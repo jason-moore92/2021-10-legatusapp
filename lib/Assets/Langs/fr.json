@@ -1,0 +1,91 @@
+{
+  "ValidateErrorString": {
+  "shouldBeErrorText": "Please enter the {}",
+  "inCorrectErrorText": "Please enter correct {}",
+  "emailErrorText": "Please enter correct email",
+    "passwordMatchErrorText": "Not Match Password",
+    "textlengthErrorText": "Please enter {length} charaters",
+    "dropdownItemErrorText": "Please choose item"
+  },
+  "BottomNavBarString": {
+    "planning": "Planning",
+    "reports": "Constants",
+    "configration": "Configration"
+  },
+  "PlanningPageString": {
+    "appbar_title": "Planning de l’étude",
+    "login_description": "Connectez-vous à votre compte Legatus pour accéder au planning de constats de l’étude.",
+    "login_button": "SE CONNECTER"
+  },
+  "ConfigurationPageString": {
+    "appbarTitle": "Configuration",
+    "login": "Connexion",
+    "logout":"se déconnecter",
+    "login_description": "La connexion est réservée aux utilisateurs de Legatus disposant d’un compte de test ou un compte client.",
+    "emailLabel":"Votre adresse email",
+    "phoneLabel":"N° de téléphone portable",
+    "loginLabel":"2. Se connecter",
+    "smsLabel": "CODE SMS",
+    "receiveSms":"Recevoir un code SMS",
+    "application_permission": "Autorisations de l’application",
+    "camera_permission": "Accès à la caméra de cet appareil quand l'application est active",
+    "camera_permission_desc": "Permet de prendre des photos et enregistrer des vidéos",
+    "microphone_permission":"Accès au microphone de cet appareil quand l'application est active",
+    "microphone_permission_desc": "Permet d'enregistrer des dictées au format audio",
+    "location_permission": "Autoriser la localisation de cet appareil quand l'application est active",
+    "location_permission_desc": "Permet d'enregistrer les coordonnées GPS des photos, notes et vidéos",
+    "storage":"Stockage",
+    "storage_condition1":"1 250 Mo ",
+    "storage_condition2": "stockés sur cet appareil",
+    "storage_condition_desc": "Supprimez des constats pour libérer de la place sur cet appareil",
+    "image_size": "Optimiser la taille des images",
+    "image_size_desc":"En cochant cette option, Legatus force votre appareil à enregistrer des photos dont le plus grand côté fera 2048px maximum (standard 2k). Accèlère les transferts, limite la taille du stockage et la taille des Procès-verbaux.",
+    "infomation": "Informations",
+    "infomation_desc":"Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.",
+    "analyse": "Données d'analyse",
+    "analyse_desc": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
+    "sendReport":"SEND REPORT"
+  },
+  "LogoutDialog": {
+    "title": "Déconnecter",
+    "description": "Voulez-vous vous déconnecter ?",
+    "logout": "SE DECONNECTER",
+    "cancel": "ANNULER"
+  },
+  "ReportDialog": {
+    "title": "Rapport",
+    "description": "Envoyer le rapport ?",
+    "send": "ENVOYER",
+    "cancel": "ANNULER"
+  },
+  "ReportPageString": {
+    "appbarTitle": "Vos constats"
+  },
+  "NewReportPageString": {
+    "appbarTitle": "Nouveau constat",
+    "reportName": "Nom du constat",
+    "types": "{\"free\":\"Libre\",\"display\":\"Affichage\",\"edl\":\"EDL\"}",
+    "date": "Date",
+    "time": "Heure",
+    "description": "Description",
+    "addressLabel":"Adresse du constat",
+    "street": "Rue",
+    "additionalAddress": "Complément d’adresse",
+    "zip": "CP",
+    "city": "Ville",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "customerTypes": "{\"applicant\":\"Requérant\",\"particular\":\"Particulier\",\"professional\":\"Professionnel\"}",
+    "name": "Nom",
+    "crop_form": "Forme sociale",
+    "crop_siren": "SIREN",
+    "crop_rcs": "RCS",
+    "recipient_label": "Représenté par",
+    "recipient_position": "Fonction / Emploi",
+    "recipient_birth_date": "BirthDay",
+    "recipient_birth_city": "Birth City",
+    "recipient_email": "Email",
+    "recipient_phone": "Mobile",
+    "save": "Enregistrer"
+  }
+}

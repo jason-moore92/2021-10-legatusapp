@@ -1,0 +1,136 @@
+name: legutus
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+
+  sentry_flutter: ^5.1.0
+  provider: ^5.0.0
+  equatable: ^2.0.3
+  flutter_screenutil: ^5.0.0+2
+  persistent_bottom_nav_bar: ^4.0.2
+  mask_text_input_formatter: ^2.0.0
+  date_time_format: ^2.0.1
+  permission_handler: ^8.1.2
+  geolocator: ^7.2.0+1
+  hive_flutter: ^1.1.0
+  localstorage: ^4.0.0+1
+  uuid: ^3.0.4
+  device_info: ^2.0.2
+  path_provider: ^2.0.2
+  pull_to_refresh: ^2.0.0
+  
+  easy_localization: ^3.0.0
+  # flutter pub run easy_localization:generate --source-dir ./lib/Assets/Langs
+  # flutter pub run easy_localization:generate --source-dir ./lib/Assets/Langs -f keys -o locale_keys.g.dart
+
+  keicy_progress_dialog:
+    path: lib/CustomPackages/keicy_progress_dialog/
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.9.0
+  
+flutter_icons:
+  android: true
+  ios: true
+  image_path_android: "lib/Assets/Images/logo.png"
+  image_path_ios: "lib/Assets/Images/logo-no-alpha.png"
+
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - lib/Assets/Images/
+    - lib/Assets/Langs/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: lib/Assets/Fonts/Schyler-Regular.ttf
+  #       - asset: lib/Assets/Fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: lib/Assets/Fonts/TrajanPro.ttf
+  #       - asset: lib/Assets/Fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  
+  fonts:
+  - family: Roboto
+    fonts:
+      - asset: lib/Assets/Fonts/Roboto-Regular.ttf
+      - asset: lib/Assets/Fonts/Roboto-Italic.ttf
+        style: italic
+      - asset: lib/Assets/Fonts/Roboto-Thin.ttf
+        weight: 100
+      - asset: lib/Assets/Fonts/Roboto-ThinItalic.ttf
+        style: italic
+        weight: 100
+      # - asset: lib/Assets/Fonts/Roboto-ExtraLight.ttf
+      #   weight: 200
+      - asset: lib/Assets/Fonts/Roboto-Light.ttf
+        weight: 300
+      - asset: lib/Assets/Fonts/Roboto-LightItalic.ttf
+        style: italic
+        weight: 300
+      - asset: lib/Assets/Fonts/Roboto-Regular.ttf
+        weight: 400
+      - asset: lib/Assets/Fonts/Roboto-Italic.ttf
+        style: italic
+        weight: 400
+      - asset: lib/Assets/Fonts/Roboto-Medium.ttf
+        weight: 500
+      - asset: lib/Assets/Fonts/Roboto-MediumItalic.ttf
+        style: italic
+        weight: 500
+      # - asset: lib/Assets/Fonts/Roboto-SemiBold.ttf
+      #   weight: 600
+      - asset: lib/Assets/Fonts/Roboto-Bold.ttf
+        weight: 700
+      - asset: lib/Assets/Fonts/Roboto-BoldItalic.ttf
+        style: italic
+        weight: 700
+      # - asset: lib/Assets/Fonts/Roboto-ExtraBold.ttf
+      #   weight: 800
+      - asset: lib/Assets/Fonts/Roboto-Black.ttf
+        weight: 900
+      - asset: lib/Assets/Fonts/Roboto-BlackItalic.ttf
+        style: italic
+        weight: 900
+
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-lib/Assets/Fonts/#from-packages

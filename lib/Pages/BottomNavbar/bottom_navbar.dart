@@ -1,0 +1,136 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/ConfigurationPage/index.dart';
+import 'package:legutus/Pages/PlanningPage/index.dart';
+import 'package:legutus/Pages/ReportPage/report_page.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:legutus/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+class BottomNavbar extends StatefulWidget {
+  final int? currentTab;
+
+  BottomNavbar({Key? key, this.currentTab}) : super(key: key);
+
+  @override
+  _BottomNavbarState createState() => _BottomNavbarState();
+}
+
+class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderStateMixin {
+  /// Responsive design variables
+  double? deviceWidth;
+  double? deviceHeight;
+  double? statusbarHeight;
+  double? bottomBarHeight;
+  double? appbarHeight;
+  double? widthDp;
+  double? heightDp;
+  double? fontSp;
+  ///////////////////////////////
+
+  PersistentTabController? _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// Responsive design variables
+    deviceWidth = 1.sw;
+    deviceHeight = 1.sh;
+    statusbarHeight = ScreenUtil().statusBarHeight;
+    bottomBarHeight = ScreenUtil().bottomBarHeight;
+    appbarHeight = AppBar().preferredSize.height;
+    widthDp = ScreenUtil().setWidth(1);
+    heightDp = ScreenUtil().setWidth(1);
+    fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+    ///////////////////////////////
+
+    _controller = PersistentTabController(initialIndex: 0);
+
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.camera,
+        Permission.microphone,
+        Permission.location,
+        Permission.storage,
+      ].request();
+
+      var permission = await Geolocator.checkPermission();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PersistentTabView(
+      context,
+      controller: _controller,
+      screens: _buildScreens(),
+      items: _navBarsItems(),
+      confineInSafeArea: true,
+      backgroundColor: AppColors.primayColor,
+      handleAndroidBackButtonPress: true, // Default is true.
+      resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+      stateManagement: false, // Default is true.
+      hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+      decoration: NavBarDecoration(
+        borderRadius: BorderRadius.zero,
+        colorBehindNavBar: Colors.white,
+      ),
+      padding: NavBarPadding.symmetric(vertical: heightDp! * 5),
+      popAllScreensOnTapOfSelectedTab: true,
+      popActionScreens: PopActionScreensType.all,
+      itemAnimationProperties: ItemAnimationProperties(
+        // Navigation Bar's items animation properties.
+        duration: Duration(milliseconds: 200),
+        curve: Curves.ease,
+      ),
+      screenTransitionAnimation: ScreenTransitionAnimation(
+        // Screen transition animation on change of selected tab.
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
+      ),
+      navBarStyle: NavBarStyle.style14, // Choose the nav bar style with this property.
+    );
+  }
+
+  List<Widget> _buildScreens() {
+    return [
+      PlanningPage(bottomTabController: _controller),
+      ReportPage(),
+      ConfigurationPage(),
+    ];
+  }
+
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.calendar_view_day),
+        title: LocaleKeys.BottomNavBarString_planning.tr(),
+        activeColorPrimary: Colors.white,
+        inactiveColorPrimary: Colors.white,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.perm_media),
+        title: LocaleKeys.BottomNavBarString_reports.tr(),
+        activeColorPrimary: Colors.white,
+        inactiveColorPrimary: Colors.white,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.app_settings_alt),
+        title: LocaleKeys.BottomNavBarString_configration.tr(),
+        activeColorPrimary: Colors.white,
+        inactiveColorPrimary: Colors.white,
+      ),
+    ];
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "ValidateErrorString": {
+    "shouldBeErrorText": "Please enter the {}",
+    "inCorrectErrorText": "Please enter correct {}",
+    "emailErrorText": "Please enter correct email",
+    "passwordMatchErrorText": "Not Match Password",
+    "textlengthErrorText": "Please enter {length} charaters",
+    "dropdownItemErrorText": "Please choose item"
+  },
+  "BottomNavBarString": {
+    "planning": "Planning",
+    "reports": "Reports",
+    "configration": "Configration"
+  },
+  "PlanningPageString": {
+    "appbarTitle": "Planning Schedule",
+    "login_description": "Log in to your Legatus account to access the study findings schedule.",
+		"login_button": "Log In"
+  },
+  "ConfigurationPageString": {
+    "appbarTitle": "Configuration",
+		"login": "Log In",
+		"logout":"Log Out",
+    "login_description": "Login is restricted to Legatus users with a test or customer account.",
+		"emailLabel": "Your email address",
+		"phoneLabel": "Cell phone number",
+		"loginLabel": "2. To log In",
+		"smsLabel": "CODE SMS",
+		"receiveSms": "Receive an SMS code",
+		"application_permission": "Application permissions",
+		"camera_permission": "Access to the camera of this device when the application is active",
+    "camera_permission_desc": "Allows you to take photos and record videos",
+    "microphone_permission": "Accessing the microphone of this device when the application is active",
+    "microphone_permission_desc": "Allows you to record dictations in audio format",
+    "location_permission": "Allow this device to be located when the application is active",
+    "location_permission_desc": "Allows you to save coordinates GPS photos, notes and videos",
+	  "storage": "Storage",
+    "storage_condition1": "1250 MB ",
+    "storage_condition2": "stored on this device",
+    "storage_condition_desc": "Delete observations to free up space on this device",
+    "image_size": "Optimize image size",
+    "image_size_desc": "By checking this option, Legatus forces your device to record photos whose largest side will be 2048px maximum (standard 2k). Speed up transfers, limit storage size and minutes size.",
+    "infomation":"Informations",
+    "infomation_desc": "Duis autem vel eum ipsum dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum ipsum dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum ipsum dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.",
+    "analyse": "Analysis data",
+    "analyse_desc": "But, in truth, two minutes, and just, and feel, and the things to preview them. At vero eos, no hendreri is lorem ipsum carrots. Lorem ipsum dolor sit amet, tempor labore sadipscing over the years, and a great idea, but you should work per month exciting Eirmod tempor diam erat, sed diam of the project. But, in truth, two minutes, and just, and feel, and the things to preview them. At vero eos, no hendreri is lorem ipsum carrots. Lorem ipsum dolor sit amet, tempor labore sadipscing over the years.",
+	  "sendReport": "ENVOYER LE RAPPORT"
+  },
+  "LogoutDialog":{
+    "title":"Log Out",
+    "description": "Do you want to log out?",
+    "logout":"Log out",
+    "cancel": "Cancel"
+  },
+  "ReportDialog": {
+    "title": "Report",
+    "description": "Send the report?",
+    "send": "Send",
+    "cancel": "Cancel"
+  },
+  "ReportPageString": {
+    "appbarTitle": "Your Reports"
+  },
+  "NewReportPageString": {
+    "appbarTitle": "New Reports",
+    "reportName": "Report Name",
+    "types": "{\"free\":\"Free\",\"display\":\"Display\",\"edl\":\"EDL\"}",
+    "date": "Date",
+    "time": "Hour",
+    "description": "Description",
+    "addressLabel": "Report Address",
+    "street": "Street",
+    "additionalAddress": "Additional Address",
+    "zip":"Zip",
+    "city": "City",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "customerTypes": "{\"applicant\":\"Applicant\",\"particular\":\"Particular\",\"professional\":\"Professional\"}",
+    "name": "Name",
+    "crop_form": "Social form",
+    "crop_siren": "SIREN",
+    "crop_rcs": "RCS",
+    "recipient_label": "Recipient By",
+    "recipient_position": "Fonction / Emploi",
+    "recipient_birth_date": "BirthDay",
+    "recipient_birth_city": "Birth City",
+    "recipient_email": "Email",
+    "recipient_phone": "Mobile",
+    "save": "Save"
+  }
+}
