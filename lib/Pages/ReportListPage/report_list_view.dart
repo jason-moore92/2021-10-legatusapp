@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:legutus/Config/config.dart';
+import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:legutus/Pages/Components/index.dart';
@@ -14,6 +19,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:uuid/uuid.dart';
 
 class ReportListView extends StatefulWidget {
   ReportListView({Key? key}) : super(key: key);
@@ -58,13 +64,13 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _localReportsProvider!.addListener(_localReportsProviderListener);
 
-      // if (_localReportsProvider!.localReportsState.progressState != 2) {
-      _localReportsProvider!.setLocalReportsState(
-        _localReportsProvider!.localReportsState.update(progressState: 1),
-      );
+      if (_localReportsProvider!.localReportsState.progressState != 2) {
+        _localReportsProvider!.setLocalReportsState(
+          _localReportsProvider!.localReportsState.update(progressState: 1),
+        );
 
-      _localReportsProvider!.getLocalReportList();
-      // }
+        _localReportsProvider!.getLocalReportList();
+      }
     });
   }
 

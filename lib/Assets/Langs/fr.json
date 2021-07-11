@@ -105,7 +105,7 @@
   "ReportPageString": {
     "noMediaDescription": "Aucun média sur cet appareil pour ce constat.\n\nUtilisez les boutons ci-dessous pour prendre des notes ou lancer le mode photos / vidéos et dictées."
   },
-  "NewNoteString": {
+  "NoteDialogString": {
     "newNots": "Nouvelle note",
     "save": "ENREGISTRER",
     "close": "FERMER"

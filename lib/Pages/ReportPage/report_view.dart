@@ -1,12 +1,19 @@
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
+import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:legutus/Pages/Dialogs/index.dart';
 import 'package:legutus/Pages/ReportNewPage/new_report_page.dart';
 import 'package:legutus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:uuid/uuid.dart';
 
 class ReportView extends StatefulWidget {
   final LocalReportModel? localReportModel;
@@ -33,6 +40,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
   Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
 
+  KeicyProgressDialog? _keicyProgressDialog;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +58,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     ///////////////////////////////
 
     _localReportModel = LocalReportModel.copy(widget.localReportModel!);
+
+    _keicyProgressDialog = KeicyProgressDialog.of(context);
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {});
   }
@@ -71,6 +82,33 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         setState(() {});
       }
     }
+  }
+
+  void _noteHandler(String note) async {
+    await _keicyProgressDialog!.show();
+    MediaModel _mediaModel = MediaModel();
+
+    _mediaModel.type = MediaType.note;
+    _mediaModel.content = note;
+    _mediaModel.uuid = Uuid().v4();
+    _mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      _mediaModel.deviceInfo = androidInfo.model;
+    } else if (Platform.isAndroid) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      _mediaModel.deviceInfo = iosInfo.utsname.machine;
+    }
+
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+      var position = await Geolocator.getCurrentPosition();
+      _mediaModel.latitude = position.latitude.toString();
+      _mediaModel.longitude = position.longitude.toString();
+    }
+
+    await _keicyProgressDialog!.hide();
   }
 
   @override
@@ -129,8 +167,11 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             GestureDetector(
-              onTap: () {
-                NotePanelDialog.show(context);
+              onTap: () async {
+                var note = await NotePanelDialog.show(context);
+                if (note != null) {
+                  _noteHandler(note);
+                }
               },
               child: Container(
                 width: heightDp! * 50,

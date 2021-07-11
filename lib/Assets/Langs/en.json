@@ -105,7 +105,7 @@
   "ReportPageString": {
     "noMediaDescription": "No media on this device for this finding.\n\nUse the buttons below to take notes or launch photos / videos and dictations mode."
   },
-  "NewNoteString": {
+  "NoteDialogString": {
     "newNots": "New Note",
     "save": "Save",
     "close": "Close"

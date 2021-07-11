@@ -96,9 +96,9 @@ abstract class  LocaleKeys {
   static const LocalReportWidgetString = 'LocalReportWidgetString';
   static const ReportPageString_noMediaDescription = 'ReportPageString.noMediaDescription';
   static const ReportPageString = 'ReportPageString';
-  static const NewNoteString_newNots = 'NewNoteString.newNots';
-  static const NewNoteString_save = 'NewNoteString.save';
-  static const NewNoteString_close = 'NewNoteString.close';
-  static const NewNoteString = 'NewNoteString';
+  static const NoteDialogString_newNots = 'NoteDialogString.newNots';
+  static const NoteDialogString_save = 'NoteDialogString.save';
+  static const NoteDialogString_close = 'NoteDialogString.close';
+  static const NoteDialogString = 'NoteDialogString';
 
 }
