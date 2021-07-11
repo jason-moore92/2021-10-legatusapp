@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:legutus/Pages/ConfigurationPage/index.dart';
 import 'package:legutus/Pages/PlanningPage/index.dart';
-import 'package:legutus/Pages/ReportPage/report_page.dart';
+import 'package:legutus/Pages/ReportListPage/report_list_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:legutus/generated/locale_keys.g.dart';
@@ -106,7 +106,7 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
   List<Widget> _buildScreens() {
     return [
       PlanningPage(bottomTabController: _controller),
-      ReportPage(),
+      ReportListPage(),
       ConfigurationPage(),
     ];
   }

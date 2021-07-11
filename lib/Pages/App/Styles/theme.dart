@@ -59,7 +59,13 @@ ThemeData buildLightTheme(BuildContext context) {
         fontWeight: FontWeight.w500,
         height: 1.3,
       ),
-      overline: TextStyle(fontSize: fontSp * 10, color: Colors.black),
+      overline: TextStyle(
+        fontSize: fontSp * 10,
+        color: Color(0xFF222222),
+        fontWeight: FontWeight.w400,
+        height: 1,
+        letterSpacing: 0.5,
+      ),
       button: TextStyle(
         fontSize: fontSp * 14,
         color: Colors.black,

@@ -24,39 +24,39 @@ class LocalReportsProvider extends ChangeNotifier {
   }
 
   Future<void> getLocalReportList() async {
-    List<dynamic> localReportListData = _localReportsState.localReportListData!;
-    Map<String, dynamic> localReportMetaData = _localReportsState.localReportMetaData!;
-    try {
-      var result;
+    Future.delayed(Duration(milliseconds: 500), () async {
+      List<dynamic> localReportListData = _localReportsState.localReportListData!;
+      Map<String, dynamic> localReportMetaData = _localReportsState.localReportMetaData!;
+      try {
+        var result;
 
-      result = await LocalReportsDataProvider.getLocalReportList(
-        page: localReportMetaData.isEmpty ? 0 : (localReportMetaData["nextPage"] ?? 0),
-        limit: AppConfig.refreshListLimit,
-      );
-
-      if (result["success"]) {
-        for (var i = 0; i < result["data"]["docs"].length; i++) {
-          localReportListData.add(result["data"]["docs"][i]);
-        }
-        result["data"].remove("docs");
-        localReportMetaData = result["data"];
-
-        _localReportsState = _localReportsState.update(
-          progressState: 2,
-          localReportListData: localReportListData,
-          localReportMetaData: localReportMetaData,
+        result = await LocalReportsDataProvider.getLocalReportList(
+          page: localReportMetaData.isEmpty ? 0 : (localReportMetaData["nextPage"] ?? 0),
+          limit: AppConfig.refreshListLimit,
         );
-      } else {
+
+        if (result["success"]) {
+          for (var i = 0; i < result["data"]["docs"].length; i++) {
+            localReportListData.add(result["data"]["docs"][i]);
+          }
+          result["data"].remove("docs");
+          localReportMetaData = result["data"];
+
+          _localReportsState = _localReportsState.update(
+            progressState: 2,
+            localReportListData: localReportListData,
+            localReportMetaData: localReportMetaData,
+          );
+        } else {
+          _localReportsState = _localReportsState.update(
+            progressState: 2,
+          );
+        }
+      } catch (e) {
         _localReportsState = _localReportsState.update(
           progressState: 2,
         );
       }
-    } catch (e) {
-      _localReportsState = _localReportsState.update(
-        progressState: 2,
-      );
-    }
-    Future.delayed(Duration(milliseconds: 500), () {
       notifyListeners();
     });
   }
@@ -86,9 +86,9 @@ class LocalReportsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateLocalReport({@required LocalReportModel? localReportModel}) async {
+  Future<void> updateLocalReport({@required LocalReportModel? localReportModel, @required String? oldReportId}) async {
     try {
-      var result = await LocalReportsDataProvider.update(localReportModel: localReportModel);
+      var result = await LocalReportsDataProvider.update(localReportModel: localReportModel, oldReportId: oldReportId);
 
       if (result["success"]) {
         _localReportsState = _localReportsState.update(
@@ -109,5 +109,31 @@ class LocalReportsProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<Map<String, dynamic>> deleteLocalReport({@required LocalReportModel? localReportModel}) async {
+    var result = await LocalReportsDataProvider.delete(localReportModel: localReportModel);
+    return result;
+    try {
+      var result = await LocalReportsDataProvider.delete(localReportModel: localReportModel);
+
+      if (result["success"]) {
+        _localReportsState = _localReportsState.update(
+          progressState: 2,
+          message: "",
+        );
+      } else {
+        _localReportsState = _localReportsState.update(
+          progressState: -1,
+          message: "Somgthing was wrong",
+        );
+      }
+    } catch (e) {
+      _localReportsState = _localReportsState.update(
+        progressState: -1,
+        message: e.toString(),
+      );
+    }
+    // notifyListeners();
   }
 }

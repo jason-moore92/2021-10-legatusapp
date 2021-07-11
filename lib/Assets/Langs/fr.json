@@ -58,8 +58,14 @@
     "send": "ENVOYER",
     "cancel": "ANNULER"
   },
-  "ReportPageString": {
+  "ReportPageListString": {
     "appbarTitle": "Vos constats"
+  },
+  "DeleteReportDialogString":{
+    "title": "Delete LocalReport",
+    "content":"Are you sure to delete this report?",
+    "delete": "Delete",
+    "cancel":"Cancel"
   },
   "NewReportPageString": {
     "appbarTitle": "Nouveau constat",
@@ -87,5 +93,21 @@
     "recipient_email": "Email",
     "recipient_phone": "Mobile",
     "save": "Enregistrer"
+  },
+  "LocalReportWidgetString": {
+    "photos": "Photos",
+    "audios": "Dictées'",
+    "notes": "Notes",
+    "videos": "Vidéos",
+    "allMediaUpload":"Tous les médias ont été téléversés",
+    "nonUploadMedial": "{} médias non téléversés"
+  },
+  "ReportPageString": {
+    "noMediaDescription": "Aucun média sur cet appareil pour ce constat.\n\nUtilisez les boutons ci-dessous pour prendre des notes ou lancer le mode photos / vidéos et dictées."
+  },
+  "NewNoteString": {
+    "newNots": "Nouvelle note",
+    "save": "ENREGISTRER",
+    "close": "FERMER"
   }
 }

@@ -54,8 +54,13 @@ abstract class  LocaleKeys {
   static const ReportDialog_send = 'ReportDialog.send';
   static const ReportDialog_cancel = 'ReportDialog.cancel';
   static const ReportDialog = 'ReportDialog';
-  static const ReportPageString_appbarTitle = 'ReportPageString.appbarTitle';
-  static const ReportPageString = 'ReportPageString';
+  static const ReportPageListString_appbarTitle = 'ReportPageListString.appbarTitle';
+  static const ReportPageListString = 'ReportPageListString';
+  static const DeleteReportDialogString_title = 'DeleteReportDialogString.title';
+  static const DeleteReportDialogString_content = 'DeleteReportDialogString.content';
+  static const DeleteReportDialogString_delete = 'DeleteReportDialogString.delete';
+  static const DeleteReportDialogString_cancel = 'DeleteReportDialogString.cancel';
+  static const DeleteReportDialogString = 'DeleteReportDialogString';
   static const NewReportPageString_appbarTitle = 'NewReportPageString.appbarTitle';
   static const NewReportPageString_reportName = 'NewReportPageString.reportName';
   static const NewReportPageString_types = 'NewReportPageString.types';
@@ -82,5 +87,18 @@ abstract class  LocaleKeys {
   static const NewReportPageString_recipient_phone = 'NewReportPageString.recipient_phone';
   static const NewReportPageString_save = 'NewReportPageString.save';
   static const NewReportPageString = 'NewReportPageString';
+  static const LocalReportWidgetString_photos = 'LocalReportWidgetString.photos';
+  static const LocalReportWidgetString_audios = 'LocalReportWidgetString.audios';
+  static const LocalReportWidgetString_notes = 'LocalReportWidgetString.notes';
+  static const LocalReportWidgetString_videos = 'LocalReportWidgetString.videos';
+  static const LocalReportWidgetString_allMediaUpload = 'LocalReportWidgetString.allMediaUpload';
+  static const LocalReportWidgetString_nonUploadMedial = 'LocalReportWidgetString.nonUploadMedial';
+  static const LocalReportWidgetString = 'LocalReportWidgetString';
+  static const ReportPageString_noMediaDescription = 'ReportPageString.noMediaDescription';
+  static const ReportPageString = 'ReportPageString';
+  static const NewNoteString_newNots = 'NewNoteString.newNots';
+  static const NewNoteString_save = 'NewNoteString.save';
+  static const NewNoteString_close = 'NewNoteString.close';
+  static const NewNoteString = 'NewNoteString';
 
 }

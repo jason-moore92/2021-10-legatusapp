@@ -24,7 +24,10 @@ import 'package:uuid/uuid.dart';
 import 'package:device_info/device_info.dart';
 
 class NewReportView extends StatefulWidget {
-  NewReportView({Key? key}) : super(key: key);
+  final bool? isNew;
+  final LocalReportModel? localReportModel;
+
+  NewReportView({Key? key, this.isNew, this.localReportModel}) : super(key: key);
 
   @override
   _NewReportViewState createState() => _NewReportViewState();
@@ -103,9 +106,12 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   bool _init = false;
+  bool? _isNew;
 
   LocalReportsProvider? _localReportsProvider;
   KeicyProgressDialog? _keicyProgressDialog;
+
+  Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
 
   @override
   void initState() {
@@ -122,14 +128,46 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    _localReportModel = LocalReportModel();
-
-    _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now());
-    _timeController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: 'H:i');
-    _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime(DateTime.now().year - 40));
-
     _localReportsProvider = LocalReportsProvider.of(context);
     _keicyProgressDialog = KeicyProgressDialog.of(context);
+
+    _isNew = widget.isNew!;
+
+    _localReportModel = widget.localReportModel != null ? LocalReportModel.copy(widget.localReportModel!) : LocalReportModel();
+
+    if (_isNew!) {
+      _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now());
+      _timeController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: 'H:i');
+      _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime(DateTime.now().year - 40));
+    } else {
+      _nameController.text = _localReportModel!.name!;
+      _dateController.text = _localReportModel!.date!;
+      _timeController.text = _localReportModel!.time!;
+      _descriptionController.text = _localReportModel!.description!;
+
+      _streetController.text = _localReportModel!.street!;
+      _addressComplementController.text = _localReportModel!.complement!;
+      _zipController.text = _localReportModel!.zip!;
+      _cityController.text = _localReportModel!.city!;
+      _latitudeController.text = _localReportModel!.latitude!;
+      _longitudeController.text = _localReportModel!.longitude!;
+
+      _customerNameController.text = _localReportModel!.customerName!;
+      _customerStreetController.text = _localReportModel!.customerStreet!;
+      _customerComplementController.text = _localReportModel!.customerComplement!;
+      _customerZipController.text = _localReportModel!.customerZip!;
+      _customerCityController.text = _localReportModel!.customerCity!;
+      _cropFormController.text = _localReportModel!.customerCorpForm!;
+      _cropSirenController.text = _localReportModel!.customerCorpSiren!;
+      _cropRCSController.text = _localReportModel!.customerCorpRcs!;
+
+      _recipientNameController.text = _localReportModel!.recipientName!;
+      _recipientPositionController.text = _localReportModel!.recipientPosition!;
+      _recipientBirthDayController.text = _localReportModel!.recipientBirthDate!;
+      _recipientBirthCityController.text = _localReportModel!.recipientBirthCity!;
+      _recipientEmailController.text = _localReportModel!.recipientEmail!;
+      _recipientPhoneNumberController.text = _localReportModel!.recipientPhone!;
+    }
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _localReportsProvider!.addListener(_localReportsProviderListener);
@@ -150,6 +188,17 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
     if (_localReportsProvider!.localReportsState.progressState == 2) {
       SuccessDialog.show(context);
+      if (_isNew!) {
+        _updatedStatus = {"isNew": true};
+        _isNew = false;
+      } else {
+        _updatedStatus = {
+          "isUpdated": true,
+          "localReportModel": _localReportModel,
+        };
+      }
+
+      setState(() {});
     } else if (_localReportsProvider!.localReportsState.progressState == -1) {
       FailedDialog.show(context, text: _localReportsProvider!.localReportsState.message!);
     }
@@ -159,74 +208,97 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     if (!_formkey.currentState!.validate()) return;
     _formkey.currentState!.save();
 
+    FocusScope.of(context).requestFocus(FocusNode());
+
     await _keicyProgressDialog!.show();
 
-    _localReportModel!.uuid = Uuid().v4();
-    _localReportModel!.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s ");
+    if (_isNew!) {
+      _localReportModel!.uuid = Uuid().v4();
+      _localReportModel!.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
 
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      _localReportModel!.deviceInfo = androidInfo.model;
-    } else if (Platform.isAndroid) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      _localReportModel!.deviceInfo = iosInfo.utsname.machine;
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        _localReportModel!.deviceInfo = androidInfo.model;
+      } else if (Platform.isAndroid) {
+        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+        _localReportModel!.deviceInfo = iosInfo.utsname.machine;
+      }
+      // _localReportModel!.reportId = DateTime.now().millisecondsSinceEpoch;
+
+      _localReportsProvider!.createLocalReport(
+        localReportModel: _localReportModel,
+      );
+    } else {
+      String reportId = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+        dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
+      )!;
+      _localReportsProvider!.updateLocalReport(
+        localReportModel: _localReportModel,
+        oldReportId: "${reportDateTime}_$reportId",
+      );
     }
-
-    _localReportModel!.reportId = DateTime.now().millisecondsSinceEpoch;
-
-    _localReportsProvider!.createLocalReport(
-      localReportModel: _localReportModel,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          LocaleKeys.NewReportPageString_appbarTitle.tr(),
-          style: Theme.of(context).textTheme.headline6,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pop(_updatedStatus);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              Navigator.of(context).pop(_updatedStatus);
+            },
+          ),
+          title: Text(
+            LocaleKeys.NewReportPageString_appbarTitle.tr(),
+            style: Theme.of(context).textTheme.headline6,
+          ),
         ),
-      ),
-      body: _init == false
-          ? FutureBuilder<LocationPermission>(
-              future: Geolocator.checkPermission(),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                  case ConnectionState.active:
-                    return Center(child: CupertinoActivityIndicator());
-                  case ConnectionState.done:
-                    _init = true;
-                    if (snapshot.hasData && (snapshot.data == LocationPermission.whileInUse || snapshot.data == LocationPermission.always)) {
-                      return FutureBuilder<Position>(
-                          future: Geolocator.getCurrentPosition(),
-                          builder: (context, snapshot) {
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.waiting:
-                              case ConnectionState.active:
-                                return Center(child: CupertinoActivityIndicator());
-                              case ConnectionState.done:
-                                if (snapshot.hasData && snapshot.data != null) {
-                                  _latitudeController.text = snapshot.data!.latitude.toString();
-                                  _longitudeController.text = snapshot.data!.longitude.toString();
-                                }
-                                return _mainPanel();
-                              default:
-                            }
+        body: _isNew! && _init == false
+            ? FutureBuilder<LocationPermission>(
+                future: Geolocator.checkPermission(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                    case ConnectionState.active:
+                      return Center(child: CupertinoActivityIndicator());
+                    case ConnectionState.done:
+                      _init = true;
+                      if (snapshot.hasData && (snapshot.data == LocationPermission.whileInUse || snapshot.data == LocationPermission.always)) {
+                        return FutureBuilder<Position>(
+                            future: Geolocator.getCurrentPosition(),
+                            builder: (context, snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.waiting:
+                                case ConnectionState.active:
+                                  return Center(child: CupertinoActivityIndicator());
+                                case ConnectionState.done:
+                                  if (snapshot.hasData && snapshot.data != null) {
+                                    _latitudeController.text = snapshot.data!.latitude.toString();
+                                    _longitudeController.text = snapshot.data!.longitude.toString();
+                                  }
+                                  return _mainPanel();
+                                default:
+                              }
 
-                            return Center(child: CupertinoActivityIndicator());
-                          });
-                    } else {
-                      return _mainPanel();
-                    }
-                  default:
-                }
-                return Center(child: CupertinoActivityIndicator());
-              },
-            )
-          : _mainPanel(),
+                              return Center(child: CupertinoActivityIndicator());
+                            });
+                      } else {
+                        return _mainPanel();
+                      }
+                    default:
+                  }
+                  return Center(child: CupertinoActivityIndicator());
+                },
+              )
+            : _mainPanel(),
+      ),
     );
   }
 

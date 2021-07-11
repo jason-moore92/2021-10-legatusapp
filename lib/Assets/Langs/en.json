@@ -58,8 +58,14 @@
     "send": "Send",
     "cancel": "Cancel"
   },
-  "ReportPageString": {
+  "ReportPageListString": {
     "appbarTitle": "Your Reports"
+  },
+  "DeleteReportDialogString": {
+    "title": "Delete LocalReport",
+    "content": "Are you sure to delete this report?",
+    "delete": "Delete",
+    "cancel": "Cancel"
   },
   "NewReportPageString": {
     "appbarTitle": "New Reports",
@@ -87,5 +93,21 @@
     "recipient_email": "Email",
     "recipient_phone": "Mobile",
     "save": "Save"
+  },
+  "LocalReportWidgetString": {
+    "photos": "Photos",
+    "audios": "Audios",
+    "notes": "Notes",
+    "videos": "Videos",
+    "allMediaUpload": "All media have been uploaded",
+    "nonUploadMedial": "{} media not uploaded"
+  },
+  "ReportPageString": {
+    "noMediaDescription": "No media on this device for this finding.\n\nUse the buttons below to take notes or launch photos / videos and dictations mode."
+  },
+  "NewNoteString": {
+    "newNots": "New Note",
+    "save": "Save",
+    "close": "Close"
   }
 }
