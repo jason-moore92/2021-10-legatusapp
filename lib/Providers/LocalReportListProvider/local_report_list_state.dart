@@ -3,14 +3,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-class LocalReportsState extends Equatable {
+class LocalReportListState extends Equatable {
   final int? progressState; // 0: init, 1: progressing, 2: success, 3: failed
   final String? message;
   final List<dynamic>? localReportListData;
   final Map<String, dynamic>? localReportMetaData;
   final bool? isRefresh;
 
-  LocalReportsState({
+  LocalReportListState({
     @required this.progressState,
     @required this.message,
     @required this.localReportListData,
@@ -18,8 +18,8 @@ class LocalReportsState extends Equatable {
     @required this.isRefresh,
   });
 
-  factory LocalReportsState.init() {
-    return LocalReportsState(
+  factory LocalReportListState.init() {
+    return LocalReportListState(
       progressState: 0,
       message: "",
       localReportListData: [],
@@ -28,14 +28,14 @@ class LocalReportsState extends Equatable {
     );
   }
 
-  LocalReportsState copyWith({
+  LocalReportListState copyWith({
     int? progressState,
     String? message,
     List<dynamic>? localReportListData,
     Map<String, dynamic>? localReportMetaData,
     bool? isRefresh,
   }) {
-    return LocalReportsState(
+    return LocalReportListState(
       progressState: progressState ?? this.progressState,
       message: message ?? this.message,
       localReportListData: localReportListData ?? this.localReportListData,
@@ -44,7 +44,7 @@ class LocalReportsState extends Equatable {
     );
   }
 
-  LocalReportsState update({
+  LocalReportListState update({
     int? progressState,
     String? message,
     List<dynamic>? localReportListData,

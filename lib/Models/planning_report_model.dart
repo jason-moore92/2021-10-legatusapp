@@ -48,15 +48,15 @@ class PlanningReportModel extends Equatable {
     this.description = description;
     this.references = references ?? [];
     this.addressModel = addressModel ?? AddressModel();
-    this.accounts = accounts ?? Map<String, dynamic>();
+    this.accounts = accounts ?? [];
     this.customers = customers ?? [];
   }
 
   factory PlanningReportModel.fromJson(Map<String, dynamic> map) {
-    List<MediaModel>? customers = [];
+    List<CustomerModel>? customers = [];
 
     for (var i = 0; i < map["customers"].length; i++) {
-      customers.add(MediaModel.fromJson(map["customers"][i]));
+      customers.add(CustomerModel.fromJson(map["customers"][i]));
     }
 
     return PlanningReportModel(
@@ -70,9 +70,9 @@ class PlanningReportModel extends Equatable {
       type: map["type"] ?? "",
       price: map["price"] ?? "",
       description: map["description"] ?? "",
-      references: map["references"] ?? "",
-      addressModel: AddressModel.fromJson(map["addressModel"]),
-      accounts: map["accounts"] ?? Map<String, dynamic>(),
+      references: map["references"] ?? [],
+      addressModel: AddressModel.fromJson(map["address"]),
+      accounts: map["accounts"] ?? [],
       customers: customers,
     );
   }
@@ -96,8 +96,8 @@ class PlanningReportModel extends Equatable {
       "price": price ?? "",
       "description": description ?? "",
       "references": references ?? [],
-      "addressModel": addressModel!.toJson(),
-      "accounts": accounts ?? Map<String, dynamic>(),
+      "address": addressModel!.toJson(),
+      "accounts": accounts ?? [],
       "customers": customersJson,
     };
   }

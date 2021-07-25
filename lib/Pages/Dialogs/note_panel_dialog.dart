@@ -17,14 +17,11 @@ import 'package:uuid/uuid.dart';
 class NotePanelDialog {
   static show(
     BuildContext context, {
-    EdgeInsets? insetPadding,
-    EdgeInsets? titlePadding,
-    EdgeInsets? contentPadding,
-    double? borderRadius,
-    String text = "Success!",
+    double? topMargin,
+    bool? isNew = true,
+    MediaModel? medialModel,
     bool barrierDismissible = false,
     Function? callBack,
-    int delaySecondes = 2,
   }) async {
     double appbarHeight = AppBar().preferredSize.height;
     double widthDp = ScreenUtil().setWidth(1);
@@ -34,6 +31,10 @@ class NotePanelDialog {
     FocusNode _focusNode = FocusNode();
 
     GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
+    if (!isNew!) {
+      _controller.text = medialModel!.content!;
+    }
 
     void _saveHandler(BuildContext context) async {
       if (!_formkey.currentState!.validate()) return;
@@ -57,7 +58,7 @@ class NotePanelDialog {
                   key: _formkey,
                   child: Column(
                     children: [
-                      SizedBox(height: appbarHeight),
+                      SizedBox(height: topMargin ?? appbarHeight),
                       Container(
                         color: Colors.black45,
                         child: Container(

@@ -33,6 +33,7 @@ class LocalReportModel extends Equatable {
   String? recipientEmail;
   String? recipientPhone;
   List<MediaModel>? medias;
+  List<dynamic>? orderList;
 
   LocalReportModel({
     this.reportId = -1,
@@ -66,6 +67,7 @@ class LocalReportModel extends Equatable {
     this.recipientEmail = "",
     this.recipientPhone = "",
     this.medias = const [],
+    this.orderList = const [],
   });
 
   factory LocalReportModel.fromJson(Map<String, dynamic> map) {
@@ -107,6 +109,7 @@ class LocalReportModel extends Equatable {
       recipientEmail: map["recipient_email"] ?? "",
       recipientPhone: map["recipient_phone"] ?? "",
       medias: medias,
+      orderList: map["orderList"] ?? "",
     );
   }
 
@@ -149,6 +152,7 @@ class LocalReportModel extends Equatable {
       "recipient_email": recipientEmail ?? "",
       "recipient_phone": recipientPhone ?? "",
       "medias": mediasJson,
+      "orderList": orderList,
     };
   }
 
@@ -185,6 +189,7 @@ class LocalReportModel extends Equatable {
       recipientEmail: model.recipientEmail,
       recipientPhone: model.recipientPhone,
       medias: model.medias,
+      orderList: model.orderList,
     );
   }
 
@@ -221,6 +226,7 @@ class LocalReportModel extends Equatable {
         recipientEmail!,
         recipientPhone!,
         medias!,
+        orderList!,
       ];
 
   @override

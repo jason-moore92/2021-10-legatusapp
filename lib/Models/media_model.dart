@@ -1,10 +1,10 @@
 import "package:equatable/equatable.dart";
 
 class MediaType {
-  static String picture = "picture";
-  static String audio = "audio";
-  static String note = "note";
-  static String video = "video";
+  static const String picture = "picture";
+  static const String audio = "audio";
+  static const String note = "note";
+  static const String video = "video";
 }
 
 class MediaModel extends Equatable {

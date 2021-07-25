@@ -12,10 +12,29 @@
     "reports": "Constants",
     "configration": "Configration"
   },
-  "PlanningPageString": {
+  "PlanningListPageString": {
     "appbar_title": "Planning de l’étude",
     "login_description": "Connectez-vous à votre compte Legatus pour accéder au planning de constats de l’étude.",
     "login_button": "SE CONNECTER"
+  },
+  "PlanningPageString": {
+    "date": "Date",
+    "state": "Statut",
+    "type": "Type",
+    "accounts": "Huissier(s)",
+    "price": "Coûts",
+    "references": "Références",
+    "address": "Adresse",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "foldName": "Dossier",
+    "description": "Description",
+    "customerInfo": "Requérant",
+    "crope": "Siren",
+    "email": "Email",
+    "phoneNumber": "Téléphone",
+    "representations": "Rép. par",
+    "recipients": "Recipients"
   },
   "ConfigurationPageString": {
     "appbarTitle": "Configuration",
@@ -24,7 +43,7 @@
     "login_description": "La connexion est réservée aux utilisateurs de Legatus disposant d’un compte de test ou un compte client.",
     "emailLabel":"Votre adresse email",
     "phoneLabel":"N° de téléphone portable",
-    "loginLabel":"2. Se connecter",
+    "loginLabel":"Se connecter",
     "smsLabel": "CODE SMS",
     "receiveSms":"Recevoir un code SMS",
     "application_permission": "Autorisations de l’application",
@@ -63,9 +82,9 @@
   },
   "DeleteReportDialogString":{
     "title": "Delete LocalReport",
-    "content":"Are you sure to delete this report?",
-    "delete": "Delete",
-    "cancel":"Cancel"
+    "content":"Voulez-vous supprimer ce constat ? Toutes les données locales seront supprimées",
+    "delete": "Supprimer",
+    "cancel":"Annuler"
   },
   "NewReportPageString": {
     "appbarTitle": "Nouveau constat",
@@ -103,11 +122,27 @@
     "nonUploadMedial": "{} médias non téléversés"
   },
   "ReportPageString": {
+    "share":"Partager",
+    "selecteAll": "Tout sélectionner",
     "noMediaDescription": "Aucun média sur cet appareil pour ce constat.\n\nUtilisez les boutons ci-dessous pour prendre des notes ou lancer le mode photos / vidéos et dictées."
   },
   "NoteDialogString": {
     "newNots": "Nouvelle note",
     "save": "ENREGISTRER",
+    "close": "FERMER"
+  },
+  "MediaInfoDialogString": {
+    "media": "Média",
+    "mediaType": "Media Type",
+    "picture": "Photographie",
+    "audio": "Audio",
+    "note": "Note",
+    "video": "Video",
+    "registeredOn":"Enregistré le",
+    "size": "Taille",
+    "duration": "Durée",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
     "close": "FERMER"
   }
 }

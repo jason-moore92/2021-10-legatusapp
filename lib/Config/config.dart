@@ -4,7 +4,7 @@ class AppConfig {
   static String apiBaseUrl = "https://webapp.legatus.fr/api/mobile/v1";
 
   static String testEmail = "vladimir.lorentz@gmail.com";
-  static String testPhoneNumber = "626417234";
+  static String testPhoneNumber = "767048443";
 
   static int refreshListLimit = 10;
 }

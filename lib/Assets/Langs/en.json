@@ -12,10 +12,29 @@
     "reports": "Reports",
     "configration": "Configration"
   },
-  "PlanningPageString": {
+  "PlanningListPageString": {
     "appbarTitle": "Planning Schedule",
     "login_description": "Log in to your Legatus account to access the study findings schedule.",
 		"login_button": "Log In"
+  },
+  "PlanningPageString": {
+    "date": "Date",
+    "state": "State",
+    "type": "Type",
+    "accounts": "Accounts",
+    "price": "Price",
+    "references": "References",
+    "address": "Address",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "foldName": "Fold Name",
+    "description": "Description",
+    "customerInfo": "Customer Info",
+    "crope": "Siren",
+    "email": "Email",
+    "phoneNumber": "Phone",
+    "representations": "Representations",
+    "recipients": "Recipients"
   },
   "ConfigurationPageString": {
     "appbarTitle": "Configuration",
@@ -63,7 +82,7 @@
   },
   "DeleteReportDialogString": {
     "title": "Delete LocalReport",
-    "content": "Are you sure to delete this report?",
+    "content": "Do you want to delete this finding? All local data will be deleted",
     "delete": "Delete",
     "cancel": "Cancel"
   },
@@ -103,11 +122,27 @@
     "nonUploadMedial": "{} media not uploaded"
   },
   "ReportPageString": {
+    "share": "Share",
+    "selecteAll": "Select ALL",
     "noMediaDescription": "No media on this device for this finding.\n\nUse the buttons below to take notes or launch photos / videos and dictations mode."
   },
   "NoteDialogString": {
     "newNots": "New Note",
     "save": "Save",
+    "close": "Close"
+  },
+  "MediaInfoDialogString": {
+    "media": "Media",
+    "mediaType": "Media Type",
+    "picture": "Picture",
+    "audio": "Audio",
+    "note": "Note",
+    "video": "Video",
+    "registeredOn": "Registered On",
+    "size": "Size",
+    "duration": "Duration",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
     "close": "Close"
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
 import 'package:legutus/Helpers/index.dart';
@@ -108,7 +109,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
   bool _init = false;
   bool? _isNew;
 
-  LocalReportsProvider? _localReportsProvider;
+  LocalReportListProvider? _localReportListProvider;
   KeicyProgressDialog? _keicyProgressDialog;
 
   Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
@@ -128,8 +129,30 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    _localReportsProvider = LocalReportsProvider.of(context);
-    _keicyProgressDialog = KeicyProgressDialog.of(context);
+    _localReportListProvider = LocalReportListProvider.of(context);
+    _keicyProgressDialog = KeicyProgressDialog.of(
+      context,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      layout: Layout.Column,
+      padding: EdgeInsets.zero,
+      width: heightDp! * 120,
+      height: heightDp! * 120,
+      progressWidget: Container(
+        width: heightDp! * 120,
+        height: heightDp! * 120,
+        padding: EdgeInsets.all(heightDp! * 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(heightDp! * 10),
+        ),
+        child: SpinKitFadingCircle(
+          color: AppColors.primayColor,
+          size: heightDp! * 80,
+        ),
+      ),
+      message: "",
+    );
 
     _isNew = widget.isNew!;
 
@@ -170,23 +193,23 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     }
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      _localReportsProvider!.addListener(_localReportsProviderListener);
+      _localReportListProvider!.addListener(_localReportListProviderListener);
     });
   }
 
   @override
   void dispose() {
-    _localReportsProvider!.removeListener(_localReportsProviderListener);
+    _localReportListProvider!.removeListener(_localReportListProviderListener);
 
     super.dispose();
   }
 
-  void _localReportsProviderListener() async {
-    if (_localReportsProvider!.localReportsState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
+  void _localReportListProviderListener() async {
+    if (_localReportListProvider!.localReportListState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
       await _keicyProgressDialog!.hide();
     }
 
-    if (_localReportsProvider!.localReportsState.progressState == 2) {
+    if (_localReportListProvider!.localReportListState.progressState == 2) {
       SuccessDialog.show(context);
       if (_isNew!) {
         _updatedStatus = {"isNew": true};
@@ -199,8 +222,8 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       }
 
       setState(() {});
-    } else if (_localReportsProvider!.localReportsState.progressState == -1) {
-      FailedDialog.show(context, text: _localReportsProvider!.localReportsState.message!);
+    } else if (_localReportListProvider!.localReportListState.progressState == -1) {
+      FailedDialog.show(context, text: _localReportListProvider!.localReportListState.message!);
     }
   }
 
@@ -226,15 +249,15 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       }
       // _localReportModel!.reportId = DateTime.now().millisecondsSinceEpoch;
 
-      _localReportsProvider!.createLocalReport(
+      _localReportListProvider!.createLocalReport(
         localReportModel: _localReportModel,
       );
     } else {
       String reportId = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-        dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
+        dateString: "${widget.localReportModel!.date} ${widget.localReportModel!.time}",
       )!;
-      _localReportsProvider!.updateLocalReport(
+      _localReportListProvider!.updateLocalReport(
         localReportModel: _localReportModel,
         oldReportId: "${reportDateTime}_$reportId",
       );

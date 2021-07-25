@@ -19,7 +19,8 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => AppDataProvider()),
-        ChangeNotifierProvider(create: (_) => LocalReportsProvider()),
+        ChangeNotifierProvider(create: (_) => LocalReportListProvider()),
+        ChangeNotifierProvider(create: (_) => PlanningProvider()),
       ],
       child: ScreenUtilInit(
         designSize: Size(ResponsiveDesignSettings.mobileDesignWidth, ResponsiveDesignSettings.mobileDesignHeight),
@@ -39,7 +40,7 @@ class App extends StatelessWidget {
             supportedLocales: context.supportedLocales,
             locale: context.locale,
             theme: buildLightTheme(context),
-            themeMode: ThemeMode.light,
+            // themeMode: ThemeMode.dark,
             home: SplashPage(),
           );
         },

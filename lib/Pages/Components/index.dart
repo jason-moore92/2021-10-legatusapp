@@ -1,4 +1,9 @@
 export './custom_elevated_Button.dart';
 export './custom_text_button.dart';
 export './custom_textform_field.dart';
+export './custom_checkbox.dart';
 export './local_report_widget.dart';
+export './note_media_widget.dart';
+export './picture_media_widget.dart';
+export './audio_media_widget.dart';
+export './video_media_widget.dart';

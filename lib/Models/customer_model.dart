@@ -32,10 +32,10 @@ class CustomerModel extends Equatable {
   }
 
   factory CustomerModel.fromJson(Map<String, dynamic> map) {
-    List<MediaModel>? recipients = [];
+    List<RecipientModel>? recipients = [];
 
     for (var i = 0; i < map["recipients"].length; i++) {
-      recipients.add(MediaModel.fromJson(map["recipients"][i]));
+      recipients.add(RecipientModel.fromJson(map["recipients"][i]));
     }
 
     return CustomerModel(
@@ -43,8 +43,8 @@ class CustomerModel extends Equatable {
       type: map["type"] ?? "",
       phone: map["phone"] ?? "",
       corpNumber: map["corp_number"] ?? "",
-      representation: map["representation"] ?? "",
-      addressModel: AddressModel.fromJson(map["addressModel"]),
+      representation: map["representation"] ?? [],
+      addressModel: AddressModel.fromJson(map["address"]),
       recipients: recipients,
     );
   }
@@ -62,7 +62,7 @@ class CustomerModel extends Equatable {
       "phone": phone ?? "",
       "corp_number": corpNumber ?? "",
       "representation": representation ?? [],
-      "addressModel": addressModel!.toJson(),
+      "address": addressModel!.toJson(),
       "recipients": recipientsJson,
     };
   }

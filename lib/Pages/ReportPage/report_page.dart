@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:legutus/Models/local_report_model.dart';
+import 'package:legutus/Providers/index.dart';
 import 'package:provider/provider.dart';
 
 import 'index.dart';
@@ -11,6 +12,11 @@ class ReportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReportView(localReportModel: localReportModel);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LocalMediaListProvider()),
+      ],
+      child: ReportView(localReportModel: localReportModel),
+    );
   }
 }

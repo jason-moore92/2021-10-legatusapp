@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:legutus/Pages/ConfigurationPage/index.dart';
-import 'package:legutus/Pages/PlanningPage/index.dart';
+import 'package:legutus/Pages/PlanningListPage/index.dart';
 import 'package:legutus/Pages/ReportListPage/report_list_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -52,14 +52,18 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
     _controller = PersistentTabController(initialIndex: 0);
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.camera,
-        Permission.microphone,
-        Permission.location,
-        Permission.storage,
-      ].request();
+      // Map<Permission, PermissionStatus> statuses = await [
+      //   Permission.camera,
+      //   Permission.microphone,
+      //   Permission.location,
+      //   Permission.storage,
+      // ].request();
 
-      var permission = await Geolocator.checkPermission();
+      await Permission.camera.request();
+      await Permission.microphone.request();
+      // await Permission.location.request();
+      await Permission.storage.request();
+      await Geolocator.requestPermission();
     });
   }
 
@@ -105,7 +109,7 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
 
   List<Widget> _buildScreens() {
     return [
-      PlanningPage(bottomTabController: _controller),
+      PlanningListPage(bottomTabController: _controller),
       ReportListPage(),
       ConfigurationPage(),
     ];
@@ -114,13 +118,13 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.calendar_view_day),
+        icon: Icon(Icons.calendar_view_day_outlined),
         title: LocaleKeys.BottomNavBarString_planning.tr(),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.perm_media),
+        icon: Icon(Icons.perm_media_outlined),
         title: LocaleKeys.BottomNavBarString_reports.tr(),
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white,

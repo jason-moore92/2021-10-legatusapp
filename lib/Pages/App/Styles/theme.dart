@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'index.dart';
@@ -13,6 +14,9 @@ ThemeData buildLightTheme(BuildContext context) {
     accentColor: AppColors.primayColor,
     focusColor: AppColors.primayColor,
     hintColor: AppColors.primayColor,
+    appBarTheme: AppBarTheme(
+      brightness: Brightness.dark,
+    ),
     textTheme: TextTheme(
       headline1: TextStyle(fontSize: fontSp * 40, color: Colors.black),
       headline2: TextStyle(fontSize: fontSp * 36, color: Colors.black),

@@ -16,6 +16,7 @@ import 'package:legutus/Pages/ReportPage/report_page.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:legutus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -42,7 +43,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
   RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-  LocalReportsProvider? _localReportsProvider;
+  LocalReportListProvider? _localReportListProvider;
 
   @override
   void initState() {
@@ -59,42 +60,42 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    _localReportsProvider = LocalReportsProvider.of(context);
+    _localReportListProvider = LocalReportListProvider.of(context);
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      _localReportsProvider!.addListener(_localReportsProviderListener);
+      _localReportListProvider!.addListener(_localReportListProviderListener);
 
-      if (_localReportsProvider!.localReportsState.progressState != 2) {
-        _localReportsProvider!.setLocalReportsState(
-          _localReportsProvider!.localReportsState.update(progressState: 1),
+      if (_localReportListProvider!.localReportListState.progressState != 2) {
+        _localReportListProvider!.setLocalReportListState(
+          _localReportListProvider!.localReportListState.update(progressState: 1),
         );
 
-        _localReportsProvider!.getLocalReportList();
+        _localReportListProvider!.getLocalReportList();
       }
     });
   }
 
   @override
   void dispose() {
-    _localReportsProvider!.removeListener(_localReportsProviderListener);
+    _localReportListProvider!.removeListener(_localReportListProviderListener);
     super.dispose();
   }
 
-  void _localReportsProviderListener() async {
-    if (_localReportsProvider!.localReportsState.progressState == -1) {
-      if (_localReportsProvider!.localReportsState.isRefresh!) {
-        _localReportsProvider!.setLocalReportsState(
-          _localReportsProvider!.localReportsState.update(isRefresh: false),
+  void _localReportListProviderListener() async {
+    if (_localReportListProvider!.localReportListState.progressState == -1) {
+      if (_localReportListProvider!.localReportListState.isRefresh!) {
+        _localReportListProvider!.setLocalReportListState(
+          _localReportListProvider!.localReportListState.update(isRefresh: false),
           isNotifiable: false,
         );
         _refreshController.refreshFailed();
       } else {
         _refreshController.loadFailed();
       }
-    } else if (_localReportsProvider!.localReportsState.progressState == 2) {
-      if (_localReportsProvider!.localReportsState.isRefresh!) {
-        _localReportsProvider!.setLocalReportsState(
-          _localReportsProvider!.localReportsState.update(isRefresh: false),
+    } else if (_localReportListProvider!.localReportListState.progressState == 2) {
+      if (_localReportListProvider!.localReportListState.isRefresh!) {
+        _localReportListProvider!.setLocalReportListState(
+          _localReportListProvider!.localReportListState.update(isRefresh: false),
           isNotifiable: false,
         );
         _refreshController.refreshCompleted();
@@ -105,13 +106,13 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
   }
 
   void _onRefresh() async {
-    List<dynamic> localReportListData = _localReportsProvider!.localReportsState.localReportListData!;
-    Map<String, dynamic> localReportMetaData = _localReportsProvider!.localReportsState.localReportMetaData!;
+    List<dynamic> localReportListData = _localReportListProvider!.localReportListState.localReportListData!;
+    Map<String, dynamic> localReportMetaData = _localReportListProvider!.localReportListState.localReportMetaData!;
 
     localReportListData = [];
     localReportMetaData = Map<String, dynamic>();
-    _localReportsProvider!.setLocalReportsState(
-      _localReportsProvider!.localReportsState.update(
+    _localReportListProvider!.setLocalReportListState(
+      _localReportListProvider!.localReportListState.update(
         progressState: 1,
         localReportListData: localReportListData,
         localReportMetaData: localReportMetaData,
@@ -119,19 +120,19 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
       ),
     );
 
-    _localReportsProvider!.getLocalReportList();
+    _localReportListProvider!.getLocalReportList();
   }
 
   void _onLoading() async {
-    _localReportsProvider!.setLocalReportsState(
-      _localReportsProvider!.localReportsState.update(progressState: 1),
+    _localReportListProvider!.setLocalReportListState(
+      _localReportListProvider!.localReportListState.update(progressState: 1),
     );
-    _localReportsProvider!.getLocalReportList();
+    _localReportListProvider!.getLocalReportList();
   }
 
   void _deleteLocalReportHandler(LocalReportModel localReportModel) async {
-    var result = await _localReportsProvider!.deleteLocalReport(localReportModel: localReportModel);
-    if (result["success"]) {
+    var progressState = await _localReportListProvider!.deleteLocalReport(localReportModel: localReportModel);
+    if (progressState == 2) {
       SuccessDialog.show(
         context,
         callBack: () {
@@ -152,8 +153,8 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
           style: Theme.of(context).textTheme.headline6,
         ),
       ),
-      body: Consumer<LocalReportsProvider>(builder: (context, localReportsProvider, _) {
-        if (localReportsProvider.localReportsState.progressState == 0) {
+      body: Consumer<LocalReportListProvider>(builder: (context, localReportListProvider, _) {
+        if (localReportListProvider.localReportListState.progressState == 0) {
           return Center(child: CupertinoActivityIndicator());
         }
         return Container(
@@ -182,20 +183,20 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
     List<dynamic> localReportsList = [];
     Map<String, dynamic> localReportsMetaData = Map<String, dynamic>();
 
-    if (_localReportsProvider!.localReportsState.localReportListData != null) {
-      localReportsList = _localReportsProvider!.localReportsState.localReportListData!;
+    if (_localReportListProvider!.localReportListState.localReportListData != null) {
+      localReportsList = _localReportListProvider!.localReportListState.localReportListData!;
     }
-    if (_localReportsProvider!.localReportsState.localReportMetaData != null) {
-      localReportsMetaData = _localReportsProvider!.localReportsState.localReportMetaData!;
+    if (_localReportListProvider!.localReportListState.localReportMetaData != null) {
+      localReportsMetaData = _localReportListProvider!.localReportListState.localReportMetaData!;
     }
 
     int itemCount = 0;
 
-    if (_localReportsProvider!.localReportsState.localReportListData != null) {
-      itemCount += _localReportsProvider!.localReportsState.localReportListData!.length;
+    if (_localReportListProvider!.localReportListState.localReportListData != null) {
+      itemCount += _localReportListProvider!.localReportListState.localReportListData!.length;
     }
 
-    if (_localReportsProvider!.localReportsState.progressState == 1) {
+    if (_localReportListProvider!.localReportListState.progressState == 1) {
       itemCount += AppConfig.refreshListLimit;
     }
 
@@ -207,65 +208,70 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
               localReports.disallowGlow();
               return true;
             },
-            child: SmartRefresher(
-              enablePullDown: true,
-              enablePullUp: (localReportsMetaData["isEnd"] != null &&
-                  !localReportsMetaData["isEnd"] &&
-                  _localReportsProvider!.localReportsState.progressState != 1),
-              header: WaterDropHeader(),
-              footer: ClassicFooter(),
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              onLoading: _onLoading,
-              child: ListView.separated(
-                itemCount: itemCount,
-                itemBuilder: (context, index) {
-                  LocalReportModel localReportsModel = (index >= localReportsList.length) ? LocalReportModel(reportId: 0) : localReportsList[index];
-                  return Slidable(
-                    enabled: true,
-                    actionPane: SlidableDrawerActionPane(),
-                    actionExtentRatio: 0.2,
-                    secondaryActions: [
-                      IconSlideAction(
-                        caption: 'Delete',
-                        color: Colors.red,
-                        icon: Icons.delete,
-                        onTap: () {
-                          NormalAskDialog.show(
-                            context,
-                            title: LocaleKeys.DeleteReportDialogString_title.tr(),
-                            content: LocaleKeys.DeleteReportDialogString_content.tr(),
-                            okButton: LocaleKeys.DeleteReportDialogString_delete.tr(),
-                            cancelButton: LocaleKeys.DeleteReportDialogString_cancel.tr(),
-                            callback: () {
-                              _deleteLocalReportHandler(localReportsModel);
-                            },
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.grey.withOpacity(0.6))),
+              ),
+              child: SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: (localReportsMetaData["isEnd"] != null &&
+                    !localReportsMetaData["isEnd"] &&
+                    _localReportListProvider!.localReportListState.progressState != 1),
+                header: WaterDropHeader(),
+                footer: ClassicFooter(),
+                controller: _refreshController,
+                onRefresh: _onRefresh,
+                onLoading: _onLoading,
+                child: ListView.separated(
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) {
+                    LocalReportModel localReportsModel = (index >= localReportsList.length) ? LocalReportModel(reportId: 0) : localReportsList[index];
+                    return Slidable(
+                      enabled: true,
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.2,
+                      secondaryActions: [
+                        IconSlideAction(
+                          caption: 'Delete',
+                          color: Colors.red,
+                          icon: Icons.delete,
+                          onTap: () {
+                            NormalAskDialog.show(
+                              context,
+                              title: LocaleKeys.DeleteReportDialogString_title.tr(),
+                              content: LocaleKeys.DeleteReportDialogString_content.tr(),
+                              okButton: LocaleKeys.DeleteReportDialogString_delete.tr(),
+                              cancelButton: LocaleKeys.DeleteReportDialogString_cancel.tr(),
+                              callback: () {
+                                _deleteLocalReportHandler(localReportsModel);
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                      child: GestureDetector(
+                        onTap: () async {
+                          var result = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => ReportPage(localReportModel: localReportsModel),
+                            ),
                           );
-                        },
-                      ),
-                    ],
-                    child: GestureDetector(
-                      onTap: () async {
-                        var result = await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => ReportPage(localReportModel: localReportsModel),
-                          ),
-                        );
 
-                        if (result != null && result.isNotEmpty) {
-                          _onRefresh();
-                        }
-                      },
-                      child: LocalReportWidget(
-                        isLoading: localReportsModel.reportId == 0,
-                        localReportModel: localReportsModel,
+                          if (result != null && result.isNotEmpty) {
+                            _onRefresh();
+                          }
+                        },
+                        child: LocalReportWidget(
+                          isLoading: localReportsModel.reportId == 0,
+                          localReportModel: localReportsModel,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.6));
-                },
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.6));
+                  },
+                ),
               ),
             ),
           ),

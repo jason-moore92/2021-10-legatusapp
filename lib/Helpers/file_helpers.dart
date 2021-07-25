@@ -1,0 +1,108 @@
+import 'dart:io';
+import 'dart:math';
+import 'dart:typed_data';
+
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'date_time_convert.dart';
+
+class FileHelpers {
+  static Future<File> writeTextFile({@required String? text, String? path = ""}) async {
+    try {
+      if (path == "") {
+        Directory directory = await getApplicationDocumentsDirectory();
+        path = directory.path;
+        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + ".txt";
+      }
+      File file = File(path!);
+      await file.writeAsString(text!);
+      return file;
+    } catch (e) {
+      return File("");
+    }
+  }
+
+  static Future<String> readTextFile({String? path}) async {
+    String text;
+    try {
+      final File file = File(path!);
+      text = await file.readAsString();
+      return text;
+    } catch (e) {
+      print("Couldn't read file");
+      return "";
+    }
+  }
+
+  static Future<File> writeImageFile({@required XFile? imageFile, @required String? path}) async {
+    try {
+      if (path == "") {
+        Directory directory = await getApplicationDocumentsDirectory();
+        path = directory.path;
+        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + ".txt";
+      }
+      await imageFile!.saveTo(path!);
+      File file = File(path);
+      return file;
+    } catch (e) {
+      print("Couldn't read file");
+      return File("");
+    }
+  }
+
+  static Future<File> writeVideoFile({@required XFile? videoFile, @required String? path}) async {
+    try {
+      if (path == "") {
+        Directory directory = await getApplicationDocumentsDirectory();
+        path = directory.path;
+        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + videoFile!.path.split(".").last;
+      }
+      await videoFile!.saveTo(path!);
+      File file = File(path);
+      return file;
+    } catch (e) {
+      print("Couldn't read file");
+      return File("");
+    }
+  }
+
+  static Future<File> writeAudioFile({@required String? tmpPath, @required String? path}) async {
+    try {
+      if (path == "") {
+        Directory directory = await getApplicationDocumentsDirectory();
+        path = directory.path;
+        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + tmpPath!.split(".").last;
+      }
+      File tmpFile = File(tmpPath!);
+      File file = File(path!);
+      await file.writeAsBytes(tmpFile.readAsBytesSync());
+      return file;
+    } catch (e) {
+      print("Couldn't read file");
+      return File("");
+    }
+  }
+
+  static Future<String> getFilePath({
+    @required String? mediaType,
+    String? createAt,
+    @required int? rank,
+    @required String? fileType,
+  }) async {
+    Directory directory = await getApplicationDocumentsDirectory();
+    String path = directory.path;
+
+    String fileName = "";
+    if (createAt == null) {
+      fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "YmdHis");
+    } else {
+      DateTime createAtTime = KeicyDateTime.convertDateStringToDateTime(dateString: createAt)!;
+      fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: createAtTime, formats: "YmdHis");
+    }
+    fileName = "$fileName-$rank-$mediaType.$fileType";
+
+    return "$path/$fileName";
+  }
+}

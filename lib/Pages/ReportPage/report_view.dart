@@ -1,18 +1,31 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
+import 'package:legutus/ApiDataProviders/index.dart';
+import 'package:legutus/Config/config.dart';
+import 'package:legutus/Helpers/file_helpers.dart';
 import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/CameraPage/index.dart';
+import 'package:legutus/Pages/Components/index.dart';
 import 'package:legutus/Pages/Dialogs/index.dart';
 import 'package:legutus/Pages/ReportNewPage/new_report_page.dart';
+import 'package:legutus/Providers/LocalMediaListProvider/index.dart';
+import 'package:legutus/Providers/index.dart';
 import 'package:legutus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:uuid/uuid.dart';
 
 class ReportView extends StatefulWidget {
@@ -41,6 +54,16 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
 
   KeicyProgressDialog? _keicyProgressDialog;
+  LocalReportListProvider? _localReportListProvider;
+
+  LocalMediaListProvider? _localMediaListProvider;
+
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  ScrollController? _controller = ScrollController();
+
+  List<int>? _selectedMediaRanks;
+  bool _selectStatus = false;
 
   @override
   void initState() {
@@ -59,14 +82,114 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
     _localReportModel = LocalReportModel.copy(widget.localReportModel!);
 
-    _keicyProgressDialog = KeicyProgressDialog.of(context);
+    _keicyProgressDialog = KeicyProgressDialog.of(
+      context,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      layout: Layout.Column,
+      padding: EdgeInsets.zero,
+      width: heightDp! * 120,
+      height: heightDp! * 120,
+      progressWidget: Container(
+        width: heightDp! * 120,
+        height: heightDp! * 120,
+        padding: EdgeInsets.all(heightDp! * 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(heightDp! * 10),
+        ),
+        child: SpinKitFadingCircle(
+          color: AppColors.primayColor,
+          size: heightDp! * 80,
+        ),
+      ),
+      message: "",
+    );
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {});
+    _selectedMediaRanks = [];
+
+    _localReportListProvider = LocalReportListProvider.of(context);
+    _localMediaListProvider = LocalMediaListProvider.of(context);
+
+    _localMediaListProvider!.setLocalMediaListState(
+      _localMediaListProvider!.localMediaListState.update(
+        localLocalReportModel: _localReportModel,
+      ),
+      isNotifiable: false,
+    );
+
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      _localMediaListProvider!.addListener(_localMediaListProviderListener);
+
+      _localMediaListProvider!.setLocalMediaListState(
+        _localMediaListProvider!.localMediaListState.update(
+          progressState: 1,
+        ),
+      );
+
+      _localMediaListProvider!.getLocalMediaList();
+    });
   }
 
   @override
   void dispose() {
+    _localMediaListProvider!.removeListener(_localMediaListProviderListener);
     super.dispose();
+  }
+
+  void _localMediaListProviderListener() async {
+    if (_localMediaListProvider!.localMediaListState.progressState == -1) {
+      if (_localMediaListProvider!.localMediaListState.isRefresh!) {
+        _localMediaListProvider!.setLocalMediaListState(
+          _localMediaListProvider!.localMediaListState.update(isRefresh: false),
+          isNotifiable: false,
+        );
+        _refreshController.refreshFailed();
+      } else {
+        _refreshController.loadFailed();
+      }
+    } else if (_localMediaListProvider!.localMediaListState.progressState == 2) {
+      if (_localMediaListProvider!.localMediaListState.isRefresh!) {
+        _localMediaListProvider!.setLocalMediaListState(
+          _localMediaListProvider!.localMediaListState.update(isRefresh: false),
+          isNotifiable: false,
+        );
+        _refreshController.refreshCompleted();
+      } else {
+        _refreshController.loadComplete();
+      }
+
+      if (_localMediaListProvider!.localMediaListState.localMediaMetaData!["nextPage"] == 1) {
+        _controller!.jumpTo(0);
+      }
+    }
+  }
+
+  void _onRefresh() async {
+    _selectStatus = false;
+    _selectedMediaRanks = [];
+    List<dynamic> localMediaListData = _localMediaListProvider!.localMediaListState.localMediaListData!;
+    Map<String, dynamic> localMediaMetaData = _localMediaListProvider!.localMediaListState.localMediaMetaData!;
+
+    localMediaListData = [];
+    localMediaMetaData = Map<String, dynamic>();
+    _localMediaListProvider!.setLocalMediaListState(
+      _localMediaListProvider!.localMediaListState.update(
+        progressState: 1,
+        localMediaListData: localMediaListData,
+        localMediaMetaData: localMediaMetaData,
+        isRefresh: true,
+      ),
+    );
+
+    _localMediaListProvider!.getLocalMediaList();
+  }
+
+  void _onLoading() async {
+    _localMediaListProvider!.setLocalMediaListState(
+      _localMediaListProvider!.localMediaListState.update(progressState: 1),
+    );
+    _localMediaListProvider!.getLocalMediaList();
   }
 
   void _editHandler() async {
@@ -84,31 +207,173 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     }
   }
 
-  void _noteHandler(String note) async {
-    await _keicyProgressDialog!.show();
-    MediaModel _mediaModel = MediaModel();
+  Future<void> _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
+    LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
+    try {
+      await _keicyProgressDialog!.show();
 
-    _mediaModel.type = MediaType.note;
-    _mediaModel.content = note;
-    _mediaModel.uuid = Uuid().v4();
-    _mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      _mediaModel.deviceInfo = androidInfo.model;
-    } else if (Platform.isAndroid) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      _mediaModel.deviceInfo = iosInfo.utsname.machine;
+      if (isNew!) {
+        String path = await FileHelpers.getFilePath(
+          mediaType: MediaType.note,
+          rank: localReportModel.medias!.length + 1,
+          fileType: "txt",
+        );
+
+        File textFile = await FileHelpers.writeTextFile(text: note, path: path);
+        if (textFile.path == "") return;
+
+        mediaModel = MediaModel();
+        mediaModel.content = note;
+        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+        DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+        if (Platform.isAndroid) {
+          AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+          mediaModel.deviceInfo = androidInfo.model;
+        } else if (Platform.isAndroid) {
+          IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+          mediaModel.deviceInfo = iosInfo.utsname.machine;
+        }
+        mediaModel.duration = -1;
+        mediaModel.ext = textFile.path.split('.').last;
+        mediaModel.filename = textFile.path.split('/').last;
+        var permission = await Geolocator.checkPermission();
+        if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+          var position = await Geolocator.getCurrentPosition();
+          mediaModel.latitude = position.latitude.toString();
+          mediaModel.longitude = position.longitude.toString();
+        }
+        mediaModel.path = textFile.path;
+        mediaModel.rank = localReportModel.medias!.length + 1;
+        mediaModel.reportId = localReportModel.reportId!;
+        mediaModel.size = textFile.readAsBytesSync().lengthInBytes ~/ 1024;
+        mediaModel.state = "captured";
+        mediaModel.type = MediaType.note;
+        mediaModel.uuid = Uuid().v4();
+
+        localReportModel.medias!.add(mediaModel);
+      } else {
+        for (var i = 0; i < localReportModel.medias!.length; i++) {
+          if (localReportModel.medias![i].createdAt == mediaModel!.createdAt!) {
+            File oldTextFile = File(mediaModel.path!);
+            try {
+              oldTextFile.deleteSync();
+            } catch (e) {
+              print(e);
+            }
+
+            File textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
+            if (textFile.path == "") return;
+
+            mediaModel.content = note;
+            mediaModel.ext = textFile.path.split('.').last;
+            mediaModel.filename = textFile.path.split('/').last;
+            var permission = await Geolocator.checkPermission();
+            if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+              var position = await Geolocator.getCurrentPosition();
+              mediaModel.latitude = position.latitude.toString();
+              mediaModel.longitude = position.longitude.toString();
+            }
+            mediaModel.path = textFile.path;
+            mediaModel.size = textFile.readAsBytesSync().lengthInBytes ~/ 1024;
+            mediaModel.uuid = Uuid().v4();
+
+            localReportModel.medias![i] = mediaModel;
+            break;
+          }
+        }
+      }
+
+      int progressState = await _updateLocalReport(localReportModel);
+
+      await _keicyProgressDialog!.hide();
+
+      if (progressState == 2) {
+        var result = await LocalReportsDataProvider.getLocalReportModel(localReportModel: localReportModel);
+        if (result["success"]) {
+          _localReportModel = result["data"];
+        } else {
+          _localReportModel = localReportModel;
+        }
+        _updatedStatus = {
+          "isUpdated": true,
+          "localReportModel": _localReportModel,
+        };
+
+        _localMediaListProvider!.setLocalMediaListState(
+          _localMediaListProvider!.localMediaListState.update(
+            localLocalReportModel: _localReportModel,
+          ),
+          isNotifiable: true,
+        );
+        if (isNew) {
+          _onRefresh();
+        } else {
+          setState(() {});
+        }
+      }
+    } catch (e) {
+      print(e);
     }
+  }
 
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
-      var position = await Geolocator.getCurrentPosition();
-      _mediaModel.latitude = position.latitude.toString();
-      _mediaModel.longitude = position.longitude.toString();
-    }
+  Future<int> _updateLocalReport(LocalReportModel localReportModel) async {
+    String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel.createdAt).toString();
+    int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+      dateString: "${localReportModel.date} ${localReportModel.time}",
+    )!;
 
-    await _keicyProgressDialog!.hide();
+    int progressState = await _localReportListProvider!.updateLocalReport(
+      localReportModel: localReportModel,
+      oldReportId: "${reportDateTime}_$createdAt",
+    );
+    return progressState;
+  }
+
+  void _deleteLocalMedias() async {
+    if (_selectedMediaRanks!.isEmpty) return;
+
+    NormalAskDialog.show(context, title: "Delete Local Medias", content: "Are you sure to delete local medias?", callback: () async {
+      LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
+      List<MediaModel> newMedias = [];
+      for (var i = 0; i < localReportModel.medias!.length; i++) {
+        MediaModel mediaModel = localReportModel.medias![i];
+        if (_selectedMediaRanks!.contains(mediaModel.rank) && mediaModel.path! != "") {
+          File oldTextFile = File(mediaModel.path!);
+          try {
+            oldTextFile.deleteSync();
+          } catch (e) {
+            print(e);
+          }
+        } else {
+          newMedias.add(mediaModel);
+        }
+      }
+
+      localReportModel.medias = newMedias;
+
+      var progressState = await _updateLocalReport(localReportModel);
+
+      if (progressState == 2) {
+        var result = await LocalReportsDataProvider.getLocalReportModel(localReportModel: localReportModel);
+        if (result["success"]) {
+          _localReportModel = result["data"];
+        } else {
+          _localReportModel = localReportModel;
+        }
+        _updatedStatus = {
+          "isUpdated": true,
+          "localReportModel": _localReportModel,
+        };
+
+        _localMediaListProvider!.setLocalMediaListState(
+          _localMediaListProvider!.localMediaListState.update(
+            localLocalReportModel: _localReportModel,
+          ),
+          isNotifiable: false,
+        );
+        _onRefresh();
+      }
+    });
   }
 
   @override
@@ -142,7 +407,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             ),
             IconButton(
               icon: Icon(Icons.cloud_upload_outlined, size: heightDp! * 25, color: Colors.white),
-              onPressed: () {},
+              onPressed: () async {},
             ),
             IconButton(
               icon: Icon(Icons.info_outline_rounded, size: heightDp! * 25, color: Colors.white),
@@ -150,88 +415,183 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             ),
           ],
         ),
-        body: Container(
-          width: deviceWidth,
-          height: deviceHeight,
-          child: Column(
-            children: [
-              _mediaPanel(),
-              Expanded(
-                child: _localReportModel!.medias!.isEmpty ? _noMediaPanel() : Container(),
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () async {
-                var note = await NotePanelDialog.show(context);
-                if (note != null) {
-                  _noteHandler(note);
-                }
-              },
-              child: Container(
-                width: heightDp! * 50,
-                height: heightDp! * 50,
-                decoration: BoxDecoration(
-                  color: AppColors.yello,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
-                  ],
+        body: Consumer<LocalMediaListProvider>(builder: (context, localMediaListProvider, _) {
+          return Container(
+            width: deviceWidth,
+            height: deviceHeight,
+            child: Column(
+              children: [
+                _selectStatus ? _selectToolPanel() : _mediaCountPanel(),
+                SizedBox(height: heightDp! * 5),
+                Expanded(
+                  child: _localReportModel!.medias!.isEmpty ? _noMediaPanel() : _mediaPanel1(),
                 ),
-                alignment: Alignment.center,
-                child: Image.asset(
-                  "lib/Assets/Images/edit_note.png",
-                  width: heightDp! * 25,
-                  height: heightDp! * 25,
-                  color: Colors.white,
-                  fit: BoxFit.cover,
-                ),
-              ),
+                SizedBox(height: heightDp! * 50),
+              ],
             ),
-            GestureDetector(
-              child: Container(
-                width: heightDp! * 65,
-                height: heightDp! * 65,
-                decoration: BoxDecoration(
-                  color: AppColors.yello,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Icon(Icons.photo_camera_outlined, size: heightDp! * 35, color: Colors.white),
-              ),
-            ),
-            GestureDetector(
-              child: Container(
-                width: heightDp! * 50,
-                height: heightDp! * 50,
-                decoration: BoxDecoration(
-                  color: AppColors.yello,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Icon(Icons.mic_none_outlined, size: heightDp! * 25, color: Colors.white),
-              ),
-            ),
-          ],
-        ),
+          );
+        }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: _floatingButtonPanel(),
       ),
     );
   }
 
-  Widget _mediaPanel() {
-    return Padding(
+  Widget _floatingButtonPanel() {
+    return Container(
+      width: deviceWidth,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: () async {
+              var note = await NotePanelDialog.show(context, isNew: true);
+              if (note != null) {
+                await _noteHandler(note: note, isNew: true);
+              }
+            },
+            child: Container(
+              width: heightDp! * 50,
+              height: heightDp! * 50,
+              decoration: BoxDecoration(
+                color: AppColors.yello,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Image.asset(
+                "lib/Assets/Images/edit_note.png",
+                width: heightDp! * 25,
+                height: heightDp! * 25,
+                color: Colors.white,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              var result = await pushNewScreen(
+                context,
+                screen: CameraPage(localReportModel: _localReportModel, isPicture: true),
+                withNavBar: false, // OPTIONAL VALUE. True by default.
+                pageTransitionAnimation: PageTransitionAnimation.fade,
+              );
+              // var result = await Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (BuildContext context) => CameraPage(isPicture: true),
+              //   ),
+              // );
+              if (result != null && result.isNotEmpty) {
+                _updatedStatus = result;
+                if (result["isUpdated"]) {
+                  _localReportModel = result["localReportModel"];
+
+                  _localMediaListProvider!.setLocalMediaListState(
+                    _localMediaListProvider!.localMediaListState.update(
+                      localLocalReportModel: _localReportModel,
+                    ),
+                    isNotifiable: false,
+                  );
+
+                  _onRefresh();
+                  // setState(() {});
+                }
+              }
+            },
+            child: Container(
+              width: heightDp! * 65,
+              height: heightDp! * 65,
+              decoration: BoxDecoration(
+                color: AppColors.yello,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Icon(Icons.photo_camera_outlined, size: heightDp! * 35, color: Colors.white),
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              var result = await pushNewScreen(
+                context,
+                screen: CameraPage(localReportModel: _localReportModel, isAudio: true),
+                withNavBar: false, // OPTIONAL VALUE. True by default.
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+              // var result = await Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (BuildContext context) => CameraPage(isAudio: true),
+              //   ),
+              // );
+
+              if (result != null && result.isNotEmpty) {
+                _updatedStatus = result;
+                if (result["isUpdated"]) {
+                  _localReportModel = result["localReportModel"];
+
+                  _localMediaListProvider!.setLocalMediaListState(
+                    _localMediaListProvider!.localMediaListState.update(
+                      localLocalReportModel: _localReportModel,
+                    ),
+                    isNotifiable: false,
+                  );
+
+                  _onRefresh();
+                  // setState(() {});
+                }
+              }
+            },
+            child: Container(
+              width: heightDp! * 50,
+              height: heightDp! * 50,
+              decoration: BoxDecoration(
+                color: AppColors.yello,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Icon(Icons.mic_none_outlined, size: heightDp! * 25, color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _mediaCountPanel() {
+    int photosCount = 0;
+    int audiosCount = 0;
+    int notesCount = 0;
+    int videosCount = 0;
+
+    for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+      switch (_localReportModel!.medias![i].type) {
+        case MediaType.audio:
+          audiosCount++;
+          break;
+        case MediaType.note:
+          notesCount++;
+          break;
+        case MediaType.picture:
+          photosCount++;
+          break;
+        case MediaType.video:
+          videosCount++;
+          break;
+        default:
+      }
+    }
+
+    return Container(
       padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+      color: Color(0xFFE7E7E7),
       child: Row(
         children: [
           Expanded(
@@ -259,7 +619,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          "12",
+                          "$photosCount",
                           style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                         ),
                       ),
@@ -295,7 +655,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          "12",
+                          "$audiosCount",
                           style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                         ),
                       ),
@@ -331,7 +691,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          "12",
+                          "$notesCount",
                           style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                         ),
                       ),
@@ -367,7 +727,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          "12",
+                          "$videosCount",
                           style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                         ),
                       ),
@@ -375,6 +735,97 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                   ),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _selectToolPanel() {
+    return Container(
+      color: Color(0xFFE7E7E7),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              _selectStatus = false;
+              _selectedMediaRanks = [];
+              setState(() {});
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+              child: Transform.rotate(
+                angle: pi / 4,
+                child: Icon(Icons.add_circle_outline_outlined, size: heightDp! * 25, color: Colors.black),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                CustomCheckBox(
+                  iconSize: heightDp! * 25,
+                  iconColor: Colors.black,
+                  trueIcon: Icons.check_box_outlined,
+                  falseIcon: Icons.check_box_outline_blank,
+                  label: LocaleKeys.ReportPageString_selecteAll.tr(),
+                  labelSpacing: widthDp! * 5,
+                  labelStyle: Theme.of(context).textTheme.bodyText1,
+                  onChangeHandler: (value) {
+                    if (value) {
+                      _selectedMediaRanks = [];
+                      for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+                        _selectedMediaRanks!.add(_localReportModel!.medias![i].rank!);
+                      }
+                    } else {
+                      _selectedMediaRanks = [];
+                    }
+
+                    setState(() {});
+                  },
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: widthDp! * 5, vertical: heightDp! * 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.yello,
+                        borderRadius: BorderRadiusDirectional.circular(heightDp! * 4),
+                      ),
+                      child: Text(
+                        "${_selectedMediaRanks!.length}",
+                        style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+                  child: Transform.rotate(
+                    angle: -pi / 2,
+                    child: Icon(Icons.logout, size: heightDp! * 25, color: Colors.black),
+                  ),
+                ),
+                Text(
+                  LocaleKeys.ReportPageString_share.tr(),
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: _deleteLocalMedias,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+              child: Icon(Icons.delete_outline_outlined, size: heightDp! * 25, color: Colors.red),
             ),
           ),
         ],
@@ -394,4 +845,193 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       ),
     );
   }
+
+  Widget _mediaPanel1() {
+    List<dynamic> localMediaListData = [];
+    Map<String, dynamic> localMediaMetaData = Map<String, dynamic>();
+
+    if (_localMediaListProvider!.localMediaListState.localMediaListData != null) {
+      localMediaListData = _localMediaListProvider!.localMediaListState.localMediaListData!;
+    }
+    if (_localMediaListProvider!.localMediaListState.localMediaMetaData != null) {
+      localMediaMetaData = _localMediaListProvider!.localMediaListState.localMediaMetaData!;
+    }
+
+    int itemCount = 0;
+
+    if (_localMediaListProvider!.localMediaListState.localMediaListData != null) {
+      itemCount += _localMediaListProvider!.localMediaListState.localMediaListData!.length;
+    }
+
+    if (_localMediaListProvider!.localMediaListState.progressState == 1) {
+      itemCount += AppConfig.refreshListLimit;
+      // itemCount += 1;
+    }
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (localReports) {
+          localReports.disallowGlow();
+          return true;
+        },
+        child: SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: (localMediaMetaData["isEnd"] != null &&
+              !localMediaMetaData["isEnd"] &&
+              _localMediaListProvider!.localMediaListState.progressState != 1),
+          header: WaterDropHeader(),
+          footer: ClassicFooter(),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: ListView.builder(
+            controller: _controller,
+            itemCount: itemCount,
+            itemBuilder: (context, index) {
+              List<MediaModel>? mediaModelList = (index >= localMediaListData.length) ? null : localMediaListData[index];
+
+              if (mediaModelList == null) {
+                return Container(
+                  width: deviceWidth,
+                  height: heightDp! * 50,
+                  margin: EdgeInsets.symmetric(vertical: heightDp! * 5),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFE7E7E7),
+                    borderRadius: BorderRadius.circular(heightDp! * 6),
+                  ),
+                  alignment: Alignment.center,
+                  child: CupertinoActivityIndicator(),
+                );
+              } else {
+                return Wrap(
+                  spacing: widthDp! * 10,
+                  children: List.generate(mediaModelList.length, (index) {
+                    MediaModel mediaModel = mediaModelList[index];
+
+                    switch (mediaModel.type) {
+                      case MediaType.note:
+                        return NoteMediaWidget(
+                          mediaModel: mediaModel,
+                          totalMediaCount: _localReportModel!.medias!.length,
+                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
+                          tapHandler: () async {
+                            if (_selectedMediaRanks!.isEmpty) {
+                              var note = await NotePanelDialog.show(context, isNew: false, medialModel: mediaModel);
+                              if (note != null) {
+                                _noteHandler(note: note, isNew: false, mediaModel: mediaModel);
+                              }
+                            } else {
+                              _tapHandler(mediaModel);
+                            }
+                          },
+                          longPressHandler: () {
+                            _longPressHandler(mediaModel);
+                          },
+                        );
+                      case MediaType.picture:
+                        return PictureMediaWidget(
+                          mediaModel: mediaModel,
+                          totalMediaCount: _localReportModel!.medias!.length,
+                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
+                          tapHandler: () {
+                            _tapHandler(mediaModel);
+                          },
+                          longPressHandler: () {
+                            _longPressHandler(mediaModel);
+                          },
+                        );
+                      case MediaType.audio:
+                        return AudioMediaWidget(
+                          mediaModel: mediaModel,
+                          totalMediaCount: _localReportModel!.medias!.length,
+                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
+                          tapHandler: () {
+                            _tapHandler(mediaModel);
+                          },
+                          longPressHandler: () {
+                            _longPressHandler(mediaModel);
+                          },
+                        );
+                      case MediaType.video:
+                        return VideoMediaWidget(
+                          mediaModel: mediaModel,
+                          totalMediaCount: _localReportModel!.medias!.length,
+                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
+                          tapHandler: () {
+                            _tapHandler(mediaModel);
+                          },
+                          longPressHandler: () {
+                            _longPressHandler(mediaModel);
+                          },
+                        );
+                      default:
+                        return Container();
+                    }
+                  }),
+                );
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _tapHandler(MediaModel? mediaModel) {
+    if (!_selectStatus) return;
+    if (_selectedMediaRanks!.contains(mediaModel!.rank)) {
+      _selectedMediaRanks!.remove(mediaModel.rank);
+    } else {
+      _selectedMediaRanks!.add(mediaModel.rank!);
+    }
+
+    setState(() {});
+  }
+
+  void _longPressHandler(MediaModel? mediaModel) {
+    _selectedMediaRanks!.add(mediaModel!.rank!);
+    _selectStatus = true;
+    setState(() {});
+  }
+
+  // Widget _mediaPanel() {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: widthDp! * 20, vertical: heightDp! * 0),
+  //     child: NotificationListener<OverscrollIndicatorNotification>(
+  //       onNotification: (notification) {
+  //         notification.disallowGlow();
+  //         return false;
+  //       },
+  //       child: ListView.builder(
+  //         itemCount: _localReportModel!.medias!.length,
+  //         itemBuilder: (context, index) {
+  //           MediaModel mediaModel = _localReportModel!.medias![index];
+
+  //           switch (mediaModel.type) {
+  //             case MediaType.note:
+  //               return NoteMediaWidget(
+  //                 mediaModel: mediaModel,
+  //                 tapHandler: () async {
+  //                   var note = await NotePanelDialog.show(context, isNew: false, medialModel: mediaModel);
+  //                   if (note != null) {
+  //                     _noteHandler(note: note, isNew: false, medialModel: mediaModel);
+  //                   }
+  //                 },
+  //               );
+  //             case MediaType.picture:
+  //               return PictureMediaWidget(
+  //                 mediaModel: mediaModel,
+  //                 totalMediaCount: _localReportModel!.medias!.length,
+  //                 tapHandler: () async {},
+  //               );
+
+  //             default:
+  //               return Container();
+  //           }
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 }

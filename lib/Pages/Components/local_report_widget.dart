@@ -198,10 +198,12 @@ class LocalReportWidget extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(localReportModel!.name!, style: Theme.of(context).textTheme.subtitle2),
+            Expanded(child: Text(localReportModel!.name!, style: Theme.of(context).textTheme.subtitle2)),
+            SizedBox(width: widthDp! * 10),
             Text(
-              "${localReportModel!.date!} ${localReportModel!.time!}",
+              "${localReportModel!.date!} ${localReportModel!.time!.split(":")[0]}:${localReportModel!.time!.split(":")[1]}",
               style: Theme.of(context).textTheme.caption!.copyWith(color: AppColors.yello),
             ),
           ],
