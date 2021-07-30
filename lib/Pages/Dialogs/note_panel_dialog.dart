@@ -115,10 +115,10 @@ class NotePanelDialog {
                                 children: [
                                   CustomTextButton(
                                     text: LocaleKeys.NoteDialogString_close.tr().toUpperCase(),
-                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.grey),
+                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                                     // width: widthDp * 100,
-                                    bordercolor: Colors.grey.withOpacity(0.7),
-                                    borderRadius: heightDp * 6,
+                                    // bordercolor: Colors.grey.withOpacity(0.7),
+                                    // borderRadius: heightDp * 6,
                                     elevation: 0,
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -129,8 +129,8 @@ class NotePanelDialog {
                                     text: LocaleKeys.NoteDialogString_save.tr().toUpperCase(),
                                     textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                                     // width: widthDp * 120,
-                                    bordercolor: AppColors.yello,
-                                    borderRadius: heightDp * 6,
+                                    // bordercolor: AppColors.yello,
+                                    // borderRadius: heightDp * 6,
                                     elevation: 0,
                                     onPressed: () {
                                       _saveHandler(context);

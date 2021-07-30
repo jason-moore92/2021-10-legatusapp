@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 class LocalMediaListState extends Equatable {
   final int? progressState; // 0: init, 1: progressing, 2: success, 3: failed
   final String? message;
+  final String? contextName;
   final LocalReportModel? localLocalReportModel;
   final List<dynamic>? localMediaListData;
   final Map<String, dynamic>? localMediaMetaData;
@@ -15,6 +16,7 @@ class LocalMediaListState extends Equatable {
   LocalMediaListState({
     @required this.progressState,
     @required this.message,
+    @required this.contextName,
     @required this.localLocalReportModel,
     @required this.localMediaListData,
     @required this.localMediaMetaData,
@@ -25,6 +27,7 @@ class LocalMediaListState extends Equatable {
     return LocalMediaListState(
       progressState: 0,
       message: "",
+      contextName: "",
       localLocalReportModel: LocalReportModel(),
       localMediaListData: [],
       localMediaMetaData: Map<String, dynamic>(),
@@ -35,6 +38,7 @@ class LocalMediaListState extends Equatable {
   LocalMediaListState copyWith({
     int? progressState,
     String? message,
+    String? contextName,
     LocalReportModel? localLocalReportModel,
     List<dynamic>? localMediaListData,
     Map<String, dynamic>? localMediaMetaData,
@@ -43,6 +47,7 @@ class LocalMediaListState extends Equatable {
     return LocalMediaListState(
       progressState: progressState ?? this.progressState,
       message: message ?? this.message,
+      contextName: contextName ?? this.contextName,
       localLocalReportModel: localLocalReportModel ?? this.localLocalReportModel,
       localMediaListData: localMediaListData ?? this.localMediaListData,
       localMediaMetaData: localMediaMetaData ?? this.localMediaMetaData,
@@ -53,6 +58,7 @@ class LocalMediaListState extends Equatable {
   LocalMediaListState update({
     int? progressState,
     String? message,
+    String? contextName,
     LocalReportModel? localLocalReportModel,
     List<dynamic>? localMediaListData,
     Map<String, dynamic>? localMediaMetaData,
@@ -61,6 +67,7 @@ class LocalMediaListState extends Equatable {
     return copyWith(
       progressState: progressState,
       message: message,
+      contextName: contextName,
       localLocalReportModel: localLocalReportModel,
       localMediaListData: localMediaListData,
       localMediaMetaData: localMediaMetaData,
@@ -72,6 +79,7 @@ class LocalMediaListState extends Equatable {
     return {
       "progressState": progressState,
       "message": message,
+      "contextName": contextName,
       "localLocalReportModel": localLocalReportModel!.toJson(),
       "localMediaListData": localMediaListData,
       "localMediaMetaData": localMediaMetaData,
@@ -83,6 +91,7 @@ class LocalMediaListState extends Equatable {
   List<Object> get props => [
         progressState!,
         message!,
+        contextName!,
         localLocalReportModel!,
         localMediaListData!,
         localMediaMetaData!,

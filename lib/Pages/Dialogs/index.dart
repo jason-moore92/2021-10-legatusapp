@@ -4,3 +4,6 @@ export './normal_ask_dialog.dart';
 export './note_panel_dialog.dart';
 export './note_panel_horizontal_dialog.dart';
 export './media_info_dialog.dart';
+export './normal_dialog.dart';
+export './journal_panel_dialog.dart';
+export './upload_report_dialog.dart';

@@ -16,9 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PlanningListView extends StatefulWidget {
-  final PersistentTabController? bottomTabController;
-
-  PlanningListView({Key? key, this.bottomTabController}) : super(key: key);
+  PlanningListView({Key? key}) : super(key: key);
 
   @override
   _PlanningListViewState createState() => _PlanningListViewState();
@@ -35,8 +33,6 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
   double? heightDp;
   double? fontSp;
   ///////////////////////////////
-
-  String? startDate;
 
   PlanningProvider? _planningProvider;
 
@@ -58,28 +54,57 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
     ///////////////////////////////
 
     _planningProvider = PlanningProvider.of(context);
-
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {});
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void _getPlanningListHandler() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    if (_planningProvider!.planningState.currentDate == "") {
       _planningProvider!.setPlanningState(
-        _planningProvider!.planningState.update(progressState: 1),
+        _planningProvider!.planningState.update(
+          currentDate: KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now()),
+        ),
+        isNotifiable: false,
       );
+    }
 
-      _planningProvider!.getLocalReportList(startDate: startDate);
+    _planningProvider!.setPlanningState(
+      _planningProvider!.planningState.update(
+        progressState: 0,
+        message: "",
+        contextName: "PlanningListPage",
+        planningData: Map<String, dynamic>(),
+      ),
+      isNotifiable: false,
+    );
+
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      _planningProvider!.addListener(_planningProviderListener);
     });
   }
 
   @override
+  void dispose() {
+    _planningProvider!.removeListener(_planningProviderListener);
+    super.dispose();
+  }
+
+  void _planningProviderListener() async {
+    if (_planningProvider!.planningState.contextName != "PlanningListPage") return;
+
+    if (_planningProvider!.planningState.progressState == -1) {
+      _refreshController.refreshFailed();
+    } else if (_planningProvider!.planningState.progressState == 2) {
+      _refreshController.refreshCompleted();
+    }
+  }
+
+  void _getPlanningListHandler() {
+    _planningProvider!.setPlanningState(
+      _planningProvider!.planningState.update(
+        progressState: 1,
+      ),
+    );
+    _planningProvider!.getLocalReportList();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (startDate == null) startDate = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now());
     return Consumer<AuthProvider>(builder: (context, authProvider, _) {
       return Scaffold(
         appBar: AppBar(
@@ -99,7 +124,12 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
                   );
 
                   if (dateTime != null) {
-                    startDate = KeicyDateTime.convertDateTimeToDateString(dateTime: dateTime);
+                    _planningProvider!.setPlanningState(
+                      _planningProvider!.planningState.update(
+                        currentDate: KeicyDateTime.convertDateTimeToDateString(dateTime: dateTime),
+                      ),
+                      isNotifiable: false,
+                    );
                     _getPlanningListHandler();
                   }
                 },
@@ -137,7 +167,7 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
               borderRadius: heightDp! * 6,
               elevation: 0,
               onPressed: () {
-                widget.bottomTabController!.jumpToTab(2);
+                AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(2);
               },
             ),
           ],
@@ -153,9 +183,9 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
       child: Consumer<PlanningProvider>(
         builder: (context, planningProvider, _) {
           if (planningProvider.planningState.progressState == 0) {
-            if (planningProvider.planningState.planningData![startDate] == null) {
+            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
               _getPlanningListHandler();
-            }
+            });
             return SizedBox();
           }
 
@@ -176,25 +206,24 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
             controller: _refreshController,
             onRefresh: _getPlanningListHandler,
             onLoading: null,
-            child: planningProvider.planningState.planningData![startDate].length == 0
+            child: planningProvider.planningState.planningData![planningProvider.planningState.currentDate] == null ||
+                    planningProvider.planningState.planningData![planningProvider.planningState.currentDate].length == 0
                 ? Center(
                     child: Text(
-                      "No Planning Data",
+                      LocaleKeys.PlanningListPageString_noPlanning.tr(),
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   )
                 : ListView.builder(
-                    itemCount: planningProvider.planningState.planningData![startDate].length,
+                    itemCount: planningProvider.planningState.planningData![planningProvider.planningState.currentDate].length,
                     itemBuilder: (context, index) {
-                      print(index);
                       return PlanningWidget(
-                        data: planningProvider.planningState.planningData![startDate][index],
+                        data: planningProvider.planningState.planningData![planningProvider.planningState.currentDate][index],
                         onDetailHandler: (PlanningReportModel planningReportModel) async {
                           var result = await Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (BuildContext context) => PlanningPage(
                                 planningReportModel: planningReportModel,
-                                bottomTabController: widget.bottomTabController,
                               ),
                             ),
                           );

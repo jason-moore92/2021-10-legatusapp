@@ -6,6 +6,7 @@ import 'package:legutus/Models/recipient_model.dart';
 class CustomerModel extends Equatable {
   String? name;
   String? type;
+  String? email;
   String? phone;
   String? corpNumber;
   List<dynamic>? representation;
@@ -15,6 +16,7 @@ class CustomerModel extends Equatable {
   CustomerModel({
     name = "",
     type = "",
+    email = "",
     phone = "",
     corpNumber = "",
     representation,
@@ -24,6 +26,7 @@ class CustomerModel extends Equatable {
   }) {
     this.name = name;
     this.type = type;
+    this.email = email;
     this.phone = phone;
     this.corpNumber = corpNumber;
     this.representation = representation ?? [];
@@ -33,14 +36,16 @@ class CustomerModel extends Equatable {
 
   factory CustomerModel.fromJson(Map<String, dynamic> map) {
     List<RecipientModel>? recipients = [];
-
-    for (var i = 0; i < map["recipients"].length; i++) {
-      recipients.add(RecipientModel.fromJson(map["recipients"][i]));
+    if (map["recipients"] != null) {
+      for (var i = 0; i < map["recipients"].length; i++) {
+        recipients.add(RecipientModel.fromJson(map["recipients"][i]));
+      }
     }
 
     return CustomerModel(
       name: map["name"] ?? "",
       type: map["type"] ?? "",
+      email: map["email"] ?? "",
       phone: map["phone"] ?? "",
       corpNumber: map["corp_number"] ?? "",
       representation: map["representation"] ?? [],
@@ -59,6 +64,7 @@ class CustomerModel extends Equatable {
     return {
       "name": name ?? "",
       "type": type ?? "",
+      "email": email ?? "",
       "phone": phone ?? "",
       "corp_number": corpNumber ?? "",
       "representation": representation ?? [],
@@ -71,6 +77,7 @@ class CustomerModel extends Equatable {
     return CustomerModel(
       name: model.name,
       type: model.type,
+      email: model.email,
       phone: model.phone,
       corpNumber: model.corpNumber,
       representation: model.representation,
@@ -83,6 +90,7 @@ class CustomerModel extends Equatable {
   List<Object> get props => [
         name!,
         type!,
+        email!,
         phone!,
         corpNumber!,
         representation!,

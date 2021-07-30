@@ -6,5 +6,7 @@ class AppConfig {
   static String testEmail = "vladimir.lorentz@gmail.com";
   static String testPhoneNumber = "767048443";
 
+  static String contactPhoneNumber = "+33428290924";
+
   static int refreshListLimit = 10;
 }

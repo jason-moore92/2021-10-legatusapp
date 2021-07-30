@@ -14,6 +14,8 @@ class FileHelpers {
       if (path == "") {
         Directory directory = await getApplicationDocumentsDirectory();
         path = directory.path;
+        path += "/local_medias";
+        Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + ".txt";
       }
       File file = File(path!);
@@ -41,6 +43,8 @@ class FileHelpers {
       if (path == "") {
         Directory directory = await getApplicationDocumentsDirectory();
         path = directory.path;
+        path += "/local_medias";
+        Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + ".txt";
       }
       await imageFile!.saveTo(path!);
@@ -57,6 +61,8 @@ class FileHelpers {
       if (path == "") {
         Directory directory = await getApplicationDocumentsDirectory();
         path = directory.path;
+        path += "/local_medias";
+        Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + videoFile!.path.split(".").last;
       }
       await videoFile!.saveTo(path!);
@@ -73,6 +79,8 @@ class FileHelpers {
       if (path == "") {
         Directory directory = await getApplicationDocumentsDirectory();
         path = directory.path;
+        path += "/local_medias";
+        Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + tmpPath!.split(".").last;
       }
       File tmpFile = File(tmpPath!);
@@ -93,6 +101,8 @@ class FileHelpers {
   }) async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path;
+    path += "/local_medias";
+    Directory(path).createSync();
 
     String fileName = "";
     if (createAt == null) {
@@ -104,5 +114,33 @@ class FileHelpers {
     fileName = "$fileName-$rank-$mediaType.$fileType";
 
     return "$path/$fileName";
+  }
+
+  static Future<Map<String, int>> dirStatSync({String dirPath = ""}) async {
+    int fileNum = 0;
+    int totalSize = 0;
+    Directory dir;
+    if (dirPath == "") {
+      Directory directory = await getApplicationDocumentsDirectory();
+      String path = directory.path;
+      path += "/local_medias";
+      dir = Directory(path);
+    } else
+      dir = Directory(dirPath);
+
+    try {
+      if (dir.existsSync()) {
+        dir.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
+          if (entity is File) {
+            fileNum++;
+            totalSize += entity.lengthSync() ~/ 1024;
+          }
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+
+    return {'fileNum': fileNum, 'size': totalSize};
   }
 }

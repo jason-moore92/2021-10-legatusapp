@@ -109,8 +109,11 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
   bool _init = false;
   bool? _isNew;
 
-  LocalReportListProvider? _localReportListProvider;
+  LocalReportProvider? _localReportProvider;
   KeicyProgressDialog? _keicyProgressDialog;
+
+  DateTime? _reportDateTime;
+  DateTime? _recipientBirthDateTime;
 
   Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
 
@@ -129,7 +132,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    _localReportListProvider = LocalReportListProvider.of(context);
+    _localReportProvider = LocalReportProvider.of(context);
     _keicyProgressDialog = KeicyProgressDialog.of(
       context,
       backgroundColor: Colors.transparent,
@@ -154,17 +157,32 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       message: "",
     );
 
+    _localReportProvider!.setLocalReportState(
+      LocalReportState.init().copyWith(contextName: "NewReportPage"),
+      isNotifiable: false,
+    );
+
     _isNew = widget.isNew!;
 
     _localReportModel = widget.localReportModel != null ? LocalReportModel.copy(widget.localReportModel!) : LocalReportModel();
 
     if (_isNew!) {
-      _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now());
+      _reportDateTime = DateTime.now();
+      _recipientBirthDateTime = DateTime(DateTime.now().year - 40);
+
+      _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime, formats: "d/m/Y");
       _timeController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: 'H:i');
-      _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime(DateTime.now().year - 40));
+      _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _recipientBirthDateTime, formats: "d/m/Y");
     } else {
+      _reportDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: _localReportModel!.date!);
+      if (_localReportModel!.recipientBirthDate != "") {
+        _recipientBirthDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: _localReportModel!.recipientBirthDate!);
+      } else {
+        _recipientBirthDateTime = DateTime(DateTime.now().year - 40);
+      }
+
       _nameController.text = _localReportModel!.name!;
-      _dateController.text = _localReportModel!.date!;
+      _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime, formats: "d/m/Y");
       _timeController.text = _localReportModel!.time!;
       _descriptionController.text = _localReportModel!.description!;
 
@@ -186,33 +204,45 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
       _recipientNameController.text = _localReportModel!.recipientName!;
       _recipientPositionController.text = _localReportModel!.recipientPosition!;
-      _recipientBirthDayController.text = _localReportModel!.recipientBirthDate!;
+      _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _recipientBirthDateTime, formats: "d/m/Y");
       _recipientBirthCityController.text = _localReportModel!.recipientBirthCity!;
       _recipientEmailController.text = _localReportModel!.recipientEmail!;
       _recipientPhoneNumberController.text = _localReportModel!.recipientPhone!;
     }
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      _localReportListProvider!.addListener(_localReportListProviderListener);
+      _localReportProvider!.addListener(_localReportProviderListener);
     });
   }
 
   @override
   void dispose() {
-    _localReportListProvider!.removeListener(_localReportListProviderListener);
+    _localReportProvider!.removeListener(_localReportProviderListener);
 
     super.dispose();
   }
 
-  void _localReportListProviderListener() async {
-    if (_localReportListProvider!.localReportListState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
+  void _localReportProviderListener() async {
+    if (_localReportProvider!.localReportState.contextName != "NewReportPage") return;
+
+    if (_localReportProvider!.localReportState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
       await _keicyProgressDialog!.hide();
     }
 
-    if (_localReportListProvider!.localReportListState.progressState == 2) {
-      SuccessDialog.show(context);
+    if (_localReportProvider!.localReportState.progressState == 2) {
+      SuccessDialog.show(
+        context,
+        text: _isNew! ? LocaleKeys.NewReportPageString_createSuccess.tr() : LocaleKeys.NewReportPageString_updateSuccess.tr(),
+        callBack: () {
+          Navigator.of(context).pop(_updatedStatus);
+        },
+      );
+
       if (_isNew!) {
-        _updatedStatus = {"isNew": true};
+        _updatedStatus = {
+          "isUpdated": true,
+          "localReportModel": _localReportModel,
+        };
         _isNew = false;
       } else {
         _updatedStatus = {
@@ -220,10 +250,9 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
           "localReportModel": _localReportModel,
         };
       }
-
       setState(() {});
-    } else if (_localReportListProvider!.localReportListState.progressState == -1) {
-      FailedDialog.show(context, text: _localReportListProvider!.localReportListState.message!);
+    } else if (_localReportProvider!.localReportState.progressState == -1) {
+      FailedDialog.show(context, text: _localReportProvider!.localReportState.message!);
     }
   }
 
@@ -249,7 +278,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       }
       // _localReportModel!.reportId = DateTime.now().millisecondsSinceEpoch;
 
-      _localReportListProvider!.createLocalReport(
+      _localReportProvider!.createLocalReport(
         localReportModel: _localReportModel,
       );
     } else {
@@ -257,7 +286,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
         dateString: "${widget.localReportModel!.date} ${widget.localReportModel!.time}",
       )!;
-      _localReportListProvider!.updateLocalReport(
+      _localReportProvider!.updateLocalReport(
         localReportModel: _localReportModel,
         oldReportId: "${reportDateTime}_$reportId",
       );
@@ -365,13 +394,17 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
                 ///
                 SizedBox(height: heightDp! * 30),
-                Center(
-                  child: CustomElevatedButton(
-                    text: LocaleKeys.NewReportPageString_save.tr(),
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.white),
-                    backColor: AppColors.yello,
-                    onPressed: _createHandler,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CustomElevatedButton(
+                      text: LocaleKeys.NewReportPageString_save.tr().toUpperCase(),
+                      textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.white),
+                      backColor: AppColors.yello,
+                      onPressed: _createHandler,
+                    ),
+                    SizedBox(width: widthDp! * 15),
+                  ],
                 ),
               ],
             ),
@@ -473,7 +506,6 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                   CustomTextFormField(
                     controller: _dateController,
                     focusNode: _dateFocusNode,
-                    hintText: "2021-06-30",
                     hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
                     errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),
                     border: OutlineInputBorder(
@@ -494,7 +526,8 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       );
 
                       if (dateTime != null) {
-                        _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: dateTime);
+                        _reportDateTime = dateTime;
+                        _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime, formats: "d/m/Y");
                       }
                     },
                     validator: (input) => input.isEmpty
@@ -503,7 +536,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                             ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(args: [LocaleKeys.NewReportPageString_date.tr().toLowerCase()])
                             : null,
                     onChanged: (input) => (input.length == 10) ? FocusScope.of(context).requestFocus(_timeFocusNode) : null,
-                    onSaved: (input) => _localReportModel!.date = input,
+                    onSaved: (input) => _localReportModel!.date = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime),
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_timeFocusNode),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_timeFocusNode),
                   ),
@@ -540,7 +573,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: [
-                      MaskTextInputFormatter(mask: '##:##', filter: {"#": RegExp(r'[0-9]')})
+                      MaskTextInputFormatter(mask: '##:##:##', filter: {"#": RegExp(r'[0-9]')})
                     ],
                     readOnly: true,
                     onTap: () async {
@@ -549,13 +582,13 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       if (timeOfDay != null) {
                         _timeController.text = KeicyDateTime.convertDateTimeToDateString(
                           dateTime: DateTime(2000, 1, 1, timeOfDay.hour, timeOfDay.minute),
-                          formats: 'H:i',
+                          formats: 'H:i:s',
                         );
                       }
                     },
                     validator: (input) => input.isEmpty
                         ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(args: [LocaleKeys.NewReportPageString_time.tr().toLowerCase()])
-                        : input.length != 5
+                        : input.length != 8
                             ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(args: [LocaleKeys.NewReportPageString_time.tr().toLowerCase()])
                             : null,
                     onSaved: (input) => _localReportModel!.time = input,
@@ -842,29 +875,37 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Wrap(
-          children: List.generate(customerTypes.length, (index) {
-            String type = customerTypes.keys.toList()[index];
-            String label = customerTypes[type];
+        Row(
+          children: [
+            SizedBox(width: widthDp! * 15),
+            Text(LocaleKeys.NewReportPageString_customerTypeLabel.tr(), style: Theme.of(context).textTheme.caption),
+            Expanded(
+              child: Wrap(
+                children: List.generate(customerTypes.length, (index) {
+                  String type = customerTypes.keys.toList()[index];
+                  String label = customerTypes[type];
 
-            if (_localReportModel!.customerType == "") _localReportModel!.customerType = type;
+                  if (_localReportModel!.customerType == "") _localReportModel!.customerType = type;
 
-            return Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Radio<String>(
-                  value: type,
-                  groupValue: _localReportModel!.customerType ?? "",
-                  activeColor: AppColors.yello,
-                  onChanged: (String? value) {
-                    _localReportModel!.customerType = value;
-                    setState(() {});
-                  },
-                ),
-                Text(label, style: Theme.of(context).textTheme.caption)
-              ],
-            );
-          }),
+                  return Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Radio<String>(
+                        value: type,
+                        groupValue: _localReportModel!.customerType ?? "",
+                        activeColor: AppColors.yello,
+                        onChanged: (String? value) {
+                          _localReportModel!.customerType = value;
+                          setState(() {});
+                        },
+                      ),
+                      Text(label, style: Theme.of(context).textTheme.caption)
+                    ],
+                  );
+                }),
+              ),
+            ),
+          ],
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: widthDp! * 15),
@@ -1185,7 +1226,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
         CustomTextFormField(
           controller: _recipientNameController,
           focusNode: _recipientNameFocusNode,
-          hintText: "129 rue vauban",
+          hintText: "Vladimir Lorentz",
           hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
           errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),
           border: OutlineInputBorder(
@@ -1252,7 +1293,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                   CustomTextFormField(
                     controller: _recipientBirthDayController,
                     focusNode: _recipientBirthDayFocusNode,
-                    hintText: "####-##-##",
+                    hintText: "##/##/####",
                     hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
                     errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),
                     border: OutlineInputBorder(
@@ -1261,7 +1302,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: [
-                      MaskTextInputFormatter(mask: '####-##-##', filter: {"#": RegExp(r'[0-9]')})
+                      MaskTextInputFormatter(mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')})
                     ],
                     readOnly: true,
                     onTap: () async {
@@ -1273,14 +1314,20 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       );
 
                       if (dateTime != null) {
-                        _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: dateTime);
+                        _recipientBirthDateTime = dateTime;
+                        _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(
+                          dateTime: _recipientBirthDateTime,
+                          formats: "d/m/Y",
+                        );
                       }
                     },
                     validator: (input) => input.isNotEmpty && input.length != 10
                         ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(args: [LocaleKeys.NewReportPageString_date.tr().toLowerCase()])
                         : null,
                     onChanged: (input) => (input.length == 10) ? FocusScope.of(context).requestFocus(_recipientBirthCityFocusNode) : null,
-                    onSaved: (input) => _localReportModel!.recipientBirthDate = input,
+                    onSaved: (input) => _localReportModel!.recipientBirthDate = KeicyDateTime.convertDateTimeToDateString(
+                      dateTime: _recipientBirthDateTime,
+                    ),
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_customerCityFocusNode),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_customerCityFocusNode),
                   ),

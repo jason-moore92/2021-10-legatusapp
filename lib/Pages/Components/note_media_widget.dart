@@ -1,13 +1,17 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:legutus/Pages/Dialogs/index.dart';
 
-class NoteMediaWidget extends StatelessWidget {
+class NoteMediaWidget extends StatefulWidget {
   final MediaModel? mediaModel;
   final int? totalMediaCount;
   final bool? isSelected;
+  final bool? isUploading;
   final Function? tapHandler;
   final Function? longPressHandler;
 
@@ -16,80 +20,147 @@ class NoteMediaWidget extends StatelessWidget {
     @required this.mediaModel,
     @required this.totalMediaCount,
     this.isSelected = false,
+    this.isUploading = false,
     @required this.tapHandler,
     @required this.longPressHandler,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    double widthDp = ScreenUtil().setWidth(1);
-    double heightDp = ScreenUtil().setWidth(1);
-    double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+  _NoteMediaWidgetState createState() => _NoteMediaWidgetState();
+}
 
-    return GestureDetector(
-      onTap: () {
-        if (tapHandler != null) {
-          tapHandler!();
-        }
-      },
-      onLongPress: () {
-        if (longPressHandler != null) {
-          longPressHandler!();
-        }
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: heightDp * 5),
-        padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 10),
-        decoration: BoxDecoration(
-          color: Color(0xFFE7E7E7),
-          borderRadius: BorderRadius.circular(heightDp * 6),
-          border: Border.all(
-            color: isSelected! ? AppColors.yello : Colors.transparent,
-            width: isSelected! ? 3 : 0,
+class _NoteMediaWidgetState extends State<NoteMediaWidget> {
+  double widthDp = ScreenUtil().setWidth(1);
+  double heightDp = ScreenUtil().setWidth(1);
+  double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+
+  Timer? uploadTimer;
+  double angle = 0;
+
+  double? widgetWidth;
+  double? widgetHeight;
+
+  GlobalKey _key = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
+      widgetWidth = renderBox.size.width;
+      widgetHeight = renderBox.size.height;
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    if (uploadTimer != null) uploadTimer!.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isUploading!) {
+      if (uploadTimer != null) uploadTimer!.cancel();
+      uploadTimer = Timer.periodic(Duration(milliseconds: 10), (uploadTimer) {
+        angle += 10;
+        setState(() {});
+      });
+    } else {
+      angle = 0;
+    }
+
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (widget.tapHandler != null) {
+              widget.tapHandler!();
+            }
+          },
+          onLongPress: () {
+            if (widget.longPressHandler != null) {
+              widget.longPressHandler!();
+            }
+          },
+          child: Container(
+            key: _key,
+            margin: EdgeInsets.symmetric(vertical: heightDp * 5),
+            padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 10),
+            decoration: BoxDecoration(
+              color: Color(0xFFE7E7E7),
+              borderRadius: BorderRadius.circular(heightDp * 0),
+              border: Border.all(
+                color: widget.isSelected! ? AppColors.yello : Colors.transparent,
+                width: widget.isSelected! ? 3 : 0,
+              ),
+            ),
+            child: Row(
+              children: [
+                SizedBox(width: widthDp * 5),
+                Icon(
+                  widget.mediaModel!.state == "uploaded" ? Icons.cloud_done : Icons.cloud_off,
+                  size: heightDp * 20,
+                  color: widget.mediaModel!.state == "uploaded" ? AppColors.green : AppColors.red.withOpacity(0.6),
+                ),
+                SizedBox(width: widthDp * 10),
+                Expanded(
+                  child: Text(
+                    "${widget.mediaModel!.content!}",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    MediaInfoDialog.show(
+                      context,
+                      mediaModel: widget.mediaModel,
+                      totalMediaCount: widget.totalMediaCount,
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(heightDp * 5),
+                    color: Colors.transparent,
+                    child: Stack(
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          size: heightDp * 20,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.info,
+                          size: heightDp * 20,
+                          color: AppColors.yello,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        child: Row(
-          children: [
-            SizedBox(width: widthDp * 5),
-            Icon(
-              mediaModel!.state == "uploaded" ? Icons.cloud_done : Icons.cloud_off,
-              size: heightDp * 20,
-              color: mediaModel!.state == "uploaded" ? AppColors.green : AppColors.red.withOpacity(0.6),
-            ),
-            SizedBox(width: widthDp * 10),
-            Expanded(
-              child: Text("${mediaModel!.content!}", style: Theme.of(context).textTheme.bodyText2),
-            ),
-            GestureDetector(
-              onTap: () {
-                MediaInfoDialog.show(
-                  context,
-                  mediaModel: mediaModel,
-                  totalMediaCount: totalMediaCount,
-                );
-              },
-              child: Container(
-                padding: EdgeInsets.all(heightDp * 5),
-                color: Colors.transparent,
-                child: Stack(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      size: heightDp * 20,
-                      color: Colors.white,
-                    ),
-                    Icon(
-                      Icons.info,
-                      size: heightDp * 20,
-                      color: AppColors.yello,
-                    ),
-                  ],
+        if (widget.isUploading!)
+          Positioned(
+            top: heightDp * 5,
+            child: Container(
+              width: widgetWidth,
+              height: widgetHeight != null ? widgetHeight! - heightDp * 10 : widgetHeight,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+              ),
+              child: Center(
+                child: Transform.rotate(
+                  angle: angle / 180 * pi,
+                  child: Icon(Icons.autorenew, size: heightDp * 25, color: Colors.white),
                 ),
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+      ],
     );
   }
 }

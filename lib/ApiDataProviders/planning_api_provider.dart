@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:legutus/Config/config.dart';
 import 'package:legutus/Helpers/date_time_convert.dart';
 import 'package:legutus/Helpers/http_plus.dart';
 
 class PlanningApiProvider {
-  static getPlanning({String? startDate}) async {
+  static Future<Map<String, dynamic>> getPlanning({@required String? startDate}) async {
     String apiUrl = '/planning';
 
     try {

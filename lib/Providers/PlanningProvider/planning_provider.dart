@@ -16,6 +16,8 @@ class PlanningProvider extends ChangeNotifier {
   PlanningState _planningState = PlanningState.init();
   PlanningState get planningState => _planningState;
 
+  SharedPreferences? _preferences;
+
   void setPlanningState(PlanningState planningState, {bool isNotifiable = true}) {
     if (_planningState != planningState) {
       _planningState = planningState;
@@ -23,31 +25,50 @@ class PlanningProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getLocalReportList({String? startDate}) async {
+  Future<void> getLocalReportList() async {
     try {
       var result;
 
-      result = await PlanningApiProvider.getPlanning(startDate: startDate);
+      if (_preferences == null) _preferences = await SharedPreferences.getInstance();
+
+      result = await PlanningApiProvider.getPlanning(startDate: _planningState.currentDate);
 
       if (result["success"]) {
         Map<String, dynamic> planningData = _planningState.planningData!;
 
-        planningData[startDate!] = result["data"];
+        planningData[_planningState.currentDate!] = result["data"];
 
         _planningState = _planningState.update(
           progressState: 2,
           planningData: planningData,
         );
+
+        await _preferences!.setString("planningData", json.encode(_planningState.planningData));
       } else {
         _planningState = _planningState.update(
-          progressState: 2,
+          progressState: -1,
         );
       }
     } catch (e) {
       _planningState = _planningState.update(
-        progressState: 2,
+        progressState: -1,
       );
     }
+
+    if (_planningState.progressState == -1) {
+      var localData = _preferences!.getString("planningData");
+      if (localData != null) {
+        _planningState = _planningState.update(
+          progressState: 2,
+          planningData: json.decode(localData),
+        );
+      }
+    }
+
+    _planningState = _planningState.update(
+      progressState: 2,
+    );
+
     notifyListeners();
   }
 }

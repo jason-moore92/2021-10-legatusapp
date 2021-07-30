@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:legutus/ApiDataProviders/index.dart';
 import 'package:legutus/Config/config.dart';
 import 'package:legutus/Models/index.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'index.dart';
 
 class LocalReportListProvider extends ChangeNotifier {
@@ -30,7 +27,7 @@ class LocalReportListProvider extends ChangeNotifier {
       try {
         var result;
 
-        result = await LocalReportsDataProvider.getLocalReportList(
+        result = await LocalReportApiProvider.getLocalReportList(
           page: localReportMetaData.isEmpty ? 0 : (localReportMetaData["nextPage"] ?? 0),
           limit: AppConfig.refreshListLimit,
         );
@@ -59,92 +56,5 @@ class LocalReportListProvider extends ChangeNotifier {
       }
       notifyListeners();
     });
-  }
-
-  Future<int> createLocalReport({@required LocalReportModel? localReportModel}) async {
-    try {
-      var result = await LocalReportsDataProvider.create(localReportModel: localReportModel);
-
-      if (result["success"]) {
-        _localReportListState = _localReportListState.update(
-          progressState: 2,
-          message: "",
-        );
-      } else {
-        _localReportListState = _localReportListState.update(
-          progressState: -1,
-          message: "Somgthing was wrong",
-        );
-      }
-    } catch (e) {
-      _localReportListState = _localReportListState.update(
-        progressState: -1,
-        message: e.toString(),
-      );
-    }
-
-    notifyListeners();
-    return _localReportListState.progressState!;
-  }
-
-  Future<int> updateLocalReport({@required LocalReportModel? localReportModel, @required String? oldReportId}) async {
-    try {
-      var result = await LocalReportsDataProvider.update(localReportModel: localReportModel, oldReportId: oldReportId);
-
-      if (result["success"]) {
-        _localReportListState = _localReportListState.update(
-          progressState: 2,
-          message: "",
-        );
-      } else {
-        _localReportListState = _localReportListState.update(
-          progressState: -1,
-          message: "Somgthing was wrong",
-        );
-      }
-    } catch (e) {
-      _localReportListState = _localReportListState.update(
-        progressState: -1,
-        message: e.toString(),
-      );
-    }
-
-    notifyListeners();
-    return _localReportListState.progressState!;
-  }
-
-  Future<int> deleteLocalReport({@required LocalReportModel? localReportModel}) async {
-    try {
-      var result = await LocalReportsDataProvider.delete(localReportModel: localReportModel);
-
-      for (var i = 0; i < localReportModel!.medias!.length; i++) {
-        File file = File(localReportModel.medias![i].path!);
-        try {
-          file.deleteSync();
-        } catch (e) {
-          print(e);
-        }
-      }
-
-      if (result["success"]) {
-        _localReportListState = _localReportListState.update(
-          progressState: 2,
-          message: "",
-        );
-      } else {
-        _localReportListState = _localReportListState.update(
-          progressState: -1,
-          message: "Somgthing was wrong",
-        );
-      }
-    } catch (e) {
-      _localReportListState = _localReportListState.update(
-        progressState: -1,
-        message: e.toString(),
-      );
-    }
-    notifyListeners();
-
-    return _localReportListState.progressState!;
   }
 }

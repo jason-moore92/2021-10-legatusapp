@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 
 class AudioRecoderPanel extends StatefulWidget {
   final GlobalKey<ScaffoldState>? scaffoldKey;
+  final KeicyProgressDialog? keicyProgressDialog;
   final String? recoderName;
   final double? width;
   final Function(bool)? recordingStatusCallback;
@@ -22,6 +24,7 @@ class AudioRecoderPanel extends StatefulWidget {
   AudioRecoderPanel({
     Key? key,
     @required this.scaffoldKey,
+    @required this.keicyProgressDialog,
     this.recoderName = "Flutter_sound",
     @required this.width,
     @required this.recordingStatusCallback,
@@ -78,7 +81,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
   Codec _codec = Codec.pcm16WAV;
 
   /// audio description variable
-  String? _audioRecorderTxt = '00:00:00';
+  String? _audioRecorderTxt = '00:00';
   int? _inMilliseconds = 0;
   double? _dbLevel;
   String? _path;
@@ -251,7 +254,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
 
       _recorderSubscription = _recorderModule.onProgress!.listen((e) {
         var date = DateTime.fromMillisecondsSinceEpoch(e.duration.inMilliseconds, isUtc: true);
-        var txt = DateFormat('mm:ss:SS').format(date);
+        var txt = DateFormat('mm:ss').format(date);
         _inMilliseconds = e.duration.inMilliseconds;
 
         setState(() {
@@ -297,9 +300,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
 
   void stopRecorder() async {
     try {
+      await widget.keicyProgressDialog!.show();
       await _recorderModule.stopRecorder();
 
-      print('stopRecorder');
       _cancelRecorderSubscriptions();
 
       setState(() {
@@ -315,6 +318,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
 
       _showInSnackBar("Audio saved in '$_path'");
     } on Exception catch (err) {
+      await widget.keicyProgressDialog!.hide();
       print('stopRecorder error: $err');
     }
   }
@@ -341,7 +345,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
     return Consumer<CameraProvider>(builder: (context, cameraProvider, _) {
       return Container(
         width: widget.width!,
-        color: Colors.black.withOpacity(0.7),
+        color: Colors.black.withOpacity(1),
         padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
         child: Column(
           children: [

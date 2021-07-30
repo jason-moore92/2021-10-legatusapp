@@ -7,7 +7,7 @@ import 'package:legutus/Config/config.dart';
 import 'package:http/http.dart' as http;
 
 class LoginApiProvider {
-  static getSMSCode({@required String? email, @required String? phoneNumber}) async {
+  static Future<Map<String, dynamic>> getSMSCode({@required String? email, @required String? phoneNumber}) async {
     String apiUrl = '/get-sms-code';
 
     try {
@@ -46,7 +46,7 @@ class LoginApiProvider {
     }
   }
 
-  static login({@required String? email, @required String? phoneNumber, @required String? smsCode}) async {
+  static Future<Map<String, dynamic>> login({@required String? email, @required String? phoneNumber, @required String? smsCode}) async {
     String apiUrl = '/login';
 
     try {

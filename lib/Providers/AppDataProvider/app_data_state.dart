@@ -3,54 +3,62 @@ import 'package:legutus/Models/index.dart';
 import 'package:legutus/Models/user_model.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class AppDataState extends Equatable {
   final int? progressState;
   final String? message;
+  final String? contextName;
   final SettingsModel? settingsModel;
-  final List<dynamic>? localReportList;
+  final PersistentTabController? bottomTabController;
 
   AppDataState({
     @required this.progressState,
     @required this.message,
+    @required this.contextName,
     @required this.settingsModel,
-    @required this.localReportList,
+    @required this.bottomTabController,
   });
 
   factory AppDataState.init() {
     return AppDataState(
       progressState: 0,
       message: "",
+      contextName: "",
       settingsModel: SettingsModel(),
-      localReportList: [],
+      bottomTabController: PersistentTabController(),
     );
   }
 
   AppDataState copyWith({
     int? progressState,
     String? message,
+    String? contextName,
     SettingsModel? settingsModel,
-    List<dynamic>? localReportList,
+    PersistentTabController? bottomTabController,
   }) {
     return AppDataState(
       progressState: progressState ?? this.progressState,
       message: message ?? this.message,
+      contextName: contextName ?? this.contextName,
       settingsModel: settingsModel ?? this.settingsModel,
-      localReportList: localReportList ?? this.localReportList,
+      bottomTabController: bottomTabController ?? this.bottomTabController,
     );
   }
 
   AppDataState update({
     int? progressState,
     String? message,
+    String? contextName,
     SettingsModel? settingsModel,
-    List<dynamic>? localReportList,
+    PersistentTabController? bottomTabController,
   }) {
     return copyWith(
       progressState: progressState,
       message: message,
+      contextName: contextName,
       settingsModel: settingsModel,
-      localReportList: localReportList,
+      bottomTabController: bottomTabController,
     );
   }
 
@@ -58,8 +66,9 @@ class AppDataState extends Equatable {
     return {
       "progressState": progressState,
       "message": message,
+      "contextName": contextName,
       "settingsModel": settingsModel!.toJson(),
-      "localReportList": localReportList,
+      "bottomTabController": bottomTabController,
     };
   }
 
@@ -68,7 +77,7 @@ class AppDataState extends Equatable {
         progressState!,
         message!,
         settingsModel!,
-        localReportList!,
+        bottomTabController!,
       ];
 
   @override

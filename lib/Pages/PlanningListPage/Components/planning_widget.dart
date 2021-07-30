@@ -26,7 +26,7 @@ class PlanningWidget extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            color: Color(0xFFE2E2E2),
+            color: Color(0xFFF4F4F4),
             padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 10),
             child: Row(
               children: [
@@ -44,7 +44,7 @@ class PlanningWidget extends StatelessWidget {
               return Column(
                 children: [
                   _reportPanel(context, planningReportModel),
-                  Divider(height: 1, thickness: 1, color: Color(0xFFE2E2E2)),
+                  Divider(height: 1, thickness: 1, color: Color(0xFFE4E4E4)),
                 ],
               );
             }),
@@ -63,7 +63,7 @@ class PlanningWidget extends StatelessWidget {
         onDetailHandler!(planningReportModel);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 10),
+        padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 5),
         color: Colors.transparent,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,10 +86,10 @@ class PlanningWidget extends StatelessWidget {
             ),
 
             ///
-            SizedBox(height: heightDp! * 10),
+            SizedBox(height: heightDp! * 5),
             Row(
               children: [
-                Icon(Icons.folder_outlined, size: heightDp! * 25, color: Colors.black),
+                Icon(Icons.folder_outlined, size: heightDp! * 20, color: Colors.black),
                 SizedBox(width: widthDp! * 5),
                 Text(
                   planningReportModel.folderName!,
@@ -99,70 +99,85 @@ class PlanningWidget extends StatelessWidget {
             ),
 
             ///
-            SizedBox(height: heightDp! * 5),
-            Row(
-              children: [
-                Icon(Icons.location_on_outlined, size: heightDp! * 25, color: Colors.black),
-                SizedBox(width: widthDp! * 5),
-                Text(
-                  planningReportModel.zipCity!,
-                  style: Theme.of(context).textTheme.bodyText1!,
-                ),
-              ],
-            ),
-
-            ///
-            SizedBox(height: heightDp! * 5),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.business, size: heightDp! * 25, color: Colors.black),
-                SizedBox(width: widthDp! * 5),
-                Column(
-                  children: List.generate(planningReportModel.customers!.length, (index) {
-                    return Container(
-                      height: heightDp! * 25,
-                      alignment: Alignment.center,
-                      child: Text(
-                        planningReportModel.customers![index].name!,
+            if (planningReportModel.zipCity != "")
+              Column(
+                children: [
+                  SizedBox(height: heightDp! * 0),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on_outlined, size: heightDp! * 20, color: Colors.black),
+                      SizedBox(width: widthDp! * 5),
+                      Text(
+                        planningReportModel.zipCity!,
                         style: Theme.of(context).textTheme.bodyText1!,
                       ),
-                    );
-                  }),
-                ),
-              ],
-            ),
+                    ],
+                  ),
+                ],
+              ),
 
             ///
-            SizedBox(height: heightDp! * 5),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.local_police_outlined, size: heightDp! * 25, color: Colors.black),
-                SizedBox(width: widthDp! * 5),
-                planningReportModel.accounts!.isEmpty
-                    ? Container(
-                        height: heightDp! * 25,
-                        alignment: Alignment.center,
-                        child: Text(
-                          "No Accounts",
-                          style: Theme.of(context).textTheme.bodyText1!,
-                        ),
-                      )
-                    : Column(
-                        children: List.generate(planningReportModel.accounts!.length, (index) {
+            if (planningReportModel.customers!.isNotEmpty)
+              Column(
+                children: [
+                  SizedBox(height: heightDp! * 0),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.business, size: heightDp! * 20, color: Colors.black),
+                      SizedBox(width: widthDp! * 5),
+                      Column(
+                        children: List.generate(planningReportModel.customers!.length, (index) {
                           return Container(
                             height: heightDp! * 25,
                             alignment: Alignment.center,
                             child: Text(
-                              planningReportModel.accounts![index]["name"],
+                              planningReportModel.customers![index].name!,
                               style: Theme.of(context).textTheme.bodyText1!,
                             ),
                           );
                         }),
                       ),
-              ],
-            ),
+                    ],
+                  ),
+                ],
+              ),
+
+            ///
+            if (planningReportModel.accounts!.isNotEmpty)
+              Column(
+                children: [
+                  SizedBox(height: heightDp! * 0),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.local_police_outlined, size: heightDp! * 20, color: Colors.black),
+                      SizedBox(width: widthDp! * 5),
+                      planningReportModel.accounts!.isEmpty
+                          ? Container(
+                              height: heightDp! * 25,
+                              alignment: Alignment.center,
+                              child: Text(
+                                "No Accounts",
+                                style: Theme.of(context).textTheme.bodyText1!,
+                              ),
+                            )
+                          : Column(
+                              children: List.generate(planningReportModel.accounts!.length, (index) {
+                                return Container(
+                                  height: heightDp! * 25,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    planningReportModel.accounts![index]["name"],
+                                    style: Theme.of(context).textTheme.bodyText1!,
+                                  ),
+                                );
+                              }),
+                            ),
+                    ],
+                  ),
+                ],
+              ),
           ],
         ),
       ),

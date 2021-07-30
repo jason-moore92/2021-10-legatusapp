@@ -22,39 +22,35 @@ class NormalAskDialog {
           title: Text(
             title,
             style: TextStyle(fontSize: fontSp * 18, color: Colors.black),
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.start,
           ),
           content: Text(
             content,
             style: TextStyle(fontSize: fontSp * 14, color: Colors.black),
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.start,
           ),
           actions: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CustomTextButton(
-                    text: okButton,
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
-                    bordercolor: AppColors.yello,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      if (callback != null) callback();
-                    },
+            CustomTextButton(
+              text: cancelButton,
+              textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    color: AppColors.yello,
+                    fontWeight: FontWeight.w600,
                   ),
-                  CustomTextButton(
-                    text: cancelButton,
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.grey),
-                    bordercolor: Colors.grey,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CustomTextButton(
+              text: okButton,
+              textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    color: AppColors.yello,
+                    fontWeight: FontWeight.w600,
                   ),
-                ],
-              ),
-            )
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (callback != null) callback();
+              },
+            ),
           ],
         );
       },

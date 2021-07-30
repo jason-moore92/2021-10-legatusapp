@@ -11,20 +11,20 @@ enum LoginState {
 class AuthState extends Equatable {
   final int? progressState;
   final String? message;
+  final String? contextName;
   final String? description;
   final int? statusCode;
   final LoginState? loginState;
-  final String? contextName;
   final bool? smsCode;
   final UserModel? userModel;
 
   AuthState({
     @required this.progressState,
     @required this.message,
+    @required this.contextName,
     @required this.description,
     @required this.statusCode,
     @required this.loginState,
-    @required this.contextName,
     @required this.smsCode,
     @required this.userModel,
   });
@@ -33,10 +33,10 @@ class AuthState extends Equatable {
     return AuthState(
       progressState: 0,
       message: "",
+      contextName: "",
       description: "",
       statusCode: 0,
       loginState: LoginState.IsNotLogin,
-      contextName: "",
       smsCode: false,
       userModel: UserModel(),
     );
@@ -45,20 +45,20 @@ class AuthState extends Equatable {
   AuthState copyWith({
     int? progressState,
     String? message,
+    String? contextName,
     String? description,
     int? statusCode,
     LoginState? loginState,
-    String? contextName,
     bool? smsCode,
     UserModel? userModel,
   }) {
     return AuthState(
       progressState: progressState ?? this.progressState,
       message: message ?? this.message,
+      contextName: contextName ?? this.contextName,
       description: description ?? this.description,
       statusCode: statusCode ?? this.statusCode,
       loginState: loginState ?? this.loginState,
-      contextName: contextName ?? this.contextName,
       smsCode: smsCode ?? this.smsCode,
       userModel: userModel ?? this.userModel,
     );
@@ -67,20 +67,20 @@ class AuthState extends Equatable {
   AuthState update({
     int? progressState,
     String? message,
+    String? contextName,
     String? description,
     int? statusCode,
     LoginState? loginState,
-    String? contextName,
     bool? smsCode,
     UserModel? userModel,
   }) {
     return copyWith(
       progressState: progressState,
       message: message,
+      contextName: contextName,
       description: description,
       statusCode: statusCode,
       loginState: loginState,
-      contextName: contextName,
       smsCode: smsCode,
       userModel: userModel,
     );
@@ -90,10 +90,10 @@ class AuthState extends Equatable {
     return {
       "progressState": progressState,
       "message": message,
+      "contextName": contextName,
       "description": description,
       "statusCode": statusCode,
       "loginState": loginState,
-      "contextName": contextName,
       "smsCode": smsCode,
       "userModel": userModel!.toJson(),
     };
@@ -103,10 +103,10 @@ class AuthState extends Equatable {
   List<Object> get props => [
         progressState!,
         message!,
+        contextName!,
         description!,
         statusCode!,
         loginState!,
-        contextName!,
         smsCode!,
         userModel!,
       ];

@@ -13,9 +13,10 @@
     "configration": "Configration"
   },
   "PlanningListPageString": {
-    "appbar_title": "Planning de l’étude",
+    "appbar_title": "Planning",
     "login_description": "Connectez-vous à votre compte Legatus pour accéder au planning de constats de l’étude.",
-    "login_button": "SE CONNECTER"
+    "login_button": "SE CONNECTER",
+    "noPlanning": "Aucun constat dans votre planning"
   },
   "PlanningPageString": {
     "date": "Date",
@@ -34,7 +35,7 @@
     "email": "Email",
     "phoneNumber": "Téléphone",
     "representations": "Rép. par",
-    "recipients": "Recipients"
+    "recipients": "Dest."
   },
   "ConfigurationPageString": {
     "appbarTitle": "Configuration",
@@ -47,10 +48,13 @@
     "smsLabel": "CODE SMS",
     "receiveSms":"Recevoir un code SMS",
     "application_permission": "Autorisations de l’application",
+    "obligatory":"Obligatoire",
     "camera_permission": "Accès à la caméra de cet appareil quand l'application est active",
     "camera_permission_desc": "Permet de prendre des photos et enregistrer des vidéos",
     "microphone_permission":"Accès au microphone de cet appareil quand l'application est active",
     "microphone_permission_desc": "Permet d'enregistrer des dictées au format audio",
+    "photo_permission": "Accès aux photos et contenus multimédias sur cet appareil quand l'application est active",
+    "photo_permission_desc": "Permet de consulter et paratger les photos, dictées et vidéos réalisée avec l’application",
     "location_permission": "Autoriser la localisation de cet appareil quand l'application est active",
     "location_permission_desc": "Permet d'enregistrer les coordonnées GPS des photos, notes et vidéos",
     "storage":"Stockage",
@@ -63,28 +67,41 @@
     "infomation_desc":"Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.",
     "analyse": "Données d'analyse",
     "analyse_desc": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
-    "sendReport":"SEND REPORT"
+    "contactLegatus":"CONTACTER LEGATUS",
+    "sendReport": "ENVOYER LE RAPPORT"
   },
   "LogoutDialog": {
-    "title": "Déconnecter",
+    "title": "SE DÉCONNECTER",
     "description": "Voulez-vous vous déconnecter ?",
-    "logout": "SE DECONNECTER",
+    "logout": "SE DÉCONNECTER",
     "cancel": "ANNULER"
   },
   "ReportDialog": {
-    "title": "Rapport",
-    "description": "Envoyer le rapport ?",
+    "title": "Envoyer le rapport",
+    "description": "Voulez-vous envoyer un rapport de fonctionnement à Legatus ?",
     "send": "ENVOYER",
     "cancel": "ANNULER"
   },
-  "ReportPageListString": {
-    "appbarTitle": "Vos constats"
+  "ReportSuccessDialog": {
+    "title": "Envoyer le rapport",
+    "description": "Rapport envoyé avec succès",
+    "okay": "OK"
+  },
+  "ReportListPageString": {
+    "appbarTitle": "Vos constats",
+    "delete": "SUPRIMER"
   },
   "DeleteReportDialogString":{
     "title": "Delete LocalReport",
     "content":"Voulez-vous supprimer ce constat ? Toutes les données locales seront supprimées",
-    "delete": "Supprimer",
-    "cancel":"Annuler"
+    "delete": "SUPRIMER",
+    "cancel":"ANNULER"
+  },
+  "DeleteMediaDialogString": {
+    "title": "Suprimer Médias",
+    "content": "SUPRIMER définitivement ces médias de votre appareil ?",
+    "delete": "SUPRIMER",
+    "cancel": "ANNULER"
   },
   "NewReportPageString": {
     "appbarTitle": "Nouveau constat",
@@ -100,18 +117,22 @@
     "city": "Ville",
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "customerTypes": "{\"applicant\":\"Requérant\",\"particular\":\"Particulier\",\"professional\":\"Professionnel\"}",
+    "customerTypeLabel": "Requérant",
+    "customerTypes": "{\"particular\":\"Particulier\",\"professional\":\"Professionnel\"}",
     "name": "Nom",
     "crop_form": "Forme sociale",
     "crop_siren": "SIREN",
     "crop_rcs": "RCS",
     "recipient_label": "Représenté par",
     "recipient_position": "Fonction / Emploi",
-    "recipient_birth_date": "BirthDay",
-    "recipient_birth_city": "Birth City",
+    "recipient_birth_date": "Date de naissance",
+    "recipient_birth_city": "Ville de naissance",
     "recipient_email": "Email",
     "recipient_phone": "Mobile",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "createSuccess": "Constat créé avec succès",
+    "updateSuccess": "Rapport mis à jour avec succès",
+    "uploading": "Téléversement en cours..."
   },
   "LocalReportWidgetString": {
     "photos": "Photos",
@@ -119,7 +140,8 @@
     "notes": "Notes",
     "videos": "Vidéos",
     "allMediaUpload":"Tous les médias ont été téléversés",
-    "nonUploadMedial": "{} médias non téléversés"
+    "nonUploadMedial": "{} médias non téléversés",
+    "noMedial": "Aucun média"
   },
   "ReportPageString": {
     "share":"Partager",
@@ -133,7 +155,7 @@
   },
   "MediaInfoDialogString": {
     "media": "Média",
-    "mediaType": "Media Type",
+    "mediaType": "Type",
     "picture": "Photographie",
     "audio": "Audio",
     "note": "Note",
@@ -144,5 +166,27 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "close": "FERMER"
+  },
+  "StorageLimitDialogString": {
+    "content": "Vous avez atteint la limite de stockage de votre appareil. Veuillez libérer de l'espace de stockage.",
+    "ok": "OK"
+  },
+  "JournalDialogString": {
+    "title": "Recevoir une base de PV",
+    "content": "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.\n\nDuis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio.\n\nDignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.",
+    "emailLabel": "Votre adresse email",
+    "send": "RECEVOIR UNE BASE DE PV",
+    "cancel": "ANNULER"
+  },
+  "UploadDialogString": {
+    "title": "Synchronisation des médias",
+    "content1": "Vous devez vous connecter à votre compte Legatus pour bénéficier de la synchronisation des médias et de leur traitement automatique :",
+    "content2": "optimisation et scellement des photographies",
+    "content3": "transcription des dictées vocales",
+    "content4": "pré-rédaction du Pv de constat dans votre modèle",
+    "content5": "calcul de l’empreinte numérique des vidéos",
+    "content6": "...",
+    "login": "SE CONNECTER",
+    "cancel": "ANNULER"
   }
 }

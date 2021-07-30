@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:provider/provider.dart';
 
@@ -14,14 +14,18 @@ class VideoRecoderPanel extends StatefulWidget {
     Key? key,
     @required this.scaffoldKey,
     @required this.cameraController,
+    @required this.keicyProgressDialog,
     @required this.width,
     @required this.videoSaveHandler,
+    @required this.onAudioModeButtonPressed,
   }) : super(key: key);
 
-  final Function(XFile, int)? videoSaveHandler;
   final CameraController? cameraController;
   final GlobalKey<ScaffoldState>? scaffoldKey;
+  final KeicyProgressDialog? keicyProgressDialog;
   final double? width;
+  final Function(XFile, int)? videoSaveHandler;
+  final Function()? onAudioModeButtonPressed;
 
   @override
   _VideoRecoderPanelState createState() => _VideoRecoderPanelState();
@@ -32,14 +36,13 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
 
   /// Responsive design variables
   double? deviceWidth;
-
   double? fontSp;
   double? heightDp;
   double? widthDp;
+  ///////////////////////////////
 
   CameraProvider? _cameraProvider;
   int _milliseconds = 0;
-  ///////////////////////////////
 
   Timer? _timer;
 
@@ -154,6 +157,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
     }
 
     try {
+      await widget.keicyProgressDialog!.show();
       XFile file = await widget.cameraController!.stopVideoRecording();
       _timer!.cancel();
       if (mounted) setState(() {});
@@ -164,6 +168,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
         showInSnackBar('Video recorded to ${file.path}');
       }
     } on CameraException catch (e) {
+      await widget.keicyProgressDialog!.hide();
       _showCameraException(e);
       return null;
     }
@@ -192,7 +197,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
         children: [
           Container(
             width: widget.width!,
-            color: Colors.black.withOpacity(0.7),
+            color: Colors.black.withOpacity(1),
             padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
             child: Column(
               children: [
@@ -205,6 +210,16 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
                         color: Colors.white,
                         size: heightDp! * 30,
                       ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        widget.cameraController!.enableAudio ? Icons.volume_up : Icons.volume_mute,
+                        color: widget.cameraController != null && !widget.cameraController!.value.isRecordingVideo
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.6),
+                        size: heightDp! * 20,
+                      ),
+                      onPressed: widget.cameraController != null ? widget.onAudioModeButtonPressed! : null,
                     ),
                     Expanded(
                       child: Row(
@@ -239,7 +254,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
                                 child: Icon(
                                   Icons.play_arrow,
                                   size: heightDp! * 20,
-                                  color: Colors.red,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),

@@ -27,8 +27,6 @@ class AppDataProvider extends ChangeNotifier {
 
   Future<void> init() async {
     try {
-      Directory directory = await getApplicationDocumentsDirectory();
-
       _prefs = await SharedPreferences.getInstance();
       String? result = _prefs!.getString("settings");
       if (result != null && result != "null") {
@@ -50,17 +48,17 @@ class AppDataProvider extends ChangeNotifier {
   }
 
   Future<void> settingsHandler({
-    bool? allowCamera,
-    bool? allowLocation,
-    bool? allowMicrophone,
+    // bool? allowCamera,
+    // bool? allowLocation,
+    // bool? allowMicrophone,
     bool? withRestriction,
     bool isNotifiable = true,
   }) async {
     SettingsModel settingsModel = SettingsModel.copy(_appDataState.settingsModel!);
 
-    if (allowCamera != null) settingsModel.allowCamera = allowCamera;
-    if (allowLocation != null) settingsModel.allowLocation = allowLocation;
-    if (allowMicrophone != null) settingsModel.allowMicrophone = allowMicrophone;
+    // if (allowCamera != null) settingsModel.allowCamera = allowCamera;
+    // if (allowLocation != null) settingsModel.allowLocation = allowLocation;
+    // if (allowMicrophone != null) settingsModel.allowMicrophone = allowMicrophone;
     if (withRestriction != null) settingsModel.withRestriction = withRestriction;
 
     if (_prefs == null) _prefs = await SharedPreferences.getInstance();

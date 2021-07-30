@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legutus/ApiDataProviders/index.dart';
+import 'package:legutus/Helpers/custom_url_lancher.dart';
 import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/index.dart';
@@ -10,12 +11,12 @@ import 'package:legutus/Providers/index.dart';
 import 'package:legutus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:json_diff/json_diff.dart';
 
 class PlanningView extends StatefulWidget {
   final PlanningReportModel? planningReportModel;
-  final PersistentTabController? bottomTabController;
 
-  PlanningView({Key? key, this.planningReportModel, this.bottomTabController}) : super(key: key);
+  PlanningView({Key? key, this.planningReportModel}) : super(key: key);
 
   @override
   _PlanningViewState createState() => _PlanningViewState();
@@ -33,8 +34,6 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
   double? fontSp;
   ///////////////////////////////
 
-  LocalReportListProvider? _localReportListProvider;
-
   @override
   void initState() {
     super.initState();
@@ -50,8 +49,6 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    _localReportListProvider = LocalReportListProvider.of(context);
-
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {});
   }
 
@@ -61,7 +58,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
   }
 
   void _goToLocalReportPage() async {
-    LocalReportModel localReportModel = await LocalReportsDataProvider.getLocalReportModelByReportId(
+    LocalReportModel localReportModel = await LocalReportApiProvider.getLocalReportModelByReportId(
       reportId: widget.planningReportModel!.reportId,
     );
 
@@ -77,15 +74,30 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
       localReportModel.city = widget.planningReportModel!.zipCity!.split(" ").length == 2 ? widget.planningReportModel!.zipCity!.split(" ").last : "";
       localReportModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
 
-      var progressState = await _localReportListProvider!.createLocalReport(localReportModel: localReportModel);
+      var progressState = await LocalReportProvider.of(context).createLocalReport(localReportModel: localReportModel);
       if (progressState == 2) {
-        _localReportListProvider!.setLocalReportListState(
-          _localReportListProvider!.localReportListState.update(progressState: 0),
+        LocalReportListProvider.of(context).setLocalReportListState(
+          LocalReportListState.init(),
         );
       }
     }
 
-    widget.bottomTabController!.jumpToTab(1);
+    AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(1);
+  }
+
+  void _openGoogleMap(AddressModel addressModel) {
+    String url = "https://www.google.com/maps/search/?api=1";
+    if (addressModel.latitude != "" && addressModel.longitude != "") {
+      url += "&query=${addressModel.latitude}%2C${addressModel.longitude}";
+    } else {
+      url += "&query=${addressModel.city}"
+          ",${addressModel.complement}"
+          ",${addressModel.street}"
+          ",${addressModel.zip}";
+      url = url.replaceAll("from", "+");
+    }
+
+    CustomUrlLauncher.launchWebUrl(url);
   }
 
   @override
@@ -135,69 +147,77 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                 ),
 
                 /// State
-                SizedBox(height: heightDp! * 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        LocaleKeys.PlanningPageString_state.tr(),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                if (widget.planningReportModel!.state != "")
+                  Column(
+                    children: [
+                      SizedBox(height: heightDp! * 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              LocaleKeys.PlanningPageString_state.tr(),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "${widget.planningReportModel!.state!}",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        "${widget.planningReportModel!.state!}",
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
                 /// Type
-                SizedBox(height: heightDp! * 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        LocaleKeys.PlanningPageString_type.tr(),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                if (widget.planningReportModel!.type != "")
+                  Column(
+                    children: [
+                      SizedBox(height: heightDp! * 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              LocaleKeys.PlanningPageString_type.tr(),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "${widget.planningReportModel!.type!}",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        "${widget.planningReportModel!.type!}",
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
                 /// Accounts
-                SizedBox(height: heightDp! * 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        LocaleKeys.PlanningPageString_accounts.tr(),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: widget.planningReportModel!.accounts!.isEmpty
-                          ? Text(
-                              "No Accounts",
-                              style: Theme.of(context).textTheme.subtitle1,
-                            )
-                          : Column(
+                if (widget.planningReportModel!.accounts!.isNotEmpty)
+                  Column(
+                    children: [
+                      SizedBox(height: heightDp! * 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              LocaleKeys.PlanningPageString_accounts.tr(),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: List.generate(widget.planningReportModel!.accounts!.length, (index) {
                                 return Column(
@@ -211,52 +231,57 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                 );
                               }),
                             ),
-                    ),
-                  ],
-                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
 
                 /// Price
-                SizedBox(height: heightDp! * 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        LocaleKeys.PlanningPageString_price.tr(),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                if (widget.planningReportModel!.price != "")
+                  Column(
+                    children: [
+                      SizedBox(height: heightDp! * 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              LocaleKeys.PlanningPageString_price.tr(),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "${widget.planningReportModel!.price!}",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        "${widget.planningReportModel!.price!}",
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
                 /// References
-                SizedBox(height: heightDp! * 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        LocaleKeys.PlanningPageString_references.tr(),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: widget.planningReportModel!.references!.isEmpty
-                          ? Text(
-                              "No References",
-                              style: Theme.of(context).textTheme.subtitle1,
-                            )
-                          : Column(
+                if (widget.planningReportModel!.references!.isNotEmpty)
+                  Column(
+                    children: [
+                      SizedBox(height: heightDp! * 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              LocaleKeys.PlanningPageString_references.tr(),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: List.generate(widget.planningReportModel!.references!.length, (index) {
                                 return Column(
@@ -270,63 +295,67 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                 );
                               }),
                             ),
-                    ),
-                  ],
-                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
 
                 /// Address
-                SizedBox(height: heightDp! * 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        LocaleKeys.PlanningPageString_address.tr(),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: widget.planningReportModel!.references!.isEmpty
-                          ? Text(
-                              "No Address Data",
-                              style: Theme.of(context).textTheme.subtitle1,
-                            )
-                          : Row(
+                if (!JsonDiffer.fromJson(widget.planningReportModel!.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
+                  Column(
+                    children: [
+                      SizedBox(height: heightDp! * 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              LocaleKeys.PlanningPageString_address.tr(),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Row(
                               children: [
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        widget.planningReportModel!.addressModel!.street! != ""
-                                            ? "${widget.planningReportModel!.addressModel!.street!}"
-                                            : "No street",
-                                        style: Theme.of(context).textTheme.subtitle1,
-                                      ),
+                                      if (widget.planningReportModel!.addressModel!.street! != "")
+                                        Text(
+                                          "${widget.planningReportModel!.addressModel!.street!}",
+                                          style: Theme.of(context).textTheme.subtitle1,
+                                        ),
+                                      if (widget.planningReportModel!.addressModel!.complement! != "")
+                                        Column(
+                                          children: [
+                                            SizedBox(height: heightDp! * 2),
+                                            Text(
+                                              "${widget.planningReportModel!.addressModel!.complement!}",
+                                              style: Theme.of(context).textTheme.subtitle1,
+                                            ),
+                                          ],
+                                        ),
                                       SizedBox(height: heightDp! * 2),
-                                      Text(
-                                        widget.planningReportModel!.addressModel!.complement! != ""
-                                            ? "${widget.planningReportModel!.addressModel!.complement!}"
-                                            : "No complement",
-                                        style: Theme.of(context).textTheme.subtitle1,
-                                      ),
-                                      SizedBox(height: heightDp! * 2),
-                                      Row(
+                                      Column(
                                         children: [
-                                          Text(
-                                            widget.planningReportModel!.addressModel!.zip! != ""
-                                                ? "${widget.planningReportModel!.addressModel!.zip!}"
-                                                : "No zip",
-                                            style: Theme.of(context).textTheme.subtitle1,
-                                          ),
-                                          SizedBox(width: widthDp! * 10),
-                                          Text(
-                                            widget.planningReportModel!.addressModel!.city! != ""
-                                                ? "${widget.planningReportModel!.addressModel!.city!}"
-                                                : "No city",
-                                            style: Theme.of(context).textTheme.subtitle1,
+                                          Row(
+                                            children: [
+                                              if (widget.planningReportModel!.addressModel!.zip! != "")
+                                                Text(
+                                                  "${widget.planningReportModel!.addressModel!.zip!}",
+                                                  style: Theme.of(context).textTheme.subtitle1,
+                                                ),
+                                              SizedBox(width: widthDp! * 10),
+                                              if (widget.planningReportModel!.addressModel!.city! != "")
+                                                Text(
+                                                  "${widget.planningReportModel!.addressModel!.city!}",
+                                                  style: Theme.of(context).textTheme.subtitle1,
+                                                ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -334,68 +363,83 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                   ),
                                 ),
                                 CustomTextButton(
-                                  text: "GPS",
+                                  text: "Maps",
                                   textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                                   bordercolor: AppColors.yello,
                                   borderRadius: heightDp! * 6,
                                   elevation: 0,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _openGoogleMap(widget.planningReportModel!.addressModel!);
+                                  },
                                 ),
                               ],
                             ),
-                    ),
-                  ],
-                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
 
                 /// Folder Name
-                SizedBox(height: heightDp! * 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        LocaleKeys.PlanningPageString_foldName.tr(),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                if (widget.planningReportModel!.folderName != "")
+                  Column(
+                    children: [
+                      SizedBox(height: heightDp! * 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              LocaleKeys.PlanningPageString_foldName.tr(),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "${widget.planningReportModel!.folderName!}",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        "${widget.planningReportModel!.folderName!}",
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
                 /// Descripton
-                SizedBox(height: heightDp! * 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        LocaleKeys.PlanningPageString_description.tr(),
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                if (widget.planningReportModel!.description != "")
+                  Column(
+                    children: [
+                      SizedBox(height: heightDp! * 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              LocaleKeys.PlanningPageString_description.tr(),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              "${widget.planningReportModel!.description!}",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        "${widget.planningReportModel!.description!}",
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
                 /// Customers
                 if (widget.planningReportModel!.customers!.isNotEmpty)
                   Column(
                     children: List.generate(widget.planningReportModel!.customers!.length, (index) {
                       CustomerModel customerModel = widget.planningReportModel!.customers![index];
+                      if (JsonDiffer.fromJson(customerModel.toJson(), CustomerModel().toJson()).diff().hasNothing) return SizedBox();
 
                       return Column(
                         children: [
@@ -414,7 +458,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                               Expanded(
                                 flex: 3,
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Text(
@@ -433,156 +477,182 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                           ),
 
                           /// Address
-                          SizedBox(height: heightDp! * 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  LocaleKeys.PlanningPageString_address.tr(),
-                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Row(
+                          if (!JsonDiffer.fromJson(customerModel.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
+                            Column(
+                              children: [
+                                SizedBox(height: heightDp! * 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                      flex: 1,
+                                      child: Text(
+                                        LocaleKeys.PlanningPageString_address.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
                                         children: [
-                                          Text(
-                                            customerModel.addressModel!.street != "" ? "${customerModel.addressModel!.street!}" : "No street",
-                                            style: Theme.of(context).textTheme.subtitle1,
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                if (customerModel.addressModel!.street != "")
+                                                  Text(
+                                                    "${customerModel.addressModel!.street!}",
+                                                    style: Theme.of(context).textTheme.subtitle1,
+                                                  ),
+                                                if (customerModel.addressModel!.zip != "" || customerModel.addressModel!.city != "")
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(height: heightDp! * 2),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            "${customerModel.addressModel!.zip}",
+                                                            style: Theme.of(context).textTheme.subtitle1,
+                                                          ),
+                                                          SizedBox(width: widthDp! * 10),
+                                                          Text(
+                                                            "${customerModel.addressModel!.city}",
+                                                            style: Theme.of(context).textTheme.subtitle1,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                              ],
+                                            ),
                                           ),
-                                          SizedBox(height: heightDp! * 2),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                customerModel.addressModel!.zip != "" ? "${customerModel.addressModel!.zip}" : "No zip",
-                                                style: Theme.of(context).textTheme.subtitle1,
-                                              ),
-                                              SizedBox(width: widthDp! * 10),
-                                              Text(
-                                                customerModel.addressModel!.city != "" ? "${customerModel.addressModel!.city}" : "No city",
-                                                style: Theme.of(context).textTheme.subtitle1,
-                                              ),
-                                            ],
+                                          CustomTextButton(
+                                            text: "Maps",
+                                            textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
+                                            bordercolor: AppColors.yello,
+                                            borderRadius: heightDp! * 6,
+                                            elevation: 0,
+                                            onPressed: () {
+                                              _openGoogleMap(customerModel.addressModel!);
+                                            },
                                           ),
                                         ],
                                       ),
                                     ),
-                                    CustomTextButton(
-                                      text: "GPS",
-                                      textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
-                                      bordercolor: AppColors.yello,
-                                      borderRadius: heightDp! * 6,
-                                      elevation: 0,
-                                      onPressed: () {},
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                          /// Siren
+                          if (customerModel.corpNumber != "")
+                            Column(
+                              children: [
+                                SizedBox(height: heightDp! * 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        LocaleKeys.PlanningPageString_crope.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                        "${customerModel.corpNumber}",
+                                        style: Theme.of(context).textTheme.subtitle1,
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-
-                          /// Siren
-                          SizedBox(height: heightDp! * 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  LocaleKeys.PlanningPageString_crope.tr(),
-                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  customerModel.corpNumber != "" ? "${customerModel.corpNumber}" : "No crop number",
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
 
                           /// email
-                          SizedBox(height: heightDp! * 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  LocaleKeys.PlanningPageString_email.tr(),
-                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                          if (customerModel.email != "")
+                            Column(
+                              children: [
+                                SizedBox(height: heightDp! * 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        LocaleKeys.PlanningPageString_email.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                        "customerModel.email",
+                                        style: Theme.of(context).textTheme.subtitle1,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  "There is field name in api",
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
 
                           /// phone
-                          SizedBox(height: heightDp! * 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  LocaleKeys.PlanningPageString_phoneNumber.tr(),
-                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (customerModel.phone == "") return;
-                                  },
-                                  child: Text(
-                                    customerModel.phone != "" ? "${customerModel.phone}" : "No phonenumber",
-                                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                          color: customerModel.phone != "" ? AppColors.yello : Colors.black,
-                                          decoration: customerModel.phone != "" ? TextDecoration.underline : TextDecoration.none,
-                                          decorationColor: AppColors.yello,
-                                          decorationThickness: 2,
+                          if (customerModel.phone != "")
+                            Column(
+                              children: [
+                                SizedBox(height: heightDp! * 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        LocaleKeys.PlanningPageString_phoneNumber.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          CustomUrlLauncher.makePhoneCall(customerModel.phone!);
+                                        },
+                                        child: Text(
+                                          "${customerModel.phone}",
+                                          style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                                color: AppColors.yello,
+                                                decoration: TextDecoration.underline,
+                                                decorationColor: AppColors.yello,
+                                                decorationThickness: 2,
+                                              ),
                                         ),
-                                  ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
 
                           /// Representation
-                          SizedBox(height: heightDp! * 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  LocaleKeys.PlanningPageString_representations.tr(),
-                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: customerModel.representation!.isEmpty
-                                    ? Text(
-                                        "No Representation",
-                                        style: Theme.of(context).textTheme.subtitle1,
-                                      )
-                                    : Column(
+                          if (customerModel.representation!.isNotEmpty)
+                            Column(
+                              children: [
+                                SizedBox(height: heightDp! * 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        LocaleKeys.PlanningPageString_representations.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: List.generate(customerModel.representation!.length, (index) {
                                           return Column(
@@ -596,81 +666,86 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                           );
                                         }),
                                       ),
-                              ),
-                            ],
-                          ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
 
                           /// Recipients
-                          SizedBox(height: heightDp! * 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  LocaleKeys.PlanningPageString_recipients.tr(),
-                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: customerModel.recipients!.isEmpty
-                                    ? Text(
-                                        "No Representation",
-                                        style: Theme.of(context).textTheme.subtitle1,
-                                      )
-                                    : Column(
+                          if (customerModel.recipients!.isNotEmpty)
+                            Column(
+                              children: [
+                                SizedBox(height: heightDp! * 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        LocaleKeys.PlanningPageString_recipients.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: List.generate(customerModel.recipients!.length, (index) {
+                                          if (JsonDiffer.fromJson(customerModel.recipients![index].toJson(), RecipientModel().toJson())
+                                              .diff()
+                                              .hasNothing) return SizedBox();
                                           return Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    "${customerModel.recipients![index].name} - ${customerModel.recipients![index].position != '' ? customerModel.recipients![index].position : 'No Position'}",
-                                                    style: Theme.of(context).textTheme.subtitle1,
-                                                  ),
-                                                  SizedBox(height: heightDp! * 3),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      if (customerModel.recipients![index].mobilePhone == "") return;
-                                                    },
-                                                    child: Text(
-                                                      customerModel.recipients![index].mobilePhone != ""
-                                                          ? "${customerModel.recipients![index].mobilePhone}"
-                                                          : "No phonenumber",
-                                                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                                            color:
-                                                                customerModel.recipients![index].mobilePhone != "" ? AppColors.yello : Colors.black,
-                                                            decoration: customerModel.recipients![index].mobilePhone != ""
-                                                                ? TextDecoration.underline
-                                                                : TextDecoration.none,
-                                                            decorationColor: AppColors.yello,
-                                                            decorationThickness: 2,
-                                                          ),
+                                                  if (customerModel.recipients![index].name != "" || customerModel.recipients![index].position != "")
+                                                    Text(
+                                                      "${customerModel.recipients![index].name} - ${customerModel.recipients![index].position}",
+                                                      style: Theme.of(context).textTheme.subtitle1,
                                                     ),
-                                                  ),
-                                                  SizedBox(height: heightDp! * 3),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      if (customerModel.recipients![index].email == "") return;
-                                                    },
-                                                    child: Text(
-                                                      customerModel.recipients![index].email != ""
-                                                          ? "${customerModel.recipients![index].email}"
-                                                          : "No email",
-                                                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                                            color: customerModel.recipients![index].email != "" ? AppColors.yello : Colors.black,
-                                                            decoration: customerModel.recipients![index].email != ""
-                                                                ? TextDecoration.underline
-                                                                : TextDecoration.none,
-                                                            decorationColor: AppColors.yello,
-                                                            decorationThickness: 2,
+                                                  if (customerModel.recipients![index].mobilePhone != "")
+                                                    Column(
+                                                      children: [
+                                                        SizedBox(height: heightDp! * 3),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            CustomUrlLauncher.makePhoneCall(customerModel.recipients![index].mobilePhone!);
+                                                          },
+                                                          child: Text(
+                                                            "${customerModel.recipients![index].mobilePhone}",
+                                                            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                                                  color: AppColors.yello,
+                                                                  decoration: TextDecoration.underline,
+                                                                  decorationColor: AppColors.yello,
+                                                                  decorationThickness: 2,
+                                                                ),
                                                           ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
+                                                  if (customerModel.recipients![index].email != "")
+                                                    Column(
+                                                      children: [
+                                                        SizedBox(height: heightDp! * 3),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            CustomUrlLauncher.sendEmail(email: customerModel.recipients![index].email!);
+                                                          },
+                                                          child: Text(
+                                                            "${customerModel.recipients![index].email}",
+                                                            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                                                  color: AppColors.yello,
+                                                                  decoration: TextDecoration.underline,
+                                                                  decorationColor: AppColors.yello,
+                                                                  decorationThickness: 2,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                 ],
                                               ),
                                               index < customerModel.recipients!.length - 1 ? SizedBox(height: heightDp! * 5) : SizedBox(),
@@ -678,9 +753,11 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                           );
                                         }),
                                       ),
-                              ),
-                            ],
-                          ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                         ],
                       );
                     }),

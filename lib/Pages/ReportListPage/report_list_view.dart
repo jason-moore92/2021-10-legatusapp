@@ -61,6 +61,10 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
     ///////////////////////////////
 
     _localReportListProvider = LocalReportListProvider.of(context);
+    _localReportListProvider!.setLocalReportListState(
+      LocalReportListState.init().copyWith(contextName: "PlanningPage"),
+      isNotifiable: false,
+    );
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _localReportListProvider!.addListener(_localReportListProviderListener);
@@ -82,6 +86,8 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
   }
 
   void _localReportListProviderListener() async {
+    if (_localReportListProvider!.localReportListState.contextName != "PlanningPage") return;
+
     if (_localReportListProvider!.localReportListState.progressState == -1) {
       if (_localReportListProvider!.localReportListState.isRefresh!) {
         _localReportListProvider!.setLocalReportListState(
@@ -131,7 +137,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
   }
 
   void _deleteLocalReportHandler(LocalReportModel localReportModel) async {
-    var progressState = await _localReportListProvider!.deleteLocalReport(localReportModel: localReportModel);
+    var progressState = await LocalReportProvider.of(context).deleteLocalReport(localReportModel: localReportModel);
     if (progressState == 2) {
       SuccessDialog.show(
         context,
@@ -149,7 +155,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          LocaleKeys.ReportPageListString_appbarTitle.tr(),
+          LocaleKeys.ReportListPageString_appbarTitle.tr(),
           style: Theme.of(context).textTheme.headline6,
         ),
       ),
@@ -232,7 +238,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
                       actionExtentRatio: 0.2,
                       secondaryActions: [
                         IconSlideAction(
-                          caption: 'Delete',
+                          caption: LocaleKeys.ReportListPageString_delete.tr(),
                           color: Colors.red,
                           icon: Icons.delete,
                           onTap: () {

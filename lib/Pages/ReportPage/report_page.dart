@@ -15,6 +15,7 @@ class ReportPage extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LocalMediaListProvider()),
+        ChangeNotifierProvider(create: (_) => LocalReportProvider()),
       ],
       child: ReportView(localReportModel: localReportModel),
     );

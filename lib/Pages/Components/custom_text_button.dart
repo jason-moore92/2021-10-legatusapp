@@ -6,6 +6,7 @@ class CustomTextButton extends StatelessWidget {
   final Widget? rightWidget;
   final TextStyle? textStyle;
   final Color? backColor;
+  final Color? primaryColor;
   final double? width;
   final double? height;
   final double? borderRadius;
@@ -20,6 +21,7 @@ class CustomTextButton extends StatelessWidget {
     Key? key,
     @required this.text,
     this.backColor,
+    this.primaryColor,
     this.leftWidget,
     this.rightWidget,
     this.textStyle,
@@ -48,7 +50,8 @@ class CustomTextButton extends StatelessWidget {
 
     return TextButton(
       style: TextButton.styleFrom(
-        primary: backColor,
+        primary: primaryColor,
+        backgroundColor: backColor,
         fixedSize: fixedSize,
         side: bordercolor != null ? BorderSide(color: bordercolor!) : null,
         shape: borderRadius != null ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius!)) : null,

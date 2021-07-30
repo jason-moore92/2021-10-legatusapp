@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
+import 'package:legutus/ApiDataProviders/index.dart';
 import 'package:legutus/Config/config.dart';
+import 'package:legutus/Helpers/custom_url_lancher.dart';
 import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Models/user_model.dart';
@@ -70,8 +72,6 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    _authProvider = AuthProvider.of(context);
-    _appDataProvider = AppDataProvider.of(context);
     _keicyProgressDialog = KeicyProgressDialog.of(
       context,
       backgroundColor: Colors.transparent,
@@ -96,6 +96,19 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
       message: "",
     );
 
+    _authProvider = AuthProvider.of(context);
+    _appDataProvider = AppDataProvider.of(context);
+
+    _appDataProvider!.setAppDataState(
+      _appDataProvider!.appDataState.update(contextName: "ConfigurationPage"),
+      isNotifiable: false,
+    );
+
+    _authProvider!.setAuthState(
+      _authProvider!.authState.update(contextName: "ConfigurationPage"),
+      isNotifiable: false,
+    );
+
     _authProvider!.setAuthState(_authProvider!.authState.update(contextName: "Configuration"), isNotifiable: false);
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
@@ -110,7 +123,8 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
   }
 
   void _authProviderListener() async {
-    if (_authProvider!.authState.contextName != "Configuration") return;
+    if (_authProvider!.authState.contextName != "ConfigurationPage") return;
+
     if (_authProvider!.authState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
       await _keicyProgressDialog!.hide();
     }
@@ -162,9 +176,38 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     );
   }
 
-  void _logoutHandler() async {}
+  void _logoutHandler() async {
+    _authProvider!.logout();
+  }
 
-  void _reportHandler() async {}
+  void _reportHandler() async {
+    var result;
+    await _keicyProgressDialog!.show();
+    try {
+      result = await LocalReportApiProvider.getALL();
+      List<dynamic> localReports = [];
+
+      if (result["success"]) {
+        for (var i = 0; i < result["data"].length; i++) {
+          localReports.add(result["data"][i].toJson());
+        }
+        result = null;
+        String currentDate = PlanningProvider.of(context).planningState.currentDate!;
+        List<dynamic> planningData = PlanningProvider.of(context).planningState.planningData![currentDate];
+        result = await DebugApiProvider.debugReport(
+          planningData: planningData,
+          localReports: localReports,
+          userModel: AuthProvider.of(context).authState.userModel,
+          settingsModel: AppDataProvider.of(context).appDataState.settingsModel,
+        );
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    await _keicyProgressDialog!.hide();
+
+    if (result != null && result["success"]) {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,23 +242,6 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                     _infomationPanel(),
                     SizedBox(height: heightDp! * 20),
                     _analysePanel(),
-                    if (authProvider.authState.loginState == LoginState.IsLogin) SizedBox(height: heightDp! * 20),
-                    if (authProvider.authState.loginState == LoginState.IsLogin)
-                      CustomTextButton(
-                        text: LocaleKeys.ConfigurationPageString_sendReport.tr(),
-                        textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
-                        bordercolor: AppColors.yello,
-                        onPressed: () {
-                          NormalAskDialog.show(
-                            context,
-                            title: LocaleKeys.ReportDialog_title.tr(),
-                            content: LocaleKeys.ReportDialog_description.tr(),
-                            okButton: LocaleKeys.ReportDialog_send.tr(),
-                            cancelButton: LocaleKeys.ReportDialog_cancel.tr(),
-                            callback: _reportHandler,
-                          );
-                        },
-                      ),
                   ],
                 ),
               ),
@@ -327,7 +353,6 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                     CustomTextButton(
                       text: LocaleKeys.ConfigurationPageString_receiveSms.tr().toUpperCase(),
                       textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
-                      width: widthDp! * 180,
                       bordercolor: Colors.grey.withOpacity(0.6),
                       borderRadius: heightDp! * 6,
                       elevation: 0,
@@ -375,13 +400,13 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                           : null,
                       onSaved: (input) => _smsCode = input.replaceAll(" ", ""),
                     ),
-                    SizedBox(height: heightDp! * 5),
-                    CustomElevatedButton(
-                      width: widthDp! * 120,
+                    CustomTextButton(
                       text: LocaleKeys.ConfigurationPageString_login.tr().toUpperCase(),
-                      borderRadius: heightDp! * 6,
+                      textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.white),
                       backColor: AppColors.yello,
-                      onPressed: _authProvider!.authState.smsCode == false ? null : _loginHandler,
+                      borderRadius: heightDp! * 6,
+                      elevation: 0,
+                      onPressed: _loginHandler,
                     ),
                   ],
                 ),
@@ -479,9 +504,19 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_camera_permission.tr(),
-                    style: Theme.of(context).textTheme.bodyText1,
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: LocaleKeys.ConfigurationPageString_obligatory.tr() + " - ",
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: LocaleKeys.ConfigurationPageString_camera_permission.tr(),
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                   Text(
                     LocaleKeys.ConfigurationPageString_camera_permission_desc.tr(),
@@ -490,14 +525,14 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                 ],
               ),
             ),
-            Switch(
-              activeColor: AppColors.yello,
-              inactiveTrackColor: Colors.grey,
-              value: _appDataProvider!.appDataState.settingsModel!.allowCamera!,
-              onChanged: (value) {
-                _appDataProvider!.settingsHandler(allowCamera: value);
-              },
-            ),
+            // Switch(
+            //   activeColor: AppColors.yello,
+            //   inactiveTrackColor: Colors.grey,
+            //   value: _appDataProvider!.appDataState.settingsModel!.allowCamera!,
+            //   onChanged: (value) {
+            //     _appDataProvider!.settingsHandler(allowCamera: value);
+            //   },
+            // ),
           ],
         ),
         SizedBox(height: heightDp! * 10),
@@ -507,9 +542,19 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_microphone_permission.tr(),
-                    style: Theme.of(context).textTheme.bodyText1,
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: LocaleKeys.ConfigurationPageString_obligatory.tr() + " - ",
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: LocaleKeys.ConfigurationPageString_microphone_permission.tr(),
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                   Text(
                     LocaleKeys.ConfigurationPageString_microphone_permission_desc.tr(),
@@ -518,14 +563,14 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                 ],
               ),
             ),
-            Switch(
-              activeColor: AppColors.yello,
-              inactiveTrackColor: Colors.grey,
-              value: _appDataProvider!.appDataState.settingsModel!.allowMicrophone!,
-              onChanged: (value) {
-                _appDataProvider!.settingsHandler(allowMicrophone: value);
-              },
-            ),
+            // Switch(
+            //   activeColor: AppColors.yello,
+            //   inactiveTrackColor: Colors.grey,
+            //   value: _appDataProvider!.appDataState.settingsModel!.allowMicrophone!,
+            //   onChanged: (value) {
+            //     _appDataProvider!.settingsHandler(allowMicrophone: value);
+            //   },
+            // ),
           ],
         ),
         SizedBox(height: heightDp! * 10),
@@ -535,9 +580,57 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: LocaleKeys.ConfigurationPageString_obligatory.tr() + " - ",
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: LocaleKeys.ConfigurationPageString_photo_permission.tr(),
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
                   Text(
-                    LocaleKeys.ConfigurationPageString_location_permission.tr(),
-                    style: Theme.of(context).textTheme.bodyText1,
+                    LocaleKeys.ConfigurationPageString_photo_permission_desc.tr(),
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+            // Switch(
+            //   activeColor: AppColors.yello,
+            //   inactiveTrackColor: Colors.grey,
+            //   value: _appDataProvider!.appDataState.settingsModel!.allowLocation!,
+            //   onChanged: (value) {
+            //     _appDataProvider!.settingsHandler(allowLocation: value);
+            //   },
+            // ),
+          ],
+        ),
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        // TextSpan(
+                        //   text: LocaleKeys.ConfigurationPageString_obligatory.tr() + " - ",
+                        //   style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+                        // ),
+                        TextSpan(
+                          text: LocaleKeys.ConfigurationPageString_location_permission.tr(),
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
+                        ),
+                      ],
+                    ),
                   ),
                   Text(
                     LocaleKeys.ConfigurationPageString_location_permission_desc.tr(),
@@ -546,14 +639,14 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                 ],
               ),
             ),
-            Switch(
-              activeColor: AppColors.yello,
-              inactiveTrackColor: Colors.grey,
-              value: _appDataProvider!.appDataState.settingsModel!.allowLocation!,
-              onChanged: (value) {
-                _appDataProvider!.settingsHandler(allowLocation: value);
-              },
-            ),
+            // Switch(
+            //   activeColor: AppColors.yello,
+            //   inactiveTrackColor: Colors.grey,
+            //   value: _appDataProvider!.appDataState.settingsModel!.allowLocation!,
+            //   onChanged: (value) {
+            //     _appDataProvider!.settingsHandler(allowLocation: value);
+            //   },
+            // ),
           ],
         ),
       ],
@@ -659,6 +752,21 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
           LocaleKeys.ConfigurationPageString_infomation_desc.tr(),
           style: Theme.of(context).textTheme.bodyText1,
         ),
+        SizedBox(height: heightDp! * 20),
+        Center(
+          child: CustomTextButton(
+            leftWidget: Padding(
+              padding: EdgeInsets.only(right: widthDp! * 5),
+              child: Icon(Icons.call_outlined, size: heightDp! * 20, color: AppColors.yello),
+            ),
+            text: LocaleKeys.ConfigurationPageString_contactLegatus.tr(),
+            textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
+            bordercolor: AppColors.yello,
+            onPressed: () {
+              CustomUrlLauncher.makePhoneCall(AppConfig.contactPhoneNumber);
+            },
+          ),
+        ),
       ],
     );
   }
@@ -681,6 +789,24 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
         Text(
           LocaleKeys.ConfigurationPageString_analyse_desc.tr(),
           style: Theme.of(context).textTheme.bodyText1,
+        ),
+        SizedBox(height: heightDp! * 20),
+        Center(
+          child: CustomTextButton(
+            text: LocaleKeys.ConfigurationPageString_sendReport.tr(),
+            textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
+            bordercolor: AppColors.yello,
+            onPressed: () {
+              NormalAskDialog.show(
+                context,
+                title: LocaleKeys.ReportDialog_title.tr(),
+                content: LocaleKeys.ReportDialog_description.tr(),
+                okButton: LocaleKeys.ReportDialog_send.tr(),
+                cancelButton: LocaleKeys.ReportDialog_cancel.tr(),
+                callback: _reportHandler,
+              );
+            },
+          ),
         ),
       ],
     );

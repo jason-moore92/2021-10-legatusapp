@@ -15,6 +15,7 @@ abstract class  LocaleKeys {
   static const PlanningListPageString_appbarTitle = 'PlanningListPageString.appbarTitle';
   static const PlanningListPageString_login_description = 'PlanningListPageString.login_description';
   static const PlanningListPageString_login_button = 'PlanningListPageString.login_button';
+  static const PlanningListPageString_noPlanning = 'PlanningListPageString.noPlanning';
   static const PlanningListPageString = 'PlanningListPageString';
   static const PlanningPageString_date = 'PlanningPageString.date';
   static const PlanningPageString_state = 'PlanningPageString.state';
@@ -44,10 +45,13 @@ abstract class  LocaleKeys {
   static const ConfigurationPageString_smsLabel = 'ConfigurationPageString.smsLabel';
   static const ConfigurationPageString_receiveSms = 'ConfigurationPageString.receiveSms';
   static const ConfigurationPageString_application_permission = 'ConfigurationPageString.application_permission';
+  static const ConfigurationPageString_obligatory = 'ConfigurationPageString.obligatory';
   static const ConfigurationPageString_camera_permission = 'ConfigurationPageString.camera_permission';
   static const ConfigurationPageString_camera_permission_desc = 'ConfigurationPageString.camera_permission_desc';
   static const ConfigurationPageString_microphone_permission = 'ConfigurationPageString.microphone_permission';
   static const ConfigurationPageString_microphone_permission_desc = 'ConfigurationPageString.microphone_permission_desc';
+  static const ConfigurationPageString_photo_permission = 'ConfigurationPageString.photo_permission';
+  static const ConfigurationPageString_photo_permission_desc = 'ConfigurationPageString.photo_permission_desc';
   static const ConfigurationPageString_location_permission = 'ConfigurationPageString.location_permission';
   static const ConfigurationPageString_location_permission_desc = 'ConfigurationPageString.location_permission_desc';
   static const ConfigurationPageString_storage = 'ConfigurationPageString.storage';
@@ -60,6 +64,7 @@ abstract class  LocaleKeys {
   static const ConfigurationPageString_infomation_desc = 'ConfigurationPageString.infomation_desc';
   static const ConfigurationPageString_analyse = 'ConfigurationPageString.analyse';
   static const ConfigurationPageString_analyse_desc = 'ConfigurationPageString.analyse_desc';
+  static const ConfigurationPageString_contactLegatus = 'ConfigurationPageString.contactLegatus';
   static const ConfigurationPageString_sendReport = 'ConfigurationPageString.sendReport';
   static const ConfigurationPageString = 'ConfigurationPageString';
   static const LogoutDialog_title = 'LogoutDialog.title';
@@ -72,13 +77,23 @@ abstract class  LocaleKeys {
   static const ReportDialog_send = 'ReportDialog.send';
   static const ReportDialog_cancel = 'ReportDialog.cancel';
   static const ReportDialog = 'ReportDialog';
-  static const ReportPageListString_appbarTitle = 'ReportPageListString.appbarTitle';
-  static const ReportPageListString = 'ReportPageListString';
+  static const ReportSuccessDialog_title = 'ReportSuccessDialog.title';
+  static const ReportSuccessDialog_description = 'ReportSuccessDialog.description';
+  static const ReportSuccessDialog_okay = 'ReportSuccessDialog.okay';
+  static const ReportSuccessDialog = 'ReportSuccessDialog';
+  static const ReportListPageString_appbarTitle = 'ReportListPageString.appbarTitle';
+  static const ReportListPageString_delete = 'ReportListPageString.delete';
+  static const ReportListPageString = 'ReportListPageString';
   static const DeleteReportDialogString_title = 'DeleteReportDialogString.title';
   static const DeleteReportDialogString_content = 'DeleteReportDialogString.content';
   static const DeleteReportDialogString_delete = 'DeleteReportDialogString.delete';
   static const DeleteReportDialogString_cancel = 'DeleteReportDialogString.cancel';
   static const DeleteReportDialogString = 'DeleteReportDialogString';
+  static const DeleteMediaDialogString_title = 'DeleteMediaDialogString.title';
+  static const DeleteMediaDialogString_content = 'DeleteMediaDialogString.content';
+  static const DeleteMediaDialogString_delete = 'DeleteMediaDialogString.delete';
+  static const DeleteMediaDialogString_cancel = 'DeleteMediaDialogString.cancel';
+  static const DeleteMediaDialogString = 'DeleteMediaDialogString';
   static const NewReportPageString_appbarTitle = 'NewReportPageString.appbarTitle';
   static const NewReportPageString_reportName = 'NewReportPageString.reportName';
   static const NewReportPageString_types = 'NewReportPageString.types';
@@ -92,6 +107,7 @@ abstract class  LocaleKeys {
   static const NewReportPageString_city = 'NewReportPageString.city';
   static const NewReportPageString_latitude = 'NewReportPageString.latitude';
   static const NewReportPageString_longitude = 'NewReportPageString.longitude';
+  static const NewReportPageString_customerTypeLabel = 'NewReportPageString.customerTypeLabel';
   static const NewReportPageString_customerTypes = 'NewReportPageString.customerTypes';
   static const NewReportPageString_name = 'NewReportPageString.name';
   static const NewReportPageString_crop_form = 'NewReportPageString.crop_form';
@@ -104,6 +120,9 @@ abstract class  LocaleKeys {
   static const NewReportPageString_recipient_email = 'NewReportPageString.recipient_email';
   static const NewReportPageString_recipient_phone = 'NewReportPageString.recipient_phone';
   static const NewReportPageString_save = 'NewReportPageString.save';
+  static const NewReportPageString_createSuccess = 'NewReportPageString.createSuccess';
+  static const NewReportPageString_updateSuccess = 'NewReportPageString.updateSuccess';
+  static const NewReportPageString_uploading = 'NewReportPageString.uploading';
   static const NewReportPageString = 'NewReportPageString';
   static const LocalReportWidgetString_photos = 'LocalReportWidgetString.photos';
   static const LocalReportWidgetString_audios = 'LocalReportWidgetString.audios';
@@ -111,6 +130,7 @@ abstract class  LocaleKeys {
   static const LocalReportWidgetString_videos = 'LocalReportWidgetString.videos';
   static const LocalReportWidgetString_allMediaUpload = 'LocalReportWidgetString.allMediaUpload';
   static const LocalReportWidgetString_nonUploadMedial = 'LocalReportWidgetString.nonUploadMedial';
+  static const LocalReportWidgetString_noMedial = 'LocalReportWidgetString.noMedial';
   static const LocalReportWidgetString = 'LocalReportWidgetString';
   static const ReportPageString_share = 'ReportPageString.share';
   static const ReportPageString_selecteAll = 'ReportPageString.selecteAll';
@@ -133,5 +153,24 @@ abstract class  LocaleKeys {
   static const MediaInfoDialogString_longitude = 'MediaInfoDialogString.longitude';
   static const MediaInfoDialogString_close = 'MediaInfoDialogString.close';
   static const MediaInfoDialogString = 'MediaInfoDialogString';
+  static const StorageLimitDialogString_content = 'StorageLimitDialogString.content';
+  static const StorageLimitDialogString_ok = 'StorageLimitDialogString.ok';
+  static const StorageLimitDialogString = 'StorageLimitDialogString';
+  static const JournalDialogString_title = 'JournalDialogString.title';
+  static const JournalDialogString_content = 'JournalDialogString.content';
+  static const JournalDialogString_emailLabel = 'JournalDialogString.emailLabel';
+  static const JournalDialogString_send = 'JournalDialogString.send';
+  static const JournalDialogString_cancel = 'JournalDialogString.cancel';
+  static const JournalDialogString = 'JournalDialogString';
+  static const UploadDialogString_title = 'UploadDialogString.title';
+  static const UploadDialogString_content1 = 'UploadDialogString.content1';
+  static const UploadDialogString_content2 = 'UploadDialogString.content2';
+  static const UploadDialogString_content3 = 'UploadDialogString.content3';
+  static const UploadDialogString_content4 = 'UploadDialogString.content4';
+  static const UploadDialogString_content5 = 'UploadDialogString.content5';
+  static const UploadDialogString_content6 = 'UploadDialogString.content6';
+  static const UploadDialogString_login = 'UploadDialogString.login';
+  static const UploadDialogString_cancel = 'UploadDialogString.cancel';
+  static const UploadDialogString = 'UploadDialogString';
 
 }

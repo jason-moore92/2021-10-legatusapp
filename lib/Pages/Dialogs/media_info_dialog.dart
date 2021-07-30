@@ -120,7 +120,7 @@ class MediaInfoDialog {
                   child: Text(
                     "${KeicyDateTime.convertDateTimeToDateString(
                       dateTime: DateTime.tryParse(mediaModel.createdAt!),
-                      formats: 'Y-m-d H:i:s',
+                      formats: 'd/m/Y H:i:s',
                     )}",
                     style: Theme.of(context).textTheme.caption,
                   ),
@@ -139,7 +139,7 @@ class MediaInfoDialog {
                 SizedBox(width: heightDp * 8),
                 Expanded(
                   child: Text(
-                    "${(mediaModel.size! / 1024).toStringAsFixed(1)} M",
+                    "${(mediaModel.size! / 1024).toStringAsFixed(2)} Mo",
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ),
@@ -158,7 +158,7 @@ class MediaInfoDialog {
                   SizedBox(width: heightDp * 8),
                   Expanded(
                     child: Text(
-                      "${durationString} seconds",
+                      "$durationString seconds",
                       style: Theme.of(context).textTheme.caption,
                     ),
                   ),
@@ -210,8 +210,8 @@ class MediaInfoDialog {
                   text: LocaleKeys.MediaInfoDialogString_close.tr().toUpperCase(),
                   textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                   // width: widthDp * 120,
-                  bordercolor: AppColors.yello,
-                  borderRadius: heightDp * 6,
+                  // bordercolor: AppColors.yello,
+                  // borderRadius: heightDp * 6,
                   elevation: 0,
                   onPressed: () {
                     Navigator.of(context).pop();

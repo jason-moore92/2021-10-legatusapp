@@ -21,6 +21,7 @@ Future<Map<String, dynamic>> commonHeaders() async {
 
   if (authToken != "") {
     headers["X-USER-TOKEN"] = authToken;
+    // headers["Prediction-Key"] = authToken;
   }
 
   return headers;

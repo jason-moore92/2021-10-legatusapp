@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:legutus/Models/index.dart';
 import 'package:legutus/Models/local_report_model.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:legutus/generated/locale_keys.g.dart';
@@ -193,6 +194,35 @@ class LocalReportWidget extends StatelessWidget {
   }
 
   Widget _mainPanel(BuildContext context) {
+    int photosCount = 0;
+    int audiosCount = 0;
+    int notesCount = 0;
+    int videosCount = 0;
+    int totalCount = 0;
+    int nonUploadedCount = 0;
+
+    for (var i = 0; i < localReportModel!.medias!.length; i++) {
+      totalCount++;
+      if (localReportModel!.medias![i].state != "uploaded") {
+        nonUploadedCount++;
+      }
+
+      switch (localReportModel!.medias![i].type) {
+        case MediaType.audio:
+          audiosCount++;
+          break;
+        case MediaType.note:
+          notesCount++;
+          break;
+        case MediaType.picture:
+          photosCount++;
+          break;
+        case MediaType.video:
+          videosCount++;
+          break;
+        default:
+      }
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -203,24 +233,30 @@ class LocalReportWidget extends StatelessWidget {
             Expanded(child: Text(localReportModel!.name!, style: Theme.of(context).textTheme.subtitle2)),
             SizedBox(width: widthDp! * 10),
             Text(
-              "${localReportModel!.date!} ${localReportModel!.time!.split(":")[0]}:${localReportModel!.time!.split(":")[1]}",
+              "${localReportModel!.date!.split('-').last}/${localReportModel!.date!.split('-')[1]}/${localReportModel!.date!.split('-').first} "
+              "${localReportModel!.time!.split(":")[0]}:${localReportModel!.time!.split(":")[1]}",
               style: Theme.of(context).textTheme.caption!.copyWith(color: AppColors.yello),
             ),
           ],
         ),
 
         ///
-        SizedBox(height: heightDp! * 5),
-        Row(
-          children: [
-            Icon(Icons.location_on_outlined, size: heightDp! * 20, color: Colors.black),
-            SizedBox(width: widthDp! * 10),
-            Text(
-              localReportModel!.city == "" ? "No city" : localReportModel!.city!,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-          ],
-        ),
+        if (localReportModel!.city != "" || localReportModel!.zip != "")
+          Column(
+            children: [
+              SizedBox(height: heightDp! * 5),
+              Row(
+                children: [
+                  Icon(Icons.location_on_outlined, size: heightDp! * 20, color: Colors.black),
+                  SizedBox(width: widthDp! * 10),
+                  Text(
+                    "${localReportModel!.zip!} ${localReportModel!.city!}",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ],
+              ),
+            ],
+          ),
 
         ///
         SizedBox(height: heightDp! * 5),
@@ -234,6 +270,25 @@ class LocalReportWidget extends StatelessWidget {
                     LocaleKeys.LocalReportWidgetString_photos.tr(),
                     style: Theme.of(context).textTheme.overline,
                   ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.yello,
+                            borderRadius: BorderRadius.circular(heightDp! * 3),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "$photosCount",
+                            style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -245,6 +300,25 @@ class LocalReportWidget extends StatelessWidget {
                   Text(
                     LocaleKeys.LocalReportWidgetString_audios.tr(),
                     style: Theme.of(context).textTheme.overline,
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.yello,
+                            borderRadius: BorderRadius.circular(heightDp! * 3),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "$audiosCount",
+                            style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -258,6 +332,25 @@ class LocalReportWidget extends StatelessWidget {
                     LocaleKeys.LocalReportWidgetString_notes.tr(),
                     style: Theme.of(context).textTheme.overline,
                   ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.yello,
+                            borderRadius: BorderRadius.circular(heightDp! * 3),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "$notesCount",
+                            style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -270,6 +363,25 @@ class LocalReportWidget extends StatelessWidget {
                     LocaleKeys.LocalReportWidgetString_videos.tr(),
                     style: Theme.of(context).textTheme.overline,
                   ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                          decoration: BoxDecoration(
+                            color: AppColors.yello,
+                            borderRadius: BorderRadius.circular(heightDp! * 3),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "$videosCount",
+                            style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -280,10 +392,18 @@ class LocalReportWidget extends StatelessWidget {
         SizedBox(height: heightDp! * 5),
         Row(
           children: [
-            Icon(Icons.cloud_done_outlined, size: heightDp! * 20, color: AppColors.green),
-            SizedBox(width: widthDp! * 3),
+            Icon(
+              totalCount == 0 || nonUploadedCount != 0 ? Icons.cloud_off_outlined : Icons.cloud_done_outlined,
+              size: heightDp! * 20,
+              color: totalCount == 0 || nonUploadedCount != 0 ? AppColors.red : AppColors.green,
+            ),
+            SizedBox(width: widthDp! * 5),
             Text(
-              LocaleKeys.LocalReportWidgetString_allMediaUpload.tr(),
+              totalCount == 0
+                  ? LocaleKeys.LocalReportWidgetString_noMedial.tr()
+                  : totalCount != 0 && nonUploadedCount != 0
+                      ? LocaleKeys.LocalReportWidgetString_nonUploadMedial.tr(args: [nonUploadedCount.toString()])
+                      : LocaleKeys.LocalReportWidgetString_allMediaUpload.tr(),
               style: Theme.of(context).textTheme.overline,
             ),
           ],

@@ -13,9 +13,10 @@
     "configration": "Configration"
   },
   "PlanningListPageString": {
-    "appbarTitle": "Planning Schedule",
+    "appbarTitle": "Planning",
     "login_description": "Log in to your Legatus account to access the study findings schedule.",
-		"login_button": "Log In"
+		"login_button": "Log In",
+    "noPlanning": "No planning Data"
   },
   "PlanningPageString": {
     "date": "Date",
@@ -46,11 +47,14 @@
 		"loginLabel": "2. To log In",
 		"smsLabel": "CODE SMS",
 		"receiveSms": "Receive an SMS code",
-		"application_permission": "Application permissions",
-		"camera_permission": "Access to the camera of this device when the application is active",
+    "application_permission": "Application permissions",
+    "obligatory": "Obligatory",
+    "camera_permission": "Access to the camera of this device when the application is active",
     "camera_permission_desc": "Allows you to take photos and record videos",
     "microphone_permission": "Accessing the microphone of this device when the application is active",
     "microphone_permission_desc": "Allows you to record dictations in audio format",
+    "photo_permission": "Access to photos and multimedia content on this device when the application is active",
+    "photo_permission_desc": "Allows you to view and share photos, dictations and videos made with the application",
     "location_permission": "Allow this device to be located when the application is active",
     "location_permission_desc": "Allows you to save coordinates GPS photos, notes and videos",
 	  "storage": "Storage",
@@ -63,7 +67,8 @@
     "infomation_desc": "Duis autem vel eum ipsum dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum ipsum dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum ipsum dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.",
     "analyse": "Analysis data",
     "analyse_desc": "But, in truth, two minutes, and just, and feel, and the things to preview them. At vero eos, no hendreri is lorem ipsum carrots. Lorem ipsum dolor sit amet, tempor labore sadipscing over the years, and a great idea, but you should work per month exciting Eirmod tempor diam erat, sed diam of the project. But, in truth, two minutes, and just, and feel, and the things to preview them. At vero eos, no hendreri is lorem ipsum carrots. Lorem ipsum dolor sit amet, tempor labore sadipscing over the years.",
-	  "sendReport": "ENVOYER LE RAPPORT"
+	  "contactLegatus": "CONTACT LEGATUS",
+    "sendReport": "SEND REPORT"
   },
   "LogoutDialog":{
     "title":"Log Out",
@@ -72,17 +77,29 @@
     "cancel": "Cancel"
   },
   "ReportDialog": {
-    "title": "Report",
-    "description": "Send the report?",
+    "title": "Send Report",
+    "description": "Do you want to send an operation report to Legatus?",
     "send": "Send",
     "cancel": "Cancel"
   },
-  "ReportPageListString": {
-    "appbarTitle": "Your Reports"
+  "ReportSuccessDialog": {
+    "title": "Envoyer le rapport",
+    "description": "Report sent successfully",
+    "okay": "OK"
+  },
+  "ReportListPageString": {
+    "appbarTitle": "Your Reports",
+    "delete": "Supprimer"
   },
   "DeleteReportDialogString": {
     "title": "Delete LocalReport",
     "content": "Do you want to delete this finding? All local data will be deleted",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "DeleteMediaDialogString": {
+    "title": "Delete Medias",
+    "content": "Are you sure to delete local medias?",
     "delete": "Delete",
     "cancel": "Cancel"
   },
@@ -100,7 +117,8 @@
     "city": "City",
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "customerTypes": "{\"applicant\":\"Applicant\",\"particular\":\"Particular\",\"professional\":\"Professional\"}",
+    "customerTypeLabel": "Requérant",
+    "customerTypes": "{\"particular\":\"Particular\",\"professional\":\"Professional\"}",
     "name": "Name",
     "crop_form": "Social form",
     "crop_siren": "SIREN",
@@ -111,7 +129,10 @@
     "recipient_birth_city": "Birth City",
     "recipient_email": "Email",
     "recipient_phone": "Mobile",
-    "save": "Save"
+    "save": "Save",
+    "createSuccess": "Report successfully created",
+    "updateSuccess": "Report successfully updated ",
+    "uploading": "Uploading ..."
   },
   "LocalReportWidgetString": {
     "photos": "Photos",
@@ -119,7 +140,8 @@
     "notes": "Notes",
     "videos": "Videos",
     "allMediaUpload": "All media have been uploaded",
-    "nonUploadMedial": "{} media not uploaded"
+    "nonUploadMedial": "{} media not uploaded",
+    "noMedial": "No Media"
   },
   "ReportPageString": {
     "share": "Share",
@@ -133,7 +155,7 @@
   },
   "MediaInfoDialogString": {
     "media": "Media",
-    "mediaType": "Media Type",
+    "mediaType": "Type",
     "picture": "Picture",
     "audio": "Audio",
     "note": "Note",
@@ -144,5 +166,27 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "close": "Close"
+  },
+  "StorageLimitDialogString": {
+    "content": "You've reached your device's storage limit. Please free up storage space.",
+    "ok": "OK"
+  },
+  "JournalDialogString": {
+    "title": "Recevoir une base de PV",
+    "content": "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.\n\nDuis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio.\n\nDignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.",
+    "emailLabel": "Your email address",
+    "send": "RECEVOIR UNE BASE DE PV",
+    "cancel": "ANNULER"
+  },
+  "UploadDialogString": {
+    "title": "Media synchronization",
+    "content1": "You must log into your Legatus account to benefit from media sync and automatic processing:",
+    "content2": "optimization and sealing of photographs",
+    "content3": "voice dictation transcription",
+    "content4": "pre-drafting of the report in your model",
+    "content5": "calculation of the digital footprint of videos",
+    "content6": "...",
+    "login": "Log In",
+    "cancel": "Cancel"
   }
 }

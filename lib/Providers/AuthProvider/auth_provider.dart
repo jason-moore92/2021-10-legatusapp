@@ -133,7 +133,7 @@ class AuthProvider extends ChangeNotifier {
 
     _authState = _authState.update(
       progressState: 2,
-      message: "",
+      message: "Logout Success",
       description: "",
       statusCode: 200,
       loginState: LoginState.IsNotLogin,
