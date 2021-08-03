@@ -145,14 +145,14 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     _authProvider!.setAuthState(_authProvider!.authState.update(progressState: 1));
     await _keicyProgressDialog!.show();
 
-    // _authProvider!.getSMSCode(
-    //   email: _email,
-    //   phoneNumber: _phoneNumber,
-    // );
     _authProvider!.getSMSCode(
-      email: AppConfig.testEmail,
-      phoneNumber: AppConfig.testPhoneNumber,
+      email: _email,
+      phoneNumber: _phoneNumber,
     );
+    // _authProvider!.getSMSCode(
+    //   email: AppConfig.testEmail,
+    //   phoneNumber: AppConfig.testPhoneNumber,
+    // );
   }
 
   void _loginHandler() async {
@@ -164,16 +164,16 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     _authProvider!.setAuthState(_authProvider!.authState.update(progressState: 1));
     await _keicyProgressDialog!.show();
 
-    // _authProvider!.login(
-    //   email: _email,
-    //   phoneNumber: _phoneNumber,
-    //   smsCode: _smsCode,
-    // );
     _authProvider!.login(
-      email: AppConfig.testEmail,
-      phoneNumber: AppConfig.testPhoneNumber,
+      email: _email,
+      phoneNumber: _phoneNumber,
       smsCode: _smsCode,
     );
+    //   _authProvider!.login(
+    //     email: AppConfig.testEmail,
+    //     phoneNumber: AppConfig.testPhoneNumber,
+    //     smsCode: _smsCode,
+    //   );
   }
 
   void _logoutHandler() async {

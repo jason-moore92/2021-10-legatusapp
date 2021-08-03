@@ -525,7 +525,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
     final CameraController newCameraController = CameraController(
       cameraDescription,
-      ResolutionPreset.medium,
+      ResolutionPreset.hi,
       enableAudio: enableAudio,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
