@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,24 +60,21 @@ class LocalMediaApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> uploadPresignedUrl({@required String? presignedUrl}) async {
+  static Future<Map<String, dynamic>> uploadPresignedUrl({@required File? file, @required String? presignedUrl}) async {
     try {
+      Uint8List imageByteData = await file!.readAsBytes();
       var response = await httpOld.put(
         Uri.parse(presignedUrl!),
-        headers: {
-          'Content-Type': 'application/octet-stream',
-        },
+        body: imageByteData,
       );
+
       if (response.statusCode == 200) {
         return {
           "success": true,
-          "statusCode": response.statusCode,
         };
       } else {
         return {
           "success": false,
-          "data": json.decode(response.body),
-          "statusCode": response.statusCode,
         };
       }
     } on SocketException catch (e) {

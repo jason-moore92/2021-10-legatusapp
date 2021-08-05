@@ -23,7 +23,6 @@ class MediaModel extends Equatable {
   String? content;
   String? latitude;
   String? longitude;
-  String? presignedUrl;
 
   MediaModel({
     this.reportId = -1,
@@ -41,7 +40,6 @@ class MediaModel extends Equatable {
     this.content = "",
     this.latitude = "",
     this.longitude = "",
-    this.presignedUrl = "",
   });
 
   factory MediaModel.fromJson(Map<String, dynamic> map) {
@@ -61,7 +59,6 @@ class MediaModel extends Equatable {
       content: map["content"] ?? "",
       latitude: map["latitude"] ?? "",
       longitude: map["longitude"] ?? "",
-      presignedUrl: map["presignedUrl"] ?? "",
     );
   }
 
@@ -82,7 +79,6 @@ class MediaModel extends Equatable {
       "content": content ?? "",
       "latitude": latitude ?? "",
       "longitude": longitude ?? "",
-      "presignedUrl": presignedUrl ?? "",
     };
   }
 
@@ -103,7 +99,6 @@ class MediaModel extends Equatable {
       content: model.content,
       latitude: model.latitude,
       longitude: model.longitude,
-      presignedUrl: model.presignedUrl,
     );
   }
 
@@ -124,7 +119,6 @@ class MediaModel extends Equatable {
         content!,
         latitude!,
         longitude!,
-        presignedUrl!,
       ];
 
   @override

@@ -171,7 +171,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       _recipientBirthDateTime = DateTime(DateTime.now().year - 40);
 
       _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime, formats: "d/m/Y");
-      _timeController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: 'H:i');
+      _timeController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: 'H:i:s');
       _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _recipientBirthDateTime, formats: "d/m/Y");
     } else {
       _reportDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: _localReportModel!.date!);

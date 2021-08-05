@@ -525,7 +525,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
     final CameraController newCameraController = CameraController(
       cameraDescription,
-      ResolutionPreset.hi,
+      ResolutionPreset.ultraHigh,
       enableAudio: enableAudio,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
@@ -574,73 +574,70 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
               width: deviceWidth,
               height: deviceHeight,
               color: Colors.black,
-              child: Column(
+              child: Stack(
                 children: <Widget>[
-                  ///
+                  Container(
+                    width: deviceWidth,
+                    height: deviceHeight,
+                    child: _cameraPreviewWidget(),
+                  ),
                   SizedBox(height: statusbarHeight),
-                  _cameraToolTopPanel(orientation: _orientation),
-
-                  ///
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        _cameraPreviewWidget(),
-                        Positioned(
-                          bottom: heightDp! * 0,
-                          child: _isShowAudioRecoderPanel
-                              ? RotatedBox(
-                                  quarterTurns:
-                                      (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                          ? 0
-                                          : 1,
-                                  child: AudioRecoderPanel(
-                                    scaffoldKey: _scaffoldKey,
-                                    keicyProgressDialog: _keicyProgressDialog,
-                                    width:
-                                        (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                            ? deviceWidth
-                                            : _cameraViewHeiht - heightDp! * 120,
-                                    recordingStatusCallback: (bool isAudioRecording) {
-                                      _isAudioRecording = isAudioRecording;
-                                      setState(() {});
-                                    },
-                                    audioSaveHandler: (String tmpPath, int inMilliseconds) {
-                                      _audioHandler(tmpPath: tmpPath, inMilliseconds: inMilliseconds);
-                                    },
-                                  ),
-                                )
-                              : SizedBox(),
-                        ),
-                        Positioned(
-                          bottom: heightDp! * 0,
-                          child: _isShowVideoRecoderPanel
-                              ? RotatedBox(
-                                  quarterTurns:
-                                      (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                          ? 0
-                                          : 1,
-                                  child: VideoRecoderPanel(
-                                    scaffoldKey: _scaffoldKey,
-                                    cameraController: cameraController,
-                                    keicyProgressDialog: _keicyProgressDialog,
-                                    width:
-                                        (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                            ? deviceWidth
-                                            : _cameraViewHeiht - heightDp! * 120,
-                                    videoSaveHandler: (XFile xfile, int inMilliseconds) {
-                                      _videoHandler(videoFile: xfile, inMilliseconds: inMilliseconds);
-                                    },
-                                    onAudioModeButtonPressed: onAudioModeButtonPressed,
-                                  ),
-                                )
-                              : SizedBox(),
-                        ),
-                      ],
-                    ),
+                  Positioned(
+                    top: statusbarHeight,
+                    child: _cameraToolTopPanel(orientation: _orientation),
                   ),
 
                   ///
-                  _categoryToolPanel(orientation: _orientation),
+                  Positioned(
+                    bottom: heightDp! * 0,
+                    child: Column(
+                      children: [
+                        _isShowAudioRecoderPanel
+                            ? RotatedBox(
+                                quarterTurns:
+                                    (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
+                                        ? 0
+                                        : 1,
+                                child: AudioRecoderPanel(
+                                  scaffoldKey: _scaffoldKey,
+                                  keicyProgressDialog: _keicyProgressDialog,
+                                  width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
+                                      ? deviceWidth
+                                      : _cameraViewHeiht - heightDp! * 120,
+                                  recordingStatusCallback: (bool isAudioRecording) {
+                                    _isAudioRecording = isAudioRecording;
+                                    setState(() {});
+                                  },
+                                  audioSaveHandler: (String tmpPath, int inMilliseconds) {
+                                    _audioHandler(tmpPath: tmpPath, inMilliseconds: inMilliseconds);
+                                  },
+                                ),
+                              )
+                            : SizedBox(),
+                        _isShowVideoRecoderPanel
+                            ? RotatedBox(
+                                quarterTurns:
+                                    (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
+                                        ? 0
+                                        : 1,
+                                child: VideoRecoderPanel(
+                                  scaffoldKey: _scaffoldKey,
+                                  cameraController: cameraController,
+                                  keicyProgressDialog: _keicyProgressDialog,
+                                  width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
+                                      ? deviceWidth
+                                      : _cameraViewHeiht - heightDp! * 120,
+                                  videoSaveHandler: (XFile xfile, int inMilliseconds) {
+                                    _videoHandler(videoFile: xfile, inMilliseconds: inMilliseconds);
+                                  },
+                                  onAudioModeButtonPressed: onAudioModeButtonPressed,
+                                ),
+                              )
+                            : SizedBox(),
+                        _categoryToolPanel(orientation: _orientation),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             );
@@ -680,18 +677,19 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 StreamBuilder<Position>(
-                    stream: Geolocator.getPositionStream(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData && snapshot.data != null) {
-                        _currentPosition = snapshot.data;
-                      }
+                  stream: Geolocator.getPositionStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      _currentPosition = snapshot.data;
+                    }
 
-                      return Icon(
-                        Icons.gps_fixed_outlined,
-                        size: heightDp! * 20,
-                        color: _currentPosition != null ? AppColors.green : AppColors.red,
-                      );
-                    }),
+                    return Icon(
+                      Icons.gps_fixed_outlined,
+                      size: heightDp! * 20,
+                      color: _currentPosition != null ? AppColors.green : AppColors.red,
+                    );
+                  },
+                ),
                 SizedBox(width: widthDp! * 10),
                 Text(
                   KeicyDateTime.convertDateTimeToDateString(

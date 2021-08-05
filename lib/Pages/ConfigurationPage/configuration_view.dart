@@ -6,6 +6,7 @@ import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
 import 'package:legutus/ApiDataProviders/index.dart';
 import 'package:legutus/Config/config.dart';
 import 'package:legutus/Helpers/custom_url_lancher.dart';
+import 'package:legutus/Helpers/file_helpers.dart';
 import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Models/user_model.dart';
@@ -56,6 +57,8 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
   String? _email;
   String? _phoneNumber;
   String? _smsCode;
+
+  int _totalKBSize = 0;
 
   @override
   void initState() {
@@ -109,8 +112,6 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
       isNotifiable: false,
     );
 
-    _authProvider!.setAuthState(_authProvider!.authState.update(contextName: "Configuration"), isNotifiable: false);
-
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _authProvider!.addListener(_authProviderListener);
     });
@@ -145,14 +146,14 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     _authProvider!.setAuthState(_authProvider!.authState.update(progressState: 1));
     await _keicyProgressDialog!.show();
 
-    _authProvider!.getSMSCode(
-      email: _email,
-      phoneNumber: _phoneNumber,
-    );
     // _authProvider!.getSMSCode(
-    //   email: AppConfig.testEmail,
-    //   phoneNumber: AppConfig.testPhoneNumber,
+    //   email: _email,
+    //   phoneNumber: _phoneNumber,
     // );
+    _authProvider!.getSMSCode(
+      email: AppConfig.testEmail,
+      phoneNumber: AppConfig.testPhoneNumber,
+    );
   }
 
   void _loginHandler() async {
@@ -164,16 +165,16 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     _authProvider!.setAuthState(_authProvider!.authState.update(progressState: 1));
     await _keicyProgressDialog!.show();
 
+    // _authProvider!.login(
+    //   email: _email,
+    //   phoneNumber: _phoneNumber,
+    //   smsCode: _smsCode,
+    // );
     _authProvider!.login(
-      email: _email,
-      phoneNumber: _phoneNumber,
+      email: AppConfig.testEmail,
+      phoneNumber: AppConfig.testPhoneNumber,
       smsCode: _smsCode,
     );
-    //   _authProvider!.login(
-    //     email: AppConfig.testEmail,
-    //     phoneNumber: AppConfig.testPhoneNumber,
-    //     smsCode: _smsCode,
-    //   );
   }
 
   void _logoutHandler() async {
@@ -206,7 +207,17 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     }
     await _keicyProgressDialog!.hide();
 
-    if (result != null && result["success"]) {}
+    if (result != null && result["success"]) {
+      SuccessDialog.show(
+        context,
+        text: result["data"] != null && result["data"]["message"] != null ? result["data"]["message"] : "Success",
+      );
+    } else {
+      FailedDialog.show(
+        context,
+        text: result["data"] != null && result["data"]["message"] != null ? result["data"]["message"] : "Something was wrong",
+      );
+    }
   }
 
   @override
@@ -219,34 +230,45 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
-        body: NotificationListener<OverscrollIndicatorNotification>(
-          onNotification: (notification) {
-            notification.disallowGlow();
-            return true;
-          },
-          child: SingleChildScrollView(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-              child: Container(
-                width: deviceWidth,
-                color: Colors.transparent,
-                padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 20),
-                child: Column(
-                  children: [
-                    if (authProvider.authState.loginState == LoginState.IsLogin) _logInPanel() else _logoutPanel(),
-                    SizedBox(height: heightDp! * 20),
-                    _permissionPanel(),
-                    SizedBox(height: heightDp! * 20),
-                    _storagePanel(),
-                    SizedBox(height: heightDp! * 20),
-                    _infomationPanel(),
-                    SizedBox(height: heightDp! * 20),
-                    _analysePanel(),
-                  ],
+        body: StreamBuilder<Map<String, int>>(
+          stream: Stream.fromFuture(FileHelpers.dirStatSync()),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return Center(child: CupertinoActivityIndicator());
+
+            if (snapshot.hasData && snapshot.data != null) {
+              _totalKBSize = snapshot.data!["size"]!;
+            }
+
+            return NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: (notification) {
+                notification.disallowGlow();
+                return true;
+              },
+              child: SingleChildScrollView(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+                  child: Container(
+                    width: deviceWidth,
+                    color: Colors.transparent,
+                    padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 20),
+                    child: Column(
+                      children: [
+                        if (authProvider.authState.loginState == LoginState.IsLogin) _logInPanel() else _logoutPanel(),
+                        SizedBox(height: heightDp! * 20),
+                        _permissionPanel(),
+                        SizedBox(height: heightDp! * 20),
+                        _storagePanel(),
+                        SizedBox(height: heightDp! * 20),
+                        _infomationPanel(),
+                        SizedBox(height: heightDp! * 20),
+                        _analysePanel(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       );
     });
@@ -677,7 +699,7 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                   Row(
                     children: [
                       Text(
-                        LocaleKeys.ConfigurationPageString_storage_condition1.tr(),
+                        (_totalKBSize / 1024).toStringAsFixed(2) + " Mo ",
                         style: Theme.of(context).textTheme.subtitle2,
                       ),
                       Text(

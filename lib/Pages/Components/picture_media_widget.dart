@@ -132,10 +132,31 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
             Positioned(
               bottom: heightDp! * 5,
               left: heightDp! * 5,
-              child: Icon(
-                widget.mediaModel!.state == "uploaded" ? Icons.cloud_done : Icons.cloud_off_sharp,
-                size: heightDp! * 20,
-                color: widget.mediaModel!.state == "uploaded" ? AppColors.green : AppColors.red.withOpacity(0.6),
+              child: Stack(
+                children: [
+                  Icon(
+                    widget.mediaModel!.state == "error"
+                        ? Icons.report_problem_outlined
+                        : widget.mediaModel!.state == "uploaded"
+                            ? Icons.cloud_done_outlined
+                            : Icons.cloud_off_outlined,
+                    size: heightDp! * 20,
+                    color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
+                  ),
+                  Icon(
+                    widget.mediaModel!.state == "error"
+                        ? Icons.report_problem
+                        : widget.mediaModel!.state == "uploaded"
+                            ? Icons.cloud_done
+                            : Icons.cloud_off,
+                    size: heightDp! * 20,
+                    color: widget.mediaModel!.state == "error"
+                        ? AppColors.red
+                        : widget.mediaModel!.state == "uploaded"
+                            ? AppColors.green
+                            : AppColors.red.withOpacity(0.6),
+                  ),
+                ],
               ),
             ),
             Positioned(

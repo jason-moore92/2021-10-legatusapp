@@ -14,7 +14,7 @@ Client http = InterceptedClient.build(
   ],
 );
 
-Future<Map<String, dynamic>> commonHeaders() async {
+Future<Map<String, String>> commonHeaders() async {
   Map<String, String> headers = {};
 
   String authToken = await getAuthToken();

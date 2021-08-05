@@ -158,37 +158,31 @@ class LocalReportProvider extends ChangeNotifier {
 
         for (var i = 0; i < localReportModel!.medias!.length; i++) {
           MediaModel mediaModel = MediaModel.copy(localReportModel.medias![i]);
+          if (!_localReportState.isUploading!) break;
+
+          if (mediaModel.state == "uploaded") continue;
 
           /// upload media
-          if (mediaModel.state != "uploaded" && mediaModel.state != "uploading") {
-            if (!_localReportState.isUploading!) break;
+          mediaModel.reportId = localReportModel.reportId;
+          _localReportState = _localReportState.update(
+            progressState: 3,
+            uploadingMediaModel: mediaModel,
+          );
+          notifyListeners();
 
+          var result = await LocalMediaApiProvider.uploadMedia(mediaModel: mediaModel);
+          if (result["success"] && result["data"]["presigned_url"] != null) {
+            mediaModel.state = "uploading";
             _localReportState = _localReportState.update(
               progressState: 3,
               uploadingMediaModel: mediaModel,
             );
             notifyListeners();
-            mediaModel.reportId = localReportModel.reportId;
-            var result = await LocalMediaApiProvider.uploadMedia(mediaModel: mediaModel);
-            if (result["success"]) {
-              mediaModel.state = "uploading";
-              mediaModel.presignedUrl = result["data"]["presigned_url"];
-              _localReportState = _localReportState.update(
-                progressState: 3,
-                uploadingMediaModel: mediaModel,
-              );
-              notifyListeners();
-            }
-          }
-          if (mediaModel.state != "uploaded" && mediaModel.state == "uploading" && mediaModel.presignedUrl != "") {
-            if (!_localReportState.isUploading!) break;
 
-            _localReportState = _localReportState.update(
-              progressState: 3,
-              uploadingMediaModel: mediaModel,
+            var result1 = await LocalMediaApiProvider.uploadPresignedUrl(
+              file: File(mediaModel.path!),
+              presignedUrl: result["data"]["presigned_url"],
             );
-            notifyListeners();
-            var result1 = await LocalMediaApiProvider.uploadPresignedUrl(presignedUrl: mediaModel.presignedUrl);
             if (result1["success"]) {
               mediaModel.state = "uploaded";
               _localReportState = _localReportState.update(
@@ -196,7 +190,21 @@ class LocalReportProvider extends ChangeNotifier {
                 uploadingMediaModel: mediaModel,
               );
               notifyListeners();
+            } else {
+              mediaModel.state = "error";
+              _localReportState = _localReportState.update(
+                progressState: 3,
+                uploadingMediaModel: mediaModel,
+              );
+              notifyListeners();
             }
+          } else if (!result["success"]) {
+            mediaModel.state = "error";
+            _localReportState = _localReportState.update(
+              progressState: 3,
+              uploadingMediaModel: mediaModel,
+            );
+            notifyListeners();
           }
         }
       } catch (e) {

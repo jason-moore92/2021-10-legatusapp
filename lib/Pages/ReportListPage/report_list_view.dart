@@ -62,14 +62,14 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
     _localReportListProvider = LocalReportListProvider.of(context);
     _localReportListProvider!.setLocalReportListState(
-      LocalReportListState.init().copyWith(contextName: "PlanningPage"),
+      _localReportListProvider!.localReportListState.update(contextName: "PlanningPage"),
       isNotifiable: false,
     );
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _localReportListProvider!.addListener(_localReportListProviderListener);
 
-      if (_localReportListProvider!.localReportListState.progressState != 2) {
+      if (_localReportListProvider!.localReportListState.progressState != 1 && _localReportListProvider!.localReportListState.progressState != 2) {
         _localReportListProvider!.setLocalReportListState(
           _localReportListProvider!.localReportListState.update(progressState: 1),
         );

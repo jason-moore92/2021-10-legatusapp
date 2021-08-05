@@ -1,12 +1,8 @@
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
-import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:legutus/Pages/Components/index.dart';
@@ -19,7 +15,7 @@ class NotePanelDialog {
     BuildContext context, {
     double? topMargin,
     bool? isNew = true,
-    MediaModel? medialModel,
+    MediaModel? mediaModel,
     bool barrierDismissible = false,
     Function? callBack,
   }) async {
@@ -33,7 +29,7 @@ class NotePanelDialog {
     GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
     if (!isNew!) {
-      _controller.text = medialModel!.content!;
+      _controller.text = mediaModel!.content!;
     }
 
     void _saveHandler(BuildContext context) async {
@@ -74,17 +70,27 @@ class NotePanelDialog {
                           child: Column(
                             children: [
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Image.asset(
-                                    "lib/Assets/Images/edit_note.png",
-                                    width: heightDp * 25,
-                                    height: heightDp * 25,
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        "lib/Assets/Images/edit_note.png",
+                                        width: heightDp * 25,
+                                        height: heightDp * 25,
+                                      ),
+                                      SizedBox(width: widthDp * 10),
+                                      Text(
+                                        LocaleKeys.NoteDialogString_newNots.tr(),
+                                        style: Theme.of(context).textTheme.caption,
+                                      )
+                                    ],
                                   ),
-                                  SizedBox(width: widthDp * 10),
-                                  Text(
-                                    LocaleKeys.NoteDialogString_newNots.tr(),
-                                    style: Theme.of(context).textTheme.caption,
-                                  )
+                                  Icon(
+                                    mediaModel!.state == "uploaded" ? Icons.cloud_done : Icons.cloud_off,
+                                    size: heightDp * 20,
+                                    color: mediaModel.state == "uploaded" ? AppColors.green : AppColors.red.withOpacity(0.6),
+                                  ),
                                 ],
                               ),
 
@@ -127,14 +133,19 @@ class NotePanelDialog {
                                   SizedBox(width: widthDp * 20),
                                   CustomTextButton(
                                     text: LocaleKeys.NoteDialogString_save.tr().toUpperCase(),
-                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
+                                    textStyle: Theme.of(context)
+                                        .textTheme
+                                        .button!
+                                        .copyWith(color: mediaModel.state == "uploaded" ? Colors.grey.withOpacity(0.7) : AppColors.yello),
                                     // width: widthDp * 120,
                                     // bordercolor: AppColors.yello,
                                     // borderRadius: heightDp * 6,
                                     elevation: 0,
-                                    onPressed: () {
-                                      _saveHandler(context);
-                                    },
+                                    onPressed: mediaModel.state == "uploaded"
+                                        ? null
+                                        : () {
+                                            _saveHandler(context);
+                                          },
                                   ),
                                 ],
                               ),

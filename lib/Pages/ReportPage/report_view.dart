@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -65,6 +66,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   List<int>? _selectedMediaRanks;
   bool _selectStatus = false;
 
+  Position? _currentPosition;
+  StreamSubscription? _locationSubscription;
+
   int photosCount = 0;
   int audiosCount = 0;
   int notesCount = 0;
@@ -130,6 +134,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     );
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      _locationSubscription = Geolocator.getPositionStream().listen((position) {
+        _currentPosition = position;
+      });
+
       _localMediaListProvider!.addListener(_localMediaListProviderListener);
       _localReportProvider!.addListener(_localReportProviderListener);
 
@@ -147,6 +155,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   void dispose() {
     _localMediaListProvider!.removeListener(_localMediaListProviderListener);
     _localReportProvider!.removeListener(_localReportProviderListener);
+    if (_locationSubscription != null) {
+      _locationSubscription!.cancel();
+      _locationSubscription = null;
+    }
     super.dispose();
   }
 
@@ -315,11 +327,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         mediaModel.duration = -1;
         mediaModel.ext = textFile.path.split('.').last;
         mediaModel.filename = textFile.path.split('/').last;
-        var permission = await Geolocator.checkPermission();
-        if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
-          var position = await Geolocator.getCurrentPosition();
-          mediaModel.latitude = position.latitude.toString();
-          mediaModel.longitude = position.longitude.toString();
+        if (_currentPosition != null) {
+          mediaModel.latitude = _currentPosition!.latitude.toString();
+          mediaModel.longitude = _currentPosition!.longitude.toString();
         }
         mediaModel.path = textFile.path;
         mediaModel.rank = localReportModel.medias!.length + 1;
@@ -346,11 +356,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             mediaModel.content = note;
             mediaModel.ext = textFile.path.split('.').last;
             mediaModel.filename = textFile.path.split('/').last;
-            var permission = await Geolocator.checkPermission();
-            if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
-              var position = await Geolocator.getCurrentPosition();
-              mediaModel.latitude = position.latitude.toString();
-              mediaModel.longitude = position.longitude.toString();
+            if (_currentPosition != null) {
+              mediaModel.latitude = _currentPosition!.latitude.toString();
+              mediaModel.longitude = _currentPosition!.longitude.toString();
             }
             mediaModel.path = textFile.path;
             mediaModel.size = textFile.readAsBytesSync().lengthInBytes ~/ 1024;
@@ -1150,7 +1158,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                           isUploading: isUploading,
                           tapHandler: () async {
                             if (!_selectStatus && _selectedMediaRanks!.isEmpty) {
-                              var note = await NotePanelDialog.show(context, isNew: false, medialModel: mediaModel);
+                              var note = await NotePanelDialog.show(context, isNew: false, mediaModel: mediaModel);
                               if (note != null) {
                                 _noteHandler(note: note, isNew: false, mediaModel: mediaModel);
                               }

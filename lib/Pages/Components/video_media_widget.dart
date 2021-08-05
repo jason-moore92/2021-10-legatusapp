@@ -292,10 +292,31 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                   child: Row(
                     children: [
                       SizedBox(width: widthDp * 10),
-                      Icon(
-                        widget.mediaModel!.state == "uploaded" ? Icons.cloud_done : Icons.cloud_off,
-                        size: heightDp * 20,
-                        color: widget.mediaModel!.state == "uploaded" ? AppColors.green : AppColors.red.withOpacity(0.6),
+                      Stack(
+                        children: [
+                          Icon(
+                            widget.mediaModel!.state == "error"
+                                ? Icons.report_problem_outlined
+                                : widget.mediaModel!.state == "uploaded"
+                                    ? Icons.cloud_done_outlined
+                                    : Icons.cloud_off_outlined,
+                            size: heightDp * 20,
+                            color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
+                          ),
+                          Icon(
+                            widget.mediaModel!.state == "error"
+                                ? Icons.report_problem
+                                : widget.mediaModel!.state == "uploaded"
+                                    ? Icons.cloud_done
+                                    : Icons.cloud_off,
+                            size: heightDp * 20,
+                            color: widget.mediaModel!.state == "error"
+                                ? AppColors.red
+                                : widget.mediaModel!.state == "uploaded"
+                                    ? AppColors.green
+                                    : AppColors.red.withOpacity(0.6),
+                          ),
+                        ],
                       ),
                       if (!_videoPlayerController!.value.isPlaying)
                         GestureDetector(
