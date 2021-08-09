@@ -6,7 +6,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:geolocator/geolocator.dart';
-// import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
+// import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
 // import 'package:legutus/Helpers/index.dart';
 // import 'package:legutus/Models/index.dart';
 // import 'package:legutus/Pages/App/Styles/index.dart';

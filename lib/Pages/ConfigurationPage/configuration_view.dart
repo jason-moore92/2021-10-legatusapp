@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
+import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legutus/ApiDataProviders/index.dart';
 import 'package:legutus/Config/config.dart';
 import 'package:legutus/Helpers/custom_url_lancher.dart';
@@ -146,18 +146,17 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     _authProvider!.setAuthState(_authProvider!.authState.update(progressState: 1));
     await _keicyProgressDialog!.show();
 
-    // _authProvider!.getSMSCode(
-    //   email: _email,
-    //   phoneNumber: _phoneNumber,
-    // );
     _authProvider!.getSMSCode(
-      email: AppConfig.testEmail,
-      phoneNumber: AppConfig.testPhoneNumber,
+      email: _email,
+      phoneNumber: _phoneNumber,
     );
+    // _authProvider!.getSMSCode(
+    //   email: AppConfig.testEmail,
+    //   phoneNumber: AppConfig.testPhoneNumber,
+    // );
   }
 
   void _loginHandler() async {
-    print(_formkey2.currentState!.validate());
     if (!_formkey2.currentState!.validate()) return;
     _formkey2.currentState!.save();
 
@@ -165,16 +164,16 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     _authProvider!.setAuthState(_authProvider!.authState.update(progressState: 1));
     await _keicyProgressDialog!.show();
 
-    // _authProvider!.login(
-    //   email: _email,
-    //   phoneNumber: _phoneNumber,
-    //   smsCode: _smsCode,
-    // );
     _authProvider!.login(
-      email: AppConfig.testEmail,
-      phoneNumber: AppConfig.testPhoneNumber,
+      email: _email,
+      phoneNumber: _phoneNumber,
       smsCode: _smsCode,
     );
+    // _authProvider!.login(
+    //   email: AppConfig.testEmail,
+    //   phoneNumber: AppConfig.testPhoneNumber,
+    //   smsCode: _smsCode,
+    // );
   }
 
   void _logoutHandler() async {
@@ -233,7 +232,7 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
         body: StreamBuilder<Map<String, int>>(
           stream: Stream.fromFuture(FileHelpers.dirStatSync()),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) return Center(child: CupertinoActivityIndicator());
+            // if (!snapshot.hasData) return Center(child: CupertinoActivityIndicator());
 
             if (snapshot.hasData && snapshot.data != null) {
               _totalKBSize = snapshot.data!["size"]!;
@@ -258,6 +257,10 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                         _permissionPanel(),
                         SizedBox(height: heightDp! * 20),
                         _storagePanel(),
+                        SizedBox(height: heightDp! * 20),
+                        _pictureResolutionPanel(),
+                        SizedBox(height: heightDp! * 20),
+                        _videoResolutionPanel(),
                         SizedBox(height: heightDp! * 20),
                         _infomationPanel(),
                         SizedBox(height: heightDp! * 20),
@@ -748,6 +751,340 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               onChanged: (value) {
                 _appDataProvider!.settingsHandler(withRestriction: value);
               },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _pictureResolutionPanel() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.photo_outlined, size: heightDp! * 25, color: Colors.black),
+            SizedBox(width: widthDp! * 10),
+            Text(
+              LocaleKeys.ConfigurationPageString_photoResolutionTitle.tr(),
+              style: Theme.of(context).textTheme.subtitle2,
+            ),
+          ],
+        ),
+        SizedBox(height: heightDp! * 10),
+        Text(
+          LocaleKeys.ConfigurationPageString_photoResolutionDescription.tr(),
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+        ),
+
+        ///
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Container(
+              height: heightDp! * 25,
+              child: Radio(
+                value: 0,
+                activeColor: AppColors.yello,
+                groupValue: _appDataProvider!.appDataState.settingsModel!.photoResolution,
+                onChanged: (int? value) {
+                  _appDataProvider!.settingsHandler(photoResolution: value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.ConfigurationPageString_high.tr(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  SizedBox(height: heightDp! * 2),
+                  Text(
+                    "720p (1280x720)",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        ///
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Container(
+              height: heightDp! * 25,
+              child: Radio(
+                value: 1,
+                activeColor: AppColors.yello,
+                groupValue: _appDataProvider!.appDataState.settingsModel!.photoResolution,
+                onChanged: (int? value) {
+                  _appDataProvider!.settingsHandler(photoResolution: value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.ConfigurationPageString_veryHigh.tr(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  SizedBox(height: heightDp! * 2),
+                  Text(
+                    "1080p (1920x1080)",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        ///
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Container(
+              height: heightDp! * 25,
+              child: Radio(
+                value: 2,
+                activeColor: AppColors.yello,
+                groupValue: _appDataProvider!.appDataState.settingsModel!.photoResolution,
+                onChanged: (int? value) {
+                  _appDataProvider!.settingsHandler(photoResolution: value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.ConfigurationPageString_ultraHigh.tr(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  SizedBox(height: heightDp! * 2),
+                  Text(
+                    "2160p (3840x2160)",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        ///
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Container(
+              height: heightDp! * 25,
+              child: Radio(
+                value: 3,
+                activeColor: AppColors.yello,
+                groupValue: _appDataProvider!.appDataState.settingsModel!.photoResolution,
+                onChanged: (int? value) {
+                  _appDataProvider!.settingsHandler(photoResolution: value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.ConfigurationPageString_maximum.tr(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  SizedBox(height: heightDp! * 2),
+                  Text(
+                    LocaleKeys.ConfigurationPageString_maximumDesc.tr(),
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _videoResolutionPanel() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.videocam_outlined, size: heightDp! * 25, color: Colors.black),
+            SizedBox(width: widthDp! * 10),
+            Text(
+              LocaleKeys.ConfigurationPageString_videoResolutionTitle.tr(),
+              style: Theme.of(context).textTheme.subtitle2,
+            ),
+          ],
+        ),
+        SizedBox(height: heightDp! * 10),
+        Text(
+          LocaleKeys.ConfigurationPageString_videoResolutionDescription.tr(),
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+        ),
+
+        ///
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Container(
+              height: heightDp! * 25,
+              child: Radio(
+                value: 0,
+                activeColor: AppColors.yello,
+                groupValue: _appDataProvider!.appDataState.settingsModel!.videoResolution,
+                onChanged: (int? value) {
+                  _appDataProvider!.settingsHandler(videoResolution: value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.ConfigurationPageString_high.tr(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  SizedBox(height: heightDp! * 2),
+                  Text(
+                    "720p (1280x720)",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        ///
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Container(
+              height: heightDp! * 25,
+              child: Radio(
+                value: 1,
+                activeColor: AppColors.yello,
+                groupValue: _appDataProvider!.appDataState.settingsModel!.videoResolution,
+                onChanged: (int? value) {
+                  _appDataProvider!.settingsHandler(videoResolution: value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.ConfigurationPageString_veryHigh.tr(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  SizedBox(height: heightDp! * 2),
+                  Text(
+                    "1080p (1920x1080)",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        ///
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Container(
+              height: heightDp! * 25,
+              child: Radio(
+                value: 2,
+                activeColor: AppColors.yello,
+                groupValue: _appDataProvider!.appDataState.settingsModel!.videoResolution,
+                onChanged: (int? value) {
+                  _appDataProvider!.settingsHandler(videoResolution: value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.ConfigurationPageString_ultraHigh.tr(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  SizedBox(height: heightDp! * 2),
+                  Text(
+                    "2160p (3840x2160)",
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        ///
+        SizedBox(height: heightDp! * 10),
+        Row(
+          children: [
+            Container(
+              height: heightDp! * 25,
+              child: Radio(
+                value: 3,
+                activeColor: AppColors.yello,
+                groupValue: _appDataProvider!.appDataState.settingsModel!.videoResolution,
+                onChanged: (int? value) {
+                  _appDataProvider!.settingsHandler(videoResolution: value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.ConfigurationPageString_maximum.tr(),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  SizedBox(height: heightDp! * 2),
+                  Text(
+                    LocaleKeys.ConfigurationPageString_maximumDesc.tr(),
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

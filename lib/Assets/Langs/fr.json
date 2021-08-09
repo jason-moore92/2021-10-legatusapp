@@ -68,7 +68,17 @@
     "analyse": "Données d'analyse",
     "analyse_desc": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
     "contactLegatus":"CONTACTER LEGATUS",
-    "sendReport": "ENVOYER LE RAPPORT"
+    "sendReport": "ENVOYER LE RAPPORT",
+    "photoResolutionTitle": "Résolution des photographies",
+    "photoResolutionDescription":"Sélectionnez la résolution de votre choix pour vos photographies. Plus la résolution est élevée, plus volumineux seront les fichiers. Une résolution plus basse sera appliquée si votre appareil ne peut pas atteindre la résolution choisie.",
+    "default": "Par défaut",
+    "high":"Haute définition",
+    "veryHigh":"Très haute définition",
+    "ultraHigh":"Ultra haute définition",
+    "maximum":"Maximum",
+    "maximumDesc":"La meilleure résolution dont votre appareil est capable",
+    "videoResolutionTitle": "Résolution des vidéos",
+    "videoResolutionDescription": "Sélectionnez la résolution de votre choix pour vos vidéos. Plus la résolution est élevée, plus volumineux seront les fichiers. Une résolution plus basse sera appliquée si votre appareil ne peut pas atteindre la résolution choisie."
   },
   "LogoutDialog": {
     "title": "SE DÉCONNECTER",
@@ -92,7 +102,7 @@
     "delete": "SUPRIMER"
   },
   "DeleteReportDialogString":{
-    "title": "Delete LocalReport",
+    "title": "Supprimer ce constat ?",
     "content":"Voulez-vous supprimer ce constat ? Toutes les données locales seront supprimées",
     "delete": "SUPRIMER",
     "cancel":"ANNULER"
@@ -118,7 +128,7 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "customerTypeLabel": "Requérant",
-    "customerTypes": "{\"particular\":\"Particulier\",\"professional\":\"Professionnel\"}",
+    "customerTypes": "{\"individual\":\"Individual\",\"corporation\":\"Corporation\"}",
     "name": "Nom",
     "crop_form": "Forme sociale",
     "crop_siren": "SIREN",

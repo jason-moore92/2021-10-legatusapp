@@ -68,7 +68,17 @@
     "analyse": "Analysis data",
     "analyse_desc": "But, in truth, two minutes, and just, and feel, and the things to preview them. At vero eos, no hendreri is lorem ipsum carrots. Lorem ipsum dolor sit amet, tempor labore sadipscing over the years, and a great idea, but you should work per month exciting Eirmod tempor diam erat, sed diam of the project. But, in truth, two minutes, and just, and feel, and the things to preview them. At vero eos, no hendreri is lorem ipsum carrots. Lorem ipsum dolor sit amet, tempor labore sadipscing over the years.",
 	  "contactLegatus": "CONTACT LEGATUS",
-    "sendReport": "SEND REPORT"
+    "sendReport": "SEND REPORT",
+    "photoResolutionTitle": "Photograph resolution",
+    "photoResolutionDescription": "Select the resolution of your choice for your photographs. The higher the resolution, the larger the files will be. A lower resolution will be applied if your device cannot achieve the chosen resolution.",
+    "default": "Default",
+    "high": "High Definition",
+    "veryHigh": "Very high definition",
+    "ultraHigh": "Ultra High Definition",
+    "maximum": "Maximum",
+    "maximumDesc": "The best resolution your device is capable of",
+    "videoResolutionTitle": "Video resolution",
+    "videoResolutionDescription": "Select the resolution you want for your videos. The higher the resolution, the larger the files will be. A lower resolution will be applied if your device cannot achieve the chosen resolution."
   },
   "LogoutDialog":{
     "title":"Log Out",
@@ -118,7 +128,7 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "customerTypeLabel": "Requérant",
-    "customerTypes": "{\"particular\":\"Particular\",\"professional\":\"Professional\"}",
+    "customerTypes": "{\"individual\":\"Individual\",\"corporation\":\"Corporation\"}",
     "name": "Name",
     "crop_form": "Social form",
     "crop_siren": "SIREN",

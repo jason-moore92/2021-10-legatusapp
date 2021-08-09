@@ -23,27 +23,27 @@ void main() async {
 
   await EasyLocalization.ensureInitialized();
 
-  runZonedGuarded(() async {
-    await SentryFlutter.init(
-      (options) {
-        options.dsn = AppConfig.dsn;
-      },
-    );
-    runApp(
-      EasyLocalization(
-        useOnlyLangCode: true,
-        useFallbackTranslations: true,
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('fr', 'FR'),
-        ],
-        path: 'lib/Assets/Langs',
-        startLocale: Locale('fr', 'FR'),
-        fallbackLocale: Locale('en', 'US'),
-        child: App(),
-      ),
-    );
-  }, (exception, stackTrace) async {
-    await Sentry.captureException(exception, stackTrace: stackTrace);
-  });
+  // runZonedGuarded(() async {
+  //   await SentryFlutter.init(
+  //     (options) {
+  //       options.dsn = AppConfig.dsn;
+  //     },
+  //   );
+  runApp(
+    EasyLocalization(
+      useOnlyLangCode: true,
+      useFallbackTranslations: true,
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('fr', 'FR'),
+      ],
+      path: 'lib/Assets/Langs',
+      startLocale: Locale('fr', 'FR'),
+      fallbackLocale: Locale('en', 'US'),
+      child: App(),
+    ),
+  );
+  // }, (exception, stackTrace) async {
+  //   await Sentry.captureException(exception, stackTrace: stackTrace);
+  // });
 }

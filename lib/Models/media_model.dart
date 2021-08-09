@@ -12,7 +12,7 @@ class MediaModel extends Equatable {
   String? type;
   String? state;
   String? uuid;
-  String? deviceInfo;
+  Map<String, dynamic>? deviceInfo;
   String? createdAt;
   int? rank;
   String? filename;
@@ -25,18 +25,18 @@ class MediaModel extends Equatable {
   String? longitude;
 
   MediaModel({
-    this.reportId = -1,
+    this.reportId = 0,
     this.type = "",
     this.state = "",
     this.uuid = "",
-    this.deviceInfo = "",
+    this.deviceInfo,
     this.createdAt = "",
     this.rank = -1,
     this.filename = "",
     this.ext = "",
     this.size = -1,
     this.path = "",
-    this.duration = -1,
+    this.duration = 0,
     this.content = "",
     this.latitude = "",
     this.longitude = "",
@@ -44,18 +44,18 @@ class MediaModel extends Equatable {
 
   factory MediaModel.fromJson(Map<String, dynamic> map) {
     return MediaModel(
-      reportId: map["report_id"] ?? -1,
+      reportId: map["report_id"] ?? 0,
       type: map["type"] ?? "",
       state: map["state"] ?? "",
       uuid: map["uuid"] ?? "",
-      deviceInfo: map["device_info"] ?? "",
+      deviceInfo: map["device_info"] ?? Map<String, dynamic>(),
       createdAt: map["created_at"] ?? "",
       rank: map["rank"] ?? -1,
       filename: map["filename"] ?? "",
       ext: map["extension"] ?? "",
       size: map["size"] ?? -1,
       path: map["path"] ?? "",
-      duration: map["duration"] ?? -1,
+      duration: map["duration"] ?? 0,
       content: map["content"] ?? "",
       latitude: map["latitude"] ?? "",
       longitude: map["longitude"] ?? "",
@@ -64,18 +64,18 @@ class MediaModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      "report_id": reportId ?? -1,
+      "report_id": reportId ?? 0,
       "type": type ?? "",
       "state": state ?? "",
       "uuid": uuid ?? "",
-      "device_info": deviceInfo ?? "",
+      "device_info": deviceInfo ?? Map<String, dynamic>(),
       "created_at": createdAt ?? "",
       "rank": rank ?? -1,
       "filename": filename ?? "",
       "extension": ext ?? "",
       "size": size ?? -1,
       "path": path ?? "",
-      "duration": duration ?? -1,
+      "duration": duration ?? 0,
       "content": content ?? "",
       "latitude": latitude ?? "",
       "longitude": longitude ?? "",
@@ -108,7 +108,7 @@ class MediaModel extends Equatable {
         type!,
         state!,
         uuid!,
-        deviceInfo!,
+        deviceInfo ?? Map<String, dynamic>(),
         createdAt!,
         rank!,
         filename!,

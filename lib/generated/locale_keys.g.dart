@@ -66,6 +66,16 @@ abstract class  LocaleKeys {
   static const ConfigurationPageString_analyse_desc = 'ConfigurationPageString.analyse_desc';
   static const ConfigurationPageString_contactLegatus = 'ConfigurationPageString.contactLegatus';
   static const ConfigurationPageString_sendReport = 'ConfigurationPageString.sendReport';
+  static const ConfigurationPageString_photoResolutionTitle = 'ConfigurationPageString.photoResolutionTitle';
+  static const ConfigurationPageString_photoResolutionDescription = 'ConfigurationPageString.photoResolutionDescription';
+  static const ConfigurationPageString_default = 'ConfigurationPageString.default';
+  static const ConfigurationPageString_high = 'ConfigurationPageString.high';
+  static const ConfigurationPageString_veryHigh = 'ConfigurationPageString.veryHigh';
+  static const ConfigurationPageString_ultraHigh = 'ConfigurationPageString.ultraHigh';
+  static const ConfigurationPageString_maximum = 'ConfigurationPageString.maximum';
+  static const ConfigurationPageString_maximumDesc = 'ConfigurationPageString.maximumDesc';
+  static const ConfigurationPageString_videoResolutionTitle = 'ConfigurationPageString.videoResolutionTitle';
+  static const ConfigurationPageString_videoResolutionDescription = 'ConfigurationPageString.videoResolutionDescription';
   static const ConfigurationPageString = 'ConfigurationPageString';
   static const LogoutDialog_title = 'LogoutDialog.title';
   static const LogoutDialog_description = 'LogoutDialog.description';

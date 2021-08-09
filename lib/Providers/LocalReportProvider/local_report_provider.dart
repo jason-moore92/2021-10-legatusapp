@@ -115,7 +115,7 @@ class LocalReportProvider extends ChangeNotifier {
     Future.delayed(Duration(seconds: 2), () async {
       try {
         /// if this report model is new
-        if (_localReportState.isUploading! && localReportModel!.reportId == -1) {
+        if (_localReportState.isUploading! && localReportModel!.reportId == 0) {
           var result = await LocalReportApiProvider.storeReport(localReportModel: localReportModel);
           if (!result["success"]) {
             _localReportState = _localReportState.update(

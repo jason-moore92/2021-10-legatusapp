@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
+import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Helpers/validators.dart';
 import 'package:legutus/Models/index.dart';
@@ -168,18 +168,14 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
     if (_isNew!) {
       _reportDateTime = DateTime.now();
-      _recipientBirthDateTime = DateTime(DateTime.now().year - 40);
 
       _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime, formats: "d/m/Y");
       _timeController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: 'H:i:s');
-      _recipientBirthDayController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _recipientBirthDateTime, formats: "d/m/Y");
     } else {
       _reportDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: _localReportModel!.date!);
       if (_localReportModel!.recipientBirthDate != "") {
         _recipientBirthDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: _localReportModel!.recipientBirthDate!);
-      } else {
-        _recipientBirthDateTime = DateTime(DateTime.now().year - 40);
-      }
+      } else {}
 
       _nameController.text = _localReportModel!.name!;
       _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime, formats: "d/m/Y");
@@ -268,13 +264,10 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       _localReportModel!.uuid = Uuid().v4();
       _localReportModel!.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
 
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       if (Platform.isAndroid) {
-        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-        _localReportModel!.deviceInfo = androidInfo.model;
+        _localReportModel!.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
       } else if (Platform.isAndroid) {
-        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        _localReportModel!.deviceInfo = iosInfo.utsname.machine;
+        _localReportModel!.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
       }
       // _localReportModel!.reportId = DateTime.now().millisecondsSinceEpoch;
 

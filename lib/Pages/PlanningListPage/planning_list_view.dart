@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +13,7 @@ import 'package:legutus/Pages/PlanningPage/index.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:legutus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -65,10 +68,10 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
 
     _planningProvider!.setPlanningState(
       _planningProvider!.planningState.update(
-        progressState: 0,
-        message: "",
+        // progressState: 0,
+        // message: "",
         contextName: "PlanningListPage",
-        planningData: Map<String, dynamic>(),
+        // planningData: Map<String, dynamic>(),
       ),
       isNotifiable: false,
     );

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:legutus/ApiDataProviders/index.dart';
 import 'package:legutus/Models/index.dart';
@@ -42,6 +43,58 @@ class AppDataProvider extends ChangeNotifier {
           settingsModel: SettingsModel(),
         );
       }
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      Map<String, dynamic>? androidInfoJoson;
+      Map<String, dynamic>? iosInfoJoson;
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo? androidInfo;
+        androidInfo = await deviceInfo.androidInfo;
+        androidInfoJoson = {
+          "androidId": androidInfo.androidId,
+          "board": androidInfo.board,
+          "bootloader": androidInfo.bootloader,
+          "brand": androidInfo.brand,
+          "device": androidInfo.device,
+          "display": androidInfo.display,
+          "fingerprint": androidInfo.fingerprint,
+          "hardware": androidInfo.hardware,
+          "host": androidInfo.host,
+          "id": androidInfo.id,
+          "isPhysicalDevice": androidInfo.isPhysicalDevice,
+          "manufacturer": androidInfo.manufacturer,
+          "model": androidInfo.model,
+          "product": androidInfo.product,
+          "systemFeatures": androidInfo.systemFeatures,
+          "tags": androidInfo.tags,
+          "type": androidInfo.type,
+          "version": androidInfo.version.codename,
+        };
+      } else if (Platform.isAndroid) {
+        IosDeviceInfo? iosInfo;
+        iosInfo = await deviceInfo.iosInfo;
+        androidInfoJoson = {
+          "identifierForVendor": iosInfo.identifierForVendor,
+          "isPhysicalDevice": iosInfo.isPhysicalDevice,
+          "localizedModel": iosInfo.localizedModel,
+          "model": iosInfo.model,
+          "name": iosInfo.name,
+          "systemName": iosInfo.systemName,
+          "systemVersion": iosInfo.systemVersion,
+          "utsname": {
+            "machine": iosInfo.utsname.machine,
+            "nodename": iosInfo.utsname.nodename,
+            "release": iosInfo.utsname.release,
+            "sysname": iosInfo.utsname.sysname,
+            "version": iosInfo.utsname.version
+          },
+        };
+      }
+      _appDataState = _appDataState.update(
+        progressState: 2,
+        message: "",
+        androidInfo: androidInfoJoson,
+        iosInfo: iosInfoJoson,
+      );
     } catch (e) {
       print(e);
     }
@@ -52,6 +105,8 @@ class AppDataProvider extends ChangeNotifier {
     // bool? allowLocation,
     // bool? allowMicrophone,
     bool? withRestriction,
+    int? photoResolution,
+    int? videoResolution,
     bool isNotifiable = true,
   }) async {
     SettingsModel settingsModel = SettingsModel.copy(_appDataState.settingsModel!);
@@ -60,6 +115,8 @@ class AppDataProvider extends ChangeNotifier {
     // if (allowLocation != null) settingsModel.allowLocation = allowLocation;
     // if (allowMicrophone != null) settingsModel.allowMicrophone = allowMicrophone;
     if (withRestriction != null) settingsModel.withRestriction = withRestriction;
+    if (photoResolution != null) settingsModel.photoResolution = photoResolution;
+    if (videoResolution != null) settingsModel.videoResolution = videoResolution;
 
     if (_prefs == null) _prefs = await SharedPreferences.getInstance();
 

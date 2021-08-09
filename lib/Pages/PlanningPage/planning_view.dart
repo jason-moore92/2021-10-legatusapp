@@ -62,7 +62,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
       reportId: widget.planningReportModel!.reportId,
     );
 
-    if (localReportModel.reportId != -1) {
+    if (localReportModel.reportId != 0) {
       ///
     } else {
       LocalReportModel localReportModel = LocalReportModel();

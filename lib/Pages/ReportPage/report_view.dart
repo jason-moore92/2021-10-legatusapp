@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
+import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legutus/ApiDataProviders/index.dart';
 import 'package:legutus/Config/config.dart';
 import 'package:legutus/Helpers/file_helpers.dart';
@@ -28,6 +28,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share/share.dart';
 import 'package:uuid/uuid.dart';
+import 'package:wakelock/wakelock.dart';
 
 class ReportView extends StatefulWidget {
   final LocalReportModel? localReportModel;
@@ -204,6 +205,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         "localReportModel": _localReportModel,
       };
       setState(() {});
+      Wakelock.disable();
       SuccessDialog.show(
         context,
         text: _localReportProvider!.localReportState.message!,
@@ -316,13 +318,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         mediaModel = MediaModel();
         mediaModel.content = note;
         mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
-        DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
         if (Platform.isAndroid) {
-          AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-          mediaModel.deviceInfo = androidInfo.model;
+          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
         } else if (Platform.isAndroid) {
-          IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-          mediaModel.deviceInfo = iosInfo.utsname.machine;
+          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
         }
         mediaModel.duration = -1;
         mediaModel.ext = textFile.path.split('.').last;
@@ -334,8 +333,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         mediaModel.path = textFile.path;
         mediaModel.rank = localReportModel.medias!.length + 1;
         mediaModel.reportId = localReportModel.reportId!;
-        mediaModel.size = textFile.readAsBytesSync().lengthInBytes ~/ 1024;
-        mediaModel.state = "";
+        mediaModel.size = textFile.readAsBytesSync().lengthInBytes;
+        mediaModel.state = "captured";
         mediaModel.type = MediaType.note;
         mediaModel.uuid = Uuid().v4();
 
@@ -361,8 +360,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               mediaModel.longitude = _currentPosition!.longitude.toString();
             }
             mediaModel.path = textFile.path;
-            mediaModel.size = textFile.readAsBytesSync().lengthInBytes ~/ 1024;
-            mediaModel.state = "";
+            mediaModel.size = textFile.readAsBytesSync().lengthInBytes;
+            mediaModel.state = "captured";
 
             localReportModel.medias![i] = mediaModel;
             break;
@@ -393,7 +392,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           isNotifiable: true,
         );
 
-        String message = isNew ? "Note Media create successfully" : "Note Media update successfully";
+        String message = isNew ? "Note enregistrée avec succès" : "Note mise à jour avec succès";
         SuccessDialog.show(context, text: message);
 
         if (isNew) {
@@ -435,9 +434,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         for (var i = 0; i < localReportModel.medias!.length; i++) {
           MediaModel mediaModel = localReportModel.medias![i];
           if (_selectedMediaRanks!.contains(mediaModel.rank) && mediaModel.path! != "") {
-            File oldTextFile = File(mediaModel.path!);
+            File oldFile = File(mediaModel.path!);
             try {
-              oldTextFile.deleteSync();
+              oldFile.deleteSync();
             } catch (e) {
               print(e);
             }
@@ -451,6 +450,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         bool success = await _updateLocalReport(localReportModel);
 
         if (success) {
+          SuccessDialog.show(context, text: "Constat supprimé de cet appareil avec succès");
           var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
           if (result["success"]) {
             _localReportModel = result["data"];
@@ -513,6 +513,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           uploadingMediaModel: MediaModel(),
         ),
       );
+      Wakelock.enable();
       _localReportProvider!.uploadMedials(localReportModel: LocalReportModel.copy(_localReportModel!));
     }
   }

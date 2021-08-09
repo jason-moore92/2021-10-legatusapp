@@ -25,7 +25,7 @@ class LocalReportState extends Equatable {
       progressState: 0,
       message: "",
       contextName: "",
-      reportId: -1,
+      reportId: 0,
       isUploading: false,
       uploadingMediaModel: MediaModel(),
     );

@@ -68,12 +68,16 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
       //   Permission.location,
       //   Permission.storage,
       // ].request();
-
-      await Permission.camera.request();
-      await Permission.microphone.request();
-      // await Permission.location.request();
-      await Permission.storage.request();
-      await Geolocator.requestPermission();
+      bool camera = await Permission.camera.isGranted;
+      if (!camera) await Permission.camera.request();
+      bool microphone = await Permission.camera.isGranted;
+      if (!microphone) await Permission.microphone.request();
+      bool storage = await Permission.camera.isGranted;
+      if (!storage) await Permission.storage.request();
+      LocationPermission locationPermission = await Geolocator.checkPermission();
+      if (locationPermission == LocationPermission.denied || locationPermission == LocationPermission.deniedForever) {
+        await Geolocator.requestPermission();
+      }
     });
   }
 

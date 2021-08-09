@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:keicy_progress_dialog/keicy_progress_dialog.dart';
+import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:provider/provider.dart';
 
@@ -176,6 +176,8 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.cameraController == null) return SizedBox();
+
     String videoRecorderTxt = "";
     var date = DateTime(2021, 01, 01, 0, 0, 0, _milliseconds);
     String txt = DateFormat('mm:ss:SS').format(date);

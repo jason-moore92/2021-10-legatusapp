@@ -21,7 +21,7 @@ class PlanningReportModel extends Equatable {
   List<CustomerModel>? customers;
 
   PlanningReportModel({
-    reportId = -1,
+    reportId = 0,
     date = "",
     time = "",
     name = "",
@@ -60,7 +60,7 @@ class PlanningReportModel extends Equatable {
     }
 
     return PlanningReportModel(
-      reportId: map["report_id"] ?? -1,
+      reportId: map["report_id"] ?? 0,
       date: map["date"] ?? "",
       time: map["time"] ?? "",
       name: map["name"] ?? "",
@@ -85,7 +85,7 @@ class PlanningReportModel extends Equatable {
     }
 
     return {
-      "report_id": reportId ?? -1,
+      "report_id": reportId ?? 0,
       "date": date ?? "",
       "time": time ?? "",
       "name": name ?? "",

@@ -62,7 +62,9 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
     _localReportListProvider = LocalReportListProvider.of(context);
     _localReportListProvider!.setLocalReportListState(
+      // LocalReportListState.init().copyWith(contextName: "PlanningPage"),
       _localReportListProvider!.localReportListState.update(contextName: "PlanningPage"),
+
       isNotifiable: false,
     );
 
@@ -231,7 +233,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
                 child: ListView.separated(
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
-                    LocalReportModel localReportsModel = (index >= localReportsList.length) ? LocalReportModel(reportId: 0) : localReportsList[index];
+                    LocalReportModel localReportsModel = (index >= localReportsList.length) ? LocalReportModel() : localReportsList[index];
                     return Slidable(
                       enabled: true,
                       actionPane: SlidableDrawerActionPane(),

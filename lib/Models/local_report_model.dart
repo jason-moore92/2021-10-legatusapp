@@ -4,7 +4,7 @@ import 'package:legutus/Models/media_model.dart';
 class LocalReportModel extends Equatable {
   int? reportId;
   String? uuid;
-  String? deviceInfo;
+  Map<String, dynamic>? deviceInfo;
   String? date;
   String? time;
   String? createdAt;
@@ -36,9 +36,9 @@ class LocalReportModel extends Equatable {
   List<dynamic>? orderList;
 
   LocalReportModel({
-    this.reportId = -1,
+    this.reportId = 0,
     this.uuid = "",
-    this.deviceInfo = "",
+    this.deviceInfo,
     this.date = "",
     this.time = "",
     this.createdAt = "",
@@ -52,7 +52,7 @@ class LocalReportModel extends Equatable {
     this.latitude = "",
     this.longitude = "",
     this.customerName = "",
-    this.customerType = "",
+    this.customerType = "individual",
     this.customerStreet = "",
     this.customerComplement = "",
     this.customerZip = "",
@@ -78,9 +78,9 @@ class LocalReportModel extends Equatable {
     }
 
     return LocalReportModel(
-      reportId: map["report_id"] ?? -1,
+      reportId: map["report_id"] ?? 0,
       uuid: map["uuid"] ?? "",
-      deviceInfo: map["device_info"] ?? "",
+      deviceInfo: map["device_info"] ?? Map<String, dynamic>(),
       date: map["date"] ?? "",
       time: map["time"] ?? "",
       createdAt: map["created_at"] ?? "",
@@ -94,7 +94,7 @@ class LocalReportModel extends Equatable {
       latitude: map["latitude"] ?? "",
       longitude: map["longitude"] ?? "",
       customerName: map["customer_name"] ?? "",
-      customerType: map["customer_type"] ?? "",
+      customerType: map["customer_type"] ?? "individual",
       customerStreet: map["customer_street"] ?? "",
       customerComplement: map["customer_complement"] ?? "",
       customerZip: map["customer_zip"] ?? "",
@@ -121,9 +121,9 @@ class LocalReportModel extends Equatable {
     }
 
     return {
-      "report_id": reportId ?? -1,
+      "report_id": reportId ?? 0,
       "uuid": uuid ?? "",
-      "device_info": deviceInfo ?? "",
+      "device_info": deviceInfo ?? Map<String, dynamic>(),
       "date": date ?? "",
       "time": time ?? "",
       "created_at": createdAt ?? "",
@@ -137,7 +137,7 @@ class LocalReportModel extends Equatable {
       "latitude": latitude ?? "",
       "longitude": longitude ?? "",
       "customer_name": customerName ?? "",
-      "customer_type": customerType ?? "",
+      "customer_type": customerType ?? "individual",
       "customer_street": customerStreet ?? "",
       "customer_complement": customerComplement ?? "",
       "customer_zip": customerZip ?? "",
@@ -197,7 +197,7 @@ class LocalReportModel extends Equatable {
   List<Object> get props => [
         reportId!,
         uuid!,
-        deviceInfo!,
+        // deviceInfo!,
         date!,
         time!,
         createdAt!,

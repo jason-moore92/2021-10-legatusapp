@@ -12,9 +12,7 @@ class FileHelpers {
   static Future<File> writeTextFile({@required String? text, String? path = ""}) async {
     try {
       if (path == "") {
-        Directory directory = await getApplicationDocumentsDirectory();
-        path = directory.path;
-        path += "/local_medias";
+        path = await getDirectory();
         Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + ".txt";
       }
@@ -41,9 +39,7 @@ class FileHelpers {
   static Future<File> writeImageFile({@required XFile? imageFile, @required String? path}) async {
     try {
       if (path == "") {
-        Directory directory = await getApplicationDocumentsDirectory();
-        path = directory.path;
-        path += "/local_medias";
+        path = await getDirectory();
         Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + ".txt";
       }
@@ -59,9 +55,7 @@ class FileHelpers {
   static Future<File> writeVideoFile({@required XFile? videoFile, @required String? path}) async {
     try {
       if (path == "") {
-        Directory directory = await getApplicationDocumentsDirectory();
-        path = directory.path;
-        path += "/local_medias";
+        path = await getDirectory();
         Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + videoFile!.path.split(".").last;
       }
@@ -77,9 +71,7 @@ class FileHelpers {
   static Future<File> writeAudioFile({@required String? tmpPath, @required String? path}) async {
     try {
       if (path == "") {
-        Directory directory = await getApplicationDocumentsDirectory();
-        path = directory.path;
-        path += "/local_medias";
+        path = await getDirectory();
         Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + tmpPath!.split(".").last;
       }
@@ -99,9 +91,7 @@ class FileHelpers {
     @required int? rank,
     @required String? fileType,
   }) async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path;
-    path += "/local_medias";
+    String path = await getDirectory();
     Directory(path).createSync();
 
     String fileName = "";
@@ -121,9 +111,7 @@ class FileHelpers {
     int totalSize = 0;
     Directory dir;
     if (dirPath == "") {
-      Directory directory = await getApplicationDocumentsDirectory();
-      String path = directory.path;
-      path += "/local_medias";
+      String path = await getDirectory();
       dir = Directory(path);
     } else
       dir = Directory(dirPath);
@@ -142,5 +130,23 @@ class FileHelpers {
     }
 
     return {'fileNum': fileNum, 'size': totalSize};
+  }
+
+  static Future<String> getDirectory() async {
+    Directory? directory;
+    String path = "";
+    try {
+      if (Platform.isAndroid) {
+        directory = await getExternalStorageDirectory();
+      } else if (Platform.isIOS) {
+        directory = await getLibraryDirectory();
+      }
+      path = directory!.path;
+      path += "/local_medias";
+    } catch (e) {
+      path = "";
+    }
+
+    return path;
   }
 }

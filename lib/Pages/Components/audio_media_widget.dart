@@ -111,7 +111,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
   }
 
   Future<void> _initialize() async {
-    await _playerModule.closeAudioSession();
+    // await _playerModule.closeAudioSession();
     await _playerModule.openAudioSession(
       withUI: false,
       focus: AudioFocus.requestFocusAndStopOthers,

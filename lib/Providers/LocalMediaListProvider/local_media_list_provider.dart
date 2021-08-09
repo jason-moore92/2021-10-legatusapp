@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:legutus/ApiDataProviders/index.dart';
 import 'package:legutus/Config/config.dart';
+import 'package:legutus/Helpers/index.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -25,8 +26,24 @@ class LocalMediaListProvider extends ChangeNotifier {
 
   Future<void> getLocalMediaList() async {
     Future.delayed(Duration(milliseconds: 500), () async {
+      if (_localMediaListState.localLocalReportModel!.medias!.length != _localMediaListState.localLocalReportModel!.orderList!.length) {
+        print("ssss");
+        String createdAt =
+            KeicyDateTime.convertDateStringToMilliseconds(dateString: _localMediaListState.localLocalReportModel!.createdAt).toString();
+        int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${_localMediaListState.localLocalReportModel!.date} ${_localMediaListState.localLocalReportModel!.time}",
+        )!;
+        var result = await LocalReportApiProvider.update(
+          localReportModel: _localMediaListState.localLocalReportModel,
+          oldReportId: "${reportDateTime}_$createdAt",
+        );
+
+        _localMediaListState = _localMediaListState.update(localLocalReportModel: result["data"]);
+      }
+
       List<dynamic> localMediaListData = _localMediaListState.localMediaListData!;
       Map<String, dynamic> localMediaMetaData = _localMediaListState.localMediaMetaData!;
+
       try {
         int page = localMediaMetaData.isEmpty ? 0 : (localMediaMetaData["nextPage"] ?? 0);
         int limit = AppConfig.refreshListLimit;

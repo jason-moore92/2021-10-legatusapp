@@ -86,11 +86,12 @@ class NotePanelDialog {
                                       )
                                     ],
                                   ),
-                                  Icon(
-                                    mediaModel!.state == "uploaded" ? Icons.cloud_done : Icons.cloud_off,
-                                    size: heightDp * 20,
-                                    color: mediaModel.state == "uploaded" ? AppColors.green : AppColors.red.withOpacity(0.6),
-                                  ),
+                                  if (mediaModel != null)
+                                    Icon(
+                                      mediaModel.state == "uploaded" ? Icons.cloud_done : Icons.cloud_off,
+                                      size: heightDp * 20,
+                                      color: mediaModel.state == "uploaded" ? AppColors.green : AppColors.red.withOpacity(0.6),
+                                    ),
                                 ],
                               ),
 
@@ -133,15 +134,13 @@ class NotePanelDialog {
                                   SizedBox(width: widthDp * 20),
                                   CustomTextButton(
                                     text: LocaleKeys.NoteDialogString_save.tr().toUpperCase(),
-                                    textStyle: Theme.of(context)
-                                        .textTheme
-                                        .button!
-                                        .copyWith(color: mediaModel.state == "uploaded" ? Colors.grey.withOpacity(0.7) : AppColors.yello),
+                                    textStyle: Theme.of(context).textTheme.button!.copyWith(
+                                        color: mediaModel != null && mediaModel.state == "uploaded" ? Colors.grey.withOpacity(0.7) : AppColors.yello),
                                     // width: widthDp * 120,
                                     // bordercolor: AppColors.yello,
                                     // borderRadius: heightDp * 6,
                                     elevation: 0,
-                                    onPressed: mediaModel.state == "uploaded"
+                                    onPressed: mediaModel != null && mediaModel.state == "uploaded"
                                         ? null
                                         : () {
                                             _saveHandler(context);

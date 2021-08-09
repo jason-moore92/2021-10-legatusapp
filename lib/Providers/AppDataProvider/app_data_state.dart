@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:legutus/Models/index.dart';
-import 'package:legutus/Models/user_model.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -11,6 +10,8 @@ class AppDataState extends Equatable {
   final String? contextName;
   final SettingsModel? settingsModel;
   final PersistentTabController? bottomTabController;
+  final Map<String, dynamic>? androidInfo;
+  final Map<String, dynamic>? iosInfo;
 
   AppDataState({
     @required this.progressState,
@@ -18,6 +19,8 @@ class AppDataState extends Equatable {
     @required this.contextName,
     @required this.settingsModel,
     @required this.bottomTabController,
+    @required this.androidInfo,
+    @required this.iosInfo,
   });
 
   factory AppDataState.init() {
@@ -27,6 +30,8 @@ class AppDataState extends Equatable {
       contextName: "",
       settingsModel: SettingsModel(),
       bottomTabController: PersistentTabController(),
+      androidInfo: null,
+      iosInfo: null,
     );
   }
 
@@ -36,6 +41,8 @@ class AppDataState extends Equatable {
     String? contextName,
     SettingsModel? settingsModel,
     PersistentTabController? bottomTabController,
+    Map<String, dynamic>? androidInfo,
+    Map<String, dynamic>? iosInfo,
   }) {
     return AppDataState(
       progressState: progressState ?? this.progressState,
@@ -43,6 +50,8 @@ class AppDataState extends Equatable {
       contextName: contextName ?? this.contextName,
       settingsModel: settingsModel ?? this.settingsModel,
       bottomTabController: bottomTabController ?? this.bottomTabController,
+      androidInfo: androidInfo ?? this.androidInfo,
+      iosInfo: iosInfo ?? this.iosInfo,
     );
   }
 
@@ -52,6 +61,8 @@ class AppDataState extends Equatable {
     String? contextName,
     SettingsModel? settingsModel,
     PersistentTabController? bottomTabController,
+    Map<String, dynamic>? androidInfo,
+    Map<String, dynamic>? iosInfo,
   }) {
     return copyWith(
       progressState: progressState,
@@ -59,6 +70,8 @@ class AppDataState extends Equatable {
       contextName: contextName,
       settingsModel: settingsModel,
       bottomTabController: bottomTabController,
+      androidInfo: androidInfo,
+      iosInfo: iosInfo,
     );
   }
 
@@ -69,6 +82,8 @@ class AppDataState extends Equatable {
       "contextName": contextName,
       "settingsModel": settingsModel!.toJson(),
       "bottomTabController": bottomTabController,
+      "androidInfo": androidInfo,
+      "iosInfo": iosInfo,
     };
   }
 
