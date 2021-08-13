@@ -128,7 +128,7 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "customerTypeLabel": "Requérant",
-    "customerTypes": "{\"individual\":\"Individual\",\"corporation\":\"Corporation\"}",
+    "customerTypes": "{\"particulier\":\"Particulier\",\"entreprise\":\"Entreprise\"}",
     "name": "Name",
     "crop_form": "Social form",
     "crop_siren": "SIREN",

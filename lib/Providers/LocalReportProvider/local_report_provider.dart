@@ -48,7 +48,7 @@ class LocalReportProvider extends ChangeNotifier {
 
   Future<int> updateLocalReport({
     @required LocalReportModel? localReportModel,
-    @required String? oldReportId,
+    String? oldReportId,
     bool isNotifiable = true,
   }) async {
     try {
@@ -78,16 +78,29 @@ class LocalReportProvider extends ChangeNotifier {
 
   Future<int> deleteLocalReport({@required LocalReportModel? localReportModel}) async {
     try {
-      var result = await LocalReportApiProvider.delete(localReportModel: localReportModel);
-
+      List<MediaModel>? medias = [];
       for (var i = 0; i < localReportModel!.medias!.length; i++) {
         File file = File(localReportModel.medias![i].path!);
         try {
-          file.deleteSync();
+          await file.delete();
         } catch (e) {
-          print(e);
+          medias.add(localReportModel.medias![i]);
         }
       }
+
+      if (medias.isNotEmpty) {
+        var result = await updateLocalReport(
+          localReportModel: localReportModel,
+        );
+        _localReportState = _localReportState.update(
+          progressState: -1,
+          message: "Can't delete all media files",
+        );
+        notifyListeners();
+        return _localReportState.progressState!;
+      }
+
+      var result = await LocalReportApiProvider.delete(localReportModel: localReportModel);
 
       if (result["success"]) {
         _localReportState = _localReportState.update(
@@ -112,93 +125,84 @@ class LocalReportProvider extends ChangeNotifier {
   }
 
   Future<void> uploadMedials({@required LocalReportModel? localReportModel, bool isNotifiable = true}) async {
-    Future.delayed(Duration(seconds: 2), () async {
-      try {
-        /// if this report model is new
-        if (_localReportState.isUploading! && localReportModel!.reportId == 0) {
-          var result = await LocalReportApiProvider.storeReport(localReportModel: localReportModel);
-          if (!result["success"]) {
-            _localReportState = _localReportState.update(
-              progressState: -1,
-              isUploading: false,
-              message: result["data"]["message"],
-            );
-            if (isNotifiable) notifyListeners();
-            return;
-          }
-
-          /// if store Report is success, update local roport
-          String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel.createdAt).toString();
-          int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-            dateString: "${localReportModel.date} ${localReportModel.time}",
-          )!;
-
-          localReportModel.reportId = result["data"]["report_id"];
-
-          var result1 = await LocalReportApiProvider.update(localReportModel: localReportModel, oldReportId: "${reportDateTime}_$createdAt");
-
-          if (!result1["success"]) {
-            _localReportState = _localReportState.update(
-              progressState: -1,
-              isUploading: false,
-              message: "Update LocalReport Error",
-            );
-            if (isNotifiable) notifyListeners();
-            return;
-          }
-
-          /// if update is success,
+    try {
+      /// if this report model is new
+      if (_localReportState.isUploading! && localReportModel!.reportId == 0) {
+        var result = await LocalReportApiProvider.storeReport(localReportModel: localReportModel);
+        if (!result["success"]) {
           _localReportState = _localReportState.update(
-            progressState: 3,
+            progressState: -1,
+            isUploading: false,
             message: result["data"]["message"],
-            reportId: result["data"]["report_id"],
           );
+          if (isNotifiable) notifyListeners();
+          return;
         }
-        //// uploading medias
 
-        for (var i = 0; i < localReportModel!.medias!.length; i++) {
-          MediaModel mediaModel = MediaModel.copy(localReportModel.medias![i]);
-          if (!_localReportState.isUploading!) break;
+        /// if store Report is success, update local roport
+        String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel.createdAt).toString();
+        int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}",
+        )!;
 
-          if (mediaModel.state == "uploaded") continue;
+        localReportModel.reportId = result["data"]["report_id"];
 
-          /// upload media
-          mediaModel.reportId = localReportModel.reportId;
+        var result1 = await LocalReportApiProvider.update(localReportModel: localReportModel, oldReportId: "${reportDateTime}_$createdAt");
+
+        if (!result1["success"]) {
+          _localReportState = _localReportState.update(
+            progressState: -1,
+            isUploading: false,
+            message: "Update LocalReport Error",
+          );
+          if (isNotifiable) notifyListeners();
+          return;
+        }
+
+        /// if update is success,
+        _localReportState = _localReportState.update(
+          progressState: 3,
+          message: result["data"]["message"],
+          reportId: result["data"]["report_id"],
+        );
+      }
+      //// uploading medias
+
+      for (var i = 0; i < localReportModel!.medias!.length; i++) {
+        MediaModel mediaModel = MediaModel.copy(localReportModel.medias![i]);
+        if (!_localReportState.isUploading!) break;
+
+        if (mediaModel.state == "uploaded") continue;
+
+        /// upload media
+        mediaModel.reportId = localReportModel.reportId;
+        _localReportState = _localReportState.update(
+          progressState: 3,
+          uploadingMediaModel: mediaModel,
+        );
+        notifyListeners();
+
+        var result = await LocalMediaApiProvider.uploadMedia(mediaModel: mediaModel);
+        if (result["success"] && result["data"]["presigned_url"] != null) {
+          mediaModel.state = "uploading";
           _localReportState = _localReportState.update(
             progressState: 3,
             uploadingMediaModel: mediaModel,
           );
           notifyListeners();
 
-          var result = await LocalMediaApiProvider.uploadMedia(mediaModel: mediaModel);
-          if (result["success"] && result["data"]["presigned_url"] != null) {
-            mediaModel.state = "uploading";
+          var result1 = await LocalMediaApiProvider.uploadPresignedUrl(
+            file: File(mediaModel.path!),
+            presignedUrl: result["data"]["presigned_url"],
+          );
+          if (result1["success"]) {
+            mediaModel.state = "uploaded";
             _localReportState = _localReportState.update(
               progressState: 3,
               uploadingMediaModel: mediaModel,
             );
             notifyListeners();
-
-            var result1 = await LocalMediaApiProvider.uploadPresignedUrl(
-              file: File(mediaModel.path!),
-              presignedUrl: result["data"]["presigned_url"],
-            );
-            if (result1["success"]) {
-              mediaModel.state = "uploaded";
-              _localReportState = _localReportState.update(
-                progressState: 3,
-                uploadingMediaModel: mediaModel,
-              );
-              notifyListeners();
-            } else {
-              mediaModel.state = "error";
-              _localReportState = _localReportState.update(
-                progressState: 3,
-                uploadingMediaModel: mediaModel,
-              );
-              notifyListeners();
-            }
-          } else if (!result["success"]) {
+          } else {
             mediaModel.state = "error";
             _localReportState = _localReportState.update(
               progressState: 3,
@@ -206,22 +210,29 @@ class LocalReportProvider extends ChangeNotifier {
             );
             notifyListeners();
           }
+        } else if (!result["success"]) {
+          mediaModel.state = "error";
+          _localReportState = _localReportState.update(
+            progressState: 3,
+            uploadingMediaModel: mediaModel,
+          );
+          notifyListeners();
         }
-      } catch (e) {
-        print(e.toString());
-        _localReportState = _localReportState.update(
-          progressState: -1,
-          isUploading: false,
-          message: e.toString(),
-        );
       }
-
+    } catch (e) {
+      print(e.toString());
       _localReportState = _localReportState.update(
-        progressState: 3,
+        progressState: -1,
         isUploading: false,
+        message: e.toString(),
       );
+    }
 
-      if (isNotifiable) notifyListeners();
-    });
+    _localReportState = _localReportState.update(
+      progressState: 3,
+      isUploading: false,
+    );
+
+    if (isNotifiable) notifyListeners();
   }
 }

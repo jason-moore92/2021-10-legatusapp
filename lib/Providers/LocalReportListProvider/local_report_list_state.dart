@@ -10,6 +10,7 @@ class LocalReportListState extends Equatable {
   final List<dynamic>? localReportListData;
   final Map<String, dynamic>? localReportMetaData;
   final bool? isRefresh;
+  final bool? refreshList;
 
   LocalReportListState({
     @required this.progressState,
@@ -18,6 +19,7 @@ class LocalReportListState extends Equatable {
     @required this.localReportListData,
     @required this.localReportMetaData,
     @required this.isRefresh,
+    @required this.refreshList,
   });
 
   factory LocalReportListState.init() {
@@ -28,6 +30,7 @@ class LocalReportListState extends Equatable {
       localReportListData: [],
       localReportMetaData: Map<String, dynamic>(),
       isRefresh: false,
+      refreshList: false,
     );
   }
 
@@ -38,6 +41,7 @@ class LocalReportListState extends Equatable {
     List<dynamic>? localReportListData,
     Map<String, dynamic>? localReportMetaData,
     bool? isRefresh,
+    bool? refreshList,
   }) {
     return LocalReportListState(
       progressState: progressState ?? this.progressState,
@@ -46,6 +50,7 @@ class LocalReportListState extends Equatable {
       localReportListData: localReportListData ?? this.localReportListData,
       localReportMetaData: localReportMetaData ?? this.localReportMetaData,
       isRefresh: isRefresh ?? this.isRefresh,
+      refreshList: refreshList ?? this.refreshList,
     );
   }
 
@@ -56,6 +61,7 @@ class LocalReportListState extends Equatable {
     List<dynamic>? localReportListData,
     Map<String, dynamic>? localReportMetaData,
     bool? isRefresh,
+    bool? refreshList,
   }) {
     return copyWith(
       progressState: progressState,
@@ -64,6 +70,7 @@ class LocalReportListState extends Equatable {
       localReportListData: localReportListData,
       localReportMetaData: localReportMetaData,
       isRefresh: isRefresh,
+      refreshList: refreshList,
     );
   }
 
@@ -75,6 +82,7 @@ class LocalReportListState extends Equatable {
       "localReportListData": localReportListData,
       "localReportMetaData": localReportMetaData,
       "isRefresh": isRefresh,
+      "refreshList": refreshList,
     };
   }
 
@@ -86,6 +94,7 @@ class LocalReportListState extends Equatable {
         localReportListData!,
         localReportMetaData!,
         isRefresh!,
+        refreshList!,
       ];
 
   @override

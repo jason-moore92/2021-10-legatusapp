@@ -170,7 +170,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       _reportDateTime = DateTime.now();
 
       _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime, formats: "d/m/Y");
-      _timeController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: 'H:i:s');
+      _timeController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: 'H:i');
     } else {
       _reportDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: _localReportModel!.date!);
       if (_localReportModel!.recipientBirthDate != "") {
@@ -179,7 +179,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
       _nameController.text = _localReportModel!.name!;
       _dateController.text = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime, formats: "d/m/Y");
-      _timeController.text = _localReportModel!.time!;
+      _timeController.text = _localReportModel!.time!.substring(0, 5);
       _descriptionController.text = _localReportModel!.description!;
 
       _streetController.text = _localReportModel!.street!;
@@ -575,13 +575,13 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       if (timeOfDay != null) {
                         _timeController.text = KeicyDateTime.convertDateTimeToDateString(
                           dateTime: DateTime(2000, 1, 1, timeOfDay.hour, timeOfDay.minute),
-                          formats: 'H:i:s',
+                          formats: 'H:i',
                         );
                       }
                     },
                     validator: (input) => input.isEmpty
                         ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(args: [LocaleKeys.NewReportPageString_time.tr().toLowerCase()])
-                        : input.length != 8
+                        : input.length != 5
                             ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(args: [LocaleKeys.NewReportPageString_time.tr().toLowerCase()])
                             : null,
                     onSaved: (input) => _localReportModel!.time = input,
@@ -1286,7 +1286,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                   CustomTextFormField(
                     controller: _recipientBirthDayController,
                     focusNode: _recipientBirthDayFocusNode,
-                    hintText: "##/##/####",
+                    hintText: "17/02/1986",
                     hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
                     errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),
                     border: OutlineInputBorder(
@@ -1415,7 +1415,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
         CustomTextFormField(
           controller: _recipientPhoneNumberController,
           focusNode: _recipientPhoneNumberFocusNode,
-          hintText: "# ## ## ## ##",
+          hintText: "7 67 04 84 43",
           hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
           errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),
           border: OutlineInputBorder(

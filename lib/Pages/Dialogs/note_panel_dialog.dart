@@ -110,6 +110,7 @@ class NotePanelDialog {
                                 maxLines: 4,
                                 keyboardType: TextInputType.multiline,
                                 textInputAction: TextInputAction.newline,
+                                readOnly: mediaModel != null && mediaModel.state == "uploaded",
                                 validator: (input) => input.isEmpty ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(args: ["note"]) : null,
                                 onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
                                 onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -117,6 +118,16 @@ class NotePanelDialog {
 
                               ///
                               SizedBox(height: heightDp * 20),
+                              if (mediaModel != null && mediaModel.state == "uploaded")
+                                Column(
+                                  children: [
+                                    Text(
+                                      "Une note synchronisée ne peut pas être modifiée.",
+                                      style: Theme.of(context).textTheme.subtitle1,
+                                    ),
+                                    SizedBox(height: heightDp * 10),
+                                  ],
+                                ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [

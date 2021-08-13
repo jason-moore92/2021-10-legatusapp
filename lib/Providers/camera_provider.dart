@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 class CameraProvider extends ChangeNotifier {
   static CameraProvider of(BuildContext context, {bool listen = false}) => Provider.of<CameraProvider>(context, listen: listen);
 
-  String? _videoRecordStatus = "";
+  String? _videoRecordStatus = "stopped";
   String? get videoRecordStatus => _videoRecordStatus;
 
   void setVideoRecordStatus(String videoRecordStatus, {bool isNotifiable = true}) {
@@ -14,7 +14,7 @@ class CameraProvider extends ChangeNotifier {
     }
   }
 
-  String? _audioRecordStatus = "";
+  String? _audioRecordStatus = "stopped";
   String? get audioRecordStatus => _audioRecordStatus;
 
   void setAudioRecordStatus(String audioRecordStatus, {bool isNotifiable = true}) {

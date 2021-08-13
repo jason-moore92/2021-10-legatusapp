@@ -139,7 +139,7 @@ class MediaInfoDialog {
                 SizedBox(width: heightDp * 8),
                 Expanded(
                   child: Text(
-                    "${(mediaModel.size! / 1024).toStringAsFixed(2)} Mo",
+                    "${(mediaModel.size! / 1024 / 1024).toStringAsFixed(2)} Mo",
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ),

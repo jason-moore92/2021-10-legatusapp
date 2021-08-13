@@ -179,14 +179,25 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       }
 
       if (isNew!) {
-        String path = await FileHelpers.getFilePath(
+        String? path = await FileHelpers.getFilePath(
           mediaType: MediaType.note,
           rank: widget.localReportModel!.medias!.length + 1,
           fileType: "txt",
         );
 
-        File textFile = await FileHelpers.writeTextFile(text: note, path: path);
-        if (textFile.path == "") return;
+        if (path == null) {
+          await _keicyProgressDialog!.hide();
+          FailedDialog.show(context, text: "Creating new note file path occur error");
+          return;
+        }
+
+        File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
+
+        if (textFile == null) {
+          await _keicyProgressDialog!.hide();
+          FailedDialog.show(context, text: "Creating new note file occur error");
+          return;
+        }
 
         mediaModel = MediaModel();
         mediaModel.content = note;
@@ -222,8 +233,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
               print(e);
             }
 
-            File textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
-            if (textFile.path == "") return;
+            File? textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
+
+            if (textFile == null) {
+              await _keicyProgressDialog!.hide();
+              FailedDialog.show(context, text: "Creating updat note file occur error");
+              return;
+            }
 
             mediaModel.content = note;
             mediaModel.ext = textFile.path.split('.').last;
@@ -277,15 +293,25 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         }
       }
 
-      String path = await FileHelpers.getFilePath(
+      String? path = await FileHelpers.getFilePath(
         mediaType: "photographie",
         rank: widget.localReportModel!.medias!.length + 1,
         fileType: imageFile!.path.split(".").last,
       );
 
-      File _imageFile = await FileHelpers.writeImageFile(imageFile: imageFile, path: path);
+      if (path == null) {
+        await _keicyProgressDialog!.hide();
+        FailedDialog.show(context, text: "Creating image file path occur error");
+        return;
+      }
 
-      if (_imageFile.path == "") return;
+      File? _imageFile = await FileHelpers.writeImageFile(imageFile: imageFile, path: path);
+
+      if (_imageFile == null) {
+        await _keicyProgressDialog!.hide();
+        FailedDialog.show(context, text: "Creating image file occur error");
+        return;
+      }
 
       File tmpFile = File(imageFile.path);
       await tmpFile.delete();
@@ -332,9 +358,15 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           "localReportModel": _localReportModel,
         };
         setState(() {});
+      } else {
+        FailedDialog.show(context, text: "Created picture media and update local report error");
+        return;
       }
     } catch (e) {
       print(e);
+      await _keicyProgressDialog!.hide();
+      FailedDialog.show(context, text: "Creating picture media error");
+      return;
     }
   }
 
@@ -352,15 +384,25 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         }
       }
 
-      String path = await FileHelpers.getFilePath(
+      String? path = await FileHelpers.getFilePath(
         mediaType: "dictee",
         rank: widget.localReportModel!.medias!.length + 1,
         fileType: tmpPath!.split(".").last,
       );
 
-      File _audioFile = await FileHelpers.writeAudioFile(tmpPath: tmpPath, path: path);
+      if (path == null) {
+        await _keicyProgressDialog!.hide();
+        FailedDialog.show(context, text: "Creating audio file path occur error");
+        return;
+      }
 
-      if (_audioFile.path == "") return;
+      File? _audioFile = await FileHelpers.writeAudioFile(tmpPath: tmpPath, path: path);
+
+      if (_audioFile == null) {
+        await _keicyProgressDialog!.hide();
+        FailedDialog.show(context, text: "Creating audio file occur error");
+        return;
+      }
 
       File tmpFile = File(tmpPath);
       await tmpFile.delete();
@@ -406,9 +448,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           "isUpdated": true,
           "localReportModel": _localReportModel,
         };
+      } else {
+        FailedDialog.show(context, text: "Created audio media and update local report error");
       }
     } catch (e) {
       print(e);
+      await _keicyProgressDialog!.hide();
+      FailedDialog.show(context, text: "Creating audio media error");
     }
 
     _cameraProvider!.setAudioRecordStatus("stopped", isNotifiable: false);
@@ -429,15 +475,25 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         }
       }
 
-      String path = await FileHelpers.getFilePath(
+      String? path = await FileHelpers.getFilePath(
         mediaType: MediaType.video,
         rank: widget.localReportModel!.medias!.length + 1,
         fileType: videoFile!.path.split(".").last,
       );
 
-      File _videoFile = await FileHelpers.writeVideoFile(videoFile: videoFile, path: path);
+      if (path == null) {
+        await _keicyProgressDialog!.hide();
+        FailedDialog.show(context, text: "Creating video file occur error");
+        return;
+      }
 
-      if (_videoFile.path == "") return;
+      File? _videoFile = await FileHelpers.writeVideoFile(videoFile: videoFile, path: path);
+
+      if (_videoFile == null) {
+        await _keicyProgressDialog!.hide();
+        FailedDialog.show(context, text: "Creating video file occur error");
+        return;
+      }
 
       File tmpFile = File(videoFile.path);
       await tmpFile.delete();
@@ -483,15 +539,19 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           "isUpdated": true,
           "localReportModel": _localReportModel,
         };
+      } else {
+        FailedDialog.show(context, text: "Created video media and update local report error");
       }
+
       _isShowVideoRecoderPanel = false;
-
-      onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
-
-      // setState(() {});
     } catch (e) {
       print(e);
+
+      await _keicyProgressDialog!.hide();
+      FailedDialog.show(context, text: "Creating video media error");
     }
+
+    onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
   }
 
   @override
@@ -571,11 +631,28 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     });
   }
 
+  void _closeHandler() {
+    if ((_cameraProvider!.audioRecordStatus != "stopped") || _cameraProvider!.videoRecordStatus != "stopped") {
+      NormalAskDialog.show(
+        context,
+        content: "Un enregistrement est en cours, si vous quittez cette page, il sera perdu",
+        okButton: "Quitter",
+        cancelButton: "Annuler",
+        callback: () {
+          Navigator.of(context).pop(_updatedStatus);
+        },
+      );
+      return;
+    }
+
+    Navigator.of(context).pop(_updatedStatus);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop(_updatedStatus);
+        _closeHandler();
         return false;
       },
       child: Scaffold(
@@ -609,44 +686,60 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                     child: Column(
                       children: [
                         _isShowAudioRecoderPanel
-                            ? RotatedBox(
-                                quarterTurns:
-                                    (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                        ? 0
-                                        : 1,
-                                child: AudioRecoderPanel(
-                                  scaffoldKey: _scaffoldKey,
-                                  keicyProgressDialog: _keicyProgressDialog,
-                                  width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                      ? deviceWidth
-                                      : _cameraViewHeiht - heightDp! * 120,
-                                  recordingStatusCallback: (bool isAudioRecording) {
-                                    _isAudioRecording = isAudioRecording;
-                                    setState(() {});
-                                  },
-                                  audioSaveHandler: (String tmpPath, int inMilliseconds) {
-                                    _audioHandler(tmpPath: tmpPath, inMilliseconds: inMilliseconds);
-                                  },
+                            ? Container(
+                                width: deviceWidth,
+                                child: Row(
+                                  children: [
+                                    RotatedBox(
+                                      quarterTurns:
+                                          (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
+                                              ? 0
+                                              : 1,
+                                      child: AudioRecoderPanel(
+                                        scaffoldKey: _scaffoldKey,
+                                        keicyProgressDialog: _keicyProgressDialog,
+                                        width: (_cameraOrientation == DeviceOrientation.portraitDown ||
+                                                _cameraOrientation == DeviceOrientation.portraitUp)
+                                            ? deviceWidth
+                                            : _cameraViewHeiht - heightDp! * 120,
+                                        recordingStatusCallback: (bool isAudioRecording) {
+                                          _isAudioRecording = isAudioRecording;
+                                          setState(() {});
+                                        },
+                                        audioSaveHandler: (String tmpPath, int inMilliseconds) {
+                                          _audioHandler(tmpPath: tmpPath, inMilliseconds: inMilliseconds);
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               )
                             : SizedBox(),
                         _isShowVideoRecoderPanel
-                            ? RotatedBox(
-                                quarterTurns:
-                                    (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                        ? 0
-                                        : 1,
-                                child: VideoRecoderPanel(
-                                  scaffoldKey: _scaffoldKey,
-                                  cameraController: cameraController,
-                                  keicyProgressDialog: _keicyProgressDialog,
-                                  width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                      ? deviceWidth
-                                      : _cameraViewHeiht - heightDp! * 120,
-                                  videoSaveHandler: (XFile xfile, int inMilliseconds) {
-                                    _videoHandler(videoFile: xfile, inMilliseconds: inMilliseconds);
-                                  },
-                                  onAudioModeButtonPressed: onAudioModeButtonPressed,
+                            ? Container(
+                                width: deviceWidth,
+                                child: Row(
+                                  children: [
+                                    RotatedBox(
+                                      quarterTurns:
+                                          (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
+                                              ? 0
+                                              : 1,
+                                      child: VideoRecoderPanel(
+                                        scaffoldKey: _scaffoldKey,
+                                        cameraController: cameraController,
+                                        keicyProgressDialog: _keicyProgressDialog,
+                                        width: (_cameraOrientation == DeviceOrientation.portraitDown ||
+                                                _cameraOrientation == DeviceOrientation.portraitUp)
+                                            ? deviceWidth
+                                            : _cameraViewHeiht - heightDp! * 120,
+                                        videoSaveHandler: (XFile xfile, int inMilliseconds) {
+                                          _videoHandler(videoFile: xfile, inMilliseconds: inMilliseconds);
+                                        },
+                                        onAudioModeButtonPressed: onAudioModeButtonPressed,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               )
                             : SizedBox(),
@@ -684,7 +777,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
             child: IconButton(
               icon: Icon(Icons.cancel_outlined, size: heightDp! * 20, color: Colors.white),
               onPressed: () {
-                Navigator.of(context).pop(_updatedStatus);
+                _closeHandler();
               },
             ),
           ),
@@ -1005,7 +1098,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                 GestureDetector(
                   onTap: () {
                     // if (_isShowAudioRecoderPanel) {
-                    //   // if (_cameraProvider!.audioRecordStatus == "stopped" || _cameraProvider!.audioRecordStatus == "init") {
+                    //   // if (_cameraProvider!.audioRecordStatus == "stopped" || _cameraProvider!.audioRecordStatus == "stopped") {
                     //   //   _cameraProvider!.setAudioRecordStatus("recording");
                     //   // } else if (_cameraProvider!.audioRecordStatus == "recording") {
                     //   //   _cameraProvider!.setAudioRecordStatus("stopped");
@@ -1078,8 +1171,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                                 _isShowAudioRecoderPanel = false;
                                 _cameraProvider!.setIsAudioRecord(_isShowAudioRecoderPanel, isNotifiable: false);
                                 _cameraProvider!.setIsVideoRecord(_isShowVideoRecoderPanel, isNotifiable: false);
-                                _cameraProvider!.setAudioRecordStatus("init", isNotifiable: false);
-                                _cameraProvider!.setVideoRecordStatus("init", isNotifiable: false);
+                                _cameraProvider!.setAudioRecordStatus("stopped", isNotifiable: false);
+                                _cameraProvider!.setVideoRecordStatus("stopped", isNotifiable: false);
 
                                 if (_isShowVideoRecoderPanel)
                                   onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.videoResolution!);
@@ -1133,8 +1226,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                                   _isShowVideoRecoderPanel = false;
                                   _cameraProvider!.setIsAudioRecord(_isShowAudioRecoderPanel, isNotifiable: false);
                                   _cameraProvider!.setIsVideoRecord(_isShowVideoRecoderPanel, isNotifiable: false);
-                                  _cameraProvider!.setVideoRecordStatus("init", isNotifiable: false);
-                                  _cameraProvider!.setAudioRecordStatus("init", isNotifiable: false);
+                                  _cameraProvider!.setVideoRecordStatus("stopped", isNotifiable: false);
+                                  _cameraProvider!.setAudioRecordStatus("stopped", isNotifiable: false);
 
                                   if (_isShowAudioRecoderPanel) {
                                     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {

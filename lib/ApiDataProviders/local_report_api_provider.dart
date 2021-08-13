@@ -26,7 +26,7 @@ class LocalReportApiProvider {
       ///
       List<dynamic> reportIds = storage.getItem("local_report_ids") ?? [];
       reportIds.add(reportId);
-      reportIds.sort(sortHandler);
+      reportIds.sort(sortReportIdHandler);
       await storage.setItem("local_report_ids", reportIds);
 
       return {"success": true};
@@ -56,7 +56,7 @@ class LocalReportApiProvider {
     }
   }
 
-  static int sortHandler(dynamic a, dynamic b) {
+  static int sortReportIdHandler(dynamic a, dynamic b) {
     int aReportDateTime = int.parse(a.toString().split("_").first);
     int aCreateDateTime = int.parse(a.toString().split("_").last);
 
@@ -78,7 +78,7 @@ class LocalReportApiProvider {
 
   static Future<Map<String, dynamic>> update({
     @required LocalReportModel? localReportModel,
-    @required String? oldReportId,
+    String? oldReportId,
   }) async {
     try {
       await storage.ready;
@@ -91,19 +91,22 @@ class LocalReportApiProvider {
           if (mediaModel.rank != i + 1) {
             mediaModel.rank = i + 1;
             File oldFile = File(mediaModel.path!);
-            String newPath = await FileHelpers.getFilePath(
+            String? newPath = await FileHelpers.getFilePath(
               mediaType: mediaModel.type,
               createAt: mediaModel.createdAt,
               rank: mediaModel.rank,
               fileType: mediaModel.path!.split('.').last,
             );
+            if (newPath == null) return {"success": false};
+
             File newFile = await oldFile.copy(newPath);
             mediaModel.filename = newPath.split('/').last;
             mediaModel.path = newPath;
             try {
-              oldFile.deleteSync();
+              await oldFile.delete();
             } catch (e) {
               print(e);
+              return {"success": false};
             }
           } else {
             mediaModel.rank = i + 1;
@@ -125,19 +128,18 @@ class LocalReportApiProvider {
 
       ///
       int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel.createdAt)!;
-
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportId = "${reportDateTime}_$createAt";
 
       ///
-      if (oldReportId != reportId) await storage.deleteItem(oldReportId!);
+      if (oldReportId != null && oldReportId != reportId) await storage.deleteItem(oldReportId);
       await storage.setItem(reportId, localReportModel.toJson());
 
       ///
       List<dynamic> reportIds = storage.getItem("local_report_ids") ?? [];
       reportIds.remove(oldReportId);
       reportIds.add(reportId);
-      reportIds.sort(sortHandler);
+      reportIds.sort(sortReportIdHandler);
       await storage.setItem("local_report_ids", reportIds);
 
       return {"success": true, "data": localReportModel};
@@ -234,7 +236,7 @@ class LocalReportApiProvider {
       ///
       List<dynamic> reportIds = storage.getItem("local_report_ids") ?? [];
       reportIds.remove(reportId);
-      reportIds.sort(sortHandler);
+      reportIds.sort(sortReportIdHandler);
       await storage.setItem("local_report_ids", reportIds);
 
       return {"success": true};
@@ -250,7 +252,7 @@ class LocalReportApiProvider {
       String url = AppConfig.apiBaseUrl + apiUrl;
 
       var data = localReportModel!.toJson();
-      if (data["report_id"] == -1) data["report_id"] = null;
+      if (data["report_id"] == -1 || data["report_id"] == 0) data["report_id"] = null;
       data.remove("orderList");
 
       var response = await http.post(

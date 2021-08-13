@@ -83,6 +83,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
   /// audio description variable
   String? _audioRecorderTxt = '00:00';
   int? _inMilliseconds = 0;
+  int? _resumeMillseconds = 0;
   double? _dbLevel;
   String? _path;
 
@@ -253,9 +254,11 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
       print('--------- startRecorder -----------------');
 
       _recorderSubscription = _recorderModule.onProgress!.listen((e) {
-        var date = DateTime.fromMillisecondsSinceEpoch(e.duration.inMilliseconds, isUtc: true);
-        var txt = DateFormat('mm:ss').format(date);
         _inMilliseconds = e.duration.inMilliseconds;
+        print("---------------------");
+        print(_inMilliseconds);
+        var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
+        var txt = DateFormat('mm:ss').format(date);
 
         setState(() {
           // _audioRecorderTxt = txt.substring(0, 8);
@@ -288,8 +291,28 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
     try {
       if (_recorderModule.isPaused) {
         await _recorderModule.resumeRecorder();
+        _recorderSubscription = _recorderModule.onProgress!.listen((e) {
+          print("--------inMilliseconds-------------");
+          if (_resumeMillseconds == 0) {
+            _resumeMillseconds = e.duration.inMilliseconds;
+          }
+          _inMilliseconds = _inMilliseconds! + (e.duration.inMilliseconds - _resumeMillseconds!);
+          _resumeMillseconds = e.duration.inMilliseconds;
+          print("--------resume-------------");
+          print(_inMilliseconds);
+          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
+          var txt = DateFormat('mm:ss').format(date);
+
+          setState(() {
+            // _audioRecorderTxt = txt.substring(0, 8);
+            _audioRecorderTxt = txt;
+            _dbLevel = e.decibels;
+          });
+        });
       } else {
         await _recorderModule.pauseRecorder();
+        _resumeMillseconds = 0;
+        _cancelRecorderSubscriptions();
         assert(_recorderModule.isPaused);
       }
     } on Exception catch (err) {
@@ -394,9 +417,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
                             padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
                             color: Colors.transparent,
                             child: Icon(
-                              _recorderModule.isRecording ? Icons.pause : Icons.play_arrow,
+                              _recorderModule.isRecording ? Icons.pause_circle_outline_outlined : Icons.play_circle_outline_outlined,
                               size: heightDp! * 20,
-                              color: Colors.white,
+                              color: _recorderModule.isRecording ? Colors.white : Colors.red,
                             ),
                           ),
                         ),

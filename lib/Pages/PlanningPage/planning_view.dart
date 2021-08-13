@@ -139,7 +139,12 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                     Expanded(
                       flex: 3,
                       child: Text(
-                        "${widget.planningReportModel!.date!} ${widget.planningReportModel!.time!}",
+                        KeicyDateTime.convertDateTimeToDateString(
+                          dateTime: KeicyDateTime.convertDateStringToDateTime(
+                            dateString: "${widget.planningReportModel!.date!} ${widget.planningReportModel!.time!}",
+                          ),
+                          formats: "d/m/Y H:i",
+                        ),
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),

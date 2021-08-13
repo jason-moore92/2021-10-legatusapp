@@ -9,22 +9,24 @@ import 'package:path_provider/path_provider.dart';
 import 'date_time_convert.dart';
 
 class FileHelpers {
-  static Future<File> writeTextFile({@required String? text, String? path = ""}) async {
+  static Future<File?> writeTextFile({@required String? text, String? path = ""}) async {
     try {
       if (path == "") {
         path = await getDirectory();
-        Directory(path).createSync();
+        if (path == null) return null;
+        await Directory(path).create();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + ".txt";
       }
       File file = File(path!);
       await file.writeAsString(text!);
       return file;
     } catch (e) {
-      return File("");
+      print("Couldn't write text file");
+      return null;
     }
   }
 
-  static Future<String> readTextFile({String? path}) async {
+  static Future<String?> readTextFile({String? path}) async {
     String text;
     try {
       final File file = File(path!);
@@ -32,30 +34,32 @@ class FileHelpers {
       return text;
     } catch (e) {
       print("Couldn't read file");
-      return "";
+      return null;
     }
   }
 
-  static Future<File> writeImageFile({@required XFile? imageFile, @required String? path}) async {
+  static Future<File?> writeImageFile({@required XFile? imageFile, @required String? path}) async {
     try {
       if (path == "") {
         path = await getDirectory();
+        if (path == null) return null;
         Directory(path).createSync();
-        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + ".txt";
+        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + imageFile!.path.split('.').last;
       }
       await imageFile!.saveTo(path!);
       File file = File(path);
       return file;
     } catch (e) {
-      print("Couldn't read file");
-      return File("");
+      print("Couldn't write image file");
+      return null;
     }
   }
 
-  static Future<File> writeVideoFile({@required XFile? videoFile, @required String? path}) async {
+  static Future<File?> writeVideoFile({@required XFile? videoFile, @required String? path}) async {
     try {
       if (path == "") {
         path = await getDirectory();
+        if (path == null) return null;
         Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + videoFile!.path.split(".").last;
       }
@@ -63,15 +67,16 @@ class FileHelpers {
       File file = File(path);
       return file;
     } catch (e) {
-      print("Couldn't read file");
-      return File("");
+      print("Couldn't write video file");
+      return null;
     }
   }
 
-  static Future<File> writeAudioFile({@required String? tmpPath, @required String? path}) async {
+  static Future<File?> writeAudioFile({@required String? tmpPath, @required String? path}) async {
     try {
       if (path == "") {
         path = await getDirectory();
+        if (path == null) return null;
         Directory(path).createSync();
         path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + tmpPath!.split(".").last;
       }
@@ -80,30 +85,38 @@ class FileHelpers {
       await file.writeAsBytes(tmpFile.readAsBytesSync());
       return file;
     } catch (e) {
-      print("Couldn't read file");
-      return File("");
+      print("Couldn't write audio file");
+      return null;
     }
   }
 
-  static Future<String> getFilePath({
+  static Future<String?> getFilePath({
     @required String? mediaType,
     String? createAt,
     @required int? rank,
     @required String? fileType,
   }) async {
-    String path = await getDirectory();
-    Directory(path).createSync();
+    try {
+      String? path = await getDirectory();
+      if (path == null) return null;
 
-    String fileName = "";
-    if (createAt == null) {
-      fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "YmdHis");
-    } else {
-      DateTime createAtTime = KeicyDateTime.convertDateStringToDateTime(dateString: createAt)!;
-      fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: createAtTime, formats: "YmdHis");
+      Directory directory = await Directory(path).create();
+      bool isExists = await directory.exists();
+      if (!isExists) return null;
+
+      String fileName = "";
+      if (createAt == null) {
+        fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "YmdHis");
+      } else {
+        DateTime createAtTime = KeicyDateTime.convertDateStringToDateTime(dateString: createAt)!;
+        fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: createAtTime, formats: "YmdHis");
+      }
+      fileName = "$fileName-$rank-$mediaType.$fileType";
+
+      return "$path/$fileName";
+    } catch (e) {
+      return null;
     }
-    fileName = "$fileName-$rank-$mediaType.$fileType";
-
-    return "$path/$fileName";
   }
 
   static Future<Map<String, int>> dirStatSync({String dirPath = ""}) async {
@@ -111,13 +124,13 @@ class FileHelpers {
     int totalSize = 0;
     Directory dir;
     if (dirPath == "") {
-      String path = await getDirectory();
-      dir = Directory(path);
+      String? path = await getDirectory();
+      dir = Directory(path!);
     } else
       dir = Directory(dirPath);
 
     try {
-      if (dir.existsSync()) {
+      if (await dir.exists()) {
         dir.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
           if (entity is File) {
             fileNum++;
@@ -132,7 +145,7 @@ class FileHelpers {
     return {'fileNum': fileNum, 'size': totalSize};
   }
 
-  static Future<String> getDirectory() async {
+  static Future<String?> getDirectory() async {
     Directory? directory;
     String path = "";
     try {
@@ -143,10 +156,9 @@ class FileHelpers {
       }
       path = directory!.path;
       path += "/local_medias";
+      return path;
     } catch (e) {
-      path = "";
+      return null;
     }
-
-    return path;
   }
 }

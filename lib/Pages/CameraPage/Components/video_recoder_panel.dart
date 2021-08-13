@@ -242,7 +242,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
                                 child: Icon(
-                                  Icons.pause,
+                                  Icons.pause_circle_outline_outlined,
                                   size: heightDp! * 20,
                                   color: Colors.white,
                                 ),
@@ -254,9 +254,9 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
                                 child: Icon(
-                                  Icons.play_arrow,
+                                  Icons.play_circle_outline_outlined,
                                   size: heightDp! * 20,
-                                  color: Colors.white,
+                                  color: Colors.red,
                                 ),
                               ),
                             ),

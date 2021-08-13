@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/intl.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
@@ -42,17 +43,10 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
   double heightDp = ScreenUtil().setWidth(1);
   double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
 
-  FlutterSoundPlayer _playerModule = FlutterSoundPlayer();
-  StreamSubscription? _playerSubscription;
-
-  Codec _codec = Codec.pcm16WAV;
-  int _tSTREAMSAMPLERATE = 44000; // 44100 does not work for recorder on iOS
+  AudioPlayer audioPlayer = AudioPlayer();
 
   double _maxDuration = 1.0;
   double _sliderCurrentPosition = 0.0;
-  String _playerTxt = '00:00:00';
-  bool _decoderSupported = true;
-  double? _duration;
 
   MediaPlayProvider? _mediaPlayProvider;
 
@@ -68,12 +62,26 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
   void initState() {
     super.initState();
 
+    if (Platform.isIOS) {
+      audioPlayer.notificationService.startHeadlessService();
+    }
+
     _maxDuration = widget.mediaModel!.duration!.toDouble();
     _mediaPlayProvider = MediaPlayProvider.of(context);
 
     _mediaPlayProvider!.setMediaPlayState(MediaPlayState.init(), isNotifiable: false);
 
-    _initialize();
+    audioPlayer.onDurationChanged.listen((Duration d) {
+      print('Max duration: $d');
+      setState(
+        () => _maxDuration = d.inMilliseconds.toDouble(),
+      );
+    });
+
+    audioPlayer.onAudioPositionChanged.listen((Duration p) {
+      print('Current position: $p');
+      setState(() => _sliderCurrentPosition = p.inMilliseconds.toDouble());
+    });
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _mediaPlayProvider!.addListener(_mediaPlayProviderListener);
@@ -89,8 +97,6 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
   void dispose() {
     if (uploadTimer != null) uploadTimer!.cancel();
     _mediaPlayProvider!.removeListener(_mediaPlayProviderListener);
-    _cancelPlayerSubscriptions();
-    _disposePlayModel();
     super.dispose();
   }
 
@@ -98,7 +104,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
     if (_mediaPlayProvider!.mediaPlayState.isNew! &&
         _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank != widget.mediaModel!.rank &&
         _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid != widget.mediaModel!.uuid) {
-      if (_playerModule.isPlaying) {
+      if (audioPlayer.state == PlayerState.PLAYING) {
         await _seekToPlayer(0);
         _sliderCurrentPosition = 0;
         await _stopPlayer();
@@ -108,65 +114,6 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
         if (mounted) setState(() {});
       }
     }
-  }
-
-  Future<void> _initialize() async {
-    // await _playerModule.closeAudioSession();
-    await _playerModule.openAudioSession(
-      withUI: false,
-      focus: AudioFocus.requestFocusAndStopOthers,
-      category: SessionCategory.playAndRecord,
-      mode: SessionMode.modeDefault,
-      device: AudioDevice.speaker,
-    );
-    await _playerModule.setSubscriptionDuration(Duration(milliseconds: 10));
-    await initializeDateFormatting();
-    await _setCodec(_codec);
-    await _getDuration();
-  }
-
-  Future<void> _setCodec(Codec codec) async {
-    _decoderSupported = await _playerModule.isDecoderSupported(codec);
-  }
-
-  Future<void> _getDuration() async {
-    var path = widget.mediaModel!.path;
-    var d = path != null ? await flutterSoundHelper.duration(path) : null;
-    _duration = d != null ? d.inMilliseconds / 1000.0 : null;
-  }
-
-  void _cancelPlayerSubscriptions() {
-    if (_playerSubscription != null) {
-      _playerSubscription!.cancel();
-      _playerSubscription = null;
-    }
-  }
-
-  Future<void> _disposePlayModel() async {
-    try {
-      await _playerModule.closeAudioSession();
-    } on Exception {
-      print('Released unsuccessful');
-    }
-  }
-
-  void _addListeners() {
-    _cancelPlayerSubscriptions();
-    _playerSubscription = _playerModule.onProgress!.listen((e) {
-      _maxDuration = e.duration.inMilliseconds.toDouble();
-      if (_maxDuration <= 0) _maxDuration = 0.0;
-
-      _sliderCurrentPosition = min(e.position.inMilliseconds.toDouble(), _maxDuration);
-      if (_sliderCurrentPosition < 0.0) {
-        _sliderCurrentPosition = 0.0;
-      }
-
-      var date = DateTime.fromMillisecondsSinceEpoch(e.position.inMilliseconds, isUtc: true);
-      var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
-      setState(() {
-        _playerTxt = txt.substring(0, 8);
-      });
-    });
   }
 
   Future<void> _startPlayer() async {
@@ -185,18 +132,10 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
             isNew: false,
           ),
         );
-      } else {}
+      }
 
-      await _playerModule.startPlayer(
-        fromURI: widget.mediaModel!.path!,
-        codec: _codec,
-        sampleRate: _tSTREAMSAMPLERATE,
-        whenFinished: () {
-          print('Play finished');
-          setState(() {});
-        },
-      );
-      _addListeners();
+      int result = await audioPlayer.play(widget.mediaModel!.path!, isLocal: true);
+      if (result == 1) {}
       setState(() {});
     } on Exception catch (err) {
       print('error: $err');
@@ -205,12 +144,10 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
 
   Future<void> _stopPlayer() async {
     try {
-      await _playerModule.stopPlayer();
-      if (_playerSubscription != null) {
-        await _playerSubscription!.cancel();
-        _playerSubscription = null;
+      int result = await audioPlayer.stop();
+      if (result == 1) {
+        _sliderCurrentPosition = 0.0;
       }
-      _sliderCurrentPosition = 0.0;
     } on Exception catch (err) {
       print('error: $err');
     }
@@ -219,10 +156,10 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
 
   void _pauseResumePlayer() async {
     try {
-      if (_playerModule.isPlaying) {
-        await _playerModule.pausePlayer();
+      if (audioPlayer.state == PlayerState.PLAYING) {
+        int result = await audioPlayer.pause();
       } else {
-        await _playerModule.resumePlayer();
+        int result = await audioPlayer.resume();
       }
     } on Exception catch (err) {
       print('error: $err');
@@ -232,8 +169,8 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
 
   Future<void> _seekToPlayer(int milliSecs) async {
     try {
-      if (_playerModule.isPlaying) {
-        await _playerModule.seekToPlayer(Duration(milliseconds: milliSecs));
+      if (audioPlayer.state == PlayerState.PLAYING) {
+        int result = await audioPlayer.seek(Duration(milliseconds: milliSecs));
       }
     } on Exception catch (err) {
       print('error: $err');
@@ -242,25 +179,20 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
   }
 
   void Function()? _onPauseResumePlayerPressed() {
-    if (_playerModule.isPaused || _playerModule.isPlaying) {
+    if (audioPlayer.state == PlayerState.PAUSED || audioPlayer.state == PlayerState.PLAYING) {
       return _pauseResumePlayer;
     }
     return null;
   }
 
   void Function()? _onStopPlayerPressed() {
-    return (_playerModule.isPlaying || _playerModule.isPaused) ? _stopPlayer : null;
+    return (audioPlayer.state == PlayerState.PLAYING || audioPlayer.state == PlayerState.PAUSED) ? _stopPlayer : null;
   }
 
   void Function()? _onStartPlayerPressed() {
     if (widget.mediaModel!.path == "" || widget.mediaModel!.path == null) return null;
 
-    // Disable the button if the selected codec is not supported
-    if (!(_decoderSupported || _codec == Codec.pcm16)) {
-      return null;
-    }
-
-    return (_playerModule.isStopped) ? _startPlayer : null;
+    return audioPlayer.state == PlayerState.STOPPED || audioPlayer.state == PlayerState.COMPLETED ? _startPlayer : null;
   }
 
   @override
@@ -337,7 +269,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
                 Expanded(
                   child: Row(
                     children: [
-                      if (_playerModule.isStopped)
+                      if (audioPlayer.state == PlayerState.COMPLETED || audioPlayer.state == PlayerState.STOPPED)
                         GestureDetector(
                           onTap: _onStartPlayerPressed(),
                           child: Container(
@@ -345,7 +277,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
                             child: Icon(Icons.play_arrow, size: heightDp * 25, color: AppColors.yello),
                           ),
                         ),
-                      if (_playerModule.isPlaying)
+                      if (audioPlayer.state == PlayerState.PLAYING)
                         GestureDetector(
                           onTap: _onStopPlayerPressed(),
                           child: Container(
@@ -357,15 +289,15 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
                         child: Container(
                           // height: heightDp * 25,
                           child: Slider(
-                            value: min(_sliderCurrentPosition, _maxDuration),
+                            value: min(_sliderCurrentPosition, _maxDuration < 0 ? 0 : _maxDuration),
                             min: 0.0,
-                            max: _maxDuration,
+                            max: _maxDuration < 0 ? 0 : _maxDuration,
                             activeColor: AppColors.yello,
                             inactiveColor: AppColors.yello,
                             onChanged: (value) async {
                               await _seekToPlayer(value.toInt());
                             },
-                            divisions: _maxDuration == 0.0 ? 1 : _maxDuration.toInt(),
+                            divisions: _maxDuration < 0.0 ? 1 : _maxDuration.toInt(),
                           ),
                         ),
                       ),

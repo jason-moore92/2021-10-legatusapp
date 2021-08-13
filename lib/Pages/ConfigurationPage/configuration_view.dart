@@ -726,34 +726,34 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
             // ),
           ],
         ),
-        SizedBox(height: heightDp! * 10),
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_image_size.tr(),
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  Text(
-                    LocaleKeys.ConfigurationPageString_image_size_desc.tr(),
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
-              ),
-            ),
-            Switch(
-              activeColor: AppColors.yello,
-              inactiveTrackColor: Colors.grey,
-              value: _appDataProvider!.appDataState.settingsModel!.withRestriction!,
-              onChanged: (value) {
-                _appDataProvider!.settingsHandler(withRestriction: value);
-              },
-            ),
-          ],
-        ),
+        // SizedBox(height: heightDp! * 10),
+        // Row(
+        //   children: [
+        //     Expanded(
+        //       child: Column(
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         children: [
+        //           Text(
+        //             LocaleKeys.ConfigurationPageString_image_size.tr(),
+        //             style: Theme.of(context).textTheme.bodyText1,
+        //           ),
+        //           Text(
+        //             LocaleKeys.ConfigurationPageString_image_size_desc.tr(),
+        //             style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //     Switch(
+        //       activeColor: AppColors.yello,
+        //       inactiveTrackColor: Colors.grey,
+        //       value: _appDataProvider!.appDataState.settingsModel!.withRestriction!,
+        //       onChanged: (value) {
+        //         _appDataProvider!.settingsHandler(withRestriction: value);
+        //       },
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }

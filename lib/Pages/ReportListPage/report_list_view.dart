@@ -88,6 +88,13 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
   }
 
   void _localReportListProviderListener() async {
+    if (_localReportListProvider!.localReportListState.refreshList!) {
+      _localReportListProvider!.setLocalReportListState(
+        _localReportListProvider!.localReportListState.update(refreshList: false),
+        isNotifiable: false,
+      );
+      _onRefresh();
+    }
     if (_localReportListProvider!.localReportListState.contextName != "PlanningPage") return;
 
     if (_localReportListProvider!.localReportListState.progressState == -1) {
@@ -149,6 +156,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
       );
     } else {
       FailedDialog.show(context);
+      _onRefresh();
     }
   }
 
@@ -233,7 +241,8 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
                 child: ListView.separated(
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
-                    LocalReportModel localReportsModel = (index >= localReportsList.length) ? LocalReportModel() : localReportsList[index];
+                    LocalReportModel localReportsModel =
+                        (index >= localReportsList.length) ? LocalReportModel(reportId: -1) : localReportsList[index];
                     return Slidable(
                       enabled: true,
                       actionPane: SlidableDrawerActionPane(),
@@ -270,7 +279,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
                           }
                         },
                         child: LocalReportWidget(
-                          isLoading: localReportsModel.reportId == 0,
+                          isLoading: localReportsModel.reportId == -1,
                           localReportModel: localReportsModel,
                         ),
                       ),

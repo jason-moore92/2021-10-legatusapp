@@ -12,9 +12,9 @@ class SettingsModel extends Equatable {
     // this.allowCamera = true,
     // this.allowMicrophone = true,
     // this.allowLocation = true,
-    this.withRestriction = true,
+    this.withRestriction = false,
     this.photoResolution = 2,
-    this.videoResolution = 2,
+    this.videoResolution = 1,
   });
 
   factory SettingsModel.fromJson(Map<String, dynamic> map) {
@@ -22,9 +22,9 @@ class SettingsModel extends Equatable {
       // allowCamera: map["allowCamera"] ?? true,
       // allowMicrophone: map["allowMicrophone"] ?? true,
       // allowLocation: map["allowLocation"] ?? true,
-      withRestriction: map["withRestriction"] ?? true,
+      withRestriction: map["withRestriction"] ?? false,
       photoResolution: map["photoResolution"] ?? 2,
-      videoResolution: map["videoResolution"] ?? 2,
+      videoResolution: map["videoResolution"] ?? 1,
     );
   }
 
@@ -33,9 +33,9 @@ class SettingsModel extends Equatable {
       // "allowCamera": allowCamera ?? true,
       // "allowMicrophone": allowMicrophone ?? true,
       // "allowLocation": allowLocation ?? true,
-      "withRestriction": withRestriction ?? true,
+      "withRestriction": withRestriction ?? false,
       "photoResolution": photoResolution ?? 2,
-      "videoResolution": videoResolution ?? 2,
+      "videoResolution": videoResolution ?? 1,
     };
   }
 

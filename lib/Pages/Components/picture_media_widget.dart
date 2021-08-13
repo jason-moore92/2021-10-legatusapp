@@ -269,6 +269,16 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                               height: MediaQuery.of(context).size.width * 0.9,
                               fit: BoxFit.fitHeight,
                               mode: ExtendedImageMode.gesture,
+                              enableMemoryCache: true,
+                              loadStateChanged: (ExtendedImageState state) {
+                                if (state.extendedImageLoadState == LoadState.loading) {
+                                  return Center(
+                                      child: Theme(
+                                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                                    child: Center(child: CupertinoActivityIndicator()),
+                                  ));
+                                }
+                              },
                               initGestureConfigHandler: (state) {
                                 return GestureConfig(
                                   minScale: 0.9,
@@ -304,9 +314,13 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                             icon: Icon(Icons.close_outlined, size: heightDp! * 30, color: Colors.white),
                                           ),
                                         ),
-                                        RotatedBox(
-                                          quarterTurns: 1,
-                                          child: imageWidget,
+                                        Container(
+                                          width: MediaQuery.of(context).size.width * 0.9,
+                                          height: MediaQuery.of(context).size.width * 0.9 * snapshot.data!.width / snapshot.data!.height,
+                                          child: RotatedBox(
+                                            quarterTurns: 1,
+                                            child: imageWidget,
+                                          ),
                                         ),
                                         SizedBox(height: statusbarHeight! + heightDp! * 30),
                                       ],
@@ -321,6 +335,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               fit: BoxFit.fitWidth,
                               mode: ExtendedImageMode.gesture,
+                              enableMemoryCache: true,
                               initGestureConfigHandler: (state) {
                                 return GestureConfig(
                                   minScale: 0.9,
@@ -356,7 +371,11 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                             icon: Icon(Icons.close_outlined, size: heightDp! * 30, color: Colors.white),
                                           ),
                                         ),
-                                        imageWidget,
+                                        Container(
+                                          width: MediaQuery.of(context).size.width * 0.9,
+                                          height: MediaQuery.of(context).size.width * 0.9 * snapshot.data!.height / snapshot.data!.width,
+                                          child: imageWidget,
+                                        ),
                                         SizedBox(height: statusbarHeight! + heightDp! * 30),
                                       ],
                                     ),
