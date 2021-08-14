@@ -173,6 +173,23 @@ class LocalReportApiProvider {
 
           if (storage.getItem(reportId) != null) {
             LocalReportModel localReportModel = LocalReportModel.fromJson(storage.getItem(reportId));
+
+            /// check if deleted medias are exist?
+            List<MediaModel> medias = [];
+            for (var i = 0; i < localReportModel.medias!.length; i++) {
+              File file = File(localReportModel.medias![i].path!);
+              if (await file.exists()) {
+                medias.add(localReportModel.medias![i]);
+              }
+            }
+            if (localReportModel.medias!.length != medias.length) {
+              localReportModel.medias = medias;
+              var result = await update(localReportModel: localReportModel);
+              if (result["success"]) {
+                localReportModel = result["data"];
+              }
+            }
+
             reportModelList.add(localReportModel);
           } else {
             print(reportId);
@@ -206,6 +223,23 @@ class LocalReportApiProvider {
         String reportId = reportIds[i];
         if (storage.getItem(reportId) != null) {
           LocalReportModel localReportModel = LocalReportModel.fromJson(storage.getItem(reportId));
+
+          /// check if deleted medias are exist?
+          List<MediaModel> medias = [];
+          for (var i = 0; i < localReportModel.medias!.length; i++) {
+            File file = File(localReportModel.medias![i].path!);
+            if (await file.exists()) {
+              medias.add(localReportModel.medias![i]);
+            }
+          }
+          if (localReportModel.medias!.length != medias.length) {
+            localReportModel.medias = medias;
+            var result = await update(localReportModel: localReportModel);
+            if (result["success"]) {
+              localReportModel = result["data"];
+            }
+          }
+
           reportModelList.add(localReportModel);
         } else {
           print(reportId);

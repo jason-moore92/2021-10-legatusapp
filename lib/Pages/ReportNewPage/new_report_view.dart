@@ -584,7 +584,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                         : input.length != 5
                             ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(args: [LocaleKeys.NewReportPageString_time.tr().toLowerCase()])
                             : null,
-                    onSaved: (input) => _localReportModel!.time = input,
+                    onSaved: (input) => _localReportModel!.time = input + ":00",
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_descriptionFocusNode),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_descriptionFocusNode),
                   ),

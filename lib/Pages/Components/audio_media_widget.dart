@@ -231,7 +231,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
             padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 10),
             decoration: BoxDecoration(
               color: Color(0xFFE7E7E7),
-              borderRadius: BorderRadius.circular(heightDp * 6),
+              borderRadius: BorderRadius.circular(heightDp * 0),
               border: Border.all(
                 color: widget.isSelected! ? AppColors.yello : Colors.transparent,
                 width: widget.isSelected! ? 3 : 0,
@@ -347,7 +347,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
               height: widgetHeight != null ? widgetHeight! - heightDp * 10 : widgetHeight,
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(heightDp * 6),
+                borderRadius: BorderRadius.circular(heightDp * 0),
               ),
               child: Center(
                 child: Transform.rotate(

@@ -96,14 +96,14 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                 height: picHeight,
                 decoration: BoxDecoration(
                   color: Color(0xFFE7E7E7),
-                  borderRadius: BorderRadius.circular(heightDp! * 6),
+                  borderRadius: BorderRadius.circular(heightDp! * 0),
                   border: Border.all(
                     color: widget.isSelected! ? AppColors.yello : Colors.transparent,
                     width: widget.isSelected! ? 3 : 0,
                   ),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(heightDp! * 4),
+                  borderRadius: BorderRadius.circular(heightDp! * 0),
                   child: Image.file(
                     File(widget.mediaModel!.path!),
                     width: picWidth,
@@ -114,7 +114,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                         width: picWidth,
                         height: picHeight,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(heightDp! * 4),
+                          borderRadius: BorderRadius.circular(heightDp! * 0),
                           color: Color(0xFFE7E7E7),
                         ),
                         alignment: Alignment.center,
@@ -196,7 +196,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                 height: picHeight,
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(heightDp! * 6),
+                  borderRadius: BorderRadius.circular(heightDp! * 0),
                 ),
                 child: Center(
                   child: Transform.rotate(
