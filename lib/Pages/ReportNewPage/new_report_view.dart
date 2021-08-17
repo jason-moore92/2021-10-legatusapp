@@ -301,7 +301,9 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
             },
           ),
           title: Text(
-            LocaleKeys.NewReportPageString_appbarTitle.tr(),
+            widget.localReportModel != null && widget.localReportModel!.name != ""
+                ? widget.localReportModel!.name!
+                : LocaleKeys.NewReportPageString_appbarTitle.tr(),
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -362,6 +364,21 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (widget.localReportModel != null && widget.localReportModel!.reportId != 0)
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: widthDp! * 15),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Un constat synchronisé ne peut pas être modifié depuis l'application mobile.",
+                          style: Theme.of(context).textTheme.bodyText1!,
+                        ),
+                        SizedBox(height: heightDp! * 20),
+                      ],
+                    ),
+                  ),
+
+                ///
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: widthDp! * 15),
                   child: _reportPanel(),
@@ -387,18 +404,19 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
                 ///
                 SizedBox(height: heightDp! * 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    CustomElevatedButton(
-                      text: LocaleKeys.NewReportPageString_save.tr().toUpperCase(),
-                      textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.white),
-                      backColor: AppColors.yello,
-                      onPressed: _createHandler,
-                    ),
-                    SizedBox(width: widthDp! * 15),
-                  ],
-                ),
+                if (widget.localReportModel == null || widget.localReportModel!.reportId == 0)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      CustomElevatedButton(
+                        text: LocaleKeys.NewReportPageString_save.tr().toUpperCase(),
+                        textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.white),
+                        backColor: AppColors.yello,
+                        onPressed: _createHandler,
+                      ),
+                      SizedBox(width: widthDp! * 15),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -442,6 +460,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                   args: [LocaleKeys.NewReportPageString_name.tr()],
                 )
               : null,
+          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
           onSaved: (input) => _localReportModel!.name = input,
           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
           onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -622,6 +641,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
           maxLines: 4,
           textInputAction: TextInputAction.newline,
           keyboardType: TextInputType.multiline,
+          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
           onSaved: (input) => _localReportModel!.description = input,
           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
           onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -664,6 +684,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
             borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
             borderRadius: BorderRadius.circular(heightDp! * 6),
           ),
+          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
           onSaved: (input) => _localReportModel!.street = input,
           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_addressComplementFocusNode),
           onEditingComplete: () => FocusScope.of(context).requestFocus(_addressComplementFocusNode),
@@ -694,6 +715,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
             borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
             borderRadius: BorderRadius.circular(heightDp! * 6),
           ),
+          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
           onSaved: (input) => _localReportModel!.complement = input,
           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_zipFocusNode),
           onEditingComplete: () => FocusScope.of(context).requestFocus(_zipFocusNode),
@@ -735,6 +757,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                     ],
+                    readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                     onSaved: (input) => _localReportModel!.zip = input,
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_cityFocusNode),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_cityFocusNode),
@@ -770,6 +793,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                       borderRadius: BorderRadius.circular(heightDp! * 6),
                     ),
+                    readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                     onSaved: (input) => _localReportModel!.city = input,
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_latitudeFocusNode),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_latitudeFocusNode),
@@ -813,6 +837,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       borderRadius: BorderRadius.circular(heightDp! * 6),
                     ),
                     keyboardType: TextInputType.number,
+                    readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                     onSaved: (input) => _localReportModel!.latitude = input,
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_longitudeFocusNode),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_longitudeFocusNode),
@@ -849,6 +874,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       borderRadius: BorderRadius.circular(heightDp! * 6),
                     ),
                     keyboardType: TextInputType.number,
+                    readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                     onSaved: (input) => _localReportModel!.longitude = input,
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -928,6 +954,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                   borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                   borderRadius: BorderRadius.circular(heightDp! * 6),
                 ),
+                readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                 onSaved: (input) => _localReportModel!.customerName = input,
                 onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_customerStreetFocusNode),
                 onEditingComplete: () => FocusScope.of(context).requestFocus(_customerStreetFocusNode),
@@ -959,6 +986,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                   borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                   borderRadius: BorderRadius.circular(heightDp! * 6),
                 ),
+                readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                 onSaved: (input) => _localReportModel!.customerStreet = input,
                 onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_customerComplementFocusNode),
                 onEditingComplete: () => FocusScope.of(context).requestFocus(_customerComplementFocusNode),
@@ -989,6 +1017,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                   borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                   borderRadius: BorderRadius.circular(heightDp! * 6),
                 ),
+                readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                 onSaved: (input) => _localReportModel!.customerComplement = input,
                 onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_customerZipFocusNode),
                 onEditingComplete: () => FocusScope.of(context).requestFocus(_customerZipFocusNode),
@@ -1030,6 +1059,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
+                          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                           onSaved: (input) => _localReportModel!.customerZip = input,
                           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_customerCityFocusNode),
                           onEditingComplete: () => FocusScope.of(context).requestFocus(_customerCityFocusNode),
@@ -1065,6 +1095,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                             borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                             borderRadius: BorderRadius.circular(heightDp! * 6),
                           ),
+                          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                           onSaved: (input) => _localReportModel!.customerCity = input,
                           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_cropFromFocusNode),
                           onEditingComplete: () => FocusScope.of(context).requestFocus(_cropFromFocusNode),
@@ -1100,6 +1131,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                   borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                   borderRadius: BorderRadius.circular(heightDp! * 6),
                 ),
+                readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                 onSaved: (input) => _localReportModel!.customerCorpForm = input,
                 onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_cropSirenFocusNode),
                 onEditingComplete: () => FocusScope.of(context).requestFocus(_cropSirenFocusNode),
@@ -1137,10 +1169,12 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                             borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                             borderRadius: BorderRadius.circular(heightDp! * 6),
                           ),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
+                          // inputFormatters: [WhitelistingTextInputFormatter(RegExp(r"^\d+\.?\d{0,2}"))],
+                          // keyboardType: TextInputType.number,
+                          // inputFormatters: [
+                          //   FilteringTextInputFormatter.digitsOnly,
+                          // ],
+                          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                           onSaved: (input) => _localReportModel!.customerCorpSiren = input,
                           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_cropRCSFocusNode),
                           onEditingComplete: () => FocusScope.of(context).requestFocus(_cropRCSFocusNode),
@@ -1176,6 +1210,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                             borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                             borderRadius: BorderRadius.circular(heightDp! * 6),
                           ),
+                          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                           onSaved: (input) => _localReportModel!.customerCorpRcs = input,
                           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
                           onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -1226,6 +1261,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
             borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
             borderRadius: BorderRadius.circular(heightDp! * 6),
           ),
+          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
           onSaved: (input) => _localReportModel!.recipientName = input,
           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_recipientPositionFocusNode),
           onEditingComplete: () => FocusScope.of(context).requestFocus(_recipientPositionFocusNode),
@@ -1256,6 +1292,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
             borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
             borderRadius: BorderRadius.circular(heightDp! * 6),
           ),
+          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
           onSaved: (input) => _localReportModel!.recipientPosition = input,
           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_recipientBirthDayFocusNode),
           onEditingComplete: () => FocusScope.of(context).requestFocus(_recipientBirthDayFocusNode),
@@ -1355,6 +1392,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
                       borderRadius: BorderRadius.circular(heightDp! * 6),
                     ),
+                    readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
                     onSaved: (input) => _localReportModel!.recipientBirthCity = input,
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_recipientEmailFocusNode),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_recipientEmailFocusNode),
@@ -1391,6 +1429,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
             borderRadius: BorderRadius.circular(heightDp! * 6),
           ),
           keyboardType: TextInputType.emailAddress,
+          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
           validator: (input) => input.isNotEmpty && !KeicyValidators.isValidEmail(input) ? LocaleKeys.ValidateErrorString_emailErrorText.tr() : null,
           onSaved: (input) => _localReportModel!.recipientEmail = input,
           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_recipientPhoneNumberFocusNode),
@@ -1431,6 +1470,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
           inputFormatters: [
             MaskTextInputFormatter(mask: '# ## ## ## ##', filter: {"#": RegExp(r'[0-9]')})
           ],
+          readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
           validator: (input) => input.isNotEmpty && input.replaceAll(" ", "").length != 9
               ? LocaleKeys.ValidateErrorString_textlengthErrorText.tr(namedArgs: {"length": "9"})
               : null,

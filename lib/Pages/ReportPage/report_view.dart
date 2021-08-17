@@ -452,10 +452,19 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       if (_selectedMediaRanks!.contains(mediaModel.rank) && mediaModel.path! != "") {
         File oldFile = File(mediaModel.path!);
         try {
-          oldFile.deleteSync();
+          await oldFile.delete();
         } catch (e) {
           print(e);
           newMedias.add(mediaModel);
+        }
+        if (mediaModel.thumPath != "") {
+          File oldFile = File(mediaModel.thumPath!);
+          try {
+            await oldFile.delete();
+          } catch (e) {
+            print(e);
+            newMedias.add(mediaModel);
+          }
         }
       } else {
         newMedias.add(mediaModel);
@@ -654,12 +663,14 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 Expanded(
                   child: _localReportModel!.medias!.isEmpty ? _noMediaPanel() : _mediaPanel1(),
                 ),
-                SizedBox(height: heightDp! * 50),
+                SizedBox(height: heightDp! * 10),
+                _floatingButtonPanel(),
+                SizedBox(height: heightDp! * 10),
               ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: _floatingButtonPanel(),
+          // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          // floatingActionButton: _floatingButtonPanel(),
         );
       }),
     );

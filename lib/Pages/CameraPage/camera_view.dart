@@ -22,6 +22,7 @@ import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:image/image.dart' as IMG;
 
 import 'index.dart';
 
@@ -228,7 +229,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           if (_localReportModel!.medias![i].createdAt == mediaModel!.createdAt!) {
             File oldTextFile = File(mediaModel.path!);
             try {
-              oldTextFile.deleteSync();
+              await oldTextFile.delete();
             } catch (e) {
               print(e);
             }
@@ -298,6 +299,11 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         rank: widget.localReportModel!.medias!.length + 1,
         fileType: imageFile!.path.split(".").last,
       );
+      String? thumPath = await FileHelpers.getFilePath(
+        mediaType: "photographie-thum",
+        rank: widget.localReportModel!.medias!.length + 1,
+        fileType: imageFile.path.split(".").last,
+      );
 
       if (path == null) {
         await _keicyProgressDialog!.hide();
@@ -331,6 +337,16 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         mediaModel.longitude = _currentPosition!.longitude.toString();
       }
       mediaModel.path = _imageFile.path;
+      ////////////////////////////////////////
+      // Read a jpeg image from file.
+      if (thumPath != null) {
+        IMG.Image? image = IMG.decodeImage(_imageFile.readAsBytesSync());
+        // Resize the image to a 120x? thumbnail (maintaining the aspect ratio).
+        IMG.Image thumbnail = IMG.copyResize(image!, width: 300);
+        File turmFile = await File(thumPath).writeAsBytes(IMG.encodePng(thumbnail));
+        mediaModel.thumPath = turmFile.path;
+      }
+      ////////////////////////////////////////
       mediaModel.rank = _localReportModel!.medias!.length + 1;
       mediaModel.reportId = _localReportModel!.reportId!;
       mediaModel.size = _imageFile.readAsBytesSync().lengthInBytes;

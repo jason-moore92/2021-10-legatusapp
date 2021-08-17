@@ -150,6 +150,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
     if (progressState == 2) {
       SuccessDialog.show(
         context,
+        text: "Constat supprimé de cet appareil avec succès.",
         callBack: () {
           _onRefresh();
         },

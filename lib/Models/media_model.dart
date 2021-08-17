@@ -19,6 +19,7 @@ class MediaModel extends Equatable {
   String? ext;
   int? size;
   String? path;
+  String? thumPath;
   int? duration;
   String? content;
   String? latitude;
@@ -36,6 +37,7 @@ class MediaModel extends Equatable {
     this.ext = "",
     this.size = -1,
     this.path = "",
+    this.thumPath = "",
     this.duration = 0,
     this.content = "",
     this.latitude = "",
@@ -55,6 +57,7 @@ class MediaModel extends Equatable {
       ext: map["extension"] ?? "",
       size: map["size"] ?? -1,
       path: map["path"] ?? "",
+      thumPath: map["thumPath"] ?? "",
       duration: map["duration"] ?? 0,
       content: map["content"] ?? "",
       latitude: map["latitude"] ?? "",
@@ -75,6 +78,7 @@ class MediaModel extends Equatable {
       "extension": ext ?? "",
       "size": size ?? -1,
       "path": path ?? "",
+      "thumPath": thumPath ?? "",
       "duration": duration ?? 0,
       "content": content ?? "",
       "latitude": latitude ?? "",
@@ -95,6 +99,7 @@ class MediaModel extends Equatable {
       ext: model.ext,
       size: model.size,
       path: model.path,
+      thumPath: model.thumPath,
       duration: model.duration,
       content: model.content,
       latitude: model.latitude,
@@ -115,6 +120,7 @@ class MediaModel extends Equatable {
         ext!,
         size!,
         path!,
+        thumPath!,
         duration!,
         content!,
         latitude!,

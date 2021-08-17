@@ -1107,8 +1107,20 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
           ],
         ),
         SizedBox(height: heightDp! * 10),
+        // Text(
+        //   LocaleKeys.ConfigurationPageString_infomation_desc.tr(),
+        //   style: Theme.of(context).textTheme.bodyText1,
+        // ),
+        // SizedBox(height: heightDp! * 5),
         Text(
-          LocaleKeys.ConfigurationPageString_infomation_desc.tr(),
+          "Legatus est une application de HUISSIO, SAS au capital de 25 000 euros, immatriculée au RCS de LYON sous le numéro 814 062 579 dont le siège social est situé au :"
+          "\n12 avenue Paul d'Aubarède"
+          "\n69230 SAINT-GENIS-LAVAL"
+          "\nFrance"
+          "\nN° TVA intracommunautaire : FR 17 845062579"
+          "\nTéléphone :  04 28 29 09 24"
+          "\nTélecopie / email : contact@legatus.fr"
+          "\nDirecteur de la publication : Monsieur Vladimir LORENTZ, Président.",
           style: Theme.of(context).textTheme.bodyText1,
         ),
         SizedBox(height: heightDp! * 20),
@@ -1145,8 +1157,13 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
           ],
         ),
         SizedBox(height: heightDp! * 10),
+        // Text(
+        //   LocaleKeys.ConfigurationPageString_analyse_desc.tr(),
+        //   style: Theme.of(context).textTheme.bodyText1,
+        // ),
+        // SizedBox(height: heightDp! * 5),
         Text(
-          LocaleKeys.ConfigurationPageString_analyse_desc.tr(),
+          "En cliquant sur Envoyer le rapport, vous acceptez de transmettre à Legatus les données locales stockées dans votre appareil. Legatus s'engage à ne faire aucun usage commercial de ces données et à ne les transmettre à aucun tiers.",
           style: Theme.of(context).textTheme.bodyText1,
         ),
         SizedBox(height: heightDp! * 20),

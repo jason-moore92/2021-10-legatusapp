@@ -86,6 +86,14 @@ class LocalReportProvider extends ChangeNotifier {
         } catch (e) {
           medias.add(localReportModel.medias![i]);
         }
+        if (localReportModel.medias![i].thumPath != "") {
+          File file = File(localReportModel.medias![i].thumPath!);
+          try {
+            await file.delete();
+          } catch (e) {
+            medias.add(localReportModel.medias![i]);
+          }
+        }
       }
 
       if (medias.isNotEmpty) {

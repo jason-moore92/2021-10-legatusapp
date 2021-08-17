@@ -112,7 +112,10 @@ class LocalReportApiProvider {
             mediaModel.rank = i + 1;
           }
 
-          if (orderList.isNotEmpty && orderList.last["type"] == mediaModel.type && mediaModel.type == MediaType.picture) {
+          if (orderList.isNotEmpty &&
+              orderList.last["type"] == mediaModel.type &&
+              mediaModel.type == MediaType.picture &&
+              orderList.last["ranks"].length < 3) {
             orderList.last["ranks"].add(mediaModel.rank);
           } else {
             orderList.add({

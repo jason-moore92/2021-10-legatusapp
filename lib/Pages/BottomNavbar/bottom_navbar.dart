@@ -70,9 +70,9 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
       // ].request();
       bool camera = await Permission.camera.isGranted;
       if (!camera) await Permission.camera.request();
-      bool microphone = await Permission.camera.isGranted;
+      bool microphone = await Permission.microphone.isGranted;
       if (!microphone) await Permission.microphone.request();
-      bool storage = await Permission.camera.isGranted;
+      bool storage = await Permission.storage.isGranted;
       if (!storage) await Permission.storage.request();
       LocationPermission locationPermission = await Geolocator.checkPermission();
       if (locationPermission == LocationPermission.denied || locationPermission == LocationPermission.deniedForever) {

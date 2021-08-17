@@ -141,7 +141,7 @@
     "recipient_phone": "Mobile",
     "save": "Enregistrer",
     "createSuccess": "Constat créé avec succès",
-    "updateSuccess": "Rapport mis à jour avec succès",
+    "updateSuccess": "Constat mis à jour avec succès",
     "uploading": "Téléversement en cours..."
   },
   "LocalReportWidgetString": {

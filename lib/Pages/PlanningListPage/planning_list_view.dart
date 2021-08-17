@@ -154,7 +154,7 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(AppAsssets.logoGreyImage, width: heightDp! * 130, height: heightDp! * 180, fit: BoxFit.cover),
+            Image.asset(AppAsssets.logoGreyImage, height: heightDp! * 180, fit: BoxFit.fitWidth),
             SizedBox(height: heightDp! * 20),
             Text(
               LocaleKeys.PlanningListPageString_login_description.tr(),

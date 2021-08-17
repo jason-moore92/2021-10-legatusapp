@@ -85,9 +85,9 @@ class JournalPanelDialog {
                               ),
                               SizedBox(height: heightDp * 15),
                               Text(
-                                LocaleKeys.JournalDialogString_content.tr(),
-                                style: Theme.of(context).textTheme.bodyText1!.copyWith(height: 1),
-                              ),
+                                  // LocaleKeys.JournalDialogString_content.tr(),
+                                  "Recevez gratuitement et instantanément une base de PV de constat au format Word, par email. Elle reprendra les informations du constat et la chronologie des constatations. En cliquant sur Recevoir une base de PV, vous acceptez de transmettre à Legatus les données locales de ce constat stockées dans votre appareil.",
+                                  style: Theme.of(context).textTheme.bodyText1!),
 
                               ///
                               SizedBox(height: heightDp * 20),

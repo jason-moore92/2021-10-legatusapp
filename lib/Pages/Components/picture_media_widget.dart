@@ -105,7 +105,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(heightDp! * 0),
                   child: Image.file(
-                    File(widget.mediaModel!.path!),
+                    widget.mediaModel!.thumPath != "" ? File(widget.mediaModel!.thumPath!) : File(widget.mediaModel!.path!),
                     width: picWidth,
                     height: picHeight,
                     fit: BoxFit.cover,

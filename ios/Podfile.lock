@@ -1,13 +1,15 @@
 PODS:
+  - audioplayers (0.0.1):
+    - Flutter
   - camera (0.0.1):
     - Flutter
   - device_info (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_sound (8.3.4):
+  - flutter_sound (8.3.9):
     - Flutter
     - mobile-ffmpeg-audio (= 4.4.LTS)
-    - tau_core (= 8.3.4)
+    - tau_core (= 8.3.9)
   - geolocator_apple (1.0.0):
     - Flutter
   - mobile-ffmpeg-audio (4.4.LTS)
@@ -30,7 +32,7 @@ PODS:
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
-  - tau_core (8.3.4)
+  - tau_core (8.3.9)
   - url_launcher (0.0.1):
     - Flutter
   - video_player (0.0.1):
@@ -39,6 +41,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
   - camera (from `.symlinks/plugins/camera/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
@@ -62,6 +65,8 @@ SPEC REPOS:
     - tau_core
 
 EXTERNAL SOURCES:
+  audioplayers:
+    :path: ".symlinks/plugins/audioplayers/ios"
   camera:
     :path: ".symlinks/plugins/camera/ios"
   device_info:
@@ -94,10 +99,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
+  audioplayers: 455322b54050b30ea4b1af7cd9e9d105f74efa8c
   camera: 3164201dc344383e62282964016528c4f5a9ad50
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_sound: fa3639d406b426d9e8048940348d414051f2ff62
+  flutter_sound: 91c069f33d811a4c98b9aa7cec9cd1dbfd1786d9
   geolocator_apple: 60a1c3f5930c090d2f5164ba8bf25f4f89121e3c
   mobile-ffmpeg-audio: 1e0a053f8a6de57114e50ff48b3a85ff1c60f902
   native_device_orientation: 3b4cfc9565a7b879cc4fde282b3e27745e852d0d
@@ -108,7 +114,7 @@ SPEC CHECKSUMS:
   sentry_flutter: f20d4f199442900fbdab2b8496f1d2091d8b94d9
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  tau_core: 4de118e0386a14cc9f1f9c72eea6c1e7254fc9d7
+  tau_core: f7bbd1c6a632f52c2fa7c14feea385ab966b1e45
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f

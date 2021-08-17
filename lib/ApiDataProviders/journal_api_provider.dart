@@ -13,13 +13,15 @@ class JournalApiProvider {
 
     try {
       String url = AppConfig.apiBaseUrl + apiUrl;
+      var data = localMediaModel!.toJson();
+      print(data);
 
       var response = await http.post(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: json.encode({"email": email, "local_report": localMediaModel!.toJson()}),
+        body: json.encode({"email": email, "local_report": localMediaModel.toJson()}),
       );
       if (response.statusCode == 200) {
         return {

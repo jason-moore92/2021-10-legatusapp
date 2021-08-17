@@ -55,7 +55,8 @@ class LocalMediaListProvider extends ChangeNotifier {
             List<MediaModel> list = [];
             for (var k = 0; k < _localMediaListState.localLocalReportModel!.orderList![index]["ranks"].length; k++) {
               int rank = _localMediaListState.localLocalReportModel!.orderList![index]["ranks"][k];
-              list.add(_localMediaListState.localLocalReportModel!.medias![rank - 1]);
+              MediaModel mediaModel = _localMediaListState.localLocalReportModel!.medias![rank - 1];
+              list.add(mediaModel);
             }
             localMediaListData.add(list);
           } else {
