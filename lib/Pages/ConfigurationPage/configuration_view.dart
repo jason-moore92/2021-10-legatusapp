@@ -646,10 +646,10 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                   RichText(
                     text: TextSpan(
                       children: [
-                        // TextSpan(
-                        //   text: LocaleKeys.ConfigurationPageString_obligatory.tr() + " - ",
-                        //   style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-                        // ),
+                        TextSpan(
+                          text: LocaleKeys.ConfigurationPageString_obligatory.tr() + " - ",
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
                         TextSpan(
                           text: LocaleKeys.ConfigurationPageString_location_permission.tr(),
                           style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
@@ -794,21 +794,29 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_high.tr(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: GestureDetector(
+                onTap: () {
+                  _appDataProvider!.settingsHandler(photoResolution: 0);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        LocaleKeys.ConfigurationPageString_high.tr(),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(height: heightDp! * 2),
+                      Text(
+                        "720p (1280x720)",
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: heightDp! * 2),
-                  Text(
-                    "720p (1280x720)",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -830,21 +838,29 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_veryHigh.tr(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: GestureDetector(
+                onTap: () {
+                  _appDataProvider!.settingsHandler(photoResolution: 1);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        LocaleKeys.ConfigurationPageString_veryHigh.tr(),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(height: heightDp! * 2),
+                      Text(
+                        "1080p (1920x1080)",
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: heightDp! * 2),
-                  Text(
-                    "1080p (1920x1080)",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -866,21 +882,29 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_ultraHigh.tr(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: GestureDetector(
+                onTap: () {
+                  _appDataProvider!.settingsHandler(photoResolution: 2);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        LocaleKeys.ConfigurationPageString_ultraHigh.tr(),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(height: heightDp! * 2),
+                      Text(
+                        "2160p (3840x2160)",
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: heightDp! * 2),
-                  Text(
-                    "2160p (3840x2160)",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -902,21 +926,29 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_maximum.tr(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: GestureDetector(
+                onTap: () {
+                  _appDataProvider!.settingsHandler(photoResolution: 3);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        LocaleKeys.ConfigurationPageString_maximum.tr(),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(height: heightDp! * 2),
+                      Text(
+                        LocaleKeys.ConfigurationPageString_maximumDesc.tr(),
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: heightDp! * 2),
-                  Text(
-                    LocaleKeys.ConfigurationPageString_maximumDesc.tr(),
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -961,21 +993,29 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_high.tr(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: GestureDetector(
+                onTap: () {
+                  _appDataProvider!.settingsHandler(videoResolution: 0);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        LocaleKeys.ConfigurationPageString_high.tr(),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(height: heightDp! * 2),
+                      Text(
+                        "720p (1280x720)",
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: heightDp! * 2),
-                  Text(
-                    "720p (1280x720)",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -997,21 +1037,29 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_veryHigh.tr(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: GestureDetector(
+                onTap: () {
+                  _appDataProvider!.settingsHandler(videoResolution: 1);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        LocaleKeys.ConfigurationPageString_veryHigh.tr(),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(height: heightDp! * 2),
+                      Text(
+                        "1080p (1920x1080)",
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: heightDp! * 2),
-                  Text(
-                    "1080p (1920x1080)",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -1033,21 +1081,29 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_ultraHigh.tr(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: GestureDetector(
+                onTap: () {
+                  _appDataProvider!.settingsHandler(videoResolution: 2);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        LocaleKeys.ConfigurationPageString_ultraHigh.tr(),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(height: heightDp! * 2),
+                      Text(
+                        "2160p (3840x2160)",
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: heightDp! * 2),
-                  Text(
-                    "2160p (3840x2160)",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
+                ),
               ),
             ),
           ],
@@ -1069,21 +1125,29 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    LocaleKeys.ConfigurationPageString_maximum.tr(),
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+              child: GestureDetector(
+                onTap: () {
+                  _appDataProvider!.settingsHandler(videoResolution: 3);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        LocaleKeys.ConfigurationPageString_maximum.tr(),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                      SizedBox(height: heightDp! * 2),
+                      Text(
+                        LocaleKeys.ConfigurationPageString_maximumDesc.tr(),
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: heightDp! * 2),
-                  Text(
-                    LocaleKeys.ConfigurationPageString_maximumDesc.tr(),
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
+                ),
               ),
             ),
           ],

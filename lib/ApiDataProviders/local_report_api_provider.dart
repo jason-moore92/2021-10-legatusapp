@@ -151,18 +151,26 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<LocalReportModel> getLocalReportModelByReportId({int? reportId}) async {
-    List<dynamic> reportIds = storage.getItem("local_report_ids") ?? [];
+  static Future<LocalReportModel?> getLocalReportModelByReportId({int? reportId}) async {
+    try {
+      List<dynamic> reportIds = storage.getItem("local_report_ids") ?? [];
 
-    for (var i = 0; i < reportIds.length; i++) {
-      String reportIdString = reportIds[i];
-      LocalReportModel localReportModel = LocalReportModel.fromJson(storage.getItem(reportIdString));
-      if (localReportModel.reportId == reportId) {
-        return localReportModel;
+      for (var i = 0; i < reportIds.length; i++) {
+        String reportIdString = reportIds[i];
+        if (storage.getItem(reportIdString) == null) {
+          continue;
+        }
+        LocalReportModel localReportModel = LocalReportModel.fromJson(storage.getItem(reportIdString));
+        if (localReportModel.reportId == reportId) {
+          return localReportModel;
+        }
       }
-    }
 
-    return LocalReportModel();
+      return null;
+    } catch (e) {
+      print("e");
+      return null;
+    }
   }
 
   static Future<Map<String, dynamic>> getLocalReportList({@required int? limit, int page = 0}) async {

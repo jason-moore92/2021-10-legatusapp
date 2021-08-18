@@ -92,7 +92,9 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
       onWillPop: () async {
         NormalAskDialog.show(
           context,
-          content: "Are you sure to close the app?",
+          content: "Voulez-vous quitter l'application ?",
+          okButton: "Quitter",
+          cancelButton: "Annuler",
           callback: () {
             SystemNavigator.pop();
           },

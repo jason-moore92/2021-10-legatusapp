@@ -301,6 +301,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
       String? thumPath = await FileHelpers.getFilePath(
         mediaType: "photographie-thum",
+        subDirectory: "vignettes",
         rank: widget.localReportModel!.medias!.length + 1,
         fileType: imageFile.path.split(".").last,
       );

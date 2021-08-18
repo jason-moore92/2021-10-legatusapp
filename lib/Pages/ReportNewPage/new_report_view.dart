@@ -487,7 +487,13 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                     setState(() {});
                   },
                 ),
-                Text(label, style: Theme.of(context).textTheme.caption)
+                GestureDetector(
+                  onTap: () {
+                    _localReportModel!.type = type;
+                    setState(() {});
+                  },
+                  child: Text(label, style: Theme.of(context).textTheme.caption),
+                )
               ],
             );
           }),
@@ -918,7 +924,13 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                           setState(() {});
                         },
                       ),
-                      Text(label, style: Theme.of(context).textTheme.caption)
+                      GestureDetector(
+                        onTap: () {
+                          _localReportModel!.customerType = type;
+                          setState(() {});
+                        },
+                        child: Text(label, style: Theme.of(context).textTheme.caption),
+                      )
                     ],
                   );
                 }),

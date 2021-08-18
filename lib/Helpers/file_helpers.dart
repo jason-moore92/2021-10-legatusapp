@@ -92,12 +92,13 @@ class FileHelpers {
 
   static Future<String?> getFilePath({
     @required String? mediaType,
+    String? subDirectory,
     String? createAt,
     @required int? rank,
     @required String? fileType,
   }) async {
     try {
-      String? path = await getDirectory();
+      String? path = await getDirectory(subDirectory: subDirectory);
       if (path == null) return null;
 
       Directory directory = await Directory(path).create();
@@ -145,7 +146,7 @@ class FileHelpers {
     return {'fileNum': fileNum, 'size': totalSize};
   }
 
-  static Future<String?> getDirectory() async {
+  static Future<String?> getDirectory({String? subDirectory}) async {
     Directory? directory;
     String path = "";
     try {
@@ -156,6 +157,13 @@ class FileHelpers {
       }
       path = directory!.path;
       path += "/local_medias";
+      if (subDirectory != null) {
+        Directory directory = await Directory(path).create();
+        bool isExists = await directory.exists();
+        if (!isExists) return null;
+        path += "/$subDirectory";
+      }
+
       return path;
     } catch (e) {
       return null;

@@ -58,13 +58,11 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
   }
 
   void _goToLocalReportPage() async {
-    LocalReportModel localReportModel = await LocalReportApiProvider.getLocalReportModelByReportId(
+    LocalReportModel? localReportModel = await LocalReportApiProvider.getLocalReportModelByReportId(
       reportId: widget.planningReportModel!.reportId,
     );
 
-    if (localReportModel.reportId != 0) {
-      ///
-    } else {
+    if (localReportModel == null) {
       LocalReportModel localReportModel = LocalReportModel();
       localReportModel.reportId = widget.planningReportModel!.reportId;
       localReportModel.name = widget.planningReportModel!.name;
