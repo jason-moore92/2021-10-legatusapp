@@ -63,7 +63,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path_android: "lib/Assets/Images/logo.png"
+  image_path_android: "lib/Assets/Images/logo-no-alpha.png"
   image_path_ios: "lib/Assets/Images/logo-no-alpha.png"
 
 # following page: https://dart.dev/tools/pub/pubspec

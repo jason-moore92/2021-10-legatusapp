@@ -1,15 +1,15 @@
 {
   "ValidateErrorString": {
-  "shouldBeErrorText": "Please enter the {}",
-  "inCorrectErrorText": "Please enter correct {}",
-  "emailErrorText": "Please enter correct email",
-    "passwordMatchErrorText": "Not Match Password",
-    "textlengthErrorText": "Please enter {length} charaters",
-    "dropdownItemErrorText": "Please choose item"
+  "shouldBeErrorText": "Merci de renseigner le champs {}",
+  "inCorrectErrorText": "Merci de renseigner le champs {}  avec une valeur correcte",
+  "emailErrorText": "Merci de renseigner une adresse email correcte",
+    "passwordMatchErrorText": "Le mot de passe renseigné n'est pas correct",
+    "textlengthErrorText": "Merci de renseigner un mot de passe d'au moins {lengh} caractères",
+    "dropdownItemErrorText": "Merci de choisir une option"
   },
   "BottomNavBarString": {
     "planning": "Planning",
-    "reports": "Constants",
+    "reports": "Constats",
     "configration": "Configration"
   },
   "PlanningListPageString": {
@@ -43,10 +43,7 @@
     "logout":"se déconnecter",
     "login_description": "La connexion est réservée aux utilisateurs de Legatus disposant d’un compte de test ou un compte client.",
     "emailLabel":"Votre adresse email",
-    "phoneLabel":"N° de téléphone portable",
-    "loginLabel":"Se connecter",
-    "smsLabel": "CODE SMS",
-    "receiveSms":"Recevoir un code SMS",
+    "passwordLabel":"Votre mot de passe",
     "application_permission": "Autorisations de l’application",
     "obligatory":"Obligatoire",
     "camera_permission": "Accès à la caméra de cet appareil quand l'application est active",
@@ -66,7 +63,9 @@
     "infomation": "Informations",
     "infomation_desc":"Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.",
     "analyse": "Données d'analyse",
-    "analyse_desc": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr.",
+    "analyse_desc": "En cliquant sur Envoyer le rapport, vous acceptez de transmettre à Legatus les données locales stockées dans votre appareil. Legatus s'engage à ne faire aucun usage commercial de ces données et à ne les transmettre à aucun tiers.",
+    "developMode": "Mode développeur",
+    "developMode_desc": "Zone de contrôle avancée, réservée aux opérations de développement.",
     "contactLegatus":"CONTACTER LEGATUS",
     "sendReport": "ENVOYER LE RAPPORT",
     "photoResolutionTitle": "Résolution des photographies",
@@ -108,8 +107,8 @@
     "cancel":"ANNULER"
   },
   "DeleteMediaDialogString": {
-    "title": "Suprimer Médias",
-    "content": "SUPRIMER définitivement ces médias de votre appareil ?",
+    "title": "Supprimer des médias",
+    "content": "Voulez-vous définitivement supprimer ces médias de votre appareil ?",
     "delete": "SUPRIMER",
     "cancel": "ANNULER"
   },
@@ -146,7 +145,7 @@
   },
   "LocalReportWidgetString": {
     "photos": "Photos",
-    "audios": "Dictées'",
+    "audios": "Dictées",
     "notes": "Notes",
     "videos": "Vidéos",
     "allMediaUpload":"Tous les médias ont été téléversés",

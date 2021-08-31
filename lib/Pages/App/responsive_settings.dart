@@ -7,4 +7,7 @@ class ResponsiveDesignSettings {
 
   static double mobileDesignWidth = 360;
   static double mobileDesignHeight = 774;
+
+  static double tabletDesignWidth = 810;
+  static double tabletDesignHeight = 1080;
 }

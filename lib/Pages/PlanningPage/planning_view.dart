@@ -75,9 +75,19 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
       var progressState = await LocalReportProvider.of(context).createLocalReport(localReportModel: localReportModel);
       if (progressState == 2) {
         LocalReportListProvider.of(context).setLocalReportListState(
-          LocalReportListState.init(),
+          LocalReportListState.init().copyWith(
+            localReportModel: localReportModel,
+          ),
+          isNotifiable: false,
         );
       }
+    } else {
+      LocalReportListProvider.of(context).setLocalReportListState(
+        LocalReportListProvider.of(context).localReportListState.update(
+              localReportModel: localReportModel,
+            ),
+        isNotifiable: false,
+      );
     }
 
     AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(1);
@@ -109,7 +119,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.yello,
-        child: Icon(Icons.add, size: heightDp! * 25, color: Colors.white),
+        child: Icon(Icons.add_a_photo_outlined, size: heightDp! * 25, color: Colors.white),
         onPressed: _goToLocalReportPage,
       ),
       body: NotificationListener<OverscrollIndicatorNotification>(

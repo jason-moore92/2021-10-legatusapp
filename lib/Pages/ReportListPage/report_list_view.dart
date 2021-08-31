@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -70,13 +69,51 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _localReportListProvider!.addListener(_localReportListProviderListener);
-
-      if (_localReportListProvider!.localReportListState.progressState != 1 && _localReportListProvider!.localReportListState.progressState != 2) {
+      if (_localReportListProvider!.localReportListState.progressState != 2) {
         _localReportListProvider!.setLocalReportListState(
           _localReportListProvider!.localReportListState.update(progressState: 1),
         );
 
         _localReportListProvider!.getLocalReportList();
+      }
+      if (_localReportListProvider!.localReportListState.localReportModel!.reportId != 0) {
+        LocalReportModel localReportModel = _localReportListProvider!.localReportListState.localReportModel!;
+
+        var result = await pushNewScreen(
+          context,
+          screen: ReportPage(localReportModel: localReportModel),
+          pageTransitionAnimation: PageTransitionAnimation.fade,
+        );
+
+        _localReportListProvider!.setLocalReportListState(
+          _localReportListProvider!.localReportListState.update(localReportModel: LocalReportModel()),
+          isNotifiable: false,
+        );
+
+        if (result != null && result.isNotEmpty) {
+          _onRefresh();
+        }
+        {
+          setState(() {});
+        }
+      } else if (_localReportListProvider!.localReportListState.isNew!) {
+        var result = await pushNewScreen(
+          context,
+          screen: NewReportPage(),
+          pageTransitionAnimation: PageTransitionAnimation.fade,
+        );
+
+        _localReportListProvider!.setLocalReportListState(
+          _localReportListProvider!.localReportListState.update(isNew: false),
+          isNotifiable: false,
+        );
+
+        if (result != null && result.isNotEmpty) {
+          _onRefresh();
+        }
+        {
+          setState(() {});
+        }
       }
     });
   }
@@ -163,37 +200,62 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          LocaleKeys.ReportListPageString_appbarTitle.tr(),
-          style: Theme.of(context).textTheme.headline6,
-        ),
-      ),
-      body: Consumer<LocalReportListProvider>(builder: (context, localReportListProvider, _) {
-        if (localReportListProvider.localReportListState.progressState == 0) {
-          return Center(child: CupertinoActivityIndicator());
-        }
-        return Container(
-          width: deviceWidth,
-          height: deviceHeight,
-          child: _localReportsListPanel(),
+    return Consumer<LocalReportListProvider>(builder: (context, localReportListProvider, _) {
+      if (localReportListProvider.localReportListState.localReportModel!.reportId != 0) {
+        // return ReportPage(localReportModel: localReportListProvider.localReportListState.localReportModel);
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "",
+              style: Theme.of(context).textTheme.headline6,
+            ),
+          ),
+          body: SizedBox(),
         );
-      }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.yello,
-        child: Icon(Icons.add, size: heightDp! * 25, color: Colors.white),
-        onPressed: () async {
-          var result = await Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) => NewReportPage()),
-          );
+      }
 
-          if (result != null && result.isNotEmpty) {
-            _onRefresh();
-          }
-        },
-      ),
-    );
+      if (_localReportListProvider!.localReportListState.isNew!) {
+        // return NewReportPage();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "",
+              style: Theme.of(context).textTheme.headline6,
+            ),
+          ),
+          body: SizedBox(),
+        );
+      }
+
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            LocaleKeys.ReportListPageString_appbarTitle.tr(),
+            style: Theme.of(context).textTheme.headline6,
+          ),
+        ),
+        body: (localReportListProvider.localReportListState.progressState == 0)
+            ? Center(child: CupertinoActivityIndicator())
+            : Container(
+                width: deviceWidth,
+                height: deviceHeight,
+                child: _localReportsListPanel(),
+              ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.yello,
+          child: Icon(Icons.add, size: heightDp! * 25, color: Colors.white),
+          onPressed: () async {
+            var result = await Navigator.of(context).push(
+              MaterialPageRoute(builder: (BuildContext context) => NewReportPage()),
+            );
+
+            if (result != null && result.isNotEmpty) {
+              _onRefresh();
+            }
+          },
+        ),
+      );
+    });
   }
 
   Widget _localReportsListPanel() {

@@ -332,7 +332,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
         if (Platform.isAndroid) {
           mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
-        } else if (Platform.isAndroid) {
+        } else if (Platform.isIOS) {
           mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
         }
         mediaModel.duration = -1;
@@ -440,7 +440,11 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       localReportModel: localReportModel,
       oldReportId: "${reportDateTime}_$createdAt",
     );
-
+    LocalReportListProvider.of(context).setLocalReportListState(
+      LocalReportListProvider.of(context).localReportListState.update(
+            refreshList: true,
+          ),
+    );
     return result["success"];
   }
 
@@ -476,7 +480,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     bool success = await _updateLocalReport(localReportModel);
 
     if (success) {
-      SuccessDialog.show(context, text: "Constat supprimé de cet appareil avec succès");
+      SuccessDialog.show(context, text: "Médias supprimés de cet appareil avec succès.");
       var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
       if (result["success"]) {
         _localReportModel = result["data"];
@@ -540,6 +544,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         _localReportProvider!.localReportState.update(
           isUploading: true,
           uploadingMediaModel: MediaModel(),
+          reportId: _localReportModel!.reportId,
         ),
       );
       Wakelock.enable();
@@ -585,75 +590,124 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       },
       child: Consumer2<LocalMediaListProvider, LocalReportProvider>(builder: (context, localMediaListProvider, localReportProvider, _) {
         return Scaffold(
-          appBar: AppBar(
-            leading: BackButton(onPressed: () => Navigator.of(context).pop(_updatedStatus)),
-            title: Text(_localReportModel!.name!, style: Theme.of(context).textTheme.headline6),
-            actions: [
-              IconButton(
-                icon: Image.asset(
-                  "lib/Assets/Images/word.png",
-                  width: heightDp! * 20,
-                  height: heightDp! * 20,
-                  color: Colors.white,
-                  fit: BoxFit.cover,
-                ),
-                onPressed: () {
-                  JournalPanelDialog.show(
-                    context,
-                    email: AuthProvider.of(context).authState.loginState == LoginState.IsLogin
-                        ? AuthProvider.of(context).authState.userModel!.email!
-                        : "",
-                    callBack: (String email) => _journalHandler(email),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(heightDp! * 3),
-                      child: Icon(
-                        Icons.cloud_upload_outlined,
-                        size: heightDp! * 25,
-                        color: _localReportProvider!.localReportState.isUploading!
-                            ? AppColors.yello
-                            : nonUploadedCount == 0
-                                ? Colors.white.withOpacity(0.5)
-                                : Colors.white,
-                      ),
-                    ),
-                    if (nonUploadedCount != 0)
-                      Positioned(
-                        right: 0,
-                        // bottom: 0,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 2),
-                          decoration: BoxDecoration(
-                            color: AppColors.red,
-                            borderRadius: BorderRadius.circular(heightDp! * 3),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "$nonUploadedCount",
-                            style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                onPressed: _localReportProvider!.localReportState.isUploading! ? null : _uploadHandler,
-              ),
-              IconButton(
-                icon: Icon(Icons.info_outline_rounded, size: heightDp! * 25, color: Colors.white),
-                onPressed: _editHandler,
-              ),
-            ],
-          ),
+          // appBar: AppBar(
+          //   automaticallyImplyLeading: false,
+          //   // leading: BackButton(onPressed: () => Navigator.of(context).pop(_updatedStatus)),
+          //   leadingWidth: 0,
+
+          //   title: ,
+          // ),
           body: Container(
             width: deviceWidth,
             height: deviceHeight,
             child: Column(
               children: [
+                Container(width: deviceWidth, height: statusbarHeight!, color: AppColors.primayColor),
+                Container(
+                  width: deviceWidth,
+                  height: appbarHeight,
+                  color: AppColors.primayColor,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: heightDp! * 5),
+                          color: Colors.transparent,
+                          child: Row(
+                            children: [
+                              SizedBox(width: widthDp! * 10),
+                              Icon(Icons.arrow_back, size: heightDp! * 20, color: Colors.white),
+                              SizedBox(width: widthDp! * 10),
+                            ],
+                          ),
+                        ),
+                        onTap: () => Navigator.of(context).pop(_updatedStatus),
+                      ),
+                      Expanded(
+                        child: Text(
+                          _localReportModel!.name!,
+                          style: Theme.of(context).textTheme.headline6,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _selectedMediaRanks = [];
+                              _selectStatus = true;
+                              for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+                                _selectedMediaRanks!.add(_localReportModel!.medias![i].rank!);
+                              }
+                              setState(() {});
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: heightDp! * 5, vertical: heightDp! * 5),
+                              child: Icon(Icons.select_all_outlined, size: heightDp! * 20, color: Colors.white),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              JournalPanelDialog.show(
+                                context,
+                                email: AuthProvider.of(context).authState.loginState == LoginState.IsLogin
+                                    ? AuthProvider.of(context).authState.userModel!.email!
+                                    : "",
+                                callBack: (String email) => _journalHandler(email),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: heightDp! * 5, vertical: heightDp! * 5),
+                              child: Image.asset(
+                                "lib/Assets/Images/word.png",
+                                width: heightDp! * 17,
+                                height: heightDp! * 17,
+                                color: Colors.white,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: _localReportProvider!.localReportState.isUploading! ? null : _uploadHandler,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: heightDp! * 5, vertical: heightDp! * 5),
+                                  child: Icon(Icons.cloud_upload_outlined, size: heightDp! * 20, color: Colors.white),
+                                ),
+                                if (nonUploadedCount != 0)
+                                  Positioned(
+                                    right: 0,
+                                    // bottom: 0,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 2),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.red,
+                                        borderRadius: BorderRadius.circular(heightDp! * 3),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "$nonUploadedCount",
+                                        style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: _editHandler,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: heightDp! * 5, vertical: heightDp! * 5),
+                              child: Icon(Icons.info_outline_rounded, size: heightDp! * 20, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 localReportProvider.localReportState.isUploading!
                     ? _uploadingPanel()
                     : _selectStatus
@@ -663,14 +717,11 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 Expanded(
                   child: _localReportModel!.medias!.isEmpty ? _noMediaPanel() : _mediaPanel1(),
                 ),
-                SizedBox(height: heightDp! * 10),
-                _floatingButtonPanel(),
-                SizedBox(height: heightDp! * 10),
               ],
             ),
           ),
-          // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          // floatingActionButton: _floatingButtonPanel(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: _floatingButtonPanel(),
         );
       }),
     );
@@ -696,9 +747,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               decoration: BoxDecoration(
                 color: AppColors.yello,
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
-                ],
+                // boxShadow: [
+                //   BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
+                // ],
               ),
               alignment: Alignment.center,
               child: Image.asset(
@@ -746,9 +797,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               decoration: BoxDecoration(
                 color: AppColors.yello,
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
-                ],
+                // boxShadow: [
+                //   BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
+                // ],
               ),
               alignment: Alignment.center,
               child: Icon(Icons.photo_camera_outlined, size: heightDp! * 35, color: Colors.white),
@@ -791,9 +842,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               decoration: BoxDecoration(
                 color: AppColors.yello,
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
-                ],
+                // boxShadow: [
+                //   BoxShadow(color: Colors.grey, offset: Offset(0, 3), blurRadius: 8),
+                // ],
               ),
               alignment: Alignment.center,
               child: Icon(Icons.mic_none_outlined, size: heightDp! * 25, color: Colors.white),
@@ -812,34 +863,25 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         children: [
           Expanded(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.collections_outlined, size: heightDp! * 20, color: Colors.black),
-                    Text(
-                      LocaleKeys.LocalReportWidgetString_photos.tr(),
-                      style: Theme.of(context).textTheme.overline,
-                    ),
-                  ],
+                Icon(Icons.collections_outlined, size: heightDp! * 20, color: Colors.black),
+                SizedBox(width: widthDp! * 5),
+                Text(
+                  LocaleKeys.LocalReportWidgetString_photos.tr(),
+                  style: Theme.of(context).textTheme.overline,
                 ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
-                        decoration: BoxDecoration(
-                          color: AppColors.yello,
-                          borderRadius: BorderRadius.circular(heightDp! * 3),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "$photosCount",
-                          style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
-                        ),
-                      ),
-                    ],
+                SizedBox(width: widthDp! * 10),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.yello,
+                    borderRadius: BorderRadius.circular(heightDp! * 3),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "$photosCount",
+                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -848,34 +890,25 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           SizedBox(width: widthDp! * 2),
           Expanded(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.mic_none, size: heightDp! * 20, color: Colors.black),
-                    Text(
-                      LocaleKeys.LocalReportWidgetString_audios.tr(),
-                      style: Theme.of(context).textTheme.overline,
-                    ),
-                  ],
+                Icon(Icons.mic_none, size: heightDp! * 20, color: Colors.black),
+                SizedBox(width: widthDp! * 5),
+                Text(
+                  LocaleKeys.LocalReportWidgetString_audios.tr(),
+                  style: Theme.of(context).textTheme.overline,
                 ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
-                        decoration: BoxDecoration(
-                          color: AppColors.yello,
-                          borderRadius: BorderRadius.circular(heightDp! * 3),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "$audiosCount",
-                          style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
-                        ),
-                      ),
-                    ],
+                SizedBox(width: widthDp! * 10),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.yello,
+                    borderRadius: BorderRadius.circular(heightDp! * 3),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "$audiosCount",
+                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -884,34 +917,25 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           SizedBox(width: widthDp! * 2),
           Expanded(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.sticky_note_2_outlined, size: heightDp! * 20, color: Colors.black),
-                    Text(
-                      LocaleKeys.LocalReportWidgetString_notes.tr(),
-                      style: Theme.of(context).textTheme.overline,
-                    ),
-                  ],
+                Icon(Icons.sticky_note_2_outlined, size: heightDp! * 20, color: Colors.black),
+                SizedBox(width: widthDp! * 5),
+                Text(
+                  LocaleKeys.LocalReportWidgetString_notes.tr(),
+                  style: Theme.of(context).textTheme.overline,
                 ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
-                        decoration: BoxDecoration(
-                          color: AppColors.yello,
-                          borderRadius: BorderRadius.circular(heightDp! * 3),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "$notesCount",
-                          style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
-                        ),
-                      ),
-                    ],
+                SizedBox(width: widthDp! * 10),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.yello,
+                    borderRadius: BorderRadius.circular(heightDp! * 3),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "$notesCount",
+                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -920,34 +944,25 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           SizedBox(width: widthDp! * 2),
           Expanded(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.video_library_outlined, size: heightDp! * 20, color: Colors.black),
-                    Text(
-                      LocaleKeys.LocalReportWidgetString_videos.tr(),
-                      style: Theme.of(context).textTheme.overline,
-                    ),
-                  ],
+                Icon(Icons.video_library_outlined, size: heightDp! * 20, color: Colors.black),
+                SizedBox(width: widthDp! * 5),
+                Text(
+                  LocaleKeys.LocalReportWidgetString_videos.tr(),
+                  style: Theme.of(context).textTheme.overline,
                 ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
-                        decoration: BoxDecoration(
-                          color: AppColors.yello,
-                          borderRadius: BorderRadius.circular(heightDp! * 3),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "$videosCount",
-                          style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
-                        ),
-                      ),
-                    ],
+                SizedBox(width: widthDp! * 10),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.yello,
+                    borderRadius: BorderRadius.circular(heightDp! * 3),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "$videosCount",
+                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -1147,6 +1162,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     if (_localMediaListProvider!.localMediaListState.progressState == 1) {
       itemCount += AppConfig.refreshListLimit;
       // itemCount += 1;
+    } else {
+      itemCount++;
     }
 
     return Container(
@@ -1171,7 +1188,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             itemCount: itemCount,
             itemBuilder: (context, index) {
               List<MediaModel>? mediaModelList = (index >= localMediaListData.length) ? null : localMediaListData[index];
-
+              if (_localMediaListProvider!.localMediaListState.progressState == 2 && mediaModelList == null && index == localMediaListData.length) {
+                return SizedBox(height: heightDp! * 85);
+              }
               if (mediaModelList == null) {
                 return Container(
                   width: deviceWidth,

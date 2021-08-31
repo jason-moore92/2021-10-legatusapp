@@ -141,6 +141,19 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
           ],
         ),
         body: (authProvider.authState.loginState == LoginState.IsNotLogin) ? _logoutPanel() : _loginPanel(),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.yello,
+          child: Icon(Icons.add, size: heightDp! * 25, color: Colors.white),
+          onPressed: () {
+            LocalReportListProvider.of(context).setLocalReportListState(
+              LocalReportListProvider.of(context).localReportListState.update(
+                    isNew: true,
+                  ),
+              isNotifiable: false,
+            );
+            AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(1);
+          },
+        ),
       );
     });
   }
@@ -148,7 +161,7 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
   Widget _logoutPanel() {
     return Center(
       child: Container(
-        width: heightDp! * 180,
+        width: deviceWidth! / 2,
         height: deviceHeight,
         padding: EdgeInsets.symmetric(horizontal: widthDp! * 20, vertical: heightDp! * 20),
         child: Column(
@@ -165,7 +178,6 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
             CustomTextButton(
               text: LocaleKeys.PlanningListPageString_login_button.tr().toUpperCase(),
               textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
-              width: widthDp! * 150,
               bordercolor: AppColors.yello,
               borderRadius: heightDp! * 6,
               elevation: 0,
@@ -220,17 +232,23 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
                 : ListView.builder(
                     itemCount: planningProvider.planningState.planningData![planningProvider.planningState.currentDate].length,
                     itemBuilder: (context, index) {
-                      return PlanningWidget(
-                        data: planningProvider.planningState.planningData![planningProvider.planningState.currentDate][index],
-                        onDetailHandler: (PlanningReportModel planningReportModel) async {
-                          var result = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => PlanningPage(
-                                planningReportModel: planningReportModel,
-                              ),
-                            ),
-                          );
-                        },
+                      return Column(
+                        children: [
+                          PlanningWidget(
+                            data: planningProvider.planningState.planningData![planningProvider.planningState.currentDate][index],
+                            onDetailHandler: (PlanningReportModel planningReportModel) async {
+                              var result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => PlanningPage(
+                                    planningReportModel: planningReportModel,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          if (index == planningProvider.planningState.planningData![planningProvider.planningState.currentDate].length - 1)
+                            SizedBox(height: heightDp! * 30),
+                        ],
                       );
                     },
                   ),

@@ -37,21 +37,21 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
   Timer? uploadTimer;
   double angle = 0;
 
-  // double? widgetWidth;
-  // double? widgetHeight;
+  double? widgetWidth;
+  double? widgetHeight;
 
-  // GlobalKey _key = GlobalKey();
+  GlobalKey _key = GlobalKey();
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      // if (_key.currentContext == null) return;
-      // RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
-      // widgetWidth = renderBox.size.width;
-      // widgetHeight = renderBox.size.height;
-      // setState(() {});
+      if (_key.currentContext == null) return;
+      RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
+      widgetWidth = renderBox.size.width;
+      widgetHeight = renderBox.size.height;
+      setState(() {});
     });
   }
 
@@ -87,7 +87,7 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
             }
           },
           child: Container(
-            // key: _key,
+            key: _key,
             margin: EdgeInsets.symmetric(vertical: heightDp * 5),
             padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 10),
             decoration: BoxDecoration(
@@ -173,8 +173,8 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
           Positioned(
             top: heightDp * 5,
             child: Container(
-              // width: widgetWidth,
-              // height: widgetHeight != null ? widgetHeight! - heightDp * 10 : widgetHeight,
+              width: widgetWidth,
+              height: widgetHeight != null ? widgetHeight! - heightDp * 10 : widgetHeight,
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.5),
               ),

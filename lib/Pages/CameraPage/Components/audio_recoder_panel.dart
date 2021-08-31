@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
+import 'package:legutus/Pages/Dialogs/failed_dialog.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -35,7 +36,7 @@ class AudioRecoderPanel extends StatefulWidget {
   _AudioRecoderPanelState createState() => _AudioRecoderPanelState();
 }
 
-class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
+class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -100,6 +101,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
   // String _playerTxt = '00:00:00';
   // double _maxDuration = 1.0;
 
+  Animation<double>? animation;
+  AnimationController? controller;
+
   @override
   void initState() {
     super.initState();
@@ -114,6 +118,16 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
 
     _cameraProvider = CameraProvider.of(context);
     _cameraProvider!.addListener(_cameraProviderListener);
+
+    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    animation = Tween<double>(begin: 0, end: 1).animate(controller!)
+      ..addListener(() {
+        if (controller!.status == AnimationStatus.completed) {
+          controller!.reverse();
+        } else if (controller!.status == AnimationStatus.dismissed) {
+          controller!.forward();
+        }
+      });
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
       await _initSettings();
@@ -244,14 +258,15 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
       await _recorderModule.startRecorder(
         toFile: path,
         codec: _codec,
-        bitRate: 8000,
-        numChannels: 1,
-        sampleRate: (_codec == Codec.pcm16) ? tSTREAMSAMPLERATE : tSAMPLERATE,
+        // bitRate: 8000,
+        // numChannels: 1,
+        // sampleRate: tSTREAMSAMPLERATE,
       );
 
       _inMilliseconds = 0;
 
       print('--------- startRecorder -----------------');
+      controller!.forward();
 
       _recorderSubscription = _recorderModule.onProgress!.listen((e) {
         _inMilliseconds = e.duration.inMilliseconds;
@@ -274,10 +289,20 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
           widget.recordingStatusCallback!(_isRecording);
         }
       });
+    } on RecordingPermissionException catch (err) {
+      setState(() {
+        FailedDialog.show(context, text: err.message);
+        _isRecording = false;
+        if (widget.recordingStatusCallback != null) {
+          widget.recordingStatusCallback!(_isRecording);
+        }
+        _cancelRecorderSubscriptions();
+      });
     } on Exception catch (err) {
       print('startRecorder error: $err');
+
       setState(() {
-        stopRecorder();
+        FailedDialog.show(context, text: err.toString());
         _isRecording = false;
         if (widget.recordingStatusCallback != null) {
           widget.recordingStatusCallback!(_isRecording);
@@ -291,6 +316,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
     try {
       if (_recorderModule.isPaused) {
         await _recorderModule.resumeRecorder();
+        controller!.forward();
         _recorderSubscription = _recorderModule.onProgress!.listen((e) {
           print("--------inMilliseconds-------------");
           if (_resumeMillseconds == 0) {
@@ -311,6 +337,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
         });
       } else {
         await _recorderModule.pauseRecorder();
+        controller!.stop();
+        controller!.reset();
         _resumeMillseconds = 0;
         _cancelRecorderSubscriptions();
         assert(_recorderModule.isPaused);
@@ -325,6 +353,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
     try {
       await widget.keicyProgressDialog!.show();
       await _recorderModule.stopRecorder();
+      controller!.stop();
+      controller!.reset();
 
       _cancelRecorderSubscriptions();
 
@@ -423,6 +453,22 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> {
                             ),
                           ),
                         ),
+                      AnimatedBuilder(
+                        animation: animation!,
+                        builder: (context, child) {
+                          return Opacity(
+                            opacity: _recorderModule.isRecording ? 1 - animation!.value : 0,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
+                              child: Icon(
+                                Icons.fiber_manual_record,
+                                size: heightDp! * 20,
+                                color: Colors.red,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                       Text(_audioRecorderTxt!, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
                     ],
                   ),

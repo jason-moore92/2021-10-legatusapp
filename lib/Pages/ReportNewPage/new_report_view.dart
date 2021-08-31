@@ -16,6 +16,7 @@ import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:legutus/Pages/Components/index.dart';
 import 'package:legutus/Pages/Dialogs/index.dart';
 import 'package:legutus/Pages/Dialogs/success_dialog.dart';
+import 'package:legutus/Pages/ReportPage/report_page.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:legutus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -226,21 +227,26 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     }
 
     if (_localReportProvider!.localReportState.progressState == 2) {
-      SuccessDialog.show(
-        context,
-        text: _isNew! ? LocaleKeys.NewReportPageString_createSuccess.tr() : LocaleKeys.NewReportPageString_updateSuccess.tr(),
-        callBack: () {
-          Navigator.of(context).pop(_updatedStatus);
-        },
-      );
-
       if (_isNew!) {
         _updatedStatus = {
           "isUpdated": true,
           "localReportModel": _localReportModel,
         };
         _isNew = false;
+        Navigator.of(context).pop(_updatedStatus);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => ReportPage(localReportModel: _localReportModel),
+          ),
+        );
       } else {
+        SuccessDialog.show(
+          context,
+          text: _isNew! ? LocaleKeys.NewReportPageString_createSuccess.tr() : LocaleKeys.NewReportPageString_updateSuccess.tr(),
+          callBack: () {
+            Navigator.of(context).pop(_updatedStatus);
+          },
+        );
         _updatedStatus = {
           "isUpdated": true,
           "localReportModel": _localReportModel,
@@ -266,7 +272,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
       if (Platform.isAndroid) {
         _localReportModel!.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
-      } else if (Platform.isAndroid) {
+      } else if (Platform.isIOS) {
         _localReportModel!.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
       }
       // _localReportModel!.reportId = DateTime.now().millisecondsSinceEpoch;

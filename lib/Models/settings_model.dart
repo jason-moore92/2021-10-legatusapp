@@ -14,7 +14,7 @@ class SettingsModel extends Equatable {
     // this.allowLocation = true,
     this.withRestriction = false,
     this.photoResolution = 2,
-    this.videoResolution = 1,
+    this.videoResolution = 0,
   });
 
   factory SettingsModel.fromJson(Map<String, dynamic> map) {
@@ -24,7 +24,7 @@ class SettingsModel extends Equatable {
       // allowLocation: map["allowLocation"] ?? true,
       withRestriction: map["withRestriction"] ?? false,
       photoResolution: map["photoResolution"] ?? 2,
-      videoResolution: map["videoResolution"] ?? 1,
+      videoResolution: map["videoResolution"] ?? 0,
     );
   }
 
@@ -35,7 +35,7 @@ class SettingsModel extends Equatable {
       // "allowLocation": allowLocation ?? true,
       "withRestriction": withRestriction ?? false,
       "photoResolution": photoResolution ?? 2,
-      "videoResolution": videoResolution ?? 1,
+      "videoResolution": videoResolution ?? 0,
     };
   }
 

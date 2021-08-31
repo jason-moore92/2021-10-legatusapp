@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:legutus/Models/index.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'date_time_convert.dart';
@@ -112,6 +113,14 @@ class FileHelpers {
         DateTime createAtTime = KeicyDateTime.convertDateStringToDateTime(dateString: createAt)!;
         fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: createAtTime, formats: "YmdHis");
       }
+      if (mediaType == MediaType.picture) {
+        mediaType = "photographie";
+      } else {
+        if (mediaType == MediaType.audio) {
+          mediaType = "dictee";
+        }
+      }
+
       fileName = "$fileName-$rank-$mediaType.$fileType";
 
       return "$path/$fileName";
@@ -153,10 +162,10 @@ class FileHelpers {
       if (Platform.isAndroid) {
         directory = await getExternalStorageDirectory();
       } else if (Platform.isIOS) {
-        directory = await getLibraryDirectory();
+        directory = await getApplicationDocumentsDirectory();
       }
       path = directory!.path;
-      path += "/local_medias";
+      path += "/medias";
       if (subDirectory != null) {
         Directory directory = await Directory(path).create();
         bool isExists = await directory.exists();

@@ -289,10 +289,9 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                 child: Container(
                   width: (MediaQuery.of(context).size.width - widthDp * 20),
                   color: Colors.black.withOpacity(0.3),
-                  padding: EdgeInsets.symmetric(horizontal: widthDp * 10),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      SizedBox(width: widthDp * 10),
                       Stack(
                         children: [
                           Icon(
@@ -319,36 +318,67 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                           ),
                         ],
                       ),
+                      if (!_videoPlayerController!.value.isPlaying)
+                        GestureDetector(
+                          onTap: _onStartPlay,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: widthDp * 3, vertical: heightDp * 5),
+                            child: Icon(Icons.play_arrow, size: heightDp * 25, color: Colors.white),
+                          ),
+                        ),
+                      if (_videoPlayerController!.value.isPlaying)
+                        GestureDetector(
+                          onTap: _onStopPlay,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 5),
+                            child: Icon(Icons.stop, size: heightDp * 25, color: Colors.white),
+                          ),
+                        ),
+                      Expanded(
+                        child: Container(
+                          height: heightDp * 20,
+                          child: Slider(
+                            value: min(_sliderCurrentPosition, _maxDuration),
+                            min: 0.0,
+                            max: _maxDuration,
+                            activeColor: Colors.white,
+                            inactiveColor: Colors.white,
+                            onChanged: (value) async {
+                              await _seekToPlayer(value.toInt());
+                            },
+                            divisions: _maxDuration == 0.0 ? 1 : _maxDuration.toInt(),
+                          ),
+                        ),
+                      ),
                       Text(
-                        "$maxTimeString",
+                        "$currentTimeString/$maxTimeString",
                         style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          pushNewScreen(
+                            context,
+                            screen: VideoPlayFullScreen(
+                              mediaModel: widget.mediaModel!,
+                            ),
+                            withNavBar: false,
+                            pageTransitionAnimation: PageTransitionAnimation.fade,
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(
+                            left: widthDp * 5,
+                            right: widthDp * 5,
+                            top: heightDp * 5,
+                            bottom: heightDp * 5,
+                          ),
+                          child: Icon(Icons.fullscreen, size: heightDp * 25, color: Colors.white),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-              if (!widget.isUploading!)
-                Container(
-                  width: (MediaQuery.of(context).size.width - widthDp * 20),
-                  height: _videoPlayerController!.value.aspectRatio < 1
-                      ? (MediaQuery.of(context).size.width - widthDp * 20) * _videoPlayerController!.value.aspectRatio
-                      : (MediaQuery.of(context).size.width - widthDp * 20) / _videoPlayerController!.value.aspectRatio,
-                  child: GestureDetector(
-                    onTap: () {
-                      pushNewScreen(
-                        context,
-                        screen: VideoPlayFullScreen(
-                          mediaModel: widget.mediaModel!,
-                        ),
-                        withNavBar: false,
-                        pageTransitionAnimation: PageTransitionAnimation.fade,
-                      );
-                    },
-                    child: Center(
-                      child: Icon(Icons.play_arrow_rounded, size: heightDp * 100, color: Colors.white.withOpacity(0.8)),
-                    ),
-                  ),
-                ),
               if (widget.isUploading!)
                 Container(
                   width: (MediaQuery.of(context).size.width - widthDp * 20),
@@ -411,7 +441,6 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
             _maxDuration = _videoPlayerController!.value.duration.inMilliseconds.toDouble();
             if (_maxDuration <= 0) _maxDuration = 0.0;
             if (mounted) setState(() {});
-            _onStartPlay();
           });
         },
       ).onError((error, stackTrace) {

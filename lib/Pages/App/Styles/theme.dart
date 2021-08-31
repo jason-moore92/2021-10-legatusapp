@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../responsive_settings.dart';
 import 'index.dart';
 
 ThemeData buildLightTheme(BuildContext context) {
   double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+  double deviceWidth = 1.sw;
   return ThemeData(
     fontFamily: "Roboto",
     brightness: Brightness.light,

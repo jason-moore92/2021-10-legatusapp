@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:legutus/Models/index.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -11,6 +12,8 @@ class LocalReportListState extends Equatable {
   final Map<String, dynamic>? localReportMetaData;
   final bool? isRefresh;
   final bool? refreshList;
+  final LocalReportModel? localReportModel;
+  final bool? isNew;
 
   LocalReportListState({
     @required this.progressState,
@@ -20,6 +23,8 @@ class LocalReportListState extends Equatable {
     @required this.localReportMetaData,
     @required this.isRefresh,
     @required this.refreshList,
+    @required this.localReportModel,
+    @required this.isNew,
   });
 
   factory LocalReportListState.init() {
@@ -31,6 +36,8 @@ class LocalReportListState extends Equatable {
       localReportMetaData: Map<String, dynamic>(),
       isRefresh: false,
       refreshList: false,
+      localReportModel: LocalReportModel(),
+      isNew: false,
     );
   }
 
@@ -42,6 +49,8 @@ class LocalReportListState extends Equatable {
     Map<String, dynamic>? localReportMetaData,
     bool? isRefresh,
     bool? refreshList,
+    LocalReportModel? localReportModel,
+    bool? isNew,
   }) {
     return LocalReportListState(
       progressState: progressState ?? this.progressState,
@@ -51,6 +60,8 @@ class LocalReportListState extends Equatable {
       localReportMetaData: localReportMetaData ?? this.localReportMetaData,
       isRefresh: isRefresh ?? this.isRefresh,
       refreshList: refreshList ?? this.refreshList,
+      localReportModel: localReportModel ?? this.localReportModel,
+      isNew: isNew ?? this.isNew,
     );
   }
 
@@ -62,6 +73,8 @@ class LocalReportListState extends Equatable {
     Map<String, dynamic>? localReportMetaData,
     bool? isRefresh,
     bool? refreshList,
+    LocalReportModel? localReportModel,
+    bool? isNew,
   }) {
     return copyWith(
       progressState: progressState,
@@ -71,6 +84,8 @@ class LocalReportListState extends Equatable {
       localReportMetaData: localReportMetaData,
       isRefresh: isRefresh,
       refreshList: refreshList,
+      localReportModel: localReportModel,
+      isNew: isNew,
     );
   }
 
@@ -83,6 +98,8 @@ class LocalReportListState extends Equatable {
       "localReportMetaData": localReportMetaData,
       "isRefresh": isRefresh,
       "refreshList": refreshList,
+      "localReportModel": localReportModel,
+      "isNew": isNew,
     };
   }
 
@@ -95,6 +112,9 @@ class LocalReportListState extends Equatable {
         localReportMetaData!,
         isRefresh!,
         refreshList!,
+        localReportModel ?? Object(),
+        refreshList!,
+        isNew!,
       ];
 
   @override

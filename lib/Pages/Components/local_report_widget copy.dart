@@ -272,21 +272,43 @@ class LocalReportWidget extends StatelessWidget {
           children: [
             Expanded(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(Icons.collections_outlined, size: heightDp! * 15, color: Colors.black),
-                  SizedBox(width: widthDp! * 5),
-                  Text(
-                    LocaleKeys.LocalReportWidgetString_photos.tr(),
-                    style: TextStyle(
-                      fontSize: fontSp! * 10,
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                      letterSpacing: 0.5,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.collections_outlined, size: heightDp! * 15, color: Colors.black),
+                      SizedBox(width: widthDp! * 5),
+                      Text(
+                        LocaleKeys.LocalReportWidgetString_photos.tr(),
+                        style: TextStyle(
+                          fontSize: fontSp! * 10,
+                          color: Color(0xFF222222),
+                          fontWeight: FontWeight.w400,
+                          height: 1,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      SizedBox(width: widthDp! * 10),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                        decoration: BoxDecoration(
+                          color: AppColors.yello,
+                          borderRadius: BorderRadius.circular(heightDp! * 3),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          "$photosCount",
+                          style: TextStyle(
+                            fontSize: fontSp! * 10,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            height: 1,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: widthDp! * 10),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
@@ -311,21 +333,23 @@ class LocalReportWidget extends StatelessWidget {
             SizedBox(width: widthDp! * 3),
             Expanded(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(Icons.mic_none, size: heightDp! * 15, color: Colors.black),
-                  SizedBox(width: widthDp! * 5),
-                  Text(
-                    LocaleKeys.LocalReportWidgetString_audios.tr(),
-                    style: TextStyle(
-                      fontSize: fontSp! * 10,
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                      letterSpacing: 0.5,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.mic_none, size: heightDp! * 15, color: Colors.black),
+                      Text(
+                        LocaleKeys.LocalReportWidgetString_audios.tr(),
+                        style: TextStyle(
+                          fontSize: fontSp! * 10,
+                          color: Color(0xFF222222),
+                          fontWeight: FontWeight.w400,
+                          height: 1,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: widthDp! * 10),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
@@ -350,21 +374,23 @@ class LocalReportWidget extends StatelessWidget {
             SizedBox(width: widthDp! * 3),
             Expanded(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(Icons.sticky_note_2_outlined, size: heightDp! * 15, color: Colors.black),
-                  SizedBox(width: widthDp! * 5),
-                  Text(
-                    LocaleKeys.LocalReportWidgetString_notes.tr(),
-                    style: TextStyle(
-                      fontSize: fontSp! * 10,
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                      letterSpacing: 0.5,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.sticky_note_2_outlined, size: heightDp! * 15, color: Colors.black),
+                      Text(
+                        LocaleKeys.LocalReportWidgetString_notes.tr(),
+                        style: TextStyle(
+                          fontSize: fontSp! * 10,
+                          color: Color(0xFF222222),
+                          fontWeight: FontWeight.w400,
+                          height: 1,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: widthDp! * 10),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
@@ -389,21 +415,23 @@ class LocalReportWidget extends StatelessWidget {
             SizedBox(width: widthDp! * 3),
             Expanded(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(Icons.video_library_outlined, size: heightDp! * 15, color: Colors.black),
-                  SizedBox(width: widthDp! * 5),
-                  Text(
-                    LocaleKeys.LocalReportWidgetString_videos.tr(),
-                    style: TextStyle(
-                      fontSize: fontSp! * 10,
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                      letterSpacing: 0.5,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.video_library_outlined, size: heightDp! * 15, color: Colors.black),
+                      Text(
+                        LocaleKeys.LocalReportWidgetString_videos.tr(),
+                        style: TextStyle(
+                          fontSize: fontSp! * 10,
+                          color: Color(0xFF222222),
+                          fontWeight: FontWeight.w400,
+                          height: 1,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: widthDp! * 10),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(

@@ -6,3 +6,4 @@ export './LocalMediaListProvider/index.dart';
 export './camera_provider.dart';
 export './MediaPlayProvider/index.dart';
 export './LocalReportProvider/index.dart';
+export './BridgeProvider/index.dart';

@@ -5,13 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:legutus/Config/config.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginApiProvider {
   static Future<Map<String, dynamic>> getSMSCode({@required String? email, @required String? phoneNumber}) async {
     String apiUrl = '/get-sms-code';
 
     try {
-      String url = AppConfig.apiBaseUrl + apiUrl;
+      SharedPreferences _prefs = await SharedPreferences.getInstance();
+      String? modeValue = _prefs.getString("develop_mode");
+      String url;
+
+      if (modeValue == "40251764") {
+        url = AppConfig.testApiBaseUrl + apiUrl;
+      } else {
+        url = AppConfig.productionApiBaseUrl + apiUrl;
+      }
 
       var request = http.MultipartRequest("POST", Uri.parse(url));
       request.fields.addAll({"email": email ?? "", "mobile_phone_number": phoneNumber ?? ""});
@@ -46,18 +55,22 @@ class LoginApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> login({@required String? email, @required String? phoneNumber, @required String? smsCode}) async {
-    String apiUrl = '/login';
+  static Future<Map<String, dynamic>> login({@required String? email, @required String? password}) async {
+    String apiUrl = '/login-with-password';
 
     try {
-      String url = AppConfig.apiBaseUrl + apiUrl;
+      SharedPreferences _prefs = await SharedPreferences.getInstance();
+      String? modeValue = _prefs.getString("develop_mode");
+      String url;
+
+      if (modeValue == "40251764") {
+        url = AppConfig.testApiBaseUrl + apiUrl;
+      } else {
+        url = AppConfig.productionApiBaseUrl + apiUrl;
+      }
 
       var request = http.MultipartRequest("POST", Uri.parse(url));
-      request.fields.addAll({
-        "email": email ?? "",
-        "mobile_phone_number": phoneNumber ?? "",
-        "sms_code": smsCode ?? "",
-      });
+      request.fields.addAll({"email": email!, "password": password!});
 
       var response = await request.send();
       var result = await response.stream.bytesToString();

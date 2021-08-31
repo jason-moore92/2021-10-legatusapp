@@ -40,10 +40,7 @@ abstract class  LocaleKeys {
   static const ConfigurationPageString_logout = 'ConfigurationPageString.logout';
   static const ConfigurationPageString_login_description = 'ConfigurationPageString.login_description';
   static const ConfigurationPageString_emailLabel = 'ConfigurationPageString.emailLabel';
-  static const ConfigurationPageString_phoneLabel = 'ConfigurationPageString.phoneLabel';
-  static const ConfigurationPageString_loginLabel = 'ConfigurationPageString.loginLabel';
-  static const ConfigurationPageString_smsLabel = 'ConfigurationPageString.smsLabel';
-  static const ConfigurationPageString_receiveSms = 'ConfigurationPageString.receiveSms';
+  static const ConfigurationPageString_passwordLabel = 'ConfigurationPageString.passwordLabel';
   static const ConfigurationPageString_application_permission = 'ConfigurationPageString.application_permission';
   static const ConfigurationPageString_obligatory = 'ConfigurationPageString.obligatory';
   static const ConfigurationPageString_camera_permission = 'ConfigurationPageString.camera_permission';
@@ -64,6 +61,8 @@ abstract class  LocaleKeys {
   static const ConfigurationPageString_infomation_desc = 'ConfigurationPageString.infomation_desc';
   static const ConfigurationPageString_analyse = 'ConfigurationPageString.analyse';
   static const ConfigurationPageString_analyse_desc = 'ConfigurationPageString.analyse_desc';
+  static const ConfigurationPageString_developMode = 'ConfigurationPageString.developMode';
+  static const ConfigurationPageString_developMode_desc = 'ConfigurationPageString.developMode_desc';
   static const ConfigurationPageString_contactLegatus = 'ConfigurationPageString.contactLegatus';
   static const ConfigurationPageString_sendReport = 'ConfigurationPageString.sendReport';
   static const ConfigurationPageString_photoResolutionTitle = 'ConfigurationPageString.photoResolutionTitle';

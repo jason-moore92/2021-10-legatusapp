@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:legutus/Pages/Dialogs/index.dart';
+import 'package:legutus/Pages/Dialogs/normal_dialog.dart';
 import 'package:legutus/Pages/SplashPage/splash_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:legutus/Providers/index.dart';
@@ -47,6 +49,40 @@ class App extends StatelessWidget {
             theme: buildLightTheme(context),
             // themeMode: ThemeMode.dark,
             home: SplashPage(),
+            builder: (context, child) {
+              return StreamBuilder<BridgeState>(
+                stream: BridgeProvider().getStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.data != null) {
+                    print(snapshot.data!.event);
+                  }
+                  if (snapshot.hasData && snapshot.data != null && snapshot.data!.event == "log_out") {
+                    BridgeProvider().update(
+                      BridgeState(
+                        event: "init",
+                        data: {
+                          "message": "init",
+                        },
+                      ),
+                    );
+
+                    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+                      AuthProvider.of(navigatorKey.currentContext!).logout(context).then((value) {
+                        try {
+                          FailedDialog.show(
+                            navigatorKey.currentContext!,
+                            text: snapshot.data!.data!["message"] ?? "Your account logout",
+                          );
+                        } catch (e) {
+                          print(e);
+                        }
+                      });
+                    });
+                  }
+                  return child!;
+                },
+              );
+            },
           );
         },
       ),

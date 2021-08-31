@@ -8,13 +8,23 @@ import 'package:legutus/Config/config.dart';
 import 'package:legutus/Helpers/http_plus.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:http/http.dart' as httpOld;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalMediaApiProvider {
   static Future<Map<String, dynamic>> uploadMedia({@required MediaModel? mediaModel}) async {
     String apiUrl = '/upload-media';
 
     try {
-      String url = AppConfig.apiBaseUrl + apiUrl;
+      SharedPreferences _prefs = await SharedPreferences.getInstance();
+      String? modeValue = _prefs.getString("develop_mode");
+      String url;
+
+      if (modeValue == "40251764") {
+        url = AppConfig.testApiBaseUrl + apiUrl;
+      } else {
+        url = AppConfig.productionApiBaseUrl + apiUrl;
+      }
+
       var data = mediaModel!.toJson();
       if (data["report_id"] == -1) data["report_id"] = null;
 

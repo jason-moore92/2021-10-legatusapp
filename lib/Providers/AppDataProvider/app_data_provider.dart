@@ -69,10 +69,10 @@ class AppDataProvider extends ChangeNotifier {
           "type": androidInfo.type,
           "version": androidInfo.version.codename,
         };
-      } else if (Platform.isAndroid) {
+      } else if (Platform.isIOS) {
         IosDeviceInfo? iosInfo;
         iosInfo = await deviceInfo.iosInfo;
-        androidInfoJoson = {
+        iosInfoJoson = {
           "identifierForVendor": iosInfo.identifierForVendor,
           "isPhysicalDevice": iosInfo.isPhysicalDevice,
           "localizedModel": iosInfo.localizedModel,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:legutus/ApiDataProviders/login_api_provider.dart';
 import 'package:legutus/Models/index.dart';
+import 'package:legutus/Providers/PlanningProvider/index.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -89,9 +90,9 @@ class AuthProvider extends ChangeNotifier {
     if (isNotifiable) notifyListeners();
   }
 
-  Future<void> login({@required String? email, @required String? phoneNumber, @required String? smsCode, bool isNotifiable = true}) async {
+  Future<void> login({@required String? email, @required String? password, bool isNotifiable = true}) async {
     try {
-      var result = await LoginApiProvider.login(email: email, phoneNumber: phoneNumber, smsCode: smsCode);
+      var result = await LoginApiProvider.login(email: email, password: password);
       if (result["success"]) {
         if (_prefs == null) _prefs = await SharedPreferences.getInstance();
 
@@ -127,11 +128,12 @@ class AuthProvider extends ChangeNotifier {
     if (isNotifiable) notifyListeners();
   }
 
-  Future<void> logout({bool isNotifiable = true}) async {
+  Future<void> logout(context, {bool isNotifiable = true}) async {
     if (_prefs == null) _prefs = await SharedPreferences.getInstance();
     _prefs!.setString(_rememberUserKey, "null");
 
     _authState = _authState.update(
+      contextName: "",
       progressState: 2,
       message: "Vous avez été déconnecté avec succès",
       description: "",
@@ -139,6 +141,10 @@ class AuthProvider extends ChangeNotifier {
       loginState: LoginState.IsNotLogin,
       smsCode: false,
       userModel: UserModel(),
+    );
+
+    PlanningProvider.of(context).setPlanningState(
+      PlanningState.init(),
     );
 
     if (isNotifiable) notifyListeners();

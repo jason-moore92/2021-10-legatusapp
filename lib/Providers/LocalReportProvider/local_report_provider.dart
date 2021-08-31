@@ -191,7 +191,7 @@ class LocalReportProvider extends ChangeNotifier {
         notifyListeners();
 
         var result = await LocalMediaApiProvider.uploadMedia(mediaModel: mediaModel);
-        if (result["success"] && result["data"]["presigned_url"] != null) {
+        if (result["success"] && result["statusCode"] == 200 && result["data"]["presigned_url"] != null) {
           mediaModel.state = "uploading";
           _localReportState = _localReportState.update(
             progressState: 3,
@@ -218,6 +218,13 @@ class LocalReportProvider extends ChangeNotifier {
             );
             notifyListeners();
           }
+        } else if (result["success"] && result["statusCode"] == 201) {
+          mediaModel.state = "uploaded";
+          _localReportState = _localReportState.update(
+            progressState: 3,
+            uploadingMediaModel: mediaModel,
+          );
+          notifyListeners();
         } else if (!result["success"]) {
           mediaModel.state = "error";
           _localReportState = _localReportState.update(
