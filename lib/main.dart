@@ -12,7 +12,7 @@ import 'Pages/App/app.dart';
 void main() async {
   if (!kIsWeb) {
     WidgetsFlutterBinding.ensureInitialized();
-    await SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+    // await SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: AppColors.primayColor,

@@ -188,10 +188,9 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
       SuccessDialog.show(
         context,
         text: "Constat supprimé de cet appareil avec succès.",
-        callBack: () {
-          _onRefresh();
-        },
+        callBack: () {},
       );
+      _onRefresh();
     } else {
       FailedDialog.show(context);
       _onRefresh();

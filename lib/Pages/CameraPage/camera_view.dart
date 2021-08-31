@@ -146,8 +146,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.dark, //status bar brigtness
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light, //status bar brigtness
       ));
       setState(() {});
       cameras = await availableCameras();
@@ -159,8 +159,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   void dispose() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: AppColors.primayColor,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.dark, //status bar brigtness
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light, //status bar brigtness
     ));
     WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
@@ -169,14 +169,14 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   void _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
     await _keicyProgressDialog!.show();
     try {
-      if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
-        Map<String, int> result = await FileHelpers.dirStatSync();
-        if ((result["size"]! + (note!.length * 2) ~/ 1024) > 1250 * 1024) {
-          await _keicyProgressDialog!.hide();
-          NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
-          return;
-        }
-      }
+      // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
+      //   Map<String, int> result = await FileHelpers.dirStatSync();
+      //   if ((result["size"]! + (note!.length * 2) ~/ 1024) > 1250 * 1024) {
+      //     await _keicyProgressDialog!.hide();
+      //     NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
+      //     return;
+      //   }
+      // }
 
       if (isNew!) {
         String? path = await FileHelpers.getFilePath(
@@ -221,7 +221,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         mediaModel.state = "captured";
         mediaModel.type = MediaType.note;
         mediaModel.uuid = Uuid().v4();
-
+        if (_localReportModel!.medias == null) _localReportModel!.medias = [];
         _localReportModel!.medias!.add(mediaModel);
       } else {
         for (var i = 0; i < _localReportModel!.medias!.length; i++) {
@@ -283,15 +283,15 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
   void _pictureHandler({@required XFile? imageFile}) async {
     try {
-      if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
-        Map<String, int> result = await FileHelpers.dirStatSync();
-        int fileSize = ((await imageFile!.readAsBytes()).lengthInBytes ~/ 1024).toInt();
-        if (result["size"]! + fileSize > 1250 * 1024) {
-          await _keicyProgressDialog!.hide();
-          NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
-          return;
-        }
-      }
+      // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
+      //   Map<String, int> result = await FileHelpers.dirStatSync();
+      //   int fileSize = ((await imageFile!.readAsBytes()).lengthInBytes ~/ 1024).toInt();
+      //   if (result["size"]! + fileSize > 1250 * 1024) {
+      //     await _keicyProgressDialog!.hide();
+      //     NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
+      //     return;
+      //   }
+      // }
 
       String? path = await FileHelpers.getFilePath(
         mediaType: "photographie",
@@ -354,6 +354,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       mediaModel.type = MediaType.picture;
       mediaModel.uuid = Uuid().v4();
 
+      if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
       String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
@@ -389,16 +390,16 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   void _audioHandler({@required String? tmpPath, @required int? inMilliseconds}) async {
     // await _keicyProgressDialog!.show();
     try {
-      if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
-        Map<String, int> result = await FileHelpers.dirStatSync();
-        File audioFile = File(tmpPath!);
-        int fileSize = ((await audioFile.readAsBytes()).lengthInBytes ~/ 1024).toInt();
-        if (result["size"]! + fileSize > 1250 * 1024) {
-          await _keicyProgressDialog!.hide();
-          NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
-          return;
-        }
-      }
+      // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
+      //   Map<String, int> result = await FileHelpers.dirStatSync();
+      //   File audioFile = File(tmpPath!);
+      //   int fileSize = ((await audioFile.readAsBytes()).lengthInBytes ~/ 1024).toInt();
+      //   if (result["size"]! + fileSize > 1250 * 1024) {
+      //     await _keicyProgressDialog!.hide();
+      //     NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
+      //     return;
+      //   }
+      // }
 
       String? path = await FileHelpers.getFilePath(
         mediaType: "dictee",
@@ -445,6 +446,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       mediaModel.type = MediaType.audio;
       mediaModel.uuid = Uuid().v4();
 
+      if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
       String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
@@ -481,15 +483,15 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   void _videoHandler({@required XFile? videoFile, @required int? inMilliseconds}) async {
     // await _keicyProgressDialog!.show();
     try {
-      if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
-        Map<String, int> result = await FileHelpers.dirStatSync();
-        int fileSize = ((await videoFile!.readAsBytes()).lengthInBytes ~/ 1024).toInt();
-        if (result["size"]! + fileSize > 1250 * 1024) {
-          await _keicyProgressDialog!.hide();
-          NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
-          return;
-        }
-      }
+      // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
+      //   Map<String, int> result = await FileHelpers.dirStatSync();
+      //   int fileSize = ((await videoFile!.readAsBytes()).lengthInBytes ~/ 1024).toInt();
+      //   if (result["size"]! + fileSize > 1250 * 1024) {
+      //     await _keicyProgressDialog!.hide();
+      //     NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
+      //     return;
+      //   }
+      // }
 
       String? path = await FileHelpers.getFilePath(
         mediaType: MediaType.video,
@@ -536,6 +538,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       mediaModel.type = MediaType.video;
       mediaModel.uuid = Uuid().v4();
 
+      if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
       String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
@@ -613,7 +616,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         default:
           resolutionPreset = ResolutionPreset.ultraHigh;
       }
-      final CameraController newCameraController = CameraController(
+      CameraController newCameraController = CameraController(
         cameraDescription,
         resolutionPreset,
         enableAudio: enableAudio,

@@ -297,14 +297,14 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
     await _keicyProgressDialog!.show();
     try {
-      if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
-        Map<String, int> result = await FileHelpers.dirStatSync();
-        if ((result["size"]! + (note!.length * 2) ~/ 1024) > 1250 * 1024) {
-          await _keicyProgressDialog!.hide();
-          NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
-          return;
-        }
-      }
+      // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
+      //   Map<String, int> result = await FileHelpers.dirStatSync();
+      //   if ((result["size"]! + (note!.length * 2) ~/ 1024) > 1250 * 1024) {
+      //     await _keicyProgressDialog!.hide();
+      //     NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
+      //     return;
+      //   }
+      // }
 
       if (isNew!) {
         String? path = await FileHelpers.getFilePath(
@@ -350,6 +350,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         mediaModel.type = MediaType.note;
         mediaModel.uuid = Uuid().v4();
 
+        if (_localReportModel!.medias == null) _localReportModel!.medias = [];
         localReportModel.medias!.add(mediaModel);
       } else {
         for (var i = 0; i < localReportModel.medias!.length; i++) {

@@ -266,7 +266,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                           if (snapshot.data!.width > snapshot.data!.height) {
                             ExtendedImage imageWidget = ExtendedImage.file(
                               file,
-                              height: MediaQuery.of(context).size.width * 0.9,
+                              height: MediaQuery.of(context).size.height * 0.7,
                               fit: BoxFit.fitHeight,
                               mode: ExtendedImageMode.gesture,
                               enableMemoryCache: true,
@@ -302,10 +302,10 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                     width: MediaQuery.of(context).size.width,
                                     height: MediaQuery.of(context).size.height,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
+                                        SizedBox(height: heightDp! * 10),
                                         Container(
-                                          width: MediaQuery.of(context).size.width * 0.9,
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.width / snapshot.data!.height),
                                           alignment: Alignment.centerRight,
                                           child: IconButton(
                                             onPressed: () {
@@ -314,9 +314,10 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                             icon: Icon(Icons.close_outlined, size: heightDp! * 30, color: Colors.white),
                                           ),
                                         ),
+                                        SizedBox(height: heightDp! * 10),
                                         Container(
-                                          width: MediaQuery.of(context).size.width * 0.9,
-                                          height: MediaQuery.of(context).size.width * 0.9 * snapshot.data!.width / snapshot.data!.height,
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.width / snapshot.data!.height),
+                                          height: MediaQuery.of(context).size.height * 0.7,
                                           child: RotatedBox(
                                             quarterTurns: 1,
                                             child: imageWidget,
@@ -332,7 +333,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                           } else {
                             ExtendedImage imageWidget = ExtendedImage.file(
                               file,
-                              width: MediaQuery.of(context).size.width * 0.9,
+                              width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
                               fit: BoxFit.fitWidth,
                               mode: ExtendedImageMode.gesture,
                               enableMemoryCache: true,
@@ -359,10 +360,10 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                     width: MediaQuery.of(context).size.width,
                                     height: MediaQuery.of(context).size.height,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
+                                        SizedBox(height: heightDp! * 10),
                                         Container(
-                                          width: MediaQuery.of(context).size.width * 0.9,
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
                                           alignment: Alignment.centerRight,
                                           child: IconButton(
                                             onPressed: () {
@@ -371,9 +372,10 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                             icon: Icon(Icons.close_outlined, size: heightDp! * 30, color: Colors.white),
                                           ),
                                         ),
+                                        SizedBox(height: heightDp! * 10),
                                         Container(
-                                          width: MediaQuery.of(context).size.width * 0.9,
-                                          height: MediaQuery.of(context).size.width * 0.9 * snapshot.data!.height / snapshot.data!.width,
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
+                                          height: MediaQuery.of(context).size.height * 0.7,
                                           child: imageWidget,
                                         ),
                                         SizedBox(height: statusbarHeight! + heightDp! * 30),

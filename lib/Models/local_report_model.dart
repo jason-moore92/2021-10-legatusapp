@@ -66,12 +66,14 @@ class LocalReportModel extends Equatable {
     this.recipientBirthCity = "",
     this.recipientEmail = "",
     this.recipientPhone = "",
-    this.medias = const [],
+    this.medias,
     this.orderList = const [],
   });
 
   factory LocalReportModel.fromJson(Map<String, dynamic> map) {
     List<MediaModel>? medias = [];
+
+    if (map["medias"] == null) map["medias"] = [];
 
     for (var i = 0; i < map["medias"].length; i++) {
       medias.add(MediaModel.fromJson(map["medias"][i]));
@@ -115,7 +117,7 @@ class LocalReportModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     List<dynamic> mediasJson = [];
-
+    if (medias == null) medias = [];
     for (var i = 0; i < medias!.length; i++) {
       mediasJson.add(medias![i].toJson());
     }
@@ -225,7 +227,7 @@ class LocalReportModel extends Equatable {
         recipientBirthCity!,
         recipientEmail!,
         recipientPhone!,
-        medias!,
+        medias ?? Object(),
         orderList!,
       ];
 
