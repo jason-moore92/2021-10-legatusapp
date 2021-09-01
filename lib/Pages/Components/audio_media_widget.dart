@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:legutus/Pages/App/index.dart';
 import 'package:legutus/Pages/Dialogs/index.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:path_provider/path_provider.dart';
@@ -197,6 +198,26 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
 
   @override
   Widget build(BuildContext context) {
+    String responsiveStyle = "";
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "desktop";
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "tablet";
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+      responsiveStyle = "mobile";
+    }
+
+    double iconSize = heightDp * 20;
+    double iconPadding = widthDp * 10;
+    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp * 35;
+      iconPadding = widthDp * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
+
     var maxTime = DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
     var maxTimeString = DateFormat('mm:ss').format(maxTime);
     var currentTime = DateTime.fromMillisecondsSinceEpoch(_sliderCurrentPosition.toInt(), isUtc: true);
@@ -248,7 +269,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
                           : widget.mediaModel!.state == "uploaded"
                               ? Icons.cloud_done_outlined
                               : Icons.cloud_off_outlined,
-                      size: heightDp * 20,
+                      size: iconSize,
                       color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
                     ),
                     Icon(
@@ -257,7 +278,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
                           : widget.mediaModel!.state == "uploaded"
                               ? Icons.cloud_done
                               : Icons.cloud_off,
-                      size: heightDp * 20,
+                      size: iconSize,
                       color: widget.mediaModel!.state == "error"
                           ? AppColors.red
                           : widget.mediaModel!.state == "uploaded"
@@ -320,12 +341,12 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
                             children: [
                               Icon(
                                 Icons.info_outline,
-                                size: heightDp * 20,
+                                size: iconSize,
                                 color: Colors.white,
                               ),
                               Icon(
                                 Icons.info,
-                                size: heightDp * 20,
+                                size: iconSize,
                                 color: AppColors.yello,
                               ),
                             ],
@@ -352,7 +373,7 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
               child: Center(
                 child: Transform.rotate(
                   angle: angle / 180 * pi,
-                  child: Icon(Icons.autorenew, size: heightDp * 25, color: Colors.white),
+                  child: Icon(Icons.autorenew, size: iconSize, color: Colors.white),
                 ),
               ),
             ),

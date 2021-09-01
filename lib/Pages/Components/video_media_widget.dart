@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/App/index.dart';
 import 'package:legutus/Pages/Dialogs/index.dart';
 import 'package:legutus/Providers/index.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -176,6 +177,26 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
 
   @override
   Widget build(BuildContext context) {
+    String responsiveStyle = "";
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "desktop";
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "tablet";
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+      responsiveStyle = "mobile";
+    }
+
+    double iconSize = heightDp * 20;
+    double iconPadding = widthDp * 10;
+    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp * 35;
+      iconPadding = widthDp * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
+
     if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) {
       return Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
@@ -271,12 +292,12 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                       children: [
                         Icon(
                           Icons.info_outline,
-                          size: heightDp * 20,
+                          size: iconSize,
                           color: Colors.white,
                         ),
                         Icon(
                           Icons.info,
-                          size: heightDp * 20,
+                          size: iconSize,
                           color: AppColors.yello,
                         ),
                       ],
@@ -301,7 +322,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                                 : widget.mediaModel!.state == "uploaded"
                                     ? Icons.cloud_done_outlined
                                     : Icons.cloud_off_outlined,
-                            size: heightDp * 20,
+                            size: iconSize,
                             color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
                           ),
                           Icon(
@@ -310,7 +331,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                                 : widget.mediaModel!.state == "uploaded"
                                     ? Icons.cloud_done
                                     : Icons.cloud_off,
-                            size: heightDp * 20,
+                            size: iconSize,
                             color: widget.mediaModel!.state == "error"
                                 ? AppColors.red
                                 : widget.mediaModel!.state == "uploaded"
@@ -397,8 +418,8 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light, //status bar brigtness
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark, //status bar brigtness
       ));
     });
   }

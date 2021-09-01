@@ -47,6 +47,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Legatus doit avoir accès à la caméra de cet appareil lors de son fonctionnement.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Legatus doit avoir accès à la localisation de cet appareil.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Legatus doit avoir accès à la localisation de cet appareil lors de son fonctionnement.</string>
 	<key>NSMicrophoneUsageDescription</key>

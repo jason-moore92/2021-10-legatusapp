@@ -4,7 +4,7 @@ class SettingsModel extends Equatable {
   // bool? allowCamera;
   // bool? allowMicrophone;
   // bool? allowLocation;
-  bool? withRestriction;
+  // bool? withRestriction;
   int? photoResolution;
   int? videoResolution;
 
@@ -12,7 +12,7 @@ class SettingsModel extends Equatable {
     // this.allowCamera = true,
     // this.allowMicrophone = true,
     // this.allowLocation = true,
-    this.withRestriction = false,
+    // this.withRestriction = false,
     this.photoResolution = 2,
     this.videoResolution = 0,
   });
@@ -22,7 +22,7 @@ class SettingsModel extends Equatable {
       // allowCamera: map["allowCamera"] ?? true,
       // allowMicrophone: map["allowMicrophone"] ?? true,
       // allowLocation: map["allowLocation"] ?? true,
-      withRestriction: map["withRestriction"] ?? false,
+      // withRestriction: map["withRestriction"] ?? false,
       photoResolution: map["photoResolution"] ?? 2,
       videoResolution: map["videoResolution"] ?? 0,
     );
@@ -33,7 +33,7 @@ class SettingsModel extends Equatable {
       // "allowCamera": allowCamera ?? true,
       // "allowMicrophone": allowMicrophone ?? true,
       // "allowLocation": allowLocation ?? true,
-      "withRestriction": withRestriction ?? false,
+      // "withRestriction": withRestriction ?? false,
       "photoResolution": photoResolution ?? 2,
       "videoResolution": videoResolution ?? 0,
     };
@@ -44,7 +44,7 @@ class SettingsModel extends Equatable {
       // allowCamera: model.allowCamera,
       // allowMicrophone: model.allowMicrophone,
       // allowLocation: model.allowLocation,
-      withRestriction: model.withRestriction,
+      // withRestriction: model.withRestriction,
       photoResolution: model.photoResolution,
       videoResolution: model.videoResolution,
     );
@@ -55,7 +55,7 @@ class SettingsModel extends Equatable {
         // allowCamera!,
         // allowMicrophone!,
         // allowLocation!,
-        withRestriction!,
+        // withRestriction!,
         photoResolution!,
         videoResolution!,
       ];

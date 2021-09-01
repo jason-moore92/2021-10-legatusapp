@@ -4,7 +4,7 @@
   "inCorrectErrorText": "Merci de renseigner le champs {}  avec une valeur correcte",
   "emailErrorText": "Merci de renseigner une adresse email correcte",
     "passwordMatchErrorText": "Le mot de passe renseigné n'est pas correct",
-    "textlengthErrorText": "Merci de renseigner un mot de passe d'au moins {lengh} caractères",
+    "textlengthErrorText": "Merci de renseigner un mot de passe d'au moins {length} caractères",
     "dropdownItemErrorText": "Merci de choisir une option"
   },
   "BottomNavBarString": {
@@ -154,7 +154,7 @@
   },
   "ReportPageString": {
     "share":"Partager",
-    "selecteAll": "Tout sélectionner",
+    "selecteAll": "Tout selectionner",
     "noMediaDescription": "Aucun média sur cet appareil pour ce constat.\n\nUtilisez les boutons ci-dessous pour prendre des notes ou lancer le mode photos / vidéos et dictées."
   },
   "NoteDialogString": {

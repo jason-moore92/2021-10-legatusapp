@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/App/index.dart';
 import 'package:legutus/Pages/Dialogs/index.dart';
 
 class NoteMediaWidget extends StatefulWidget {
@@ -33,6 +34,7 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
   double widthDp = ScreenUtil().setWidth(1);
   double heightDp = ScreenUtil().setWidth(1);
   double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+  String responsiveStyle = "";
 
   Timer? uploadTimer;
   double angle = 0;
@@ -63,6 +65,25 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "desktop";
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "tablet";
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+      responsiveStyle = "mobile";
+    }
+
+    double iconSize = heightDp * 20;
+    double iconPadding = widthDp * 10;
+    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp * 35;
+      iconPadding = widthDp * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
+
     if (widget.isUploading!) {
       if (uploadTimer != null) uploadTimer!.cancel();
       uploadTimer = Timer.periodic(Duration(milliseconds: 10), (uploadTimer) {
@@ -111,7 +132,7 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
                               : widget.mediaModel!.state == "uploaded"
                                   ? Icons.cloud_done_outlined
                                   : Icons.cloud_off_outlined,
-                          size: heightDp * 20,
+                          size: iconSize,
                           color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
                         ),
                         Icon(
@@ -120,7 +141,7 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
                               : widget.mediaModel!.state == "uploaded"
                                   ? Icons.cloud_done
                                   : Icons.cloud_off,
-                          size: heightDp * 20,
+                          size: iconSize,
                           color: widget.mediaModel!.state == "error"
                               ? AppColors.red
                               : widget.mediaModel!.state == "uploaded"
@@ -153,12 +174,12 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
                       children: [
                         Icon(
                           Icons.info_outline,
-                          size: heightDp * 20,
+                          size: iconSize,
                           color: Colors.white,
                         ),
                         Icon(
                           Icons.info,
-                          size: heightDp * 20,
+                          size: iconSize,
                           color: AppColors.yello,
                         ),
                       ],
@@ -181,7 +202,7 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
               child: Center(
                 child: Transform.rotate(
                   angle: angle / 180 * pi,
-                  child: Icon(Icons.autorenew, size: heightDp * 25, color: Colors.white),
+                  child: Icon(Icons.autorenew, size: iconSize, color: Colors.white),
                 ),
               ),
             ),

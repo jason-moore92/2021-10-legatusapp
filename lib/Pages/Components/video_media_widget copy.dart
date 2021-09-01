@@ -427,8 +427,8 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light, //status bar brigtness
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark, //status bar brigtness
       ));
     });
   }

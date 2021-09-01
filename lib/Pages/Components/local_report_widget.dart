@@ -24,6 +24,7 @@ class LocalReportWidget extends StatelessWidget {
   double? heightDp;
   double? heightDp1;
   double? fontSp;
+  String responsiveStyle = "";
   ///////////////////////////////
 
   @override
@@ -40,11 +41,13 @@ class LocalReportWidget extends StatelessWidget {
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    if (deviceWidth! >= ResponsiveDesignSettings.tabletDesignWidth) {
-      fontSp = fontSp! * 1.5;
-      widthDp = widthDp! * 1.5;
-      heightDp = heightDp! * 1.5;
-      heightDp1 = heightDp1! * 1.5;
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "desktop";
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "tablet";
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+      responsiveStyle = "mobile";
     }
 
     return Container(
@@ -202,6 +205,16 @@ class LocalReportWidget extends StatelessWidget {
   }
 
   Widget _mainPanel(BuildContext context) {
+    double iconSize = heightDp! * 15;
+    double iconPadding = widthDp! * 8;
+    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp! * 30;
+      iconPadding = widthDp! * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
+
     int photosCount = 0;
     int audiosCount = 0;
     int notesCount = 0;
@@ -274,19 +287,13 @@ class LocalReportWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.collections_outlined, size: heightDp! * 15, color: Colors.black),
-                  SizedBox(width: widthDp! * 5),
+                  Icon(Icons.collections_outlined, size: iconSize, color: Colors.black),
+                  SizedBox(width: iconPadding / 2),
                   Text(
                     LocaleKeys.LocalReportWidgetString_photos.tr(),
-                    style: TextStyle(
-                      fontSize: fontSp! * 10,
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                      letterSpacing: 0.5,
-                    ),
+                    style: textStyle,
                   ),
-                  SizedBox(width: widthDp! * 10),
+                  SizedBox(width: iconPadding),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
@@ -296,13 +303,7 @@ class LocalReportWidget extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       "$photosCount",
-                      style: TextStyle(
-                        fontSize: fontSp! * 10,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        height: 1,
-                        letterSpacing: 0.5,
-                      ),
+                      style: textStyle!.copyWith(color: Colors.white),
                     ),
                   ),
                 ],
@@ -313,19 +314,13 @@ class LocalReportWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.mic_none, size: heightDp! * 15, color: Colors.black),
-                  SizedBox(width: widthDp! * 5),
+                  Icon(Icons.mic_none, size: iconSize, color: Colors.black),
+                  SizedBox(width: iconPadding / 2),
                   Text(
                     LocaleKeys.LocalReportWidgetString_audios.tr(),
-                    style: TextStyle(
-                      fontSize: fontSp! * 10,
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                      letterSpacing: 0.5,
-                    ),
+                    style: textStyle,
                   ),
-                  SizedBox(width: widthDp! * 10),
+                  SizedBox(width: iconPadding),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
@@ -335,13 +330,7 @@ class LocalReportWidget extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       "$audiosCount",
-                      style: TextStyle(
-                        fontSize: fontSp! * 10,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        height: 1,
-                        letterSpacing: 0.5,
-                      ),
+                      style: textStyle.copyWith(color: Colors.white),
                     ),
                   ),
                 ],
@@ -352,19 +341,13 @@ class LocalReportWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.sticky_note_2_outlined, size: heightDp! * 15, color: Colors.black),
-                  SizedBox(width: widthDp! * 5),
+                  Icon(Icons.sticky_note_2_outlined, size: iconSize, color: Colors.black),
+                  SizedBox(width: iconPadding / 2),
                   Text(
                     LocaleKeys.LocalReportWidgetString_notes.tr(),
-                    style: TextStyle(
-                      fontSize: fontSp! * 10,
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                      letterSpacing: 0.5,
-                    ),
+                    style: textStyle,
                   ),
-                  SizedBox(width: widthDp! * 10),
+                  SizedBox(width: iconPadding),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
@@ -374,13 +357,7 @@ class LocalReportWidget extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       "$notesCount",
-                      style: TextStyle(
-                        fontSize: fontSp! * 10,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        height: 1,
-                        letterSpacing: 0.5,
-                      ),
+                      style: textStyle.copyWith(color: Colors.white),
                     ),
                   ),
                 ],
@@ -392,18 +369,12 @@ class LocalReportWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.video_library_outlined, size: heightDp! * 15, color: Colors.black),
-                  SizedBox(width: widthDp! * 5),
+                  SizedBox(width: iconPadding / 2),
                   Text(
                     LocaleKeys.LocalReportWidgetString_videos.tr(),
-                    style: TextStyle(
-                      fontSize: fontSp! * 10,
-                      color: Color(0xFF222222),
-                      fontWeight: FontWeight.w400,
-                      height: 1,
-                      letterSpacing: 0.5,
-                    ),
+                    style: textStyle,
                   ),
-                  SizedBox(width: widthDp! * 10),
+                  SizedBox(width: iconPadding),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
@@ -413,13 +384,7 @@ class LocalReportWidget extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       "$videosCount",
-                      style: TextStyle(
-                        fontSize: fontSp! * 10,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        height: 1,
-                        letterSpacing: 0.5,
-                      ),
+                      style: textStyle.copyWith(color: Colors.white),
                     ),
                   ),
                 ],
@@ -437,20 +402,14 @@ class LocalReportWidget extends StatelessWidget {
               size: heightDp! * 20,
               color: totalCount == 0 || nonUploadedCount != 0 ? AppColors.red : AppColors.green,
             ),
-            SizedBox(width: widthDp! * 5),
+            SizedBox(width: iconPadding / 2),
             Text(
               totalCount == 0
                   ? LocaleKeys.LocalReportWidgetString_noMedial.tr()
                   : totalCount != 0 && nonUploadedCount != 0
                       ? LocaleKeys.LocalReportWidgetString_nonUploadMedial.tr(args: [nonUploadedCount.toString()])
                       : LocaleKeys.LocalReportWidgetString_allMediaUpload.tr(),
-              style: TextStyle(
-                fontSize: fontSp! * 10,
-                color: Color(0xFF222222),
-                fontWeight: FontWeight.w400,
-                height: 1,
-                letterSpacing: 0.5,
-              ),
+              style: textStyle,
             ),
           ],
         )

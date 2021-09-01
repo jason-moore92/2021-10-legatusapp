@@ -131,6 +131,8 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     }
 
     if (_authProvider!.authState.progressState == 2) {
+      _emailController.clear();
+      _passwordController.clear();
       SuccessDialog.show(context, text: _authProvider!.authState.message!);
     } else if (_authProvider!.authState.progressState == -1) {
       FailedDialog.show(context, text: _authProvider!.authState.message!);
@@ -147,8 +149,8 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
 
     _authProvider!.login(
       email: _email,
-      // password: "BiksbcNgALR8",
-      password: _password,
+      password: "BiksbcNgALR8",
+      // password: _password,
     );
   }
 
@@ -169,7 +171,10 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
         }
         result = null;
         String currentDate = PlanningProvider.of(context).planningState.currentDate!;
-        List<dynamic> planningData = PlanningProvider.of(context).planningState.planningData![currentDate];
+        List<dynamic> planningData = [];
+        if (currentDate != "") {
+          planningData = PlanningProvider.of(context).planningState.planningData![currentDate];
+        }
         result = await DebugApiProvider.debugReport(
           planningData: planningData,
           localReports: localReports,
@@ -331,6 +336,7 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                   obscureText: true,
                   onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
                   validator: (input) => input.length < 8 ? LocaleKeys.ValidateErrorString_textlengthErrorText.tr(namedArgs: {"length": "8"}) : null,
+                  errorMaxLines: 3,
                   onSaved: (input) => _password = input,
                 ),
 

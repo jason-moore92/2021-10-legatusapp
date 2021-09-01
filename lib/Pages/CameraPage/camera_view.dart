@@ -146,8 +146,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light, //status bar brigtness
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark, //status bar brigtness
       ));
       setState(() {});
       cameras = await availableCameras();
@@ -159,8 +159,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   void dispose() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: AppColors.primayColor,
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.light, //status bar brigtness
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.dark, //status bar brigtness
     ));
     WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
@@ -698,7 +698,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                     height: deviceHeight,
                     child: _cameraPreviewWidget(),
                   ),
-                  Container(width: deviceWidth, height: statusbarHeight),
+                  Container(width: deviceWidth, height: statusbarHeight, color: Colors.black),
                   Positioned(
                     top: statusbarHeight,
                     child: _cameraToolTopPanel(orientation: _orientation),

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legutus/Models/index.dart';
 import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/App/index.dart';
 import 'package:legutus/Pages/Dialogs/index.dart';
 import 'package:legutus/Providers/MediaPlayProvider/index.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +46,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
   double? fontSp;
   double? picWidth;
   double? picHeight;
+  String responsiveStyle = "";
 
   Timer? uploadTimer;
   double angle = 0;
@@ -65,6 +67,25 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
 
     picWidth = (deviceWidth! - widthDp! * 40) / 3;
     picHeight = (deviceWidth! - widthDp! * 40) / 3;
+
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "desktop";
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "tablet";
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+      responsiveStyle = "mobile";
+    }
+
+    double iconSize = heightDp! * 20;
+    double iconPadding = widthDp! * 10;
+    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp! * 35;
+      iconPadding = widthDp! * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
 
     if (widget.isUploading!) {
       if (uploadTimer != null) uploadTimer!.cancel();
@@ -140,7 +161,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                         : widget.mediaModel!.state == "uploaded"
                             ? Icons.cloud_done_outlined
                             : Icons.cloud_off_outlined,
-                    size: heightDp! * 20,
+                    size: iconSize,
                     color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
                   ),
                   Icon(
@@ -149,7 +170,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                         : widget.mediaModel!.state == "uploaded"
                             ? Icons.cloud_done
                             : Icons.cloud_off,
-                    size: heightDp! * 20,
+                    size: iconSize,
                     color: widget.mediaModel!.state == "error"
                         ? AppColors.red
                         : widget.mediaModel!.state == "uploaded"
@@ -177,12 +198,12 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                     children: [
                       Icon(
                         Icons.info_outline,
-                        size: heightDp! * 20,
+                        size: iconSize,
                         color: Colors.white,
                       ),
                       Icon(
                         Icons.info,
-                        size: heightDp! * 20,
+                        size: iconSize,
                         color: AppColors.yello,
                       ),
                     ],

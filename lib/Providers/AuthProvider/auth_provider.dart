@@ -133,7 +133,6 @@ class AuthProvider extends ChangeNotifier {
     _prefs!.setString(_rememberUserKey, "null");
 
     _authState = _authState.update(
-      contextName: "",
       progressState: 2,
       message: "Vous avez été déconnecté avec succès",
       description: "",

@@ -37,6 +37,12 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
   double? widthDp;
   double? heightDp;
   double? fontSp;
+
+  String responsiveStyle = "";
+  double iconSize = 0;
+  double iconPadding = 0;
+  TextStyle? textStyle;
+  double navBarHeight = 0;
   ///////////////////////////////
 
   PersistentTabController? _controller;
@@ -140,6 +146,27 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
     // fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     // ///////////////////////////////
 
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "desktop";
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "tablet";
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+      responsiveStyle = "mobile";
+    }
+
+    iconSize = heightDp! * 20;
+    iconPadding = widthDp! * 10;
+    textStyle = Theme.of(context).textTheme.overline;
+    navBarHeight = kBottomNavigationBarHeight;
+
+    if (responsiveStyle != "mobile") {
+      navBarHeight = heightDp! * 80;
+      iconSize = heightDp! * 35;
+      iconPadding = widthDp! * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
+
     return WillPopScope(
       onWillPop: () async {
         NormalAskDialog.show(
@@ -159,6 +186,7 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
         screens: _buildScreens(),
         items: _navBarsItems(),
         confineInSafeArea: true,
+        navBarHeight: navBarHeight,
         backgroundColor: AppColors.primayColor,
         handleAndroidBackButtonPress: false, // Default is true.
         resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
@@ -245,8 +273,8 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white.withOpacity(0.6),
         contentPadding: heightDp! * 5,
-        iconSize: heightDp! * 25,
-        textStyle: TextStyle(fontSize: fontSp! * 10, color: Colors.white),
+        iconSize: iconSize,
+        textStyle: textStyle,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.perm_media),
@@ -255,8 +283,8 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white.withOpacity(0.6),
         contentPadding: heightDp! * 5,
-        iconSize: heightDp! * 25,
-        textStyle: TextStyle(fontSize: fontSp! * 12, color: Colors.white),
+        iconSize: iconSize,
+        textStyle: textStyle,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.app_settings_alt),
@@ -265,8 +293,8 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
         activeColorPrimary: Colors.white,
         inactiveColorPrimary: Colors.white.withOpacity(0.6),
         contentPadding: heightDp! * 5,
-        iconSize: heightDp! * 25,
-        textStyle: TextStyle(fontSize: fontSp! * 12, color: Colors.white),
+        iconSize: iconSize,
+        textStyle: textStyle,
       ),
     ];
   }

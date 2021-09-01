@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:legutus/Pages/App/index.dart';
 import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legutus/ApiDataProviders/index.dart';
 import 'package:legutus/Config/config.dart';
@@ -76,6 +77,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   int videosCount = 0;
   int totalCount = 0;
   int nonUploadedCount = 0;
+  String responsiveStyle = "";
 
   @override
   void initState() {
@@ -555,6 +557,15 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "desktop";
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+      responsiveStyle = "tablet";
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+      responsiveStyle = "mobile";
+    }
+
     photosCount = 0;
     audiosCount = 0;
     notesCount = 0;
@@ -604,111 +615,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Column(
               children: [
                 Container(width: deviceWidth, height: statusbarHeight!, color: AppColors.primayColor),
-                Container(
-                  width: deviceWidth,
-                  height: appbarHeight,
-                  color: AppColors.primayColor,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: heightDp! * 5),
-                          color: Colors.transparent,
-                          child: Row(
-                            children: [
-                              SizedBox(width: widthDp! * 10),
-                              Icon(Icons.arrow_back, size: heightDp! * 20, color: Colors.white),
-                              SizedBox(width: widthDp! * 10),
-                            ],
-                          ),
-                        ),
-                        onTap: () => Navigator.of(context).pop(_updatedStatus),
-                      ),
-                      Expanded(
-                        child: Text(
-                          _localReportModel!.name!,
-                          style: Theme.of(context).textTheme.headline6,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _selectedMediaRanks = [];
-                              _selectStatus = true;
-                              for (var i = 0; i < _localReportModel!.medias!.length; i++) {
-                                _selectedMediaRanks!.add(_localReportModel!.medias![i].rank!);
-                              }
-                              setState(() {});
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: heightDp! * 5, vertical: heightDp! * 5),
-                              child: Icon(Icons.select_all_outlined, size: heightDp! * 20, color: Colors.white),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              JournalPanelDialog.show(
-                                context,
-                                email: AuthProvider.of(context).authState.loginState == LoginState.IsLogin
-                                    ? AuthProvider.of(context).authState.userModel!.email!
-                                    : "",
-                                callBack: (String email) => _journalHandler(email),
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: heightDp! * 5, vertical: heightDp! * 5),
-                              child: Image.asset(
-                                "lib/Assets/Images/word.png",
-                                width: heightDp! * 17,
-                                height: heightDp! * 17,
-                                color: Colors.white,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: _localReportProvider!.localReportState.isUploading! ? null : _uploadHandler,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: heightDp! * 5, vertical: heightDp! * 5),
-                                  child: Icon(Icons.cloud_upload_outlined, size: heightDp! * 20, color: Colors.white),
-                                ),
-                                if (nonUploadedCount != 0)
-                                  Positioned(
-                                    right: 0,
-                                    // bottom: 0,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 2),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.red,
-                                        borderRadius: BorderRadius.circular(heightDp! * 3),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "$nonUploadedCount",
-                                        style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: _editHandler,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: heightDp! * 5, vertical: heightDp! * 5),
-                              child: Icon(Icons.info_outline_rounded, size: heightDp! * 20, color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                _appBarWidget(),
                 localReportProvider.localReportState.isUploading!
                     ? _uploadingPanel()
                     : _selectStatus
@@ -725,6 +632,121 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           floatingActionButton: _floatingButtonPanel(),
         );
       }),
+    );
+  }
+
+  Widget _appBarWidget() {
+    double iconSize = heightDp! * 25;
+    double iconPadding = widthDp! * 10;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp! * 45;
+      iconPadding = widthDp! * 20;
+    }
+
+    return Container(
+      width: deviceWidth,
+      height: appbarHeight,
+      color: AppColors.primayColor,
+      child: Row(
+        children: [
+          GestureDetector(
+            child: Container(
+              color: Colors.transparent,
+              child: Row(
+                children: [
+                  SizedBox(width: iconPadding),
+                  Icon(Icons.arrow_back_ios_outlined, size: iconSize * 0.8, color: Colors.white),
+                  SizedBox(width: iconPadding),
+                ],
+              ),
+            ),
+            onTap: () => Navigator.of(context).pop(_updatedStatus),
+          ),
+          Expanded(
+            child: Text(
+              _localReportModel!.name!,
+              style: Theme.of(context).textTheme.headline6,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _selectedMediaRanks = [];
+                  _selectStatus = true;
+                  for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+                    _selectedMediaRanks!.add(_localReportModel!.medias![i].rank!);
+                  }
+                  setState(() {});
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: iconPadding),
+                  child: Icon(Icons.select_all_outlined, size: iconSize, color: Colors.white),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  JournalPanelDialog.show(
+                    context,
+                    email: AuthProvider.of(context).authState.loginState == LoginState.IsLogin
+                        ? AuthProvider.of(context).authState.userModel!.email!
+                        : "",
+                    callBack: (String email) => _journalHandler(email),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: iconPadding),
+                  child: Image.asset(
+                    "lib/Assets/Images/word.png",
+                    width: iconSize - heightDp! * 5,
+                    height: iconSize - heightDp! * 5,
+                    color: Colors.white,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: _localReportProvider!.localReportState.isUploading! ? null : _uploadHandler,
+                child: Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: iconPadding),
+                      child: Icon(Icons.cloud_upload_outlined, size: iconSize, color: Colors.white),
+                    ),
+                    if (nonUploadedCount != 0)
+                      Positioned(
+                        right: iconPadding / 2,
+                        // bottom: 0,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.red,
+                            borderRadius: BorderRadius.circular(heightDp! * 3),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "$nonUploadedCount",
+                            style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: _editHandler,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: iconPadding),
+                  child: Icon(Icons.info_outline_rounded, size: iconSize, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -857,6 +879,15 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   }
 
   Widget _mediaCountPanel() {
+    double iconSize = heightDp! * 20;
+    double iconPadding = widthDp! * 10;
+    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp! * 35;
+      iconPadding = widthDp! * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
       color: Color(0xFFE7E7E7),
@@ -866,13 +897,13 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.collections_outlined, size: heightDp! * 20, color: Colors.black),
-                SizedBox(width: widthDp! * 5),
+                Icon(Icons.collections_outlined, size: iconSize, color: Colors.black),
+                SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_photos.tr(),
-                  style: Theme.of(context).textTheme.overline,
+                  style: textStyle,
                 ),
-                SizedBox(width: widthDp! * 10),
+                SizedBox(width: iconPadding),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
@@ -882,7 +913,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                   alignment: Alignment.center,
                   child: Text(
                     "$photosCount",
-                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                    style: textStyle!.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -893,13 +924,13 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.mic_none, size: heightDp! * 20, color: Colors.black),
-                SizedBox(width: widthDp! * 5),
+                Icon(Icons.mic_none, size: iconSize, color: Colors.black),
+                SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_audios.tr(),
-                  style: Theme.of(context).textTheme.overline,
+                  style: textStyle,
                 ),
-                SizedBox(width: widthDp! * 10),
+                SizedBox(width: iconPadding),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
@@ -909,7 +940,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                   alignment: Alignment.center,
                   child: Text(
                     "$audiosCount",
-                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                    style: textStyle.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -920,13 +951,13 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.sticky_note_2_outlined, size: heightDp! * 20, color: Colors.black),
-                SizedBox(width: widthDp! * 5),
+                Icon(Icons.sticky_note_2_outlined, size: iconSize, color: Colors.black),
+                SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_notes.tr(),
-                  style: Theme.of(context).textTheme.overline,
+                  style: textStyle,
                 ),
-                SizedBox(width: widthDp! * 10),
+                SizedBox(width: iconPadding),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
@@ -936,7 +967,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                   alignment: Alignment.center,
                   child: Text(
                     "$notesCount",
-                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                    style: textStyle.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -947,13 +978,13 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.video_library_outlined, size: heightDp! * 20, color: Colors.black),
-                SizedBox(width: widthDp! * 5),
+                Icon(Icons.video_library_outlined, size: iconSize, color: Colors.black),
+                SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_videos.tr(),
-                  style: Theme.of(context).textTheme.overline,
+                  style: textStyle,
                 ),
-                SizedBox(width: widthDp! * 10),
+                SizedBox(width: iconPadding),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
@@ -963,7 +994,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                   alignment: Alignment.center,
                   child: Text(
                     "$videosCount",
-                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                    style: textStyle.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -975,6 +1006,16 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   }
 
   Widget _selectToolPanel() {
+    double iconSize = heightDp! * 20;
+    double iconPadding = widthDp! * 10;
+    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp! * 35;
+      iconPadding = widthDp! * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
+
     return Container(
       color: Color(0xFFE7E7E7),
       child: Row(
@@ -990,7 +1031,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
               child: Transform.rotate(
                 angle: pi / 4,
-                child: Icon(Icons.add_circle_outline_outlined, size: heightDp! * 25, color: Colors.black),
+                child: Icon(Icons.add_circle_outline_outlined, size: iconSize, color: Colors.black),
               ),
             ),
           ),
@@ -998,7 +1039,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               children: [
                 CustomCheckBox(
-                  iconSize: heightDp! * 25,
+                  iconSize: iconSize,
                   iconColor: Colors.black,
                   trueIcon: Icons.check_box_outlined,
                   falseIcon: Icons.check_box_outline_blank,
@@ -1018,19 +1059,16 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                     setState(() {});
                   },
                 ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: widthDp! * 5, vertical: heightDp! * 3),
-                      decoration: BoxDecoration(
-                        color: AppColors.yello,
-                        borderRadius: BorderRadiusDirectional.circular(heightDp! * 4),
-                      ),
-                      child: Text(
-                        "${_selectedMediaRanks!.length}",
-                        style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
-                      ),
-                    ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: widthDp! * 5),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 5, vertical: heightDp! * 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.yello,
+                    borderRadius: BorderRadiusDirectional.circular(heightDp! * 4),
+                  ),
+                  child: Text(
+                    "${_selectedMediaRanks!.length}",
+                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -1052,10 +1090,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+                  padding: EdgeInsets.symmetric(horizontal: iconPadding / 2, vertical: heightDp! * 10),
                   child: Transform.rotate(
                     angle: -pi / 2,
-                    child: Icon(Icons.logout, size: heightDp! * 25, color: Colors.black),
+                    child: Icon(Icons.logout, size: iconSize, color: Colors.black),
                   ),
                 ),
                 Text(
@@ -1081,8 +1119,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               );
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
-              child: Icon(Icons.delete_outline_outlined, size: heightDp! * 25, color: Colors.red),
+              padding: EdgeInsets.symmetric(horizontal: iconPadding, vertical: heightDp! * 10),
+              child: Icon(Icons.delete_outline_outlined, size: iconSize, color: Colors.red),
             ),
           ),
         ],
@@ -1091,6 +1129,16 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   }
 
   Widget _uploadingPanel() {
+    double iconSize = heightDp! * 20;
+    double iconPadding = widthDp! * 10;
+    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+    if (responsiveStyle != "mobile") {
+      iconSize = heightDp! * 35;
+      iconPadding = widthDp! * 20;
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    }
+
     return Container(
       color: AppColors.yello,
       child: Row(
@@ -1100,7 +1148,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           Expanded(
             child: Row(
               children: [
-                Icon(Icons.cloud_upload_outlined, size: heightDp! * 25, color: Colors.white),
+                Icon(Icons.cloud_upload_outlined, size: iconSize, color: Colors.white),
                 SizedBox(width: widthDp! * 5),
                 Text(
                   LocaleKeys.NewReportPageString_uploading.tr(),
@@ -1121,7 +1169,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
               child: Transform.rotate(
                 angle: pi / 4,
-                child: Icon(Icons.add_circle_outline_outlined, size: heightDp! * 25, color: Colors.white),
+                child: Icon(Icons.add_circle_outline_outlined, size: iconSize, color: Colors.white),
               ),
             ),
           ),

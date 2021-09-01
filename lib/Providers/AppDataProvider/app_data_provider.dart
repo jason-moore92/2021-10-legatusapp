@@ -114,7 +114,7 @@ class AppDataProvider extends ChangeNotifier {
     // if (allowCamera != null) settingsModel.allowCamera = allowCamera;
     // if (allowLocation != null) settingsModel.allowLocation = allowLocation;
     // if (allowMicrophone != null) settingsModel.allowMicrophone = allowMicrophone;
-    if (withRestriction != null) settingsModel.withRestriction = withRestriction;
+    // if (withRestriction != null) settingsModel.withRestriction = withRestriction;
     if (photoResolution != null) settingsModel.photoResolution = photoResolution;
     if (videoResolution != null) settingsModel.videoResolution = videoResolution;
 
