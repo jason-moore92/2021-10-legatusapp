@@ -176,7 +176,11 @@ class _ConfigurationViewState extends State<ConfigurationView>
         String currentDate =
             PlanningProvider.of(context).planningState.currentDate!;
         List<dynamic> planningData = [];
-        if (currentDate != "") {
+        if (currentDate != "" &&
+            PlanningProvider.of(context)
+                .planningState
+                .planningData!
+                .isNotEmpty) {
           planningData = PlanningProvider.of(context)
               .planningState
               .planningData![currentDate];
@@ -188,25 +192,31 @@ class _ConfigurationViewState extends State<ConfigurationView>
           settingsModel: AppDataProvider.of(context).appDataState.settingsModel,
         );
       }
-    } catch (e) {
-      print(e.toString());
-    }
-    await _keicyProgressDialog!.hide();
 
-    if (result != null && result["success"]) {
-      SuccessDialog.show(
-        context,
-        text: result["data"] != null && result["data"]["message"] != null
-            ? result["data"]["message"]
-            : "Success",
-      );
-    } else {
+      await _keicyProgressDialog!.hide();
+
+      if (result != null && result["success"]) {
+        SuccessDialog.show(
+          context,
+          text: result["data"] != null && result["data"]["message"] != null
+              ? result["data"]["message"]
+              : "Success",
+        );
+      } else {
+        FailedDialog.show(
+          context,
+          text: result["data"] != null && result["data"]["message"] != null
+              ? result["data"]["message"]
+              : "Something was wrong",
+        );
+      }
+    } catch (e) {
+      await _keicyProgressDialog!.hide();
       FailedDialog.show(
         context,
-        text: result["data"] != null && result["data"]["message"] != null
-            ? result["data"]["message"]
-            : "Something was wrong",
+        text: "Something was wrong",
       );
+      print(e.toString());
     }
   }
 
