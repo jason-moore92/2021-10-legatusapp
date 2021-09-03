@@ -3,22 +3,25 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:legutus/Config/config.dart';
-import 'package:legutus/Helpers/file_helpers.dart';
-import 'package:legutus/Helpers/index.dart';
-import 'package:legutus/Models/index.dart';
+import 'package:legatus/Config/config.dart';
+import 'package:legatus/Helpers/file_helpers.dart';
+import 'package:legatus/Helpers/index.dart';
+import 'package:legatus/Models/index.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:legutus/Helpers/http_plus.dart';
+import 'package:legatus/Helpers/http_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalReportApiProvider {
   static final LocalStorage storage = LocalStorage("local_reports");
 
-  static Future<Map<String, dynamic>> create({@required LocalReportModel? localReportModel}) async {
+  static Future<Map<String, dynamic>> create(
+      {@required LocalReportModel? localReportModel}) async {
     try {
       await storage.ready;
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
+      int createAt = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: localReportModel!.createdAt)!;
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportId = "${reportDateTime}_$createAt";
 
       ///
@@ -36,11 +39,14 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> getLocalReportModel({@required LocalReportModel? localReportModel}) async {
+  static Future<Map<String, dynamic>> getLocalReportModel(
+      {@required LocalReportModel? localReportModel}) async {
     try {
       await storage.ready;
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
+      int createAt = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: localReportModel!.createdAt)!;
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportId = "${reportDateTime}_$createAt";
 
       var result = storage.getItem(reportId);
@@ -131,12 +137,15 @@ class LocalReportApiProvider {
       }
 
       ///
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
+      int createAt = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: localReportModel.createdAt)!;
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportId = "${reportDateTime}_$createAt";
 
       ///
-      if (oldReportId != null && oldReportId != reportId) await storage.deleteItem(oldReportId);
+      if (oldReportId != null && oldReportId != reportId)
+        await storage.deleteItem(oldReportId);
       await storage.setItem(reportId, localReportModel.toJson());
 
       ///
@@ -152,7 +161,8 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<LocalReportModel?> getLocalReportModelByReportId({int? reportId}) async {
+  static Future<LocalReportModel?> getLocalReportModelByReportId(
+      {int? reportId}) async {
     try {
       await storage.ready;
 
@@ -163,7 +173,8 @@ class LocalReportApiProvider {
         if (storage.getItem(reportIdString) == null) {
           continue;
         }
-        LocalReportModel localReportModel = LocalReportModel.fromJson(storage.getItem(reportIdString));
+        LocalReportModel localReportModel =
+            LocalReportModel.fromJson(storage.getItem(reportIdString));
         if (localReportModel.reportId == reportId) {
           return localReportModel;
         }
@@ -176,7 +187,8 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> getLocalReportList({@required int? limit, int page = 0}) async {
+  static Future<Map<String, dynamic>> getLocalReportList(
+      {@required int? limit, int page = 0}) async {
     try {
       await storage.ready;
       List<dynamic> reportIds = storage.getItem("local_report_ids") ?? [];
@@ -186,7 +198,8 @@ class LocalReportApiProvider {
           String reportId = reportIds[i];
 
           if (storage.getItem(reportId) != null) {
-            LocalReportModel localReportModel = LocalReportModel.fromJson(storage.getItem(reportId));
+            LocalReportModel localReportModel =
+                LocalReportModel.fromJson(storage.getItem(reportId));
 
             /// check if deleted medias are exist?
             List<MediaModel> medias = [];
@@ -236,7 +249,8 @@ class LocalReportApiProvider {
       for (var i = 0; i < reportIds.length; i++) {
         String reportId = reportIds[i];
         if (storage.getItem(reportId) != null) {
-          LocalReportModel localReportModel = LocalReportModel.fromJson(storage.getItem(reportId));
+          LocalReportModel localReportModel =
+              LocalReportModel.fromJson(storage.getItem(reportId));
 
           /// check if deleted medias are exist?
           List<MediaModel> medias = [];
@@ -269,13 +283,16 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> delete({@required LocalReportModel? localReportModel}) async {
+  static Future<Map<String, dynamic>> delete(
+      {@required LocalReportModel? localReportModel}) async {
     try {
       await storage.ready;
 
       ///
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
+      int createAt = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: localReportModel!.createdAt)!;
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportId = "${reportDateTime}_$createAt";
 
       ///
@@ -293,7 +310,8 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> storeReport({@required LocalReportModel? localReportModel}) async {
+  static Future<Map<String, dynamic>> storeReport(
+      {@required LocalReportModel? localReportModel}) async {
     String apiUrl = '/store-report';
 
     try {
@@ -308,7 +326,8 @@ class LocalReportApiProvider {
       }
 
       var data = localReportModel!.toJson();
-      if (data["report_id"] == -1 || data["report_id"] == 0) data["report_id"] = null;
+      if (data["report_id"] == -1 || data["report_id"] == 0)
+        data["report_id"] = null;
       data.remove("orderList");
 
       var response = await http.post(

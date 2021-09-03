@@ -1,6 +1,6 @@
 import "package:equatable/equatable.dart";
-import 'package:legutus/Models/address_model.dart';
-import 'package:legutus/Models/media_model.dart';
+import 'package:legatus/Models/address_model.dart';
+import 'package:legatus/Models/media_model.dart';
 
 import 'customer_model.dart';
 

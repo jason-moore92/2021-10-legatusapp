@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:legutus/Models/media_model.dart';
+import 'package:legatus/Models/media_model.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 

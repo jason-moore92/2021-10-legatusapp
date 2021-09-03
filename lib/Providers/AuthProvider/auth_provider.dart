@@ -1,16 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:legutus/ApiDataProviders/login_api_provider.dart';
-import 'package:legutus/Models/index.dart';
-import 'package:legutus/Providers/PlanningProvider/index.dart';
+import 'package:legatus/ApiDataProviders/login_api_provider.dart';
+import 'package:legatus/Models/index.dart';
+import 'package:legatus/Providers/PlanningProvider/index.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'index.dart';
 
 class AuthProvider extends ChangeNotifier {
-  static AuthProvider of(BuildContext context, {bool listen = false}) => Provider.of<AuthProvider>(context, listen: listen);
+  static AuthProvider of(BuildContext context, {bool listen = false}) =>
+      Provider.of<AuthProvider>(context, listen: listen);
 
   AuthState _authState = AuthState.init();
   AuthState get authState => _authState;
@@ -54,9 +55,13 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getSMSCode({@required String? email, @required String? phoneNumber, bool isNotifiable = true}) async {
+  Future<void> getSMSCode(
+      {@required String? email,
+      @required String? phoneNumber,
+      bool isNotifiable = true}) async {
     try {
-      var result = await LoginApiProvider.getSMSCode(email: email, phoneNumber: phoneNumber);
+      var result = await LoginApiProvider.getSMSCode(
+          email: email, phoneNumber: phoneNumber);
       if (result["success"]) {
         _authState = _authState.update(
           progressState: 2,
@@ -90,9 +95,13 @@ class AuthProvider extends ChangeNotifier {
     if (isNotifiable) notifyListeners();
   }
 
-  Future<void> login({@required String? email, @required String? password, bool isNotifiable = true}) async {
+  Future<void> login(
+      {@required String? email,
+      @required String? password,
+      bool isNotifiable = true}) async {
     try {
-      var result = await LoginApiProvider.login(email: email, password: password);
+      var result =
+          await LoginApiProvider.login(email: email, password: password);
       if (result["success"]) {
         if (_prefs == null) _prefs = await SharedPreferences.getInstance();
 

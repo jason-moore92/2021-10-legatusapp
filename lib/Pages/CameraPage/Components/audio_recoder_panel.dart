@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
-import 'package:legutus/Pages/Dialogs/failed_dialog.dart';
-import 'package:legutus/Providers/index.dart';
+import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
+import 'package:legatus/Pages/Dialogs/failed_dialog.dart';
+import 'package:legatus/Providers/index.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart' show DateFormat;
@@ -36,7 +36,8 @@ class AudioRecoderPanel extends StatefulWidget {
   _AudioRecoderPanelState createState() => _AudioRecoderPanelState();
 }
 
-class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTickerProviderStateMixin {
+class _AudioRecoderPanelState extends State<AudioRecoderPanel>
+    with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -119,7 +120,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
     _cameraProvider = CameraProvider.of(context);
     _cameraProvider!.addListener(_cameraProviderListener);
 
-    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
     animation = Tween<double>(begin: 0, end: 1).animate(controller!)
       ..addListener(() {
         if (controller!.status == AnimationStatus.completed) {
@@ -183,9 +185,11 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
   }
 
   void _cameraProviderListener() async {
-    if (_cameraProvider!.isAudioRecord! && _cameraProvider!.audioRecordStatus == "recording") {
+    if (_cameraProvider!.isAudioRecord! &&
+        _cameraProvider!.audioRecordStatus == "recording") {
       startRecorder();
-    } else if (_cameraProvider!.isAudioRecord! && _cameraProvider!.audioRecordStatus == "stopped") {
+    } else if (_cameraProvider!.isAudioRecord! &&
+        _cameraProvider!.audioRecordStatus == "stopped") {
       stopRecorder();
     }
   }
@@ -243,7 +247,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
       if (!kIsWeb) {
         var status = await Permission.microphone.request();
         if (status != PermissionStatus.granted) {
-          throw RecordingPermissionException('Microphone permission not granted');
+          throw RecordingPermissionException(
+              'Microphone permission not granted');
           return;
         }
       }
@@ -272,7 +277,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
         _inMilliseconds = e.duration.inMilliseconds;
         print("---------------------");
         print(_inMilliseconds);
-        var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
+        var date =
+            DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
         var txt = DateFormat('mm:ss').format(date);
 
         setState(() {
@@ -322,11 +328,13 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
           if (_resumeMillseconds == 0) {
             _resumeMillseconds = e.duration.inMilliseconds;
           }
-          _inMilliseconds = _inMilliseconds! + (e.duration.inMilliseconds - _resumeMillseconds!);
+          _inMilliseconds = _inMilliseconds! +
+              (e.duration.inMilliseconds - _resumeMillseconds!);
           _resumeMillseconds = e.duration.inMilliseconds;
           print("--------resume-------------");
           print(_inMilliseconds);
-          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
+          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!,
+              isUtc: true);
           var txt = DateFormat('mm:ss').format(date);
 
           setState(() {
@@ -419,7 +427,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
                       GestureDetector(
                         onTap: stopRecorder,
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: widthDp! * 10),
                           color: Colors.transparent,
                           child: Icon(
                             Icons.stop,
@@ -444,12 +453,17 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
                         GestureDetector(
                           onTap: pauseResumeRecorder,
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
+                            padding:
+                                EdgeInsets.symmetric(horizontal: widthDp! * 10),
                             color: Colors.transparent,
                             child: Icon(
-                              _recorderModule.isRecording ? Icons.pause_circle_outline_outlined : Icons.play_circle_outline_outlined,
+                              _recorderModule.isRecording
+                                  ? Icons.pause_circle_outline_outlined
+                                  : Icons.play_circle_outline_outlined,
                               size: heightDp! * 20,
-                              color: _recorderModule.isRecording ? Colors.white : Colors.red,
+                              color: _recorderModule.isRecording
+                                  ? Colors.white
+                                  : Colors.red,
                             ),
                           ),
                         ),
@@ -457,9 +471,13 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
                         animation: animation!,
                         builder: (context, child) {
                           return Opacity(
-                            opacity: _recorderModule.isRecording ? 1 - animation!.value : 0,
+                            opacity: _recorderModule.isRecording
+                                ? 1 - animation!.value
+                                : 0,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthDp! * 10,
+                                  vertical: heightDp! * 5),
                               child: Icon(
                                 Icons.fiber_manual_record,
                                 size: heightDp! * 20,
@@ -469,7 +487,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
                           );
                         },
                       ),
-                      Text(_audioRecorderTxt!, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
+                      Text(_audioRecorderTxt!,
+                          style: TextStyle(
+                              fontSize: fontSp! * 14, color: Colors.white)),
                     ],
                   ),
                 ),

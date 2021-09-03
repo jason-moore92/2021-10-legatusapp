@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:legutus/Config/config.dart';
-import 'package:legutus/Helpers/custom_url_lancher.dart';
-import 'package:legutus/Helpers/index.dart';
-import 'package:legutus/Models/media_model.dart';
-import 'package:legutus/Pages/App/Styles/index.dart';
-import 'package:legutus/Pages/Components/index.dart';
-import 'package:legutus/generated/locale_keys.g.dart';
+import 'package:legatus/Config/config.dart';
+import 'package:legatus/Helpers/custom_url_lancher.dart';
+import 'package:legatus/Helpers/index.dart';
+import 'package:legatus/Models/media_model.dart';
+import 'package:legatus/Pages/App/Styles/index.dart';
+import 'package:legatus/Pages/Components/index.dart';
+import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class UploadReportDialog {
@@ -27,8 +27,11 @@ class UploadReportDialog {
         return SimpleDialog(
           elevation: 0.0,
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? heightDp * 10)),
-          insetPadding: EdgeInsets.symmetric(horizontal: heightDp * 30.0, vertical: heightDp * 20.0),
+          shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(borderRadius ?? heightDp * 10)),
+          insetPadding: EdgeInsets.symmetric(
+              horizontal: heightDp * 30.0, vertical: heightDp * 20.0),
           titlePadding: EdgeInsets.zero,
           contentPadding: EdgeInsets.only(
             left: heightDp * 15,
@@ -41,7 +44,8 @@ class UploadReportDialog {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.cloud_upload_outlined, size: heightDp * 20, color: Colors.black),
+                    Icon(Icons.cloud_upload_outlined,
+                        size: heightDp * 20, color: Colors.black),
                     SizedBox(width: heightDp * 10),
                     Text(
                       LocaleKeys.UploadDialogString_title.tr(),
@@ -167,13 +171,19 @@ class UploadReportDialog {
                   child: CustomTextButton(
                     leftWidget: Padding(
                       padding: EdgeInsets.only(right: widthDp * 5),
-                      child: Icon(Icons.call_outlined, size: heightDp * 20, color: AppColors.yello),
+                      child: Icon(Icons.call_outlined,
+                          size: heightDp * 20, color: AppColors.yello),
                     ),
-                    text: LocaleKeys.ConfigurationPageString_contactLegatus.tr(),
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
+                    text:
+                        LocaleKeys.ConfigurationPageString_contactLegatus.tr(),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .button!
+                        .copyWith(color: AppColors.yello),
                     bordercolor: AppColors.yello,
                     onPressed: () {
-                      CustomUrlLauncher.makePhoneCall(AppConfig.contactPhoneNumber);
+                      CustomUrlLauncher.makePhoneCall(
+                          AppConfig.contactPhoneNumber);
                     },
                   ),
                 ),
@@ -185,20 +195,22 @@ class UploadReportDialog {
                   children: [
                     CustomTextButton(
                       text: LocaleKeys.UploadDialogString_cancel.tr(),
-                      textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: AppColors.yello,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      textStyle:
+                          Theme.of(context).textTheme.bodyText1!.copyWith(
+                                color: AppColors.yello,
+                                fontWeight: FontWeight.w600,
+                              ),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                     CustomTextButton(
                       text: LocaleKeys.UploadDialogString_login.tr(),
-                      textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: AppColors.yello,
-                            fontWeight: FontWeight.w600,
-                          ),
+                      textStyle:
+                          Theme.of(context).textTheme.bodyText1!.copyWith(
+                                color: AppColors.yello,
+                                fontWeight: FontWeight.w600,
+                              ),
                       onPressed: () {
                         Navigator.of(context).pop();
                         if (callback != null) callback();

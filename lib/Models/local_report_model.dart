@@ -1,5 +1,5 @@
 import "package:equatable/equatable.dart";
-import 'package:legutus/Models/media_model.dart';
+import 'package:legatus/Models/media_model.dart';
 
 class LocalReportModel extends Equatable {
   int? reportId;

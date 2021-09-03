@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:legutus/Models/local_report_model.dart';
-import 'package:legutus/Providers/index.dart';
+import 'package:legatus/Models/local_report_model.dart';
+import 'package:legatus/Providers/index.dart';
 import 'package:provider/provider.dart';
 
 import 'index.dart';
