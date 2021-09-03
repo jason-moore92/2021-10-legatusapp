@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "legutusappv2",
+            "name": "legatusappv2",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "legutusappv2 (profile mode)",
+            "name": "legatusappv2 (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
