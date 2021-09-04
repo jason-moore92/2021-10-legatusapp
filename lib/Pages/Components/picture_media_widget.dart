@@ -65,8 +65,8 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     statusbarHeight = ScreenUtil().statusBarHeight;
 
-    picWidth = (deviceWidth! - widthDp! * 40) / 3;
-    picHeight = (deviceWidth! - widthDp! * 40) / 3;
+    picWidth = ((deviceWidth! - widthDp! * 40) / 3) - 1;
+    picHeight = ((deviceWidth! - widthDp! * 40) / 3) - 1;
 
     if (MediaQuery.of(context).size.width >=
         ResponsiveDesignSettings.tableteMaxWidth) {

@@ -445,10 +445,10 @@ class _ReportViewState extends State<ReportView>
           isNotifiable: true,
         );
 
-        String message = isNew
+/*         String message = isNew
             ? "Note enregistrée avec succès"
             : "Note mise à jour avec succès";
-        SuccessDialog.show(context, text: message);
+        SuccessDialog.show(context, text: message); */
 
         if (isNew) {
           _onRefresh();
