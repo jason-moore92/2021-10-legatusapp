@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:legutus/Models/index.dart';
-import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legatus/Models/index.dart';
+import 'package:legatus/Pages/App/Styles/index.dart';
 
 class PlanningWidget extends StatelessWidget {
   final Map<String, dynamic>? data;
   final Function(PlanningReportModel)? onDetailHandler;
 
-  PlanningWidget({Key? key, @required this.data, @required this.onDetailHandler}) : super(key: key);
+  PlanningWidget(
+      {Key? key, @required this.data, @required this.onDetailHandler})
+      : super(key: key);
 
   double? deviceWidth;
   double? widthDp;
@@ -27,7 +29,8 @@ class PlanningWidget extends StatelessWidget {
         children: [
           Container(
             color: Color(0xFFF4F4F4),
-            padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 10),
+            padding: EdgeInsets.symmetric(
+                horizontal: widthDp! * 15, vertical: heightDp! * 10),
             child: Row(
               children: [
                 Text(
@@ -39,7 +42,8 @@ class PlanningWidget extends StatelessWidget {
           ),
           Column(
             children: List.generate(data!["reports"].length, (index) {
-              PlanningReportModel planningReportModel = PlanningReportModel.fromJson(data!["reports"][index]);
+              PlanningReportModel planningReportModel =
+                  PlanningReportModel.fromJson(data!["reports"][index]);
 
               return Column(
                 children: [
@@ -54,7 +58,8 @@ class PlanningWidget extends StatelessWidget {
     );
   }
 
-  Widget _reportPanel(BuildContext context, PlanningReportModel? planningReportModel) {
+  Widget _reportPanel(
+      BuildContext context, PlanningReportModel? planningReportModel) {
     List<dynamic> timeList = planningReportModel!.time!.split(":");
     String time = timeList[0] + ":" + timeList[1];
 
@@ -63,7 +68,8 @@ class PlanningWidget extends StatelessWidget {
         onDetailHandler!(planningReportModel);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 5),
+        padding: EdgeInsets.symmetric(
+            horizontal: widthDp! * 15, vertical: heightDp! * 5),
         color: Colors.transparent,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +86,10 @@ class PlanningWidget extends StatelessWidget {
                 SizedBox(width: widthDp! * 5),
                 Text(
                   time,
-                  style: Theme.of(context).textTheme.caption!.copyWith(color: AppColors.yello),
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .copyWith(color: AppColors.yello),
                 ),
               ],
             ),
@@ -89,7 +98,8 @@ class PlanningWidget extends StatelessWidget {
             SizedBox(height: heightDp! * 5),
             Row(
               children: [
-                Icon(Icons.folder_outlined, size: heightDp! * 20, color: Colors.black),
+                Icon(Icons.folder_outlined,
+                    size: heightDp! * 20, color: Colors.black),
                 SizedBox(width: widthDp! * 5),
                 Text(
                   planningReportModel.folderName!,
@@ -105,7 +115,8 @@ class PlanningWidget extends StatelessWidget {
                   SizedBox(height: heightDp! * 0),
                   Row(
                     children: [
-                      Icon(Icons.location_on_outlined, size: heightDp! * 20, color: Colors.black),
+                      Icon(Icons.location_on_outlined,
+                          size: heightDp! * 20, color: Colors.black),
                       SizedBox(width: widthDp! * 5),
                       Text(
                         planningReportModel.zipCity!,
@@ -124,10 +135,12 @@ class PlanningWidget extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.business, size: heightDp! * 20, color: Colors.black),
+                      Icon(Icons.business,
+                          size: heightDp! * 20, color: Colors.black),
                       SizedBox(width: widthDp! * 5),
                       Column(
-                        children: List.generate(planningReportModel.customers!.length, (index) {
+                        children: List.generate(
+                            planningReportModel.customers!.length, (index) {
                           return Container(
                             height: heightDp! * 25,
                             alignment: Alignment.center,
@@ -151,7 +164,8 @@ class PlanningWidget extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.local_police_outlined, size: heightDp! * 20, color: Colors.black),
+                      Icon(Icons.local_police_outlined,
+                          size: heightDp! * 20, color: Colors.black),
                       SizedBox(width: widthDp! * 5),
                       planningReportModel.accounts!.isEmpty
                           ? Container(
@@ -163,13 +177,17 @@ class PlanningWidget extends StatelessWidget {
                               ),
                             )
                           : Column(
-                              children: List.generate(planningReportModel.accounts!.length, (index) {
+                              children: List.generate(
+                                  planningReportModel.accounts!.length,
+                                  (index) {
                                 return Container(
                                   height: heightDp! * 25,
                                   alignment: Alignment.center,
                                   child: Text(
-                                    planningReportModel.accounts![index]["name"],
-                                    style: Theme.of(context).textTheme.bodyText1!,
+                                    planningReportModel.accounts![index]
+                                        ["name"],
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1!,
                                   ),
                                 );
                               }),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:legutus/Models/index.dart';
-import 'package:legutus/Providers/index.dart';
+import 'package:legatus/Models/index.dart';
+import 'package:legatus/Providers/index.dart';
 import 'package:provider/provider.dart';
 
 import 'index.dart';
@@ -10,7 +10,10 @@ class CameraPage extends StatelessWidget {
   final bool? isPicture;
   final bool? isAudio;
 
-  CameraPage({@required this.localReportModel, this.isAudio = false, this.isPicture = false});
+  CameraPage(
+      {@required this.localReportModel,
+      this.isAudio = false,
+      this.isPicture = false});
 
   @override
   Widget build(BuildContext context) {

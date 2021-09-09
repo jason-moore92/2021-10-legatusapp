@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:legutus/Config/config.dart';
-import 'package:legutus/Helpers/file_helpers.dart';
-import 'package:legutus/Helpers/index.dart';
-import 'package:legutus/Models/index.dart';
-import 'package:legutus/Helpers/http_plus.dart';
+import 'package:legatus/Config/config.dart';
+import 'package:legatus/Helpers/file_helpers.dart';
+import 'package:legatus/Helpers/index.dart';
+import 'package:legatus/Models/index.dart';
+import 'package:legatus/Helpers/http_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalReportApiProvider {
@@ -23,7 +23,8 @@ class LocalReportApiProvider {
         localReportsBox = await Hive.openBox<LocalReportModel>("local_reports");
       }
       if (localReportIdsBox == null) {
-        localReportIdsBox = await Hive.openBox<List<dynamic>>("local_report_ids");
+        localReportIdsBox =
+            await Hive.openBox<List<dynamic>>("local_report_ids");
       }
       if (appSettingsBox == null) {
         appSettingsBox = await Hive.openBox<dynamic>("app_settings");
@@ -40,7 +41,8 @@ class LocalReportApiProvider {
       print("=======================================================");
       print(".");
       print(".");
-      List<dynamic>? localReportIds = localReportIdsBox!.get("ids", defaultValue: []);
+      List<dynamic>? localReportIds =
+          localReportIdsBox!.get("ids", defaultValue: []);
 
       print("==== Local Report Ids === ${localReportIds!.length} ====");
       print(localReportIds);
@@ -49,14 +51,16 @@ class LocalReportApiProvider {
       print(".");
 
       List<LocalReportModel> localReportList = localReportsBox!.values.toList();
-      print("==== Local Report Ids === ${localReportsBox!.keys.toList().length} ====");
+      print(
+          "==== Local Report Ids === ${localReportsBox!.keys.toList().length} ====");
       print(localReportsBox!.keys.toList());
       print("=======================================================");
       print(".");
       print(".");
 
       for (var i = 0; i < localReportList.length; i++) {
-        print("================== local report data ===========================");
+        print(
+            "================== local report data ===========================");
         print(localReportList[i].toJson());
         print("=======================================================");
         print(".");
@@ -70,19 +74,23 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> create({@required LocalReportModel? localReportModel}) async {
+  static Future<Map<String, dynamic>> create(
+      {@required LocalReportModel? localReportModel}) async {
     try {
       await initHiveObject();
 
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
+      int createAt = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: localReportModel!.createdAt)!;
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportIdStr = "${reportDateTime}_$createAt";
 
       /// store local report
       localReportsBox!.put(reportIdStr, localReportModel);
 
       /// update local reportsIds
-      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+      List<dynamic>? reportIds =
+          localReportIdsBox!.get("ids", defaultValue: []);
       reportIds!.add(reportIdStr);
       reportIds.sort(sortReportIdHandler);
       localReportIdsBox!.put("ids", reportIds);
@@ -95,12 +103,15 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> getLocalReportModel({@required LocalReportModel? localReportModel}) async {
+  static Future<Map<String, dynamic>> getLocalReportModel(
+      {@required LocalReportModel? localReportModel}) async {
     try {
       await initHiveObject();
 
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
+      int createAt = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: localReportModel!.createdAt)!;
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportIdStr = "${reportDateTime}_$createAt";
 
       LocalReportModel? newReport = localReportsBox!.get(reportIdStr);
@@ -173,7 +184,8 @@ class LocalReportApiProvider {
               print(e);
               return {
                 "success": false,
-                "message": "when update local media, deleting old media file is failed.",
+                "message":
+                    "when update local media, deleting old media file is failed.",
               };
             }
           } else {
@@ -198,8 +210,10 @@ class LocalReportApiProvider {
       }
 
       ///
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
+      int createAt = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: localReportModel.createdAt)!;
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportIdStr = "${reportDateTime}_$createAt";
 
       /// if updated local report, delete old local report;
@@ -212,7 +226,8 @@ class LocalReportApiProvider {
       localReportsBox!.put(reportIdStr, localReportModel);
 
       /// update local reportIds
-      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+      List<dynamic>? reportIds =
+          localReportIdsBox!.get("ids", defaultValue: []);
       reportIds!.remove(oldReportIdStr);
       reportIds.add(reportIdStr);
       reportIds.sort(sortReportIdHandler);
@@ -226,11 +241,13 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<LocalReportModel?> getLocalReportModelByReportId({int? reportId}) async {
+  static Future<LocalReportModel?> getLocalReportModelByReportId(
+      {int? reportId}) async {
     try {
       await initHiveObject();
 
-      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+      List<dynamic>? reportIds =
+          localReportIdsBox!.get("ids", defaultValue: []);
 
       for (var i = 0; i < reportIds!.length; i++) {
         String reportIdStr = reportIds[i];
@@ -251,17 +268,20 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> getLocalReportList({@required int? limit, int page = 0}) async {
+  static Future<Map<String, dynamic>> getLocalReportList(
+      {@required int? limit, int page = 0}) async {
     try {
       await initHiveObject();
 
-      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+      List<dynamic>? reportIds =
+          localReportIdsBox!.get("ids", defaultValue: []);
       List<LocalReportModel> reportModelList = [];
 
       for (var i = page * limit!; i < (page + 1) * limit; i++) {
         if (i < reportIds!.length) {
           String reportIdStr = reportIds[i];
-          LocalReportModel? localReportModel = localReportsBox!.get(reportIdStr);
+          LocalReportModel? localReportModel =
+              localReportsBox!.get(reportIdStr);
 
           if (localReportModel != null) {
             /// check if deleted medias are exist?
@@ -308,7 +328,8 @@ class LocalReportApiProvider {
     try {
       await initHiveObject();
 
-      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+      List<dynamic>? reportIds =
+          localReportIdsBox!.get("ids", defaultValue: []);
       List<LocalReportModel> reportModelList = [];
 
       for (var i = 0; i < reportIds!.length; i++) {
@@ -347,20 +368,24 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> delete({@required LocalReportModel? localReportModel}) async {
+  static Future<Map<String, dynamic>> delete(
+      {@required LocalReportModel? localReportModel}) async {
     try {
       await initHiveObject();
 
       ///
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
+      int createAt = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: localReportModel!.createdAt)!;
+      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
+          dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportIdStr = "${reportDateTime}_$createAt";
 
       ///
       localReportsBox!.delete(reportIdStr);
 
       ///
-      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+      List<dynamic>? reportIds =
+          localReportIdsBox!.get("ids", defaultValue: []);
       reportIds!.remove(reportIdStr);
       reportIds.sort(sortReportIdHandler);
       localReportIdsBox!.put("ids", reportIds);
@@ -373,7 +398,8 @@ class LocalReportApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> storeReport({@required LocalReportModel? localReportModel}) async {
+  static Future<Map<String, dynamic>> storeReport(
+      {@required LocalReportModel? localReportModel}) async {
     String apiUrl = '/store-report';
 
     try {
@@ -389,7 +415,8 @@ class LocalReportApiProvider {
       }
 
       var data = localReportModel!.toJson();
-      if (data["report_id"] == -1 || data["report_id"] == 0) data["report_id"] = null;
+      if (data["report_id"] == -1 || data["report_id"] == 0)
+        data["report_id"] = null;
       data.remove("orderList");
 
       var response = await http.post(
