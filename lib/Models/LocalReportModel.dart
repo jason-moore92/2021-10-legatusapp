@@ -1,38 +1,74 @@
 import "package:equatable/equatable.dart";
-import 'package:legatus/Models/media_model.dart';
+import 'package:hive/hive.dart';
+import 'package:legutus/Models/MediaModel.dart';
 
+part 'LocalReportModel.g.dart';
+
+@HiveType(typeId: 2)
 class LocalReportModel extends Equatable {
+  @HiveField(0)
   int? reportId;
+  @HiveField(1)
   String? uuid;
+  @HiveField(2)
   Map<String, dynamic>? deviceInfo;
+  @HiveField(3)
   String? date;
+  @HiveField(4)
   String? time;
+  @HiveField(5)
   String? createdAt;
+  @HiveField(6)
   String? name;
+  @HiveField(7)
   String? type;
+  @HiveField(8)
   String? description;
+  @HiveField(9)
   String? street;
+  @HiveField(10)
   String? complement;
+  @HiveField(11)
   String? zip;
+  @HiveField(12)
   String? city;
+  @HiveField(13)
   String? latitude;
+  @HiveField(14)
   String? longitude;
+  @HiveField(15)
   String? customerName;
+  @HiveField(16)
   String? customerType;
+  @HiveField(17)
   String? customerStreet;
+  @HiveField(18)
   String? customerComplement;
+  @HiveField(19)
   String? customerZip;
+  @HiveField(20)
   String? customerCity;
+  @HiveField(21)
   String? customerCorpForm;
+  @HiveField(22)
   String? customerCorpSiren;
+  @HiveField(23)
   String? customerCorpRcs;
+  @HiveField(24)
   String? recipientName;
+  @HiveField(25)
   String? recipientPosition;
+  @HiveField(26)
   String? recipientBirthDate;
+  @HiveField(27)
   String? recipientBirthCity;
+  @HiveField(28)
   String? recipientEmail;
+  @HiveField(29)
   String? recipientPhone;
+  @HiveField(30)
   List<MediaModel>? medias;
+  @HiveField(31)
   List<dynamic>? orderList;
 
   LocalReportModel({

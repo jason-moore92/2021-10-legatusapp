@@ -4,6 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:legutus/Models/LocalReportModel.dart';
+import 'package:legutus/Models/MediaModel.dart';
+import 'package:legutus/Models/SettingsModel.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'Config/config.dart';
 import 'Pages/App/Styles/index.dart';
@@ -23,27 +27,33 @@ void main() async {
 
   await EasyLocalization.ensureInitialized();
 
-  runZonedGuarded(() async {
-    await SentryFlutter.init(
-      (options) {
-        options.dsn = AppConfig.dsn;
-      },
-    );
-    runApp(
-      EasyLocalization(
-        useOnlyLangCode: true,
-        useFallbackTranslations: true,
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('fr', 'FR'),
-        ],
-        path: 'lib/Assets/Langs',
-        startLocale: Locale('fr', 'FR'),
-        fallbackLocale: Locale('en', 'US'),
-        child: App(),
-      ),
-    );
-  }, (exception, stackTrace) async {
-    await Sentry.captureException(exception, stackTrace: stackTrace);
-  });
+  await Hive.initFlutter();
+
+  Hive.registerAdapter(LocalReportModelAdapter());
+  Hive.registerAdapter(SettingsModelAdapter());
+  Hive.registerAdapter(MediaModelAdapter());
+
+  // runZonedGuarded(() async {
+  //   await SentryFlutter.init(
+  //     (options) {
+  //       options.dsn = AppConfig.dsn;
+  //     },
+  //   );
+  runApp(
+    EasyLocalization(
+      useOnlyLangCode: true,
+      useFallbackTranslations: true,
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('fr', 'FR'),
+      ],
+      path: 'lib/Assets/Langs',
+      startLocale: Locale('fr', 'FR'),
+      fallbackLocale: Locale('en', 'US'),
+      child: App(),
+    ),
+  );
+  // }, (exception, stackTrace) async {
+  //   await Sentry.captureException(exception, stackTrace: stackTrace);
+  // });
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:legatus/Models/index.dart';
-import 'package:legatus/Models/local_report_model.dart';
-import 'package:legatus/Pages/App/Styles/index.dart';
-import 'package:legatus/Pages/App/responsive_settings.dart';
-import 'package:legatus/generated/locale_keys.g.dart';
+import 'package:legutus/Models/index.dart';
+import 'package:legutus/Models/LocalReportModel.dart';
+import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/App/responsive_settings.dart';
+import 'package:legutus/generated/locale_keys.g.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -12,9 +12,7 @@ class LocalReportWidget extends StatelessWidget {
   final LocalReportModel? localReportModel;
   final bool? isLoading;
 
-  LocalReportWidget(
-      {Key? key, @required this.localReportModel, @required this.isLoading})
-      : super(key: key);
+  LocalReportWidget({Key? key, @required this.localReportModel, @required this.isLoading}) : super(key: key);
 
   /// Responsive design variables
   double? deviceWidth;
@@ -50,12 +48,9 @@ class LocalReportWidget extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: widthDp! * 15, vertical: heightDp! * 10),
+      padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 10),
       color: Colors.transparent,
-      child: isLoading!
-          ? _shimmerWidget(context)
-          : Container(child: _mainPanel(context)),
+      child: isLoading! ? _shimmerWidget(context) : Container(child: _mainPanel(context)),
     );
   }
 
@@ -74,17 +69,13 @@ class LocalReportWidget extends StatelessWidget {
             children: [
               Container(
                 color: Colors.white,
-                child: Text("report name",
-                    style: Theme.of(context).textTheme.subtitle2),
+                child: Text("report name", style: Theme.of(context).textTheme.subtitle2),
               ),
               Container(
                 color: Colors.white,
                 child: Text(
                   "2021-02-34 34:45",
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(color: AppColors.yello),
+                  style: Theme.of(context).textTheme.caption!.copyWith(color: AppColors.yello),
                 ),
               ),
             ],
@@ -96,8 +87,7 @@ class LocalReportWidget extends StatelessWidget {
             children: [
               Container(
                 color: Colors.white,
-                child: Icon(Icons.location_on_outlined,
-                    size: heightDp! * 20, color: Colors.white),
+                child: Icon(Icons.location_on_outlined, size: heightDp! * 20, color: Colors.white),
               ),
               SizedBox(width: widthDp! * 10),
               Container(
@@ -119,8 +109,7 @@ class LocalReportWidget extends StatelessWidget {
                   children: [
                     Container(
                       color: Colors.white,
-                      child: Icon(Icons.collections_outlined,
-                          size: heightDp! * 15, color: Colors.white),
+                      child: Icon(Icons.collections_outlined, size: heightDp! * 15, color: Colors.white),
                     ),
                     Container(
                       color: Colors.white,
@@ -138,8 +127,7 @@ class LocalReportWidget extends StatelessWidget {
                   children: [
                     Container(
                       color: Colors.white,
-                      child: Icon(Icons.mic_none,
-                          size: heightDp! * 15, color: Colors.white),
+                      child: Icon(Icons.mic_none, size: heightDp! * 15, color: Colors.white),
                     ),
                     Container(
                       color: Colors.white,
@@ -157,8 +145,7 @@ class LocalReportWidget extends StatelessWidget {
                   children: [
                     Container(
                       color: Colors.white,
-                      child: Icon(Icons.sticky_note_2_outlined,
-                          size: heightDp! * 15, color: Colors.white),
+                      child: Icon(Icons.sticky_note_2_outlined, size: heightDp! * 15, color: Colors.white),
                     ),
                     Container(
                       color: Colors.white,
@@ -176,8 +163,7 @@ class LocalReportWidget extends StatelessWidget {
                   children: [
                     Container(
                       color: Colors.white,
-                      child: Icon(Icons.video_library_outlined,
-                          size: heightDp! * 15, color: Colors.white),
+                      child: Icon(Icons.video_library_outlined, size: heightDp! * 15, color: Colors.white),
                     ),
                     Container(
                       color: Colors.white,
@@ -198,8 +184,7 @@ class LocalReportWidget extends StatelessWidget {
             children: [
               Container(
                 color: Colors.white,
-                child: Icon(Icons.cloud_done_outlined,
-                    size: heightDp! * 20, color: AppColors.green),
+                child: Icon(Icons.cloud_done_outlined, size: heightDp! * 20, color: AppColors.green),
               ),
               SizedBox(width: widthDp! * 3),
               Container(
@@ -253,17 +238,12 @@ class LocalReportWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-                child: Text(localReportModel!.name!,
-                    style: Theme.of(context).textTheme.subtitle2)),
+            Expanded(child: Text(localReportModel!.name!, style: Theme.of(context).textTheme.subtitle2)),
             SizedBox(width: widthDp! * 10),
             Text(
               "${localReportModel!.date!.split('-').last}/${localReportModel!.date!.split('-')[1]}/${localReportModel!.date!.split('-').first} "
               "${localReportModel!.time!.split(":")[0]}:${localReportModel!.time!.split(":")[1]}",
-              style: Theme.of(context)
-                  .textTheme
-                  .caption!
-                  .copyWith(color: AppColors.yello),
+              style: Theme.of(context).textTheme.caption!.copyWith(color: AppColors.yello),
             ),
           ],
         ),
@@ -275,8 +255,7 @@ class LocalReportWidget extends StatelessWidget {
               SizedBox(height: heightDp! * 5),
               Row(
                 children: [
-                  Icon(Icons.location_on_outlined,
-                      size: heightDp! * 20, color: Colors.black),
+                  Icon(Icons.location_on_outlined, size: heightDp! * 20, color: Colors.black),
                   SizedBox(width: widthDp! * 10),
                   Text(
                     "${localReportModel!.zip!} ${localReportModel!.city!}",
@@ -297,8 +276,7 @@ class LocalReportWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.collections_outlined,
-                          size: heightDp! * 15, color: Colors.black),
+                      Icon(Icons.collections_outlined, size: heightDp! * 15, color: Colors.black),
                       SizedBox(width: widthDp! * 5),
                       Text(
                         LocaleKeys.LocalReportWidgetString_photos.tr(),
@@ -312,8 +290,7 @@ class LocalReportWidget extends StatelessWidget {
                       ),
                       SizedBox(width: widthDp! * 10),
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                        padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                         decoration: BoxDecoration(
                           color: AppColors.yello,
                           borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -333,8 +310,7 @@ class LocalReportWidget extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                    padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
                       color: AppColors.yello,
                       borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -361,8 +337,7 @@ class LocalReportWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.mic_none,
-                          size: heightDp! * 15, color: Colors.black),
+                      Icon(Icons.mic_none, size: heightDp! * 15, color: Colors.black),
                       Text(
                         LocaleKeys.LocalReportWidgetString_audios.tr(),
                         style: TextStyle(
@@ -376,8 +351,7 @@ class LocalReportWidget extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                    padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
                       color: AppColors.yello,
                       borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -404,8 +378,7 @@ class LocalReportWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.sticky_note_2_outlined,
-                          size: heightDp! * 15, color: Colors.black),
+                      Icon(Icons.sticky_note_2_outlined, size: heightDp! * 15, color: Colors.black),
                       Text(
                         LocaleKeys.LocalReportWidgetString_notes.tr(),
                         style: TextStyle(
@@ -419,8 +392,7 @@ class LocalReportWidget extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                    padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
                       color: AppColors.yello,
                       borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -447,8 +419,7 @@ class LocalReportWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.video_library_outlined,
-                          size: heightDp! * 15, color: Colors.black),
+                      Icon(Icons.video_library_outlined, size: heightDp! * 15, color: Colors.black),
                       Text(
                         LocaleKeys.LocalReportWidgetString_videos.tr(),
                         style: TextStyle(
@@ -462,8 +433,7 @@ class LocalReportWidget extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                    padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                     decoration: BoxDecoration(
                       color: AppColors.yello,
                       borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -491,21 +461,16 @@ class LocalReportWidget extends StatelessWidget {
         Row(
           children: [
             Icon(
-              totalCount == 0 || nonUploadedCount != 0
-                  ? Icons.cloud_off_outlined
-                  : Icons.cloud_done_outlined,
+              totalCount == 0 || nonUploadedCount != 0 ? Icons.cloud_off_outlined : Icons.cloud_done_outlined,
               size: heightDp! * 20,
-              color: totalCount == 0 || nonUploadedCount != 0
-                  ? AppColors.red
-                  : AppColors.green,
+              color: totalCount == 0 || nonUploadedCount != 0 ? AppColors.red : AppColors.green,
             ),
             SizedBox(width: widthDp! * 5),
             Text(
               totalCount == 0
                   ? LocaleKeys.LocalReportWidgetString_noMedial.tr()
                   : totalCount != 0 && nonUploadedCount != 0
-                      ? LocaleKeys.LocalReportWidgetString_nonUploadMedial.tr(
-                          args: [nonUploadedCount.toString()])
+                      ? LocaleKeys.LocalReportWidgetString_nonUploadMedial.tr(args: [nonUploadedCount.toString()])
                       : LocaleKeys.LocalReportWidgetString_allMediaUpload.tr(),
               style: TextStyle(
                 fontSize: fontSp! * 10,

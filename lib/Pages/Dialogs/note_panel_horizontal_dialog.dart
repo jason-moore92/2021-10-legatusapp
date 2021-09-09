@@ -6,12 +6,12 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:geolocator/geolocator.dart';
-// import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
-// import 'package:legatus/Helpers/index.dart';
-// import 'package:legatus/Models/index.dart';
-// import 'package:legatus/Pages/App/Styles/index.dart';
-// import 'package:legatus/Pages/Components/index.dart';
-// import 'package:legatus/generated/locale_keys.g.dart';
+// import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
+// import 'package:legutus/Helpers/index.dart';
+// import 'package:legutus/Models/index.dart';
+// import 'package:legutus/Pages/App/Styles/index.dart';
+// import 'package:legutus/Pages/Components/index.dart';
+// import 'package:legutus/generated/locale_keys.g.dart';
 // import 'package:easy_localization/easy_localization.dart';
 // import 'package:uuid/uuid.dart';
 

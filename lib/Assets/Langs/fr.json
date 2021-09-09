@@ -13,7 +13,7 @@
     "configration": "Configration"
   },
   "PlanningListPageString": {
-    "appbarTitle": "Planning",
+    "appbar_title": "Planning",
     "login_description": "Connectez-vous à votre compte Legatus pour accéder au planning de constats de l’étude.",
     "login_button": "SE CONNECTER",
     "noPlanning": "Aucun constat dans votre planning"

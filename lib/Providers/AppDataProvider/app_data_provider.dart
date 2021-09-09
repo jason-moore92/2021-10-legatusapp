@@ -3,16 +3,16 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
-import 'package:legatus/ApiDataProviders/index.dart';
-import 'package:legatus/Models/index.dart';
+import 'package:hive/hive.dart';
+import 'package:legutus/ApiDataProviders/index.dart';
+import 'package:legutus/Models/index.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'index.dart';
 
 class AppDataProvider extends ChangeNotifier {
-  static AppDataProvider of(BuildContext context, {bool listen = false}) =>
-      Provider.of<AppDataProvider>(context, listen: listen);
+  static AppDataProvider of(BuildContext context, {bool listen = false}) => Provider.of<AppDataProvider>(context, listen: listen);
 
   AppDataState _appDataState = AppDataState.init();
   AppDataState get appDataState => _appDataState;
@@ -24,13 +24,25 @@ class AppDataProvider extends ChangeNotifier {
     }
   }
 
-  SharedPreferences? _prefs;
-  SharedPreferences? get prefs => _prefs;
+  Box<dynamic>? _appSettingsBox;
+  Box<dynamic>? get appSettingsBox => _appSettingsBox;
+
+  Future<void> initHiveObject() async {
+    try {
+      if (_appSettingsBox == null) {
+        _appSettingsBox = await Hive.openBox<dynamic>("app_settings");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<void> init() async {
     try {
-      _prefs = await SharedPreferences.getInstance();
-      String? result = _prefs!.getString("settings");
+      await initHiveObject();
+
+      dynamic result = _appSettingsBox!.get("settings");
+
       if (result != null && result != "null") {
         _appDataState = _appDataState.update(
           progressState: 2,
@@ -110,21 +122,22 @@ class AppDataProvider extends ChangeNotifier {
     int? videoResolution,
     bool isNotifiable = true,
   }) async {
-    SettingsModel settingsModel =
-        SettingsModel.copy(_appDataState.settingsModel!);
+    await initHiveObject();
+
+    SettingsModel settingsModel = SettingsModel.copy(_appDataState.settingsModel!);
 
     // if (allowCamera != null) settingsModel.allowCamera = allowCamera;
     // if (allowLocation != null) settingsModel.allowLocation = allowLocation;
     // if (allowMicrophone != null) settingsModel.allowMicrophone = allowMicrophone;
     // if (withRestriction != null) settingsModel.withRestriction = withRestriction;
-    if (photoResolution != null)
-      settingsModel.photoResolution = photoResolution;
-    if (videoResolution != null)
-      settingsModel.videoResolution = videoResolution;
+    if (photoResolution != null) settingsModel.photoResolution = photoResolution;
+    if (videoResolution != null) settingsModel.videoResolution = videoResolution;
 
-    if (_prefs == null) _prefs = await SharedPreferences.getInstance();
+    _appSettingsBox!.put("settings", settingsModel);
 
-    await _prefs!.setString("settings", json.encode(settingsModel.toJson()));
+    var result = _appSettingsBox!.get("settings");
+
+    print(result);
 
     _appDataState = _appDataState.update(
       settingsModel: settingsModel,

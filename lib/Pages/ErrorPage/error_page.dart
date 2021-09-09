@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:legatus/Pages/App/Styles/index.dart';
-import 'package:legatus/Pages/Components/index.dart';
+import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/Components/index.dart';
 
 class ErrorPage extends StatelessWidget {
   final String? message;

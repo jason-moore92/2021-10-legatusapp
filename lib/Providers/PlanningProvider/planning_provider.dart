@@ -2,40 +2,47 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:legatus/ApiDataProviders/index.dart';
-import 'package:legatus/Config/config.dart';
-import 'package:legatus/Models/index.dart';
+import 'package:hive/hive.dart';
+import 'package:legutus/ApiDataProviders/index.dart';
+import 'package:legutus/Config/config.dart';
+import 'package:legutus/Models/index.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'index.dart';
 
 class PlanningProvider extends ChangeNotifier {
-  static PlanningProvider of(BuildContext context, {bool listen = false}) =>
-      Provider.of<PlanningProvider>(context, listen: listen);
+  static PlanningProvider of(BuildContext context, {bool listen = false}) => Provider.of<PlanningProvider>(context, listen: listen);
 
   PlanningState _planningState = PlanningState.init();
   PlanningState get planningState => _planningState;
 
-  SharedPreferences? _preferences;
+  Box<dynamic>? _planningDataBox;
+  Box<dynamic>? get planningDataBox => _planningDataBox;
 
-  void setPlanningState(PlanningState planningState,
-      {bool isNotifiable = true}) {
+  void setPlanningState(PlanningState planningState, {bool isNotifiable = true}) {
     if (_planningState != planningState) {
       _planningState = planningState;
       if (isNotifiable) notifyListeners();
     }
   }
 
+  Future<void> initHiveObject() async {
+    try {
+      if (_planningDataBox == null) {
+        _planningDataBox = await Hive.openBox<dynamic>("planningData");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> getLocalReportList() async {
     try {
       var result;
+      await initHiveObject();
 
-      if (_preferences == null)
-        _preferences = await SharedPreferences.getInstance();
-
-      result = await PlanningApiProvider.getPlanning(
-          startDate: _planningState.currentDate);
+      result = await PlanningApiProvider.getPlanning(startDate: _planningState.currentDate);
 
       if (result["success"]) {
         Map<String, dynamic> planningData = _planningState.planningData!;
@@ -47,8 +54,10 @@ class PlanningProvider extends ChangeNotifier {
           planningData: planningData,
         );
 
-        await _preferences!.setString(
-            "planningData", json.encode(_planningState.planningData));
+        _planningDataBox!.put("planningData", _planningState.planningData);
+        var test = _planningDataBox!.get("planningData");
+
+        print(test);
       } else {
         _planningState = _planningState.update(
           progressState: -1,
@@ -61,11 +70,11 @@ class PlanningProvider extends ChangeNotifier {
     }
 
     if (_planningState.progressState == -1) {
-      var localData = _preferences!.getString("planningData");
+      var localData = _planningDataBox!.get("planningData");
       if (localData != null) {
         _planningState = _planningState.update(
           progressState: 2,
-          planningData: json.decode(localData),
+          planningData: localData,
         );
       }
     }

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http_interceptor/http_interceptor.dart';
-import 'package:legatus/Config/config.dart';
-import 'package:legatus/Providers/index.dart';
+import 'package:legutus/Config/config.dart';
+import 'package:legutus/Providers/index.dart';
 
 import '../http_plus.dart';
 

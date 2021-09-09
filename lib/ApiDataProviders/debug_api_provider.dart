@@ -3,12 +3,25 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:legatus/Config/config.dart';
-import 'package:legatus/Helpers/http_plus.dart';
-import 'package:legatus/Models/index.dart';
+import 'package:hive/hive.dart';
+import 'package:legutus/Config/config.dart';
+import 'package:legutus/Helpers/http_plus.dart';
+import 'package:legutus/Models/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DebugApiProvider {
+  static Box<dynamic>? appSettingsBox;
+
+  static Future<void> initHiveObject() async {
+    try {
+      if (appSettingsBox == null) {
+        appSettingsBox = await Hive.openBox<dynamic>("app_settings");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   static Future<Map<String, dynamic>> debugReport({
     @required List<dynamic>? planningData,
     @required List<dynamic>? localReports,
@@ -18,8 +31,9 @@ class DebugApiProvider {
     String apiUrl = '/debug';
 
     try {
-      SharedPreferences _prefs = await SharedPreferences.getInstance();
-      String? modeValue = _prefs.getString("develop_mode");
+      await initHiveObject();
+
+      dynamic modeValue = appSettingsBox!.get("develop_mode");
       String url;
 
       if (modeValue == "40251764") {

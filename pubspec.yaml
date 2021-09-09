@@ -1,9 +1,9 @@
-name: legatus
+name: legutus
 description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 3.0.3+22
+version: 1.0.0+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -26,7 +26,7 @@ dependencies:
   date_time_format: ^2.0.1
   permission_handler: ^8.1.2
   geolocator: ^7.2.0+1
-  localstorage: ^4.0.0+1
+  # localstorage: ^4.0.0+1
   uuid: ^3.0.4
   device_info: ^2.0.2
   path_provider: ^2.0.2
@@ -40,7 +40,9 @@ dependencies:
   json_diff: ^0.2.0
   share: ^2.0.4
   wakelock: ^0.5.2
-  
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+
   ####################
   camera: ^0.8.1+4
   native_device_orientation:
@@ -59,6 +61,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.9.0
+  hive_generator: ^1.1.0
+  build_runner: ^2.1.2
+  # flutter packages pub run build_runner build --delete-conflicting-outputs
+  
   
 flutter_icons:
   android: true

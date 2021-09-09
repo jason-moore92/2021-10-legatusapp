@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:legatus/Models/index.dart';
-import 'package:legatus/Pages/App/Styles/index.dart';
-import 'package:legatus/Pages/App/index.dart';
-import 'package:legatus/Pages/Dialogs/index.dart';
-import 'package:legatus/Providers/index.dart';
+import 'package:legutus/Models/index.dart';
+import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/App/index.dart';
+import 'package:legutus/Pages/Dialogs/index.dart';
+import 'package:legutus/Providers/index.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -64,8 +64,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
 
     _mediaPlayProvider = MediaPlayProvider.of(context);
 
-    _mediaPlayProvider!
-        .setMediaPlayState(MediaPlayState.init(), isNotifiable: false);
+    _mediaPlayProvider!.setMediaPlayState(MediaPlayState.init(), isNotifiable: false);
 
     _init();
 
@@ -76,10 +75,8 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
 
   void _mediaPlayProviderListener() async {
     if (_mediaPlayProvider!.mediaPlayState.isNew! &&
-        _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank !=
-            widget.mediaModel!.rank &&
-        _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid !=
-            widget.mediaModel!.uuid) {
+        _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank != widget.mediaModel!.rank &&
+        _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid != widget.mediaModel!.uuid) {
       if (_videoPlayerController!.value.isPlaying) {
         await _seekToPlayer(0);
         _sliderCurrentPosition = 0;
@@ -93,21 +90,18 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   }
 
   void _init() {
-    _videoPlayerController =
-        VideoPlayerController.file(File(widget.mediaModel!.path!))
-          ..initialize().then(
-            (_) {
-              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                _maxDuration = _videoPlayerController!
-                    .value.duration.inMilliseconds
-                    .toDouble();
-                if (_maxDuration <= 0) _maxDuration = 0.0;
-                if (mounted) setState(() {});
-              });
-            },
-          ).onError((error, stackTrace) {
-            print(error);
+    _videoPlayerController = VideoPlayerController.file(File(widget.mediaModel!.path!))
+      ..initialize().then(
+        (_) {
+          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+            _maxDuration = _videoPlayerController!.value.duration.inMilliseconds.toDouble();
+            if (_maxDuration <= 0) _maxDuration = 0.0;
+            if (mounted) setState(() {});
           });
+        },
+      ).onError((error, stackTrace) {
+        print(error);
+      });
   }
 
   @override
@@ -119,22 +113,16 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   }
 
   void _onStartPlay() async {
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized) return;
+    if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) return;
     try {
-      if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank !=
-              widget.mediaModel!.rank &&
-          _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid !=
-              widget.mediaModel!.uuid) {
+      if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank != widget.mediaModel!.rank &&
+          _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid != widget.mediaModel!.uuid) {
         ///
         _mediaPlayProvider!.setMediaPlayState(
-          _mediaPlayProvider!.mediaPlayState
-              .update(isNew: true, selectedMediaModel: widget.mediaModel),
+          _mediaPlayProvider!.mediaPlayState.update(isNew: true, selectedMediaModel: widget.mediaModel),
         );
-      } else if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank ==
-              widget.mediaModel!.rank &&
-          _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid ==
-              widget.mediaModel!.uuid) {
+      } else if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank == widget.mediaModel!.rank &&
+          _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid == widget.mediaModel!.uuid) {
         ///
         _mediaPlayProvider!.setMediaPlayState(
           _mediaPlayProvider!.mediaPlayState.update(
@@ -146,8 +134,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
       await _videoPlayerController!.play();
       _timer = Timer.periodic(Duration(milliseconds: 1), (timer) async {
         if ((await _videoPlayerController!.position) == null) return;
-        _sliderCurrentPosition =
-            (await _videoPlayerController!.position)!.inMilliseconds.toDouble();
+        _sliderCurrentPosition = (await _videoPlayerController!.position)!.inMilliseconds.toDouble();
         if (_sliderCurrentPosition >= _maxDuration) {
           _onStopPlay();
         } else {
@@ -158,8 +145,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   }
 
   Future<void> _seekToPlayer(int milliSecs) async {
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized) return;
+    if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) return;
     try {
       await _videoPlayerController!.seekTo(Duration(milliseconds: milliSecs));
       if (_timer != null) _timer!.cancel();
@@ -180,8 +166,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   }
 
   Future<void> _onStopPlay() async {
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized) return;
+    if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) return;
     if (_timer != null) _timer!.cancel();
     _videoPlayerController!.seekTo(Duration(milliseconds: 0));
     await _videoPlayerController!.pause();
@@ -193,16 +178,12 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   @override
   Widget build(BuildContext context) {
     String responsiveStyle = "";
-    if (MediaQuery.of(context).size.width >=
-        ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >=
-            ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width <
-            ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width <
-        ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
@@ -213,12 +194,10 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
     if (responsiveStyle != "mobile") {
       iconSize = heightDp * 35;
       iconPadding = widthDp * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized) {
+    if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) {
       return Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
@@ -237,12 +216,9 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
       );
     }
 
-    var maxTime =
-        DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
+    var maxTime = DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
     var maxTimeString = DateFormat('mm:ss').format(maxTime);
-    var currentTime = DateTime.fromMillisecondsSinceEpoch(
-        _sliderCurrentPosition.toInt(),
-        isUtc: true);
+    var currentTime = DateTime.fromMillisecondsSinceEpoch(_sliderCurrentPosition.toInt(), isUtc: true);
     var currentTimeString = DateFormat('mm:ss').format(currentTime);
 
     if (widget.isUploading!) {
@@ -255,8 +231,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
       angle = 0;
     }
 
-    return Consumer<MediaPlayProvider>(
-        builder: (context, mediaPlayProvider, _) {
+    return Consumer<MediaPlayProvider>(builder: (context, mediaPlayProvider, _) {
       return GestureDetector(
         onTap: () {
           if (widget.tapHandler != null) {
@@ -282,10 +257,8 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
               Container(
                 width: (MediaQuery.of(context).size.width - widthDp * 20),
                 height: _videoPlayerController!.value.aspectRatio < 1
-                    ? (MediaQuery.of(context).size.width - widthDp * 20) *
-                        _videoPlayerController!.value.aspectRatio
-                    : (MediaQuery.of(context).size.width - widthDp * 20) /
-                        _videoPlayerController!.value.aspectRatio,
+                    ? (MediaQuery.of(context).size.width - widthDp * 20) * _videoPlayerController!.value.aspectRatio
+                    : (MediaQuery.of(context).size.width - widthDp * 20) / _videoPlayerController!.value.aspectRatio,
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(heightDp * 0),
@@ -295,9 +268,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                     borderRadius: BorderRadius.circular(heightDp * 0),
                     child: AspectRatio(
                       // aspectRatio: (MediaQuery.of(context).size.width - widthDp * 20) / heightDp * 200,
-                      aspectRatio: _videoPlayerController!.value.size != null
-                          ? _videoPlayerController!.value.aspectRatio
-                          : 1.0,
+                      aspectRatio: _videoPlayerController!.value.size != null ? _videoPlayerController!.value.aspectRatio : 1.0,
                       child: VideoPlayer(_videoPlayerController!),
                     ),
                   ),
@@ -352,10 +323,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                                     ? Icons.cloud_done_outlined
                                     : Icons.cloud_off_outlined,
                             size: iconSize,
-                            color: widget.mediaModel!.state == "error" ||
-                                    widget.mediaModel!.state == "uploaded"
-                                ? Colors.white
-                                : Colors.transparent,
+                            color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
                           ),
                           Icon(
                             widget.mediaModel!.state == "error"
@@ -374,10 +342,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                       ),
                       Text(
                         "$maxTimeString",
-                        style: Theme.of(context)
-                            .textTheme
-                            .overline!
-                            .copyWith(color: Colors.white),
+                        style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                       ),
                     ],
                   ),
@@ -387,10 +352,8 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                 Container(
                   width: (MediaQuery.of(context).size.width - widthDp * 20),
                   height: _videoPlayerController!.value.aspectRatio < 1
-                      ? (MediaQuery.of(context).size.width - widthDp * 20) *
-                          _videoPlayerController!.value.aspectRatio
-                      : (MediaQuery.of(context).size.width - widthDp * 20) /
-                          _videoPlayerController!.value.aspectRatio,
+                      ? (MediaQuery.of(context).size.width - widthDp * 20) * _videoPlayerController!.value.aspectRatio
+                      : (MediaQuery.of(context).size.width - widthDp * 20) / _videoPlayerController!.value.aspectRatio,
                   child: GestureDetector(
                     onTap: () {
                       pushNewScreen(
@@ -403,9 +366,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                       );
                     },
                     child: Center(
-                      child: Icon(Icons.play_arrow_rounded,
-                          size: heightDp * 100,
-                          color: Colors.white.withOpacity(0.8)),
+                      child: Icon(Icons.play_arrow_rounded, size: heightDp * 100, color: Colors.white.withOpacity(0.8)),
                     ),
                   ),
                 ),
@@ -413,17 +374,13 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                 Container(
                   width: (MediaQuery.of(context).size.width - widthDp * 20),
                   height: _videoPlayerController!.value.aspectRatio < 1
-                      ? (MediaQuery.of(context).size.width - widthDp * 20) *
-                          _videoPlayerController!.value.aspectRatio
-                      : (MediaQuery.of(context).size.width - widthDp * 20) /
-                          _videoPlayerController!.value.aspectRatio,
-                  decoration:
-                      BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                      ? (MediaQuery.of(context).size.width - widthDp * 20) * _videoPlayerController!.value.aspectRatio
+                      : (MediaQuery.of(context).size.width - widthDp * 20) / _videoPlayerController!.value.aspectRatio,
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
                   child: Center(
                     child: Transform.rotate(
                       angle: angle / 180 * pi,
-                      child: Icon(Icons.autorenew,
-                          size: heightDp * 50, color: Colors.white),
+                      child: Icon(Icons.autorenew, size: heightDp * 50, color: Colors.white),
                     ),
                   ),
                 )
@@ -468,22 +425,19 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
   }
 
   void _init() {
-    _videoPlayerController =
-        VideoPlayerController.file(File(widget.mediaModel!.path!))
-          ..initialize().then(
-            (_) {
-              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                _maxDuration = _videoPlayerController!
-                    .value.duration.inMilliseconds
-                    .toDouble();
-                if (_maxDuration <= 0) _maxDuration = 0.0;
-                if (mounted) setState(() {});
-                _onStartPlay();
-              });
-            },
-          ).onError((error, stackTrace) {
-            print(error);
+    _videoPlayerController = VideoPlayerController.file(File(widget.mediaModel!.path!))
+      ..initialize().then(
+        (_) {
+          WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+            _maxDuration = _videoPlayerController!.value.duration.inMilliseconds.toDouble();
+            if (_maxDuration <= 0) _maxDuration = 0.0;
+            if (mounted) setState(() {});
+            _onStartPlay();
           });
+        },
+      ).onError((error, stackTrace) {
+        print(error);
+      });
   }
 
   @override
@@ -507,17 +461,13 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
     double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     double statusbarHeight = ScreenUtil().statusBarHeight;
 
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized) {
+    if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) {
       return Center(child: CupertinoActivityIndicator());
     }
 
-    var maxTime =
-        DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
+    var maxTime = DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
     var maxTimeString = DateFormat('mm:ss').format(maxTime);
-    var currentTime = DateTime.fromMillisecondsSinceEpoch(
-        _sliderCurrentPosition.toInt(),
-        isUtc: true);
+    var currentTime = DateTime.fromMillisecondsSinceEpoch(_sliderCurrentPosition.toInt(), isUtc: true);
     var currentTimeString = DateFormat('mm:ss').format(currentTime);
 
     return WillPopScope(
@@ -540,15 +490,12 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
               children: [
                 Center(
                   child: AspectRatio(
-                    aspectRatio: _videoPlayerController!.value.size != null
-                        ? _videoPlayerController!.value.aspectRatio
-                        : 1.0,
+                    aspectRatio: _videoPlayerController!.value.size != null ? _videoPlayerController!.value.aspectRatio : 1.0,
                     child: VideoPlayer(_videoPlayerController!),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.close_outlined,
-                      color: Colors.white, size: heightDp * 25),
+                  icon: Icon(Icons.close_outlined, color: Colors.white, size: heightDp * 25),
                   onPressed: () async {
                     await _onStopPlay();
                     Navigator.of(context).pop();
@@ -557,9 +504,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
                 Positioned(
                   bottom: heightDp * 5,
                   child: Container(
-                    width: _videoPlayerController!.value.aspectRatio < 1
-                        ? deviceWidth
-                        : deviceHeight - statusbarHeight,
+                    width: _videoPlayerController!.value.aspectRatio < 1 ? deviceWidth : deviceHeight - statusbarHeight,
                     padding: EdgeInsets.symmetric(horizontal: widthDp * 10),
                     color: Colors.black.withOpacity(0.3),
                     child: Row(
@@ -569,22 +514,16 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
                           GestureDetector(
                             onTap: _onStartPlay,
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: widthDp * 3,
-                                  vertical: heightDp * 5),
-                              child: Icon(Icons.play_arrow,
-                                  size: heightDp * 25, color: Colors.white),
+                              padding: EdgeInsets.symmetric(horizontal: widthDp * 3, vertical: heightDp * 5),
+                              child: Icon(Icons.play_arrow, size: heightDp * 25, color: Colors.white),
                             ),
                           ),
                         if (_videoPlayerController!.value.isPlaying)
                           GestureDetector(
                             onTap: _onStopPlay,
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: widthDp * 5,
-                                  vertical: heightDp * 5),
-                              child: Icon(Icons.stop,
-                                  size: heightDp * 25, color: Colors.white),
+                              padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 5),
+                              child: Icon(Icons.stop, size: heightDp * 25, color: Colors.white),
                             ),
                           ),
                         Expanded(
@@ -599,18 +538,13 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
                               onChanged: (value) async {
                                 await _seekToPlayer(value.toInt());
                               },
-                              divisions: _maxDuration == 0.0
-                                  ? 1
-                                  : _maxDuration.toInt(),
+                              divisions: _maxDuration == 0.0 ? 1 : _maxDuration.toInt(),
                             ),
                           ),
                         ),
                         Text(
                           "$currentTimeString/$maxTimeString",
-                          style: Theme.of(context)
-                              .textTheme
-                              .overline!
-                              .copyWith(color: Colors.white),
+                          style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                         ),
                       ],
                     ),
@@ -625,14 +559,12 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
   }
 
   void _onStartPlay() async {
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized) return;
+    if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) return;
     try {
       await _videoPlayerController!.play();
       _timer = Timer.periodic(Duration(milliseconds: 1), (timer) async {
         if ((await _videoPlayerController!.position) == null) return;
-        _sliderCurrentPosition =
-            (await _videoPlayerController!.position)!.inMilliseconds.toDouble();
+        _sliderCurrentPosition = (await _videoPlayerController!.position)!.inMilliseconds.toDouble();
         if (_sliderCurrentPosition >= _maxDuration) {
           _onStopPlay();
         } else {
@@ -643,9 +575,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
   }
 
   Future<void> _seekToPlayer(int milliSecs) async {
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized ||
-        _timer == null) return;
+    if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized || _timer == null) return;
     try {
       await _videoPlayerController!.seekTo(Duration(milliseconds: milliSecs));
       if (_timer != null) _timer!.cancel();
@@ -666,8 +596,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
   }
 
   Future<void> _onStopPlay() async {
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized) return;
+    if (_videoPlayerController == null || !_videoPlayerController!.value.isInitialized) return;
     if (!_videoPlayerController!.value.isPlaying) return;
 
     if (_timer != null) _timer!.cancel();

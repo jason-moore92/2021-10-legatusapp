@@ -3,19 +3,32 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:legatus/Config/config.dart';
-import 'package:legatus/Helpers/date_time_convert.dart';
-import 'package:legatus/Helpers/http_plus.dart';
+import 'package:hive/hive.dart';
+import 'package:legutus/Config/config.dart';
+import 'package:legutus/Helpers/date_time_convert.dart';
+import 'package:legutus/Helpers/http_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlanningApiProvider {
-  static Future<Map<String, dynamic>> getPlanning(
-      {@required String? startDate}) async {
+  static Box<dynamic>? appSettingsBox;
+
+  static Future<void> initHiveObject() async {
+    try {
+      if (appSettingsBox == null) {
+        appSettingsBox = await Hive.openBox<dynamic>("app_settings");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<Map<String, dynamic>> getPlanning({@required String? startDate}) async {
     String apiUrl = '/planning';
 
     try {
-      SharedPreferences _prefs = await SharedPreferences.getInstance();
-      String? modeValue = _prefs.getString("develop_mode");
+      await initHiveObject();
+
+      dynamic modeValue = appSettingsBox!.get("develop_mode");
       String url;
 
       if (modeValue == "40251764") {
@@ -24,8 +37,7 @@ class PlanningApiProvider {
         url = AppConfig.productionApiBaseUrl + apiUrl;
       }
 
-      startDate = startDate ??
-          KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now());
+      startDate = startDate ?? KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now());
       url += "?start_date=$startDate";
 
       var response = await http.get(

@@ -1,4 +1,7 @@
 import "package:equatable/equatable.dart";
+import 'package:hive/hive.dart';
+
+part 'MediaModel.g.dart';
 
 class MediaType {
   static const String picture = "picture";
@@ -7,22 +10,39 @@ class MediaType {
   static const String video = "video";
 }
 
+@HiveType(typeId: 3)
 class MediaModel extends Equatable {
+  @HiveField(0)
   int? reportId;
+  @HiveField(1)
   String? type;
+  @HiveField(2)
   String? state;
+  @HiveField(3)
   String? uuid;
+  @HiveField(4)
   Map<String, dynamic>? deviceInfo;
+  @HiveField(5)
   String? createdAt;
+  @HiveField(6)
   int? rank;
+  @HiveField(7)
   String? filename;
+  @HiveField(8)
   String? ext;
+  @HiveField(9)
   int? size;
+  @HiveField(10)
   String? path;
+  @HiveField(11)
   String? thumPath;
+  @HiveField(12)
   int? duration;
+  @HiveField(13)
   String? content;
+  @HiveField(14)
   String? latitude;
+  @HiveField(15)
   String? longitude;
 
   MediaModel({

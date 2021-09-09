@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
-import 'package:legatus/Providers/index.dart';
+import 'package:legutus/Pages/Components/keicy_progress_dialog.dart';
+import 'package:legutus/Providers/index.dart';
 import 'package:provider/provider.dart';
 
 class VideoRecoderPanel extends StatefulWidget {
@@ -31,8 +31,7 @@ class VideoRecoderPanel extends StatefulWidget {
   _VideoRecoderPanelState createState() => _VideoRecoderPanelState();
 }
 
-class _VideoRecoderPanelState extends State<VideoRecoderPanel>
-    with SingleTickerProviderStateMixin {
+class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTickerProviderStateMixin {
   double? deviceHeight;
 
   /// Responsive design variables
@@ -70,8 +69,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
 
     _cameraProvider = CameraProvider.of(context);
 
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     animation = Tween<double>(begin: 0, end: 1).animate(controller!)
       ..addListener(() {
         if (controller!.status == AnimationStatus.completed) {
@@ -87,11 +85,9 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   void _cameraProviderListener() async {
-    if (_cameraProvider!.isVideoRecord! &&
-        _cameraProvider!.videoRecordStatus == "recording") {
+    if (_cameraProvider!.isVideoRecord! && _cameraProvider!.videoRecordStatus == "recording") {
       startVideoRecording();
-    } else if (_cameraProvider!.isVideoRecord! &&
-        _cameraProvider!.videoRecordStatus == "stopped") {
+    } else if (_cameraProvider!.isVideoRecord! && _cameraProvider!.videoRecordStatus == "stopped") {
       stopVideoRecording();
     }
   }
@@ -107,8 +103,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   Future<void> startVideoRecording() async {
-    if (widget.cameraController == null ||
-        !widget.cameraController!.value.isInitialized) {
+    if (widget.cameraController == null || !widget.cameraController!.value.isInitialized) {
       showInSnackBar('Error: select a camera first.');
       return;
     }
@@ -135,8 +130,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   Future<void> resumeVideoRecording() async {
-    if (widget.cameraController == null ||
-        !widget.cameraController!.value.isRecordingVideo) {
+    if (widget.cameraController == null || !widget.cameraController!.value.isRecordingVideo) {
       return null;
     }
 
@@ -157,8 +151,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   Future<void> pauseVideoRecording() async {
-    if (widget.cameraController == null ||
-        !widget.cameraController!.value.isRecordingVideo) {
+    if (widget.cameraController == null || !widget.cameraController!.value.isRecordingVideo) {
       return null;
     }
 
@@ -176,8 +169,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   Future<void> stopVideoRecording() async {
-    if (widget.cameraController == null ||
-        !widget.cameraController!.value.isRecordingVideo) {
+    if (widget.cameraController == null || !widget.cameraController!.value.isRecordingVideo) {
       return null;
     }
 
@@ -214,20 +206,13 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
     videoRecorderTxt = txt.substring(0, 5);
 
     String statusString = "";
-    if (widget.cameraController != null &&
-        !widget.cameraController!.value.isInitialized) {
+    if (widget.cameraController != null && !widget.cameraController!.value.isInitialized) {
       statusString = "Video Record is initializing";
-    } else if (widget.cameraController != null &&
-        widget.cameraController!.value.isInitialized &&
-        !widget.cameraController!.value.isRecordingVideo) {
+    } else if (widget.cameraController != null && widget.cameraController!.value.isInitialized && !widget.cameraController!.value.isRecordingVideo) {
       statusString = "Video Record is ready";
-    } else if (widget.cameraController != null &&
-        widget.cameraController!.value.isInitialized &&
-        widget.cameraController!.value.isRecordingPaused) {
+    } else if (widget.cameraController != null && widget.cameraController!.value.isInitialized && widget.cameraController!.value.isRecordingPaused) {
       statusString = "Video Record is stopped";
-    } else if (widget.cameraController != null &&
-        widget.cameraController!.value.isInitialized &&
-        widget.cameraController!.value.isRecordingVideo) {
+    } else if (widget.cameraController != null && widget.cameraController!.value.isInitialized && widget.cameraController!.value.isRecordingVideo) {
       statusString = "Video Record is recording";
     }
 
@@ -252,18 +237,13 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                     ),
                     IconButton(
                       icon: Icon(
-                        widget.cameraController!.enableAudio
-                            ? Icons.volume_up
-                            : Icons.volume_mute,
-                        color: widget.cameraController != null &&
-                                !widget.cameraController!.value.isRecordingVideo
+                        widget.cameraController!.enableAudio ? Icons.volume_up : Icons.volume_mute,
+                        color: widget.cameraController != null && !widget.cameraController!.value.isRecordingVideo
                             ? Colors.white
                             : Colors.white.withOpacity(0.6),
                         size: heightDp! * 20,
                       ),
-                      onPressed: widget.cameraController != null
-                          ? widget.onAudioModeButtonPressed!
-                          : null,
+                      onPressed: widget.cameraController != null ? widget.onAudioModeButtonPressed! : null,
                     ),
                     Expanded(
                       child: Row(
@@ -278,14 +258,11 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                           //       size: heightDp! * 20,
                           //     ),
                           //   ),
-                          if (widget.cameraController!.value.isRecordingVideo &&
-                              !widget.cameraController!.value.isRecordingPaused)
+                          if (widget.cameraController!.value.isRecordingVideo && !widget.cameraController!.value.isRecordingPaused)
                             GestureDetector(
                               onTap: pauseVideoRecording,
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: widthDp! * 10,
-                                    vertical: heightDp! * 5),
+                                padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
                                 child: Icon(
                                   Icons.pause_circle_outline_outlined,
                                   size: heightDp! * 20,
@@ -293,14 +270,11 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                                 ),
                               ),
                             ),
-                          if (widget.cameraController!.value.isRecordingVideo &&
-                              widget.cameraController!.value.isRecordingPaused)
+                          if (widget.cameraController!.value.isRecordingVideo && widget.cameraController!.value.isRecordingPaused)
                             GestureDetector(
                               onTap: resumeVideoRecording,
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: widthDp! * 10,
-                                    vertical: heightDp! * 5),
+                                padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
                                 child: Icon(
                                   Icons.play_circle_outline_outlined,
                                   size: heightDp! * 20,
@@ -312,16 +286,11 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                             animation: animation!,
                             builder: (context, child) {
                               return Opacity(
-                                opacity: (widget.cameraController!.value
-                                            .isRecordingVideo &&
-                                        !widget.cameraController!.value
-                                            .isRecordingPaused)
+                                opacity: (widget.cameraController!.value.isRecordingVideo && !widget.cameraController!.value.isRecordingPaused)
                                     ? 1 - animation!.value
                                     : 0,
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: widthDp! * 10,
-                                      vertical: heightDp! * 5),
+                                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
                                   child: Icon(
                                     Icons.fiber_manual_record,
                                     size: heightDp! * 20,
@@ -331,9 +300,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                               );
                             },
                           ),
-                          Text(videoRecorderTxt,
-                              style: TextStyle(
-                                  fontSize: fontSp! * 14, color: Colors.white)),
+                          Text(videoRecorderTxt, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
                         ],
                       ),
                     ),

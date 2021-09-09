@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:legatus/ApiDataProviders/index.dart';
-import 'package:legatus/Helpers/custom_url_lancher.dart';
-import 'package:legatus/Helpers/index.dart';
-import 'package:legatus/Models/index.dart';
-import 'package:legatus/Pages/App/index.dart';
-import 'package:legatus/Pages/Components/custom_text_button.dart';
-import 'package:legatus/Providers/index.dart';
-import 'package:legatus/generated/locale_keys.g.dart';
+import 'package:legutus/ApiDataProviders/index.dart';
+import 'package:legutus/Helpers/custom_url_lancher.dart';
+import 'package:legutus/Helpers/index.dart';
+import 'package:legutus/Models/index.dart';
+import 'package:legutus/Pages/App/index.dart';
+import 'package:legutus/Pages/Components/custom_text_button.dart';
+import 'package:legutus/Providers/index.dart';
+import 'package:legutus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:json_diff/json_diff.dart';
@@ -22,8 +22,7 @@ class PlanningView extends StatefulWidget {
   _PlanningViewState createState() => _PlanningViewState();
 }
 
-class _PlanningViewState extends State<PlanningView>
-    with SingleTickerProviderStateMixin {
+class _PlanningViewState extends State<PlanningView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -59,8 +58,7 @@ class _PlanningViewState extends State<PlanningView>
   }
 
   void _goToLocalReportPage() async {
-    LocalReportModel? localReportModel =
-        await LocalReportApiProvider.getLocalReportModelByReportId(
+    LocalReportModel? localReportModel = await LocalReportApiProvider.getLocalReportModelByReportId(
       reportId: widget.planningReportModel!.reportId,
     );
 
@@ -70,17 +68,11 @@ class _PlanningViewState extends State<PlanningView>
       localReportModel.name = widget.planningReportModel!.name;
       localReportModel.date = widget.planningReportModel!.date;
       localReportModel.time = widget.planningReportModel!.time;
-      localReportModel.zip =
-          widget.planningReportModel!.zipCity!.split(" ").first;
-      localReportModel.city =
-          widget.planningReportModel!.zipCity!.split(" ").length == 2
-              ? widget.planningReportModel!.zipCity!.split(" ").last
-              : "";
-      localReportModel.createdAt = KeicyDateTime.convertDateTimeToDateString(
-          dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+      localReportModel.zip = widget.planningReportModel!.zipCity!.split(" ").first;
+      localReportModel.city = widget.planningReportModel!.zipCity!.split(" ").length == 2 ? widget.planningReportModel!.zipCity!.split(" ").last : "";
+      localReportModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
 
-      var progressState = await LocalReportProvider.of(context)
-          .createLocalReport(localReportModel: localReportModel);
+      var progressState = await LocalReportProvider.of(context).createLocalReport(localReportModel: localReportModel);
       if (progressState == 2) {
         LocalReportListProvider.of(context).setLocalReportListState(
           LocalReportListState.init().copyWith(
@@ -127,8 +119,7 @@ class _PlanningViewState extends State<PlanningView>
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.yello,
-        child: Icon(Icons.add_a_photo_outlined,
-            size: heightDp! * 25, color: Colors.white),
+        child: Icon(Icons.add_a_photo_outlined, size: heightDp! * 25, color: Colors.white),
         onPressed: _goToLocalReportPage,
       ),
       body: NotificationListener<OverscrollIndicatorNotification>(
@@ -139,8 +130,7 @@ class _PlanningViewState extends State<PlanningView>
         child: SingleChildScrollView(
           child: Container(
             width: deviceWidth,
-            padding: EdgeInsets.symmetric(
-                horizontal: widthDp! * 20, vertical: heightDp! * 20),
+            padding: EdgeInsets.symmetric(horizontal: widthDp! * 20, vertical: heightDp! * 20),
             child: Column(
               children: [
                 /// Date Time
@@ -151,10 +141,7 @@ class _PlanningViewState extends State<PlanningView>
                       flex: 1,
                       child: Text(
                         LocaleKeys.PlanningPageString_date.tr(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                     Expanded(
@@ -162,8 +149,7 @@ class _PlanningViewState extends State<PlanningView>
                       child: Text(
                         KeicyDateTime.convertDateTimeToDateString(
                           dateTime: KeicyDateTime.convertDateStringToDateTime(
-                            dateString:
-                                "${widget.planningReportModel!.date!} ${widget.planningReportModel!.time!}",
+                            dateString: "${widget.planningReportModel!.date!} ${widget.planningReportModel!.time!}",
                           ),
                           formats: "d/m/Y H:i",
                         ),
@@ -185,10 +171,7 @@ class _PlanningViewState extends State<PlanningView>
                             flex: 1,
                             child: Text(
                               LocaleKeys.PlanningPageString_state.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
@@ -215,10 +198,7 @@ class _PlanningViewState extends State<PlanningView>
                             flex: 1,
                             child: Text(
                               LocaleKeys.PlanningPageString_type.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
@@ -245,32 +225,21 @@ class _PlanningViewState extends State<PlanningView>
                             flex: 1,
                             child: Text(
                               LocaleKeys.PlanningPageString_accounts.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
                             flex: 3,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: List.generate(
-                                  widget.planningReportModel!.accounts!.length,
-                                  (index) {
+                              children: List.generate(widget.planningReportModel!.accounts!.length, (index) {
                                 return Column(
                                   children: [
                                     Text(
                                       "${widget.planningReportModel!.accounts![index]["name"]}",
-                                      style:
-                                          Theme.of(context).textTheme.subtitle1,
+                                      style: Theme.of(context).textTheme.subtitle1,
                                     ),
-                                    index <
-                                            widget.planningReportModel!
-                                                    .accounts!.length -
-                                                1
-                                        ? SizedBox(height: heightDp! * 3)
-                                        : SizedBox(),
+                                    index < widget.planningReportModel!.accounts!.length - 1 ? SizedBox(height: heightDp! * 3) : SizedBox(),
                                   ],
                                 );
                               }),
@@ -293,10 +262,7 @@ class _PlanningViewState extends State<PlanningView>
                             flex: 1,
                             child: Text(
                               LocaleKeys.PlanningPageString_price.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
@@ -323,32 +289,21 @@ class _PlanningViewState extends State<PlanningView>
                             flex: 1,
                             child: Text(
                               LocaleKeys.PlanningPageString_references.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
                             flex: 3,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: List.generate(
-                                  widget.planningReportModel!.references!
-                                      .length, (index) {
+                              children: List.generate(widget.planningReportModel!.references!.length, (index) {
                                 return Column(
                                   children: [
                                     Text(
                                       "${widget.planningReportModel!.references![index].toString().split(":").last.trim()}",
-                                      style:
-                                          Theme.of(context).textTheme.subtitle1,
+                                      style: Theme.of(context).textTheme.subtitle1,
                                     ),
-                                    index <
-                                            widget.planningReportModel!
-                                                    .references!.length -
-                                                1
-                                        ? SizedBox(height: heightDp! * 3)
-                                        : SizedBox(),
+                                    index < widget.planningReportModel!.references!.length - 1 ? SizedBox(height: heightDp! * 3) : SizedBox(),
                                   ],
                                 );
                               }),
@@ -360,11 +315,7 @@ class _PlanningViewState extends State<PlanningView>
                   ),
 
                 /// Address
-                if (!JsonDiffer.fromJson(
-                        widget.planningReportModel!.addressModel!.toJson(),
-                        AddressModel().toJson())
-                    .diff()
-                    .hasNothing)
+                if (!JsonDiffer.fromJson(widget.planningReportModel!.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
                   Column(
                     children: [
                       SizedBox(height: heightDp! * 8),
@@ -375,10 +326,7 @@ class _PlanningViewState extends State<PlanningView>
                             flex: 1,
                             child: Text(
                               LocaleKeys.PlanningPageString_address.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
@@ -387,29 +335,20 @@ class _PlanningViewState extends State<PlanningView>
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      if (widget.planningReportModel!
-                                              .addressModel!.street! !=
-                                          "")
+                                      if (widget.planningReportModel!.addressModel!.street! != "")
                                         Text(
                                           "${widget.planningReportModel!.addressModel!.street!}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle1,
+                                          style: Theme.of(context).textTheme.subtitle1,
                                         ),
-                                      if (widget.planningReportModel!
-                                              .addressModel!.complement! !=
-                                          "")
+                                      if (widget.planningReportModel!.addressModel!.complement! != "")
                                         Column(
                                           children: [
                                             SizedBox(height: heightDp! * 2),
                                             Text(
                                               "${widget.planningReportModel!.addressModel!.complement!}",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1,
+                                              style: Theme.of(context).textTheme.subtitle1,
                                             ),
                                           ],
                                         ),
@@ -418,24 +357,16 @@ class _PlanningViewState extends State<PlanningView>
                                         children: [
                                           Row(
                                             children: [
-                                              if (widget.planningReportModel!
-                                                      .addressModel!.zip! !=
-                                                  "")
+                                              if (widget.planningReportModel!.addressModel!.zip! != "")
                                                 Text(
                                                   "${widget.planningReportModel!.addressModel!.zip!}",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle1,
+                                                  style: Theme.of(context).textTheme.subtitle1,
                                                 ),
                                               SizedBox(width: widthDp! * 10),
-                                              if (widget.planningReportModel!
-                                                      .addressModel!.city! !=
-                                                  "")
+                                              if (widget.planningReportModel!.addressModel!.city! != "")
                                                 Text(
                                                   "${widget.planningReportModel!.addressModel!.city!}",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle1,
+                                                  style: Theme.of(context).textTheme.subtitle1,
                                                 ),
                                             ],
                                           ),
@@ -446,16 +377,12 @@ class _PlanningViewState extends State<PlanningView>
                                 ),
                                 CustomTextButton(
                                   text: "Maps",
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .button!
-                                      .copyWith(color: AppColors.yello),
+                                  textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                                   bordercolor: AppColors.yello,
                                   borderRadius: heightDp! * 6,
                                   elevation: 0,
                                   onPressed: () {
-                                    _openGoogleMap(widget
-                                        .planningReportModel!.addressModel!);
+                                    _openGoogleMap(widget.planningReportModel!.addressModel!);
                                   },
                                 ),
                               ],
@@ -478,10 +405,7 @@ class _PlanningViewState extends State<PlanningView>
                             flex: 1,
                             child: Text(
                               LocaleKeys.PlanningPageString_foldName.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
@@ -508,10 +432,7 @@ class _PlanningViewState extends State<PlanningView>
                             flex: 1,
                             child: Text(
                               LocaleKeys.PlanningPageString_description.tr(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                              style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
@@ -529,14 +450,9 @@ class _PlanningViewState extends State<PlanningView>
                 /// Customers
                 if (widget.planningReportModel!.customers!.isNotEmpty)
                   Column(
-                    children: List.generate(
-                        widget.planningReportModel!.customers!.length, (index) {
-                      CustomerModel customerModel =
-                          widget.planningReportModel!.customers![index];
-                      if (JsonDiffer.fromJson(
-                              customerModel.toJson(), CustomerModel().toJson())
-                          .diff()
-                          .hasNothing) return SizedBox();
+                    children: List.generate(widget.planningReportModel!.customers!.length, (index) {
+                      CustomerModel customerModel = widget.planningReportModel!.customers![index];
+                      if (JsonDiffer.fromJson(customerModel.toJson(), CustomerModel().toJson()).diff().hasNothing) return SizedBox();
 
                       return Column(
                         children: [
@@ -548,32 +464,24 @@ class _PlanningViewState extends State<PlanningView>
                               Expanded(
                                 flex: 1,
                                 child: Text(
-                                  LocaleKeys.PlanningPageString_customerInfo
-                                      .tr(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(fontWeight: FontWeight.bold),
+                                  LocaleKeys.PlanningPageString_customerInfo.tr(),
+                                  style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Expanded(
                                 flex: 3,
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Text(
                                         "${customerModel.name}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1,
+                                        style: Theme.of(context).textTheme.subtitle1,
                                       ),
                                     ),
                                     Text(
                                       "${customerModel.type}",
-                                      style:
-                                          Theme.of(context).textTheme.subtitle1,
+                                      style: Theme.of(context).textTheme.subtitle1,
                                     ),
                                   ],
                                 ),
@@ -582,11 +490,7 @@ class _PlanningViewState extends State<PlanningView>
                           ),
 
                           /// Address
-                          if (!JsonDiffer.fromJson(
-                                  customerModel.addressModel!.toJson(),
-                                  AddressModel().toJson())
-                              .diff()
-                              .hasNothing)
+                          if (!JsonDiffer.fromJson(customerModel.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
                             Column(
                               children: [
                                 SizedBox(height: heightDp! * 8),
@@ -596,13 +500,8 @@ class _PlanningViewState extends State<PlanningView>
                                     Expanded(
                                       flex: 1,
                                       child: Text(
-                                        LocaleKeys.PlanningPageString_address
-                                            .tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
+                                        LocaleKeys.PlanningPageString_address.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Expanded(
@@ -611,47 +510,27 @@ class _PlanningViewState extends State<PlanningView>
                                         children: [
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                if (customerModel
-                                                        .addressModel!.street !=
-                                                    "")
+                                                if (customerModel.addressModel!.street != "")
                                                   Text(
                                                     "${customerModel.addressModel!.street!}",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .subtitle1,
+                                                    style: Theme.of(context).textTheme.subtitle1,
                                                   ),
-                                                if (customerModel.addressModel!
-                                                            .zip !=
-                                                        "" ||
-                                                    customerModel.addressModel!
-                                                            .city !=
-                                                        "")
+                                                if (customerModel.addressModel!.zip != "" || customerModel.addressModel!.city != "")
                                                   Column(
                                                     children: [
-                                                      SizedBox(
-                                                          height:
-                                                              heightDp! * 2),
+                                                      SizedBox(height: heightDp! * 2),
                                                       Row(
                                                         children: [
                                                           Text(
                                                             "${customerModel.addressModel!.zip}",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .subtitle1,
+                                                            style: Theme.of(context).textTheme.subtitle1,
                                                           ),
-                                                          SizedBox(
-                                                              width: widthDp! *
-                                                                  10),
+                                                          SizedBox(width: widthDp! * 10),
                                                           Text(
                                                             "${customerModel.addressModel!.city}",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .subtitle1,
+                                                            style: Theme.of(context).textTheme.subtitle1,
                                                           ),
                                                         ],
                                                       ),
@@ -662,17 +541,12 @@ class _PlanningViewState extends State<PlanningView>
                                           ),
                                           CustomTextButton(
                                             text: "Maps",
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .button!
-                                                .copyWith(
-                                                    color: AppColors.yello),
+                                            textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                                             bordercolor: AppColors.yello,
                                             borderRadius: heightDp! * 6,
                                             elevation: 0,
                                             onPressed: () {
-                                              _openGoogleMap(
-                                                  customerModel.addressModel!);
+                                              _openGoogleMap(customerModel.addressModel!);
                                             },
                                           ),
                                         ],
@@ -694,22 +568,15 @@ class _PlanningViewState extends State<PlanningView>
                                     Expanded(
                                       flex: 1,
                                       child: Text(
-                                        LocaleKeys.PlanningPageString_crope
-                                            .tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
+                                        LocaleKeys.PlanningPageString_crope.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Expanded(
                                       flex: 3,
                                       child: Text(
                                         "${customerModel.corpNumber}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1,
+                                        style: Theme.of(context).textTheme.subtitle1,
                                       ),
                                     ),
                                   ],
@@ -728,22 +595,15 @@ class _PlanningViewState extends State<PlanningView>
                                     Expanded(
                                       flex: 1,
                                       child: Text(
-                                        LocaleKeys.PlanningPageString_email
-                                            .tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
+                                        LocaleKeys.PlanningPageString_email.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Expanded(
                                       flex: 3,
                                       child: Text(
                                         "customerModel.email",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1,
+                                        style: Theme.of(context).textTheme.subtitle1,
                                       ),
                                     ),
                                   ],
@@ -762,34 +622,22 @@ class _PlanningViewState extends State<PlanningView>
                                     Expanded(
                                       flex: 1,
                                       child: Text(
-                                        LocaleKeys
-                                                .PlanningPageString_phoneNumber
-                                            .tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
+                                        LocaleKeys.PlanningPageString_phoneNumber.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Expanded(
                                       flex: 3,
                                       child: GestureDetector(
                                         onTap: () {
-                                          CustomUrlLauncher.makePhoneCall(
-                                              customerModel.phone!);
+                                          CustomUrlLauncher.makePhoneCall(customerModel.phone!);
                                         },
                                         child: Text(
                                           "${customerModel.phone}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle1!
-                                              .copyWith(
+                                          style: Theme.of(context).textTheme.subtitle1!.copyWith(
                                                 color: AppColors.yello,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                decorationColor:
-                                                    AppColors.yello,
+                                                decoration: TextDecoration.underline,
+                                                decorationColor: AppColors.yello,
                                                 decorationThickness: 2,
                                               ),
                                         ),
@@ -811,40 +659,22 @@ class _PlanningViewState extends State<PlanningView>
                                     Expanded(
                                       flex: 1,
                                       child: Text(
-                                        LocaleKeys
-                                                .PlanningPageString_representations
-                                            .tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
+                                        LocaleKeys.PlanningPageString_representations.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Expanded(
                                       flex: 3,
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: List.generate(
-                                            customerModel.representation!
-                                                .length, (index) {
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: List.generate(customerModel.representation!.length, (index) {
                                           return Column(
                                             children: [
                                               Text(
                                                 "${customerModel.representation![index]}",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1,
+                                                style: Theme.of(context).textTheme.subtitle1,
                                               ),
-                                              index <
-                                                      customerModel
-                                                              .representation!
-                                                              .length -
-                                                          1
-                                                  ? SizedBox(
-                                                      height: heightDp! * 3)
-                                                  : SizedBox(),
+                                              index < customerModel.representation!.length - 1 ? SizedBox(height: heightDp! * 3) : SizedBox(),
                                             ],
                                           );
                                         }),
@@ -866,130 +696,64 @@ class _PlanningViewState extends State<PlanningView>
                                     Expanded(
                                       flex: 1,
                                       child: Text(
-                                        LocaleKeys.PlanningPageString_recipients
-                                            .tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
+                                        LocaleKeys.PlanningPageString_recipients.tr(),
+                                        style: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     Expanded(
                                       flex: 3,
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: List.generate(
-                                            customerModel.recipients!.length,
-                                            (index) {
-                                          if (JsonDiffer.fromJson(
-                                                  customerModel
-                                                      .recipients![index]
-                                                      .toJson(),
-                                                  RecipientModel().toJson())
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: List.generate(customerModel.recipients!.length, (index) {
+                                          if (JsonDiffer.fromJson(customerModel.recipients![index].toJson(), RecipientModel().toJson())
                                               .diff()
                                               .hasNothing) return SizedBox();
                                           return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  if (customerModel
-                                                              .recipients![
-                                                                  index]
-                                                              .name !=
-                                                          "" ||
-                                                      customerModel
-                                                              .recipients![
-                                                                  index]
-                                                              .position !=
-                                                          "")
+                                                  if (customerModel.recipients![index].name != "" || customerModel.recipients![index].position != "")
                                                     Text(
                                                       "${customerModel.recipients![index].name} - ${customerModel.recipients![index].position}",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .subtitle1,
+                                                      style: Theme.of(context).textTheme.subtitle1,
                                                     ),
-                                                  if (customerModel
-                                                          .recipients![index]
-                                                          .mobilePhone !=
-                                                      "")
+                                                  if (customerModel.recipients![index].mobilePhone != "")
                                                     Column(
                                                       children: [
-                                                        SizedBox(
-                                                            height:
-                                                                heightDp! * 3),
+                                                        SizedBox(height: heightDp! * 3),
                                                         GestureDetector(
                                                           onTap: () {
-                                                            CustomUrlLauncher
-                                                                .makePhoneCall(
-                                                                    customerModel
-                                                                        .recipients![
-                                                                            index]
-                                                                        .mobilePhone!);
+                                                            CustomUrlLauncher.makePhoneCall(customerModel.recipients![index].mobilePhone!);
                                                           },
                                                           child: Text(
                                                             "${customerModel.recipients![index].mobilePhone}",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .subtitle1!
-                                                                .copyWith(
-                                                                  color:
-                                                                      AppColors
-                                                                          .yello,
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .underline,
-                                                                  decorationColor:
-                                                                      AppColors
-                                                                          .yello,
-                                                                  decorationThickness:
-                                                                      2,
+                                                            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                                                  color: AppColors.yello,
+                                                                  decoration: TextDecoration.underline,
+                                                                  decorationColor: AppColors.yello,
+                                                                  decorationThickness: 2,
                                                                 ),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
-                                                  if (customerModel
-                                                          .recipients![index]
-                                                          .email !=
-                                                      "")
+                                                  if (customerModel.recipients![index].email != "")
                                                     Column(
                                                       children: [
-                                                        SizedBox(
-                                                            height:
-                                                                heightDp! * 3),
+                                                        SizedBox(height: heightDp! * 3),
                                                         GestureDetector(
                                                           onTap: () {
-                                                            CustomUrlLauncher.sendEmail(
-                                                                email: customerModel
-                                                                    .recipients![
-                                                                        index]
-                                                                    .email!);
+                                                            CustomUrlLauncher.sendEmail(email: customerModel.recipients![index].email!);
                                                           },
                                                           child: Text(
                                                             "${customerModel.recipients![index].email}",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .subtitle1!
-                                                                .copyWith(
-                                                                  color:
-                                                                      AppColors
-                                                                          .yello,
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .underline,
-                                                                  decorationColor:
-                                                                      AppColors
-                                                                          .yello,
-                                                                  decorationThickness:
-                                                                      2,
+                                                            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                                                                  color: AppColors.yello,
+                                                                  decoration: TextDecoration.underline,
+                                                                  decorationColor: AppColors.yello,
+                                                                  decorationThickness: 2,
                                                                 ),
                                                           ),
                                                         ),
@@ -997,13 +761,7 @@ class _PlanningViewState extends State<PlanningView>
                                                     ),
                                                 ],
                                               ),
-                                              index <
-                                                      customerModel.recipients!
-                                                              .length -
-                                                          1
-                                                  ? SizedBox(
-                                                      height: heightDp! * 5)
-                                                  : SizedBox(),
+                                              index < customerModel.recipients!.length - 1 ? SizedBox(height: heightDp! * 5) : SizedBox(),
                                             ],
                                           );
                                         }),

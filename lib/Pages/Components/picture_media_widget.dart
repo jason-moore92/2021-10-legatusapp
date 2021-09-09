@@ -7,11 +7,11 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:legatus/Models/index.dart';
-import 'package:legatus/Pages/App/Styles/index.dart';
-import 'package:legatus/Pages/App/index.dart';
-import 'package:legatus/Pages/Dialogs/index.dart';
-import 'package:legatus/Providers/MediaPlayProvider/index.dart';
+import 'package:legutus/Models/index.dart';
+import 'package:legutus/Pages/App/Styles/index.dart';
+import 'package:legutus/Pages/App/index.dart';
+import 'package:legutus/Pages/Dialogs/index.dart';
+import 'package:legutus/Providers/MediaPlayProvider/index.dart';
 import 'package:provider/provider.dart';
 
 class PictureMediaWidget extends StatefulWidget {
@@ -65,19 +65,15 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     statusbarHeight = ScreenUtil().statusBarHeight;
 
-    picWidth = ((deviceWidth! - widthDp! * 40) / 3) - 1;
-    picHeight = ((deviceWidth! - widthDp! * 40) / 3) - 1;
+    picWidth = (deviceWidth! - widthDp! * 40) / 3;
+    picHeight = (deviceWidth! - widthDp! * 40) / 3;
 
-    if (MediaQuery.of(context).size.width >=
-        ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >=
-            ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width <
-            ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width <
-        ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
@@ -88,8 +84,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 35;
       iconPadding = widthDp! * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
     if (widget.isUploading!) {
@@ -102,8 +97,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
       angle = 0;
     }
 
-    return Consumer<MediaPlayProvider>(
-        builder: (context, mediaPlayProvider, _) {
+    return Consumer<MediaPlayProvider>(builder: (context, mediaPlayProvider, _) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: heightDp! * 5),
         child: Stack(
@@ -125,23 +119,18 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                   color: Color(0xFFE7E7E7),
                   borderRadius: BorderRadius.circular(heightDp! * 0),
                   border: Border.all(
-                    color: widget.isSelected!
-                        ? AppColors.yello
-                        : Colors.transparent,
+                    color: widget.isSelected! ? AppColors.yello : Colors.transparent,
                     width: widget.isSelected! ? 3 : 0,
                   ),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(heightDp! * 0),
                   child: Image.file(
-                    widget.mediaModel!.thumPath != ""
-                        ? File(widget.mediaModel!.thumPath!)
-                        : File(widget.mediaModel!.path!),
+                    widget.mediaModel!.thumPath != "" ? File(widget.mediaModel!.thumPath!) : File(widget.mediaModel!.path!),
                     width: picWidth,
                     height: picHeight,
                     fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
+                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                       return Container(
                         width: picWidth,
                         height: picHeight,
@@ -173,10 +162,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                             ? Icons.cloud_done_outlined
                             : Icons.cloud_off_outlined,
                     size: iconSize,
-                    color: widget.mediaModel!.state == "error" ||
-                            widget.mediaModel!.state == "uploaded"
-                        ? Colors.white
-                        : Colors.transparent,
+                    color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
                   ),
                   Icon(
                     widget.mediaModel!.state == "error"
@@ -236,8 +222,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                 child: Center(
                   child: Transform.rotate(
                     angle: angle / 180 * pi,
-                    child: Icon(Icons.autorenew,
-                        size: picHeight! / 2, color: Colors.white),
+                    child: Icon(Icons.autorenew, size: picHeight! / 2, color: Colors.white),
                   ),
                 ),
               ),
@@ -253,19 +238,14 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
         widget.tapHandler!();
       }
     } else {
-      if (mediaPlayProvider.mediaPlayState.selectedMediaModel!.rank !=
-              widget.mediaModel!.rank &&
-          mediaPlayProvider.mediaPlayState.selectedMediaModel!.uuid !=
-              widget.mediaModel!.uuid) {
+      if (mediaPlayProvider.mediaPlayState.selectedMediaModel!.rank != widget.mediaModel!.rank &&
+          mediaPlayProvider.mediaPlayState.selectedMediaModel!.uuid != widget.mediaModel!.uuid) {
         ///
         mediaPlayProvider.setMediaPlayState(
-          mediaPlayProvider.mediaPlayState
-              .update(isNew: true, selectedMediaModel: widget.mediaModel),
+          mediaPlayProvider.mediaPlayState.update(isNew: true, selectedMediaModel: widget.mediaModel),
         );
-      } else if (mediaPlayProvider.mediaPlayState.selectedMediaModel!.rank ==
-              widget.mediaModel!.rank &&
-          mediaPlayProvider.mediaPlayState.selectedMediaModel!.uuid ==
-              widget.mediaModel!.uuid) {
+      } else if (mediaPlayProvider.mediaPlayState.selectedMediaModel!.rank == widget.mediaModel!.rank &&
+          mediaPlayProvider.mediaPlayState.selectedMediaModel!.uuid == widget.mediaModel!.uuid) {
         ///
         mediaPlayProvider.setMediaPlayState(
           mediaPlayProvider.mediaPlayState.update(
@@ -283,8 +263,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     Image image = new Image.file(file);
     Completer<ui.Image> completer = new Completer<ui.Image>();
     image.image.resolve(new ImageConfiguration()).addListener(
-          ImageStreamListener(
-              (ImageInfo info, bool _) => completer.complete(info.image)),
+          ImageStreamListener((ImageInfo info, bool _) => completer.complete(info.image)),
         );
 
     showDialog(
@@ -303,8 +282,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                   children: [
                     FutureBuilder<ui.Image>(
                       future: completer.future,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<ui.Image> snapshot) {
+                      builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
                         if (snapshot.hasData) {
                           if (snapshot.data!.width > snapshot.data!.height) {
                             ExtendedImage imageWidget = ExtendedImage.file(
@@ -314,14 +292,11 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                               mode: ExtendedImageMode.gesture,
                               enableMemoryCache: true,
                               loadStateChanged: (ExtendedImageState state) {
-                                if (state.extendedImageLoadState ==
-                                    LoadState.loading) {
+                                if (state.extendedImageLoadState == LoadState.loading) {
                                   return Center(
                                       child: Theme(
-                                    data: Theme.of(context)
-                                        .copyWith(brightness: Brightness.dark),
-                                    child: Center(
-                                        child: CupertinoActivityIndicator()),
+                                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                                    child: Center(child: CupertinoActivityIndicator()),
                                   ));
                                 }
                               },
@@ -351,42 +326,25 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                       children: [
                                         SizedBox(height: heightDp! * 10),
                                         Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.7 /
-                                              (snapshot.data!.width /
-                                                  snapshot.data!.height),
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.width / snapshot.data!.height),
                                           alignment: Alignment.centerRight,
                                           child: IconButton(
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
-                                            icon: Icon(Icons.close_outlined,
-                                                size: heightDp! * 30,
-                                                color: Colors.white),
+                                            icon: Icon(Icons.close_outlined, size: heightDp! * 30, color: Colors.white),
                                           ),
                                         ),
                                         SizedBox(height: heightDp! * 10),
                                         Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.7 /
-                                              (snapshot.data!.width /
-                                                  snapshot.data!.height),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.7,
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.width / snapshot.data!.height),
+                                          height: MediaQuery.of(context).size.height * 0.7,
                                           child: RotatedBox(
                                             quarterTurns: 1,
                                             child: imageWidget,
                                           ),
                                         ),
-                                        SizedBox(
-                                            height: statusbarHeight! +
-                                                heightDp! * 30),
+                                        SizedBox(height: statusbarHeight! + heightDp! * 30),
                                       ],
                                     ),
                                   ),
@@ -396,10 +354,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                           } else {
                             ExtendedImage imageWidget = ExtendedImage.file(
                               file,
-                              width: MediaQuery.of(context).size.height *
-                                  0.7 /
-                                  (snapshot.data!.height /
-                                      snapshot.data!.width),
+                              width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
                               fit: BoxFit.fitWidth,
                               mode: ExtendedImageMode.gesture,
                               enableMemoryCache: true,
@@ -429,39 +384,22 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                       children: [
                                         SizedBox(height: heightDp! * 10),
                                         Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.7 /
-                                              (snapshot.data!.height /
-                                                  snapshot.data!.width),
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
                                           alignment: Alignment.centerRight,
                                           child: IconButton(
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
-                                            icon: Icon(Icons.close_outlined,
-                                                size: heightDp! * 30,
-                                                color: Colors.white),
+                                            icon: Icon(Icons.close_outlined, size: heightDp! * 30, color: Colors.white),
                                           ),
                                         ),
                                         SizedBox(height: heightDp! * 10),
                                         Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.7 /
-                                              (snapshot.data!.height /
-                                                  snapshot.data!.width),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.7,
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
+                                          height: MediaQuery.of(context).size.height * 0.7,
                                           child: imageWidget,
                                         ),
-                                        SizedBox(
-                                            height: statusbarHeight! +
-                                                heightDp! * 30),
+                                        SizedBox(height: statusbarHeight! + heightDp! * 30),
                                       ],
                                     ),
                                   ),
@@ -478,10 +416,8 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                                   width: MediaQuery.of(context).size.width,
                                   height: MediaQuery.of(context).size.height,
                                   child: Theme(
-                                    data: Theme.of(context)
-                                        .copyWith(brightness: Brightness.dark),
-                                    child: Center(
-                                        child: CupertinoActivityIndicator()),
+                                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                                    child: Center(child: CupertinoActivityIndicator()),
                                   ),
                                 ),
                               ],
