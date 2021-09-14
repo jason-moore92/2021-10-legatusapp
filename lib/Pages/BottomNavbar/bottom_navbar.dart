@@ -166,15 +166,17 @@ class _BottomNavbarState extends State<BottomNavbar>
       responsiveStyle = "mobile";
     }
 
-    iconSize = heightDp! * 20;
-    iconPadding = widthDp! * 10;
+    // iconSize = heightDp! * 20;
+    iconSize = 24;
+    // iconPadding = widthDp! * 10;
+    iconPadding = 10;
     textStyle = Theme.of(context).textTheme.overline;
     navBarHeight = kBottomNavigationBarHeight;
 
     if (responsiveStyle != "mobile") {
       navBarHeight = heightDp! * 80;
-      iconSize = heightDp! * 35;
-      iconPadding = widthDp! * 20;
+      // iconSize = heightDp! * 35;
+      // iconPadding = widthDp! * 20;
       textStyle =
           Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
