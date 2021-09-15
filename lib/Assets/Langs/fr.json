@@ -115,7 +115,7 @@
   "NewReportPageString": {
     "appbarTitle": "Nouveau constat",
     "reportName": "Nom du constat",
-    "types": "{\"free\":\"Libre\",\"display\":\"Affichage\",\"edl\":\"EDL\"}",
+    "types": "{\"free\":\"Libre\",\"permission\":\"Affichage\",\"state-report\":\"EDL\"}",
     "date": "Date",
     "time": "Heure",
     "description": "Description",
@@ -127,7 +127,7 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "customerTypeLabel": "Requérant",
-    "customerTypes": "{\"particulier\":\"Particulier\",\"entreprise\":\"Entreprise\"}",
+    "customerTypes": "{\"individual\":\"Particulier\",\"corporation\":\"Entreprise\"}",
     "name": "Nom",
     "crop_form": "Forme sociale",
     "crop_siren": "SIREN",
