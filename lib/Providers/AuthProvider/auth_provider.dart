@@ -11,8 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'index.dart';
 
 class AuthProvider extends ChangeNotifier {
-  static AuthProvider of(BuildContext context, {bool listen = false}) =>
-      Provider.of<AuthProvider>(context, listen: listen);
+  static AuthProvider of(BuildContext context, {bool listen = false}) => Provider.of<AuthProvider>(context, listen: listen);
 
   AuthState _authState = AuthState.init();
   AuthState get authState => _authState;
@@ -45,6 +44,7 @@ class AuthProvider extends ChangeNotifier {
   Future<void> init() async {
     try {
       _prefs = await SharedPreferences.getInstance();
+      await _prefs!.setBool("local_report_list_page", false);
       await initHiveObject();
       String? result = _prefs!.getString(_rememberUserKey);
       if (result != null && result != "null") {
@@ -70,13 +70,9 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getSMSCode(
-      {@required String? email,
-      @required String? phoneNumber,
-      bool isNotifiable = true}) async {
+  Future<void> getSMSCode({@required String? email, @required String? phoneNumber, bool isNotifiable = true}) async {
     try {
-      var result = await LoginApiProvider.getSMSCode(
-          email: email, phoneNumber: phoneNumber);
+      var result = await LoginApiProvider.getSMSCode(email: email, phoneNumber: phoneNumber);
       if (result["success"]) {
         _authState = _authState.update(
           progressState: 2,
@@ -110,13 +106,9 @@ class AuthProvider extends ChangeNotifier {
     if (isNotifiable) notifyListeners();
   }
 
-  Future<void> login(
-      {@required String? email,
-      @required String? password,
-      bool isNotifiable = true}) async {
+  Future<void> login({@required String? email, @required String? password, bool isNotifiable = true}) async {
     try {
-      var result =
-          await LoginApiProvider.login(email: email, password: password);
+      var result = await LoginApiProvider.login(email: email, password: password);
       if (result["success"]) {
         if (_prefs == null) _prefs = await SharedPreferences.getInstance();
 
