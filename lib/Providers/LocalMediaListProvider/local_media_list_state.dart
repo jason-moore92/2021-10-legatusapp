@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:legutus/Models/index.dart';
+import 'package:legatus/Models/index.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -48,7 +48,8 @@ class LocalMediaListState extends Equatable {
       progressState: progressState ?? this.progressState,
       message: message ?? this.message,
       contextName: contextName ?? this.contextName,
-      localLocalReportModel: localLocalReportModel ?? this.localLocalReportModel,
+      localLocalReportModel:
+          localLocalReportModel ?? this.localLocalReportModel,
       localMediaListData: localMediaListData ?? this.localMediaListData,
       localMediaMetaData: localMediaMetaData ?? this.localMediaMetaData,
       isRefresh: isRefresh ?? this.isRefresh,

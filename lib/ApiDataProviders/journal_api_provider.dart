@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:legutus/Config/config.dart';
-import 'package:legutus/Helpers/http_plus.dart';
-import 'package:legutus/Models/LocalReportModel.dart';
+import 'package:legatus/Config/config.dart';
+import 'package:legatus/Helpers/http_plus.dart';
+import 'package:legatus/Models/LocalReportModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JournalApiProvider {
@@ -22,7 +22,9 @@ class JournalApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> sendJournal({@required String? email, @required LocalReportModel? localMediaModel}) async {
+  static Future<Map<String, dynamic>> sendJournal(
+      {@required String? email,
+      @required LocalReportModel? localMediaModel}) async {
     String apiUrl = '/send-journal';
 
     try {
@@ -45,7 +47,8 @@ class JournalApiProvider {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: json.encode({"email": email, "local_report": localMediaModel.toJson()}),
+        body: json
+            .encode({"email": email, "local_report": localMediaModel.toJson()}),
       );
       if (response.statusCode == 200) {
         return {

@@ -115,7 +115,7 @@
   "NewReportPageString": {
     "appbarTitle": "New Reports",
     "reportName": "Report Name",
-    "types": "{\"free\":\"Free\",\"display\":\"Display\",\"edl\":\"EDL\"}",
+    "types": "{\"free\":\"Libre\",\"permission\":\"Affichage\",\"state-report\":\"EDL\"}",
     "date": "Date",
     "time": "Hour",
     "description": "Description",
@@ -127,7 +127,7 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "customerTypeLabel": "Requérant",
-    "customerTypes": "{\"particulier\":\"Particulier\",\"entreprise\":\"Entreprise\"}",
+    "customerTypes": "{\"individual\":\"Particulier\",\"corporation\":\"Entreprise\"}",
     "name": "Name",
     "crop_form": "Social form",
     "crop_siren": "SIREN",

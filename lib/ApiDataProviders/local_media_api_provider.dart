@@ -5,9 +5,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:legutus/Config/config.dart';
-import 'package:legutus/Helpers/http_plus.dart';
-import 'package:legutus/Models/index.dart';
+import 'package:legatus/Config/config.dart';
+import 'package:legatus/Helpers/http_plus.dart';
+import 'package:legatus/Models/index.dart';
 import 'package:http/http.dart' as httpOld;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +24,8 @@ class LocalMediaApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> uploadMedia({@required MediaModel? mediaModel}) async {
+  static Future<Map<String, dynamic>> uploadMedia(
+      {@required MediaModel? mediaModel}) async {
     String apiUrl = '/upload-media';
 
     try {
@@ -84,7 +85,8 @@ class LocalMediaApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> uploadPresignedUrl({@required File? file, @required String? presignedUrl}) async {
+  static Future<Map<String, dynamic>> uploadPresignedUrl(
+      {@required File? file, @required String? presignedUrl}) async {
     try {
       Uint8List imageByteData = await file!.readAsBytes();
       var response = await httpOld.put(

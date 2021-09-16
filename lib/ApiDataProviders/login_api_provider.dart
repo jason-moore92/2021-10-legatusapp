@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
-import 'package:legutus/Config/config.dart';
+import 'package:legatus/Config/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,7 +21,8 @@ class LoginApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> getSMSCode({@required String? email, @required String? phoneNumber}) async {
+  static Future<Map<String, dynamic>> getSMSCode(
+      {@required String? email, @required String? phoneNumber}) async {
     String apiUrl = '/get-sms-code';
 
     try {
@@ -37,7 +38,8 @@ class LoginApiProvider {
       }
 
       var request = http.MultipartRequest("POST", Uri.parse(url));
-      request.fields.addAll({"email": email ?? "", "mobile_phone_number": phoneNumber ?? ""});
+      request.fields.addAll(
+          {"email": email ?? "", "mobile_phone_number": phoneNumber ?? ""});
 
       var response = await request.send();
       var result = await response.stream.bytesToString();
@@ -69,7 +71,8 @@ class LoginApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> login({@required String? email, @required String? password}) async {
+  static Future<Map<String, dynamic>> login(
+      {@required String? email, @required String? password}) async {
     String apiUrl = '/login-with-password';
 
     try {

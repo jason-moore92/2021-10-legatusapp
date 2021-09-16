@@ -1,6 +1,6 @@
 import "package:equatable/equatable.dart";
 import 'package:hive/hive.dart';
-import 'package:legutus/Models/MediaModel.dart';
+import 'package:legatus/Models/MediaModel.dart';
 
 part 'LocalReportModel.g.dart';
 

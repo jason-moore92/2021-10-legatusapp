@@ -4,13 +4,14 @@ import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:legutus/Models/index.dart';
+import 'package:legatus/Models/index.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'date_time_convert.dart';
 
 class FileHelpers {
-  static Future<File?> writeTextFile({@required String? text, String? path = ""}) async {
+  static Future<File?> writeTextFile(
+      {@required String? text, String? path = ""}) async {
     try {
       if (path == "") {
         path = await getDirectory();
@@ -39,13 +40,17 @@ class FileHelpers {
     }
   }
 
-  static Future<File?> writeImageFile({@required XFile? imageFile, @required String? path}) async {
+  static Future<File?> writeImageFile(
+      {@required XFile? imageFile, @required String? path}) async {
     try {
       if (path == "") {
         path = await getDirectory();
         if (path == null) return null;
         Directory(path).createSync();
-        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + imageFile!.path.split('.').last;
+        path += "/" +
+            DateTime.now().millisecondsSinceEpoch.toString() +
+            "." +
+            imageFile!.path.split('.').last;
       }
       await imageFile!.saveTo(path!);
       File file = File(path);
@@ -56,13 +61,17 @@ class FileHelpers {
     }
   }
 
-  static Future<File?> writeVideoFile({@required XFile? videoFile, @required String? path}) async {
+  static Future<File?> writeVideoFile(
+      {@required XFile? videoFile, @required String? path}) async {
     try {
       if (path == "") {
         path = await getDirectory();
         if (path == null) return null;
         Directory(path).createSync();
-        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + videoFile!.path.split(".").last;
+        path += "/" +
+            DateTime.now().millisecondsSinceEpoch.toString() +
+            "." +
+            videoFile!.path.split(".").last;
       }
       await videoFile!.saveTo(path!);
       File file = File(path);
@@ -73,13 +82,17 @@ class FileHelpers {
     }
   }
 
-  static Future<File?> writeAudioFile({@required String? tmpPath, @required String? path}) async {
+  static Future<File?> writeAudioFile(
+      {@required String? tmpPath, @required String? path}) async {
     try {
       if (path == "") {
         path = await getDirectory();
         if (path == null) return null;
         Directory(path).createSync();
-        path += "/" + DateTime.now().millisecondsSinceEpoch.toString() + "." + tmpPath!.split(".").last;
+        path += "/" +
+            DateTime.now().millisecondsSinceEpoch.toString() +
+            "." +
+            tmpPath!.split(".").last;
       }
       File tmpFile = File(tmpPath!);
       File file = File(path!);
@@ -108,10 +121,13 @@ class FileHelpers {
 
       String fileName = "";
       if (createAt == null) {
-        fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "YmdHis");
+        fileName = KeicyDateTime.convertDateTimeToDateString(
+            dateTime: DateTime.now(), formats: "YmdHis");
       } else {
-        DateTime createAtTime = KeicyDateTime.convertDateStringToDateTime(dateString: createAt)!;
-        fileName = KeicyDateTime.convertDateTimeToDateString(dateTime: createAtTime, formats: "YmdHis");
+        DateTime createAtTime =
+            KeicyDateTime.convertDateStringToDateTime(dateString: createAt)!;
+        fileName = KeicyDateTime.convertDateTimeToDateString(
+            dateTime: createAtTime, formats: "YmdHis");
       }
       if (mediaType == MediaType.picture) {
         mediaType = "photographie";
@@ -141,7 +157,9 @@ class FileHelpers {
 
     try {
       if (await dir.exists()) {
-        dir.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
+        dir
+            .listSync(recursive: true, followLinks: false)
+            .forEach((FileSystemEntity entity) {
           if (entity is File) {
             fileNum++;
             totalSize += entity.lengthSync() ~/ 1024;

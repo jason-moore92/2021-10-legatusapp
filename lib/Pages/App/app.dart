@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:legutus/Pages/Dialogs/index.dart';
-import 'package:legutus/Pages/Dialogs/normal_dialog.dart';
-import 'package:legutus/Pages/SplashPage/splash_page.dart';
+import 'package:legatus/Pages/Dialogs/index.dart';
+import 'package:legatus/Pages/Dialogs/normal_dialog.dart';
+import 'package:legatus/Pages/SplashPage/splash_page.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:legutus/Providers/index.dart';
+import 'package:legatus/Providers/index.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -16,7 +16,8 @@ import 'fallback_cupertino.dart';
 
 class App extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,8 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MediaPlayProvider()),
       ],
       child: ScreenUtilInit(
-        designSize: Size(ResponsiveDesignSettings.mobileDesignWidth, ResponsiveDesignSettings.mobileDesignHeight),
+        designSize: Size(ResponsiveDesignSettings.mobileDesignWidth,
+            ResponsiveDesignSettings.mobileDesignHeight),
         builder: () {
           return MaterialApp(
             navigatorKey: navigatorKey,
@@ -57,7 +59,9 @@ class App extends StatelessWidget {
                   if (snapshot.data != null) {
                     print(snapshot.data!.event);
                   }
-                  if (snapshot.hasData && snapshot.data != null && snapshot.data!.event == "log_out") {
+                  if (snapshot.hasData &&
+                      snapshot.data != null &&
+                      snapshot.data!.event == "log_out") {
                     BridgeProvider().update(
                       BridgeState(
                         event: "init",
@@ -68,11 +72,14 @@ class App extends StatelessWidget {
                     );
 
                     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                      AuthProvider.of(navigatorKey.currentContext!).logout(context).then((value) {
+                      AuthProvider.of(navigatorKey.currentContext!)
+                          .logout(context)
+                          .then((value) {
                         try {
                           FailedDialog.show(
                             navigatorKey.currentContext!,
-                            text: snapshot.data!.data!["message"] ?? "Your account logout",
+                            text: snapshot.data!.data!["message"] ??
+                                "Your account logout",
                           );
                         } catch (e) {
                           print(e);

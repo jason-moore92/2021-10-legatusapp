@@ -3,16 +3,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:legutus/ApiDataProviders/index.dart';
-import 'package:legutus/Config/config.dart';
-import 'package:legutus/Models/index.dart';
+import 'package:legatus/ApiDataProviders/index.dart';
+import 'package:legatus/Config/config.dart';
+import 'package:legatus/Models/index.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'index.dart';
 
 class PlanningProvider extends ChangeNotifier {
-  static PlanningProvider of(BuildContext context, {bool listen = false}) => Provider.of<PlanningProvider>(context, listen: listen);
+  static PlanningProvider of(BuildContext context, {bool listen = false}) =>
+      Provider.of<PlanningProvider>(context, listen: listen);
 
   PlanningState _planningState = PlanningState.init();
   PlanningState get planningState => _planningState;
@@ -20,7 +21,8 @@ class PlanningProvider extends ChangeNotifier {
   Box<dynamic>? _planningDataBox;
   Box<dynamic>? get planningDataBox => _planningDataBox;
 
-  void setPlanningState(PlanningState planningState, {bool isNotifiable = true}) {
+  void setPlanningState(PlanningState planningState,
+      {bool isNotifiable = true}) {
     if (_planningState != planningState) {
       _planningState = planningState;
       if (isNotifiable) notifyListeners();
@@ -42,7 +44,8 @@ class PlanningProvider extends ChangeNotifier {
       var result;
       await initHiveObject();
 
-      result = await PlanningApiProvider.getPlanning(startDate: _planningState.currentDate);
+      result = await PlanningApiProvider.getPlanning(
+          startDate: _planningState.currentDate);
 
       if (result["success"]) {
         Map<String, dynamic> planningData = _planningState.planningData!;

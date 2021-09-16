@@ -1,4 +1,4 @@
-package com.example.legutus
+package fr.legatus.mobilev2
 
 import io.flutter.embedding.android.FlutterActivity
 
