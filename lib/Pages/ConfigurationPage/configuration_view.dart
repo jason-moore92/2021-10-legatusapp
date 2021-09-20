@@ -239,8 +239,8 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
                     child: Column(
                       children: [
                         if (authProvider.authState.loginState == LoginState.IsLogin) _logInPanel() else _logoutPanel(),
-                        SizedBox(height: heightDp! * 20),
-                        _permissionPanel(),
+                        // SizedBox(height: heightDp! * 20),
+                        // _permissionPanel(),
                         SizedBox(height: heightDp! * 20),
                         _storagePanel(),
                         SizedBox(height: heightDp! * 20),
