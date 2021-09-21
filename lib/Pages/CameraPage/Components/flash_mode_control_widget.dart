@@ -43,7 +43,13 @@ class FlashModeControllWidget extends StatelessWidget {
       enable = false;
     }
 
-    if (cameraController == null) return SizedBox();
+    if (cameraController == null)
+      return IconButton(
+        icon: Icon(Icons.flash_off),
+        color: Colors.transparent,
+        iconSize: iconSize!,
+        onPressed: null,
+      );
 
     switch (cameraController!.value.flashMode) {
       case FlashMode.off:

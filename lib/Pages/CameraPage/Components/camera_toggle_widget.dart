@@ -88,7 +88,15 @@ class CameraToggleWidget extends StatelessWidget {
       }
     }
 
-    if (cameraController == null) return SizedBox();
+    if (cameraController == null)
+      return IconButton(
+        icon: Icon(
+          Icons.camera_rear_outlined,
+          color: Colors.transparent,
+          size: heightDp! * 20,
+        ),
+        onPressed: null,
+      );
 
     switch (cameraController!.description.lensDirection) {
       case CameraLensDirection.back:
