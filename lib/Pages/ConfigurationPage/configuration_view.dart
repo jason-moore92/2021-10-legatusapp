@@ -146,10 +146,10 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     await _keicyProgressDialog!.show();
 
     _authProvider!.login(
-      // email: _email,
-      // password: _password,
-      email: "mobile@legatus.fr",
-      password: "BiksbcNgALR8",
+      email: _email,
+      password: _password,
+      // email: "mobile@legatus.fr",
+      // password: "BiksbcNgALR8",
     );
   }
 
