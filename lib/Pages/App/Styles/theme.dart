@@ -18,6 +18,7 @@ ThemeData buildLightTheme(BuildContext context) {
     hintColor: AppColors.primayColor,
     appBarTheme: AppBarTheme(
       brightness: Brightness.dark,
+      backgroundColor: AppColors.primayColor,
     ),
     textTheme: TextTheme(
       headline1: TextStyle(fontSize: fontSp * 40, color: Colors.black),

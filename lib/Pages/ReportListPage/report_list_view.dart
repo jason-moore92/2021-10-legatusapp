@@ -78,8 +78,9 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
       bool? isInit = _prefs!.getBool("local_report_list_page") ?? false;
 
       if (!isInit) {
-        await _prefs!.setBool("local_report_list_page", true);
         if (_localReportListProvider!.localReportListState.progressState != 2 && _localReportListProvider!.localReportListState.progressState != 1) {
+          isInit = true;
+          await _prefs!.setBool("local_report_list_page", true);
           _localReportListProvider!.setLocalReportListState(
             _localReportListProvider!.localReportListState.update(
               localReportListData: [],
@@ -108,8 +109,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
         if (result != null && result.isNotEmpty) {
           _onRefresh();
-        }
-        {
+        } else {
           setState(() {});
         }
       } else if (_localReportListProvider!.localReportListState.isNew!) {
@@ -126,8 +126,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
         if (result != null && result.isNotEmpty) {
           _onRefresh();
-        }
-        {
+        } else {
           setState(() {});
         }
       }
@@ -225,6 +224,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
         // return ReportPage(localReportModel: localReportListProvider.localReportListState.localReportModel);
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: AppColors.primayColor,
             title: Text(
               "",
               style: Theme.of(context).textTheme.headline6,
@@ -238,6 +238,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
         // return NewReportPage();
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: AppColors.primayColor,
             title: Text(
               "",
               style: Theme.of(context).textTheme.headline6,
@@ -249,6 +250,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
       return Scaffold(
         appBar: AppBar(
+          backgroundColor: AppColors.primayColor,
           title: Text(
             LocaleKeys.ReportListPageString_appbarTitle.tr(),
             style: Theme.of(context).textTheme.headline6,
