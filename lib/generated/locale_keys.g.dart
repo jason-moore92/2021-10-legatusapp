@@ -1,21 +1,32 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
-  static const ValidateErrorString_shouldBeErrorText = 'ValidateErrorString.shouldBeErrorText';
-  static const ValidateErrorString_inCorrectErrorText = 'ValidateErrorString.inCorrectErrorText';
-  static const ValidateErrorString_emailErrorText = 'ValidateErrorString.emailErrorText';
-  static const ValidateErrorString_passwordMatchErrorText = 'ValidateErrorString.passwordMatchErrorText';
-  static const ValidateErrorString_textlengthErrorText = 'ValidateErrorString.textlengthErrorText';
-  static const ValidateErrorString_dropdownItemErrorText = 'ValidateErrorString.dropdownItemErrorText';
+abstract class LocaleKeys {
+  static const ValidateErrorString_shouldBeErrorText =
+      'ValidateErrorString.shouldBeErrorText';
+  static const ValidateErrorString_inCorrectErrorText =
+      'ValidateErrorString.inCorrectErrorText';
+  static const ValidateErrorString_emailErrorText =
+      'ValidateErrorString.emailErrorText';
+  static const ValidateErrorString_passwordMatchErrorText =
+      'ValidateErrorString.passwordMatchErrorText';
+  static const ValidateErrorString_textlengthErrorText =
+      'ValidateErrorString.textlengthErrorText';
+  static const ValidateErrorString_dropdownItemErrorText =
+      'ValidateErrorString.dropdownItemErrorText';
   static const ValidateErrorString = 'ValidateErrorString';
   static const BottomNavBarString_planning = 'BottomNavBarString.planning';
   static const BottomNavBarString_reports = 'BottomNavBarString.reports';
-  static const BottomNavBarString_configration = 'BottomNavBarString.configration';
+  static const BottomNavBarString_configration =
+      'BottomNavBarString.configration';
   static const BottomNavBarString = 'BottomNavBarString';
-  static const PlanningListPageString_appbarTitle = 'PlanningListPageString.appbarTitle';
-  static const PlanningListPageString_login_description = 'PlanningListPageString.login_description';
-  static const PlanningListPageString_login_button = 'PlanningListPageString.login_button';
-  static const PlanningListPageString_noPlanning = 'PlanningListPageString.noPlanning';
+  static const PlanningListPageString_appbarTitle =
+      'PlanningListPageString.appbarTitle';
+  static const PlanningListPageString_login_description =
+      'PlanningListPageString.login_description';
+  static const PlanningListPageString_login_button =
+      'PlanningListPageString.login_button';
+  static const PlanningListPageString_noPlanning =
+      'PlanningListPageString.noPlanning';
   static const PlanningListPageString = 'PlanningListPageString';
   static const PlanningPageString_date = 'PlanningPageString.date';
   static const PlanningPageString_state = 'PlanningPageString.state';
@@ -27,54 +38,98 @@ abstract class  LocaleKeys {
   static const PlanningPageString_latitude = 'PlanningPageString.latitude';
   static const PlanningPageString_longitude = 'PlanningPageString.longitude';
   static const PlanningPageString_foldName = 'PlanningPageString.foldName';
-  static const PlanningPageString_description = 'PlanningPageString.description';
-  static const PlanningPageString_customerInfo = 'PlanningPageString.customerInfo';
+  static const PlanningPageString_description =
+      'PlanningPageString.description';
+  static const PlanningPageString_customerInfo =
+      'PlanningPageString.customerInfo';
   static const PlanningPageString_crope = 'PlanningPageString.crope';
   static const PlanningPageString_email = 'PlanningPageString.email';
-  static const PlanningPageString_phoneNumber = 'PlanningPageString.phoneNumber';
-  static const PlanningPageString_representations = 'PlanningPageString.representations';
+  static const PlanningPageString_phoneNumber =
+      'PlanningPageString.phoneNumber';
+  static const PlanningPageString_representations =
+      'PlanningPageString.representations';
   static const PlanningPageString_recipients = 'PlanningPageString.recipients';
   static const PlanningPageString = 'PlanningPageString';
-  static const ConfigurationPageString_appbarTitle = 'ConfigurationPageString.appbarTitle';
+  static const ConfigurationPageString_appbarTitle =
+      'ConfigurationPageString.appbarTitle';
   static const ConfigurationPageString_login = 'ConfigurationPageString.login';
-  static const ConfigurationPageString_logout = 'ConfigurationPageString.logout';
-  static const ConfigurationPageString_login_description = 'ConfigurationPageString.login_description';
-  static const ConfigurationPageString_emailLabel = 'ConfigurationPageString.emailLabel';
-  static const ConfigurationPageString_passwordLabel = 'ConfigurationPageString.passwordLabel';
-  static const ConfigurationPageString_application_permission = 'ConfigurationPageString.application_permission';
-  static const ConfigurationPageString_obligatory = 'ConfigurationPageString.obligatory';
-  static const ConfigurationPageString_camera_permission = 'ConfigurationPageString.camera_permission';
-  static const ConfigurationPageString_camera_permission_desc = 'ConfigurationPageString.camera_permission_desc';
-  static const ConfigurationPageString_microphone_permission = 'ConfigurationPageString.microphone_permission';
-  static const ConfigurationPageString_microphone_permission_desc = 'ConfigurationPageString.microphone_permission_desc';
-  static const ConfigurationPageString_photo_permission = 'ConfigurationPageString.photo_permission';
-  static const ConfigurationPageString_photo_permission_desc = 'ConfigurationPageString.photo_permission_desc';
-  static const ConfigurationPageString_location_permission = 'ConfigurationPageString.location_permission';
-  static const ConfigurationPageString_location_permission_desc = 'ConfigurationPageString.location_permission_desc';
-  static const ConfigurationPageString_storage = 'ConfigurationPageString.storage';
-  static const ConfigurationPageString_storage_condition1 = 'ConfigurationPageString.storage_condition1';
-  static const ConfigurationPageString_storage_condition2 = 'ConfigurationPageString.storage_condition2';
-  static const ConfigurationPageString_storage_condition_desc = 'ConfigurationPageString.storage_condition_desc';
-  static const ConfigurationPageString_image_size = 'ConfigurationPageString.image_size';
-  static const ConfigurationPageString_image_size_desc = 'ConfigurationPageString.image_size_desc';
-  static const ConfigurationPageString_infomation = 'ConfigurationPageString.infomation';
-  static const ConfigurationPageString_infomation_desc = 'ConfigurationPageString.infomation_desc';
-  static const ConfigurationPageString_analyse = 'ConfigurationPageString.analyse';
-  static const ConfigurationPageString_analyse_desc = 'ConfigurationPageString.analyse_desc';
-  static const ConfigurationPageString_developMode = 'ConfigurationPageString.developMode';
-  static const ConfigurationPageString_developMode_desc = 'ConfigurationPageString.developMode_desc';
-  static const ConfigurationPageString_contactLegatus = 'ConfigurationPageString.contactLegatus';
-  static const ConfigurationPageString_sendReport = 'ConfigurationPageString.sendReport';
-  static const ConfigurationPageString_photoResolutionTitle = 'ConfigurationPageString.photoResolutionTitle';
-  static const ConfigurationPageString_photoResolutionDescription = 'ConfigurationPageString.photoResolutionDescription';
-  static const ConfigurationPageString_default = 'ConfigurationPageString.default';
+  static const ConfigurationPageString_logout =
+      'ConfigurationPageString.logout';
+  static const ConfigurationPageString_login_description =
+      'ConfigurationPageString.login_description';
+  static const ConfigurationPageString_emailLabel =
+      'ConfigurationPageString.emailLabel';
+  static const ConfigurationPageString_passwordLabel =
+      'ConfigurationPageString.passwordLabel';
+  static const ConfigurationPageString_application_permission =
+      'ConfigurationPageString.application_permission';
+  static const ConfigurationPageString_obligatory =
+      'ConfigurationPageString.obligatory';
+  static const ConfigurationPageString_optional =
+      'ConfigurationPageString.optional';
+  static const ConfigurationPageString_camera_permission =
+      'ConfigurationPageString.camera_permission';
+  static const ConfigurationPageString_camera_permission_desc =
+      'ConfigurationPageString.camera_permission_desc';
+  static const ConfigurationPageString_microphone_permission =
+      'ConfigurationPageString.microphone_permission';
+  static const ConfigurationPageString_microphone_permission_desc =
+      'ConfigurationPageString.microphone_permission_desc';
+  static const ConfigurationPageString_photo_permission =
+      'ConfigurationPageString.photo_permission';
+  static const ConfigurationPageString_photo_permission_desc =
+      'ConfigurationPageString.photo_permission_desc';
+  static const ConfigurationPageString_location_permission =
+      'ConfigurationPageString.location_permission';
+  static const ConfigurationPageString_location_permission_desc =
+      'ConfigurationPageString.location_permission_desc';
+  static const ConfigurationPageString_storage =
+      'ConfigurationPageString.storage';
+  static const ConfigurationPageString_storage_condition1 =
+      'ConfigurationPageString.storage_condition1';
+  static const ConfigurationPageString_storage_condition2 =
+      'ConfigurationPageString.storage_condition2';
+  static const ConfigurationPageString_storage_condition_desc =
+      'ConfigurationPageString.storage_condition_desc';
+  static const ConfigurationPageString_image_size =
+      'ConfigurationPageString.image_size';
+  static const ConfigurationPageString_image_size_desc =
+      'ConfigurationPageString.image_size_desc';
+  static const ConfigurationPageString_infomation =
+      'ConfigurationPageString.infomation';
+  static const ConfigurationPageString_infomation_desc =
+      'ConfigurationPageString.infomation_desc';
+  static const ConfigurationPageString_analyse =
+      'ConfigurationPageString.analyse';
+  static const ConfigurationPageString_analyse_desc =
+      'ConfigurationPageString.analyse_desc';
+  static const ConfigurationPageString_developMode =
+      'ConfigurationPageString.developMode';
+  static const ConfigurationPageString_developMode_desc =
+      'ConfigurationPageString.developMode_desc';
+  static const ConfigurationPageString_contactLegatus =
+      'ConfigurationPageString.contactLegatus';
+  static const ConfigurationPageString_sendReport =
+      'ConfigurationPageString.sendReport';
+  static const ConfigurationPageString_photoResolutionTitle =
+      'ConfigurationPageString.photoResolutionTitle';
+  static const ConfigurationPageString_photoResolutionDescription =
+      'ConfigurationPageString.photoResolutionDescription';
+  static const ConfigurationPageString_default =
+      'ConfigurationPageString.default';
   static const ConfigurationPageString_high = 'ConfigurationPageString.high';
-  static const ConfigurationPageString_veryHigh = 'ConfigurationPageString.veryHigh';
-  static const ConfigurationPageString_ultraHigh = 'ConfigurationPageString.ultraHigh';
-  static const ConfigurationPageString_maximum = 'ConfigurationPageString.maximum';
-  static const ConfigurationPageString_maximumDesc = 'ConfigurationPageString.maximumDesc';
-  static const ConfigurationPageString_videoResolutionTitle = 'ConfigurationPageString.videoResolutionTitle';
-  static const ConfigurationPageString_videoResolutionDescription = 'ConfigurationPageString.videoResolutionDescription';
+  static const ConfigurationPageString_veryHigh =
+      'ConfigurationPageString.veryHigh';
+  static const ConfigurationPageString_ultraHigh =
+      'ConfigurationPageString.ultraHigh';
+  static const ConfigurationPageString_maximum =
+      'ConfigurationPageString.maximum';
+  static const ConfigurationPageString_maximumDesc =
+      'ConfigurationPageString.maximumDesc';
+  static const ConfigurationPageString_videoResolutionTitle =
+      'ConfigurationPageString.videoResolutionTitle';
+  static const ConfigurationPageString_videoResolutionDescription =
+      'ConfigurationPageString.videoResolutionDescription';
   static const ConfigurationPageString = 'ConfigurationPageString';
   static const LogoutDialog_title = 'LogoutDialog.title';
   static const LogoutDialog_description = 'LogoutDialog.description';
@@ -87,87 +142,126 @@ abstract class  LocaleKeys {
   static const ReportDialog_cancel = 'ReportDialog.cancel';
   static const ReportDialog = 'ReportDialog';
   static const ReportSuccessDialog_title = 'ReportSuccessDialog.title';
-  static const ReportSuccessDialog_description = 'ReportSuccessDialog.description';
+  static const ReportSuccessDialog_description =
+      'ReportSuccessDialog.description';
   static const ReportSuccessDialog_okay = 'ReportSuccessDialog.okay';
   static const ReportSuccessDialog = 'ReportSuccessDialog';
-  static const ReportListPageString_appbarTitle = 'ReportListPageString.appbarTitle';
+  static const ReportListPageString_appbarTitle =
+      'ReportListPageString.appbarTitle';
   static const ReportListPageString_delete = 'ReportListPageString.delete';
   static const ReportListPageString = 'ReportListPageString';
-  static const DeleteReportDialogString_title = 'DeleteReportDialogString.title';
-  static const DeleteReportDialogString_content = 'DeleteReportDialogString.content';
-  static const DeleteReportDialogString_delete = 'DeleteReportDialogString.delete';
-  static const DeleteReportDialogString_cancel = 'DeleteReportDialogString.cancel';
+  static const DeleteReportDialogString_title =
+      'DeleteReportDialogString.title';
+  static const DeleteReportDialogString_content =
+      'DeleteReportDialogString.content';
+  static const DeleteReportDialogString_delete =
+      'DeleteReportDialogString.delete';
+  static const DeleteReportDialogString_cancel =
+      'DeleteReportDialogString.cancel';
   static const DeleteReportDialogString = 'DeleteReportDialogString';
   static const DeleteMediaDialogString_title = 'DeleteMediaDialogString.title';
-  static const DeleteMediaDialogString_content = 'DeleteMediaDialogString.content';
-  static const DeleteMediaDialogString_delete = 'DeleteMediaDialogString.delete';
-  static const DeleteMediaDialogString_cancel = 'DeleteMediaDialogString.cancel';
+  static const DeleteMediaDialogString_content =
+      'DeleteMediaDialogString.content';
+  static const DeleteMediaDialogString_delete =
+      'DeleteMediaDialogString.delete';
+  static const DeleteMediaDialogString_cancel =
+      'DeleteMediaDialogString.cancel';
   static const DeleteMediaDialogString = 'DeleteMediaDialogString';
-  static const NewReportPageString_appbarTitle = 'NewReportPageString.appbarTitle';
-  static const NewReportPageString_reportName = 'NewReportPageString.reportName';
+  static const NewReportPageString_appbarTitle =
+      'NewReportPageString.appbarTitle';
+  static const NewReportPageString_reportName =
+      'NewReportPageString.reportName';
   static const NewReportPageString_types = 'NewReportPageString.types';
   static const NewReportPageString_date = 'NewReportPageString.date';
   static const NewReportPageString_time = 'NewReportPageString.time';
-  static const NewReportPageString_description = 'NewReportPageString.description';
-  static const NewReportPageString_addressLabel = 'NewReportPageString.addressLabel';
+  static const NewReportPageString_description =
+      'NewReportPageString.description';
+  static const NewReportPageString_addressLabel =
+      'NewReportPageString.addressLabel';
   static const NewReportPageString_street = 'NewReportPageString.street';
-  static const NewReportPageString_additionalAddress = 'NewReportPageString.additionalAddress';
+  static const NewReportPageString_additionalAddress =
+      'NewReportPageString.additionalAddress';
   static const NewReportPageString_zip = 'NewReportPageString.zip';
   static const NewReportPageString_city = 'NewReportPageString.city';
   static const NewReportPageString_latitude = 'NewReportPageString.latitude';
   static const NewReportPageString_longitude = 'NewReportPageString.longitude';
-  static const NewReportPageString_customerTypeLabel = 'NewReportPageString.customerTypeLabel';
-  static const NewReportPageString_customerTypes = 'NewReportPageString.customerTypes';
+  static const NewReportPageString_customerTypeLabel =
+      'NewReportPageString.customerTypeLabel';
+  static const NewReportPageString_customerTypes =
+      'NewReportPageString.customerTypes';
   static const NewReportPageString_name = 'NewReportPageString.name';
   static const NewReportPageString_crop_form = 'NewReportPageString.crop_form';
-  static const NewReportPageString_crop_siren = 'NewReportPageString.crop_siren';
+  static const NewReportPageString_crop_siren =
+      'NewReportPageString.crop_siren';
   static const NewReportPageString_crop_rcs = 'NewReportPageString.crop_rcs';
-  static const NewReportPageString_recipient_label = 'NewReportPageString.recipient_label';
-  static const NewReportPageString_recipient_position = 'NewReportPageString.recipient_position';
-  static const NewReportPageString_recipient_birth_date = 'NewReportPageString.recipient_birth_date';
-  static const NewReportPageString_recipient_birth_city = 'NewReportPageString.recipient_birth_city';
-  static const NewReportPageString_recipient_email = 'NewReportPageString.recipient_email';
-  static const NewReportPageString_recipient_phone = 'NewReportPageString.recipient_phone';
+  static const NewReportPageString_recipient_label =
+      'NewReportPageString.recipient_label';
+  static const NewReportPageString_recipient_position =
+      'NewReportPageString.recipient_position';
+  static const NewReportPageString_recipient_birth_date =
+      'NewReportPageString.recipient_birth_date';
+  static const NewReportPageString_recipient_birth_city =
+      'NewReportPageString.recipient_birth_city';
+  static const NewReportPageString_recipient_email =
+      'NewReportPageString.recipient_email';
+  static const NewReportPageString_recipient_phone =
+      'NewReportPageString.recipient_phone';
   static const NewReportPageString_save = 'NewReportPageString.save';
-  static const NewReportPageString_createSuccess = 'NewReportPageString.createSuccess';
-  static const NewReportPageString_updateSuccess = 'NewReportPageString.updateSuccess';
+  static const NewReportPageString_createSuccess =
+      'NewReportPageString.createSuccess';
+  static const NewReportPageString_updateSuccess =
+      'NewReportPageString.updateSuccess';
   static const NewReportPageString_uploading = 'NewReportPageString.uploading';
   static const NewReportPageString = 'NewReportPageString';
-  static const LocalReportWidgetString_photos = 'LocalReportWidgetString.photos';
-  static const LocalReportWidgetString_audios = 'LocalReportWidgetString.audios';
+  static const LocalReportWidgetString_photos =
+      'LocalReportWidgetString.photos';
+  static const LocalReportWidgetString_audios =
+      'LocalReportWidgetString.audios';
   static const LocalReportWidgetString_notes = 'LocalReportWidgetString.notes';
-  static const LocalReportWidgetString_videos = 'LocalReportWidgetString.videos';
-  static const LocalReportWidgetString_allMediaUpload = 'LocalReportWidgetString.allMediaUpload';
-  static const LocalReportWidgetString_nonUploadMedial = 'LocalReportWidgetString.nonUploadMedial';
-  static const LocalReportWidgetString_noMedial = 'LocalReportWidgetString.noMedial';
+  static const LocalReportWidgetString_videos =
+      'LocalReportWidgetString.videos';
+  static const LocalReportWidgetString_allMediaUpload =
+      'LocalReportWidgetString.allMediaUpload';
+  static const LocalReportWidgetString_nonUploadMedial =
+      'LocalReportWidgetString.nonUploadMedial';
+  static const LocalReportWidgetString_noMedial =
+      'LocalReportWidgetString.noMedial';
   static const LocalReportWidgetString = 'LocalReportWidgetString';
   static const ReportPageString_share = 'ReportPageString.share';
   static const ReportPageString_selecteAll = 'ReportPageString.selecteAll';
-  static const ReportPageString_noMediaDescription = 'ReportPageString.noMediaDescription';
+  static const ReportPageString_noMediaDescription =
+      'ReportPageString.noMediaDescription';
   static const ReportPageString = 'ReportPageString';
   static const NoteDialogString_newNots = 'NoteDialogString.newNots';
   static const NoteDialogString_save = 'NoteDialogString.save';
   static const NoteDialogString_close = 'NoteDialogString.close';
   static const NoteDialogString = 'NoteDialogString';
   static const MediaInfoDialogString_media = 'MediaInfoDialogString.media';
-  static const MediaInfoDialogString_mediaType = 'MediaInfoDialogString.mediaType';
+  static const MediaInfoDialogString_mediaType =
+      'MediaInfoDialogString.mediaType';
   static const MediaInfoDialogString_picture = 'MediaInfoDialogString.picture';
   static const MediaInfoDialogString_audio = 'MediaInfoDialogString.audio';
   static const MediaInfoDialogString_note = 'MediaInfoDialogString.note';
   static const MediaInfoDialogString_video = 'MediaInfoDialogString.video';
-  static const MediaInfoDialogString_registeredOn = 'MediaInfoDialogString.registeredOn';
+  static const MediaInfoDialogString_registeredOn =
+      'MediaInfoDialogString.registeredOn';
   static const MediaInfoDialogString_size = 'MediaInfoDialogString.size';
-  static const MediaInfoDialogString_duration = 'MediaInfoDialogString.duration';
-  static const MediaInfoDialogString_latitude = 'MediaInfoDialogString.latitude';
-  static const MediaInfoDialogString_longitude = 'MediaInfoDialogString.longitude';
+  static const MediaInfoDialogString_duration =
+      'MediaInfoDialogString.duration';
+  static const MediaInfoDialogString_latitude =
+      'MediaInfoDialogString.latitude';
+  static const MediaInfoDialogString_longitude =
+      'MediaInfoDialogString.longitude';
   static const MediaInfoDialogString_close = 'MediaInfoDialogString.close';
   static const MediaInfoDialogString = 'MediaInfoDialogString';
-  static const StorageLimitDialogString_content = 'StorageLimitDialogString.content';
+  static const StorageLimitDialogString_content =
+      'StorageLimitDialogString.content';
   static const StorageLimitDialogString_ok = 'StorageLimitDialogString.ok';
   static const StorageLimitDialogString = 'StorageLimitDialogString';
   static const JournalDialogString_title = 'JournalDialogString.title';
   static const JournalDialogString_content = 'JournalDialogString.content';
-  static const JournalDialogString_emailLabel = 'JournalDialogString.emailLabel';
+  static const JournalDialogString_emailLabel =
+      'JournalDialogString.emailLabel';
   static const JournalDialogString_send = 'JournalDialogString.send';
   static const JournalDialogString_cancel = 'JournalDialogString.cancel';
   static const JournalDialogString = 'JournalDialogString';
@@ -181,5 +275,4 @@ abstract class  LocaleKeys {
   static const UploadDialogString_login = 'UploadDialogString.login';
   static const UploadDialogString_cancel = 'UploadDialogString.cancel';
   static const UploadDialogString = 'UploadDialogString';
-
 }

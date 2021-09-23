@@ -46,15 +46,11 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Legatus doit avoir accès à la caméra de cet appareil lors de son fonctionnement.</string>
+	<string>Legatus doit avoir accès à la caméra de cet appareil pour réaliser vos photos de constatations.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Legatus doit avoir accès à la localisation de cet appareil lors de son fonctionnement.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Legatus doit avoir accès à la localisation de cet appareil lors de son fonctionnement.</string>
+	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Legatus doit avoir accès au micro de cet appareil lors de son fonctionnement.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Legatus doit avoir accès à la localisation de cet appareil lors de son fonctionnement.</string>
+	<string>Legatus doit avoir accès au micro de cet appareil lors du fonctionnement de l'application pour enregistrer vos dictées audios.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

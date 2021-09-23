@@ -259,8 +259,8 @@ class _ConfigurationViewState extends State<ConfigurationView>
                           _logInPanel()
                         else
                           _logoutPanel(),
-                        // SizedBox(height: heightDp! * 20),
-                        // _permissionPanel(),
+                        SizedBox(height: heightDp! * 20),
+                        _permissionPanel(),
                         SizedBox(height: heightDp! * 20),
                         _storagePanel(),
                         SizedBox(height: heightDp! * 20),
@@ -614,62 +614,9 @@ class _ConfigurationViewState extends State<ConfigurationView>
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: LocaleKeys.ConfigurationPageString_obligatory
-                                  .tr() +
-                              " - ",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: LocaleKeys
-                              .ConfigurationPageString_photo_permission.tr(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    LocaleKeys.ConfigurationPageString_photo_permission_desc
-                        .tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2!
-                        .copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
-              ),
-            ),
-            // Switch(
-            //   activeColor: AppColors.yello,
-            //   inactiveTrackColor: Colors.grey,
-            //   value: _appDataProvider!.appDataState.settingsModel!.allowLocation!,
-            //   onChanged: (value) {
-            //     _appDataProvider!.settingsHandler(allowLocation: value);
-            //   },
-            // ),
-          ],
-        ),
-        SizedBox(height: heightDp! * 10),
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: LocaleKeys.ConfigurationPageString_obligatory
-                                  .tr() +
-                              " - ",
+                          text:
+                              LocaleKeys.ConfigurationPageString_optional.tr() +
+                                  " - ",
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2!
