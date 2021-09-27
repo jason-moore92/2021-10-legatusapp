@@ -291,7 +291,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
       children: [
         Row(
           children: [
-            Icon(Icons.login, size: heightDp! * 25, color: Colors.black),
+            Icon(Icons.login, size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_login.tr(),
@@ -415,7 +415,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
       children: [
         Row(
           children: [
-            Icon(Icons.login, size: heightDp! * 25, color: Colors.black),
+            Icon(Icons.login, size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_login.tr(),
@@ -487,7 +487,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.toggle_on_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_application_permission.tr(),
@@ -666,7 +666,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
       children: [
         Row(
           children: [
-            Icon(Icons.storage, size: heightDp! * 25, color: Colors.black),
+            Icon(Icons.storage, size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_storage.tr(),
@@ -752,7 +752,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.photo_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_photoResolutionTitle.tr(),
@@ -984,7 +984,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.videocam_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_videoResolutionTitle.tr(),
@@ -1216,7 +1216,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.error_outline,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_infomation.tr(),
@@ -1271,7 +1271,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.bug_report_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_analyse.tr(),
@@ -1321,7 +1321,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.developer_mode_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_developMode.tr(),

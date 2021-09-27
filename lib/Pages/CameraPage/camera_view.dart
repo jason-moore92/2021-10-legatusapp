@@ -38,7 +38,8 @@ class CameraView extends StatefulWidget {
   }
 }
 
-class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _CameraViewState extends State<CameraView>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -152,7 +153,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       ));
       setState(() {});
       cameras = await availableCameras();
-      onNewCameraSelected(cameras[0], _appDataProvider!.appDataState.settingsModel!.photoResolution!);
+      onNewCameraSelected(cameras[0],
+          _appDataProvider!.appDataState.settingsModel!.photoResolution!);
 
       _locationSubscription = Geolocator.getPositionStream().listen((position) {
         _currentPosition = position;
@@ -178,7 +180,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     super.dispose();
   }
 
-  void _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
+  void _noteHandler(
+      {String? note, bool? isNew = true, MediaModel? mediaModel}) async {
     await _keicyProgressDialog!.show();
     try {
       // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
@@ -199,25 +202,31 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
         if (path == null) {
           await _keicyProgressDialog!.hide();
-          FailedDialog.show(context, text: "Creating new note file path occur error");
+          FailedDialog.show(context,
+              text: "Creating new note file path occur error");
           return;
         }
 
-        File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
+        File? textFile =
+            await FileHelpers.writeTextFile(text: note, path: path);
 
         if (textFile == null) {
           await _keicyProgressDialog!.hide();
-          FailedDialog.show(context, text: "Creating new note file occur error");
+          FailedDialog.show(context,
+              text: "Creating new note file occur error");
           return;
         }
 
         mediaModel = MediaModel();
         mediaModel.content = note;
-        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(
+            dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
         if (Platform.isAndroid) {
-          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
+          mediaModel.deviceInfo =
+              AppDataProvider.of(context).appDataState.androidInfo;
         } else if (Platform.isIOS) {
-          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
+          mediaModel.deviceInfo =
+              AppDataProvider.of(context).appDataState.iosInfo;
         }
         mediaModel.duration = -1;
         mediaModel.ext = textFile.path.split('.').last;
@@ -237,7 +246,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         _localReportModel!.medias!.add(mediaModel);
       } else {
         for (var i = 0; i < _localReportModel!.medias!.length; i++) {
-          if (_localReportModel!.medias![i].createdAt == mediaModel!.createdAt!) {
+          if (_localReportModel!.medias![i].createdAt ==
+              mediaModel!.createdAt!) {
             File oldTextFile = File(mediaModel.path!);
             try {
               await oldTextFile.delete();
@@ -245,11 +255,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
               print(e);
             }
 
-            File? textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
+            File? textFile = await FileHelpers.writeTextFile(
+                text: note, path: mediaModel.path!);
 
             if (textFile == null) {
               await _keicyProgressDialog!.hide();
-              FailedDialog.show(context, text: "Creating updat note file occur error");
+              FailedDialog.show(context,
+                  text: "Creating updat note file occur error");
               return;
             }
 
@@ -269,7 +281,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         }
       }
 
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
+      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(
+              dateString: _localReportModel!.createdAt)
+          .toString();
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
         dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
       )!;
@@ -319,11 +333,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
       if (path == null) {
         await _keicyProgressDialog!.hide();
-        FailedDialog.show(context, text: "Creating image file path occur error");
+        FailedDialog.show(context,
+            text: "Creating image file path occur error");
         return;
       }
 
-      File? _imageFile = await FileHelpers.writeImageFile(imageFile: imageFile, path: path);
+      File? _imageFile =
+          await FileHelpers.writeImageFile(imageFile: imageFile, path: path);
 
       if (_imageFile == null) {
         await _keicyProgressDialog!.hide();
@@ -335,11 +351,14 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       await tmpFile.delete();
 
       MediaModel mediaModel = MediaModel();
-      mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+      mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(
+          dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
       if (Platform.isAndroid) {
-        mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
+        mediaModel.deviceInfo =
+            AppDataProvider.of(context).appDataState.androidInfo;
       } else if (Platform.isIOS) {
-        mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
+        mediaModel.deviceInfo =
+            AppDataProvider.of(context).appDataState.iosInfo;
       }
       mediaModel.duration = -1;
       mediaModel.ext = _imageFile.path.split('.').last;
@@ -355,7 +374,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         IMG.Image? image = IMG.decodeImage(_imageFile.readAsBytesSync());
         // Resize the image to a 120x? thumbnail (maintaining the aspect ratio).
         IMG.Image thumbnail = IMG.copyResize(image!, width: 300);
-        File turmFile = await File(thumPath).writeAsBytes(IMG.encodePng(thumbnail));
+        File turmFile =
+            await File(thumPath).writeAsBytes(IMG.encodePng(thumbnail));
         mediaModel.thumPath = turmFile.path;
       }
       ////////////////////////////////////////
@@ -369,7 +389,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
+      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(
+              dateString: _localReportModel!.createdAt)
+          .toString();
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
         dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
       )!;
@@ -388,7 +410,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         };
         setState(() {});
       } else {
-        FailedDialog.show(context, text: "Created picture media and update local report error");
+        FailedDialog.show(context,
+            text: "Created picture media and update local report error");
         return;
       }
     } catch (e) {
@@ -399,7 +422,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     }
   }
 
-  void _audioHandler({@required String? tmpPath, @required int? inMilliseconds}) async {
+  void _audioHandler(
+      {@required String? tmpPath, @required int? inMilliseconds}) async {
     // await _keicyProgressDialog!.show();
     try {
       // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
@@ -421,11 +445,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
       if (path == null) {
         await _keicyProgressDialog!.hide();
-        FailedDialog.show(context, text: "Creating audio file path occur error");
+        FailedDialog.show(context,
+            text: "Creating audio file path occur error");
         return;
       }
 
-      File? _audioFile = await FileHelpers.writeAudioFile(tmpPath: tmpPath, path: path);
+      File? _audioFile =
+          await FileHelpers.writeAudioFile(tmpPath: tmpPath, path: path);
 
       if (_audioFile == null) {
         await _keicyProgressDialog!.hide();
@@ -437,11 +463,14 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       await tmpFile.delete();
 
       MediaModel mediaModel = MediaModel();
-      mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+      mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(
+          dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
       if (Platform.isAndroid) {
-        mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
+        mediaModel.deviceInfo =
+            AppDataProvider.of(context).appDataState.androidInfo;
       } else if (Platform.isIOS) {
-        mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
+        mediaModel.deviceInfo =
+            AppDataProvider.of(context).appDataState.iosInfo;
       }
       mediaModel.duration = inMilliseconds;
       mediaModel.ext = _audioFile.path.split('.').last;
@@ -461,7 +490,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
+      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(
+              dateString: _localReportModel!.createdAt)
+          .toString();
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
         dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
       )!;
@@ -479,7 +510,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           "localReportModel": _localReportModel,
         };
       } else {
-        FailedDialog.show(context, text: "Created audio media and update local report error");
+        FailedDialog.show(context,
+            text: "Created audio media and update local report error");
       }
     } catch (e) {
       print(e);
@@ -492,7 +524,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     setState(() {});
   }
 
-  void _videoHandler({@required XFile? videoFile, @required int? inMilliseconds}) async {
+  void _videoHandler(
+      {@required XFile? videoFile, @required int? inMilliseconds}) async {
     // await _keicyProgressDialog!.show();
     try {
       // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
@@ -517,7 +550,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         return;
       }
 
-      File? _videoFile = await FileHelpers.writeVideoFile(videoFile: videoFile, path: path);
+      File? _videoFile =
+          await FileHelpers.writeVideoFile(videoFile: videoFile, path: path);
 
       if (_videoFile == null) {
         await _keicyProgressDialog!.hide();
@@ -529,11 +563,14 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       await tmpFile.delete();
 
       MediaModel mediaModel = MediaModel();
-      mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+      mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(
+          dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
       if (Platform.isAndroid) {
-        mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
+        mediaModel.deviceInfo =
+            AppDataProvider.of(context).appDataState.androidInfo;
       } else if (Platform.isIOS) {
-        mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
+        mediaModel.deviceInfo =
+            AppDataProvider.of(context).appDataState.iosInfo;
       }
       mediaModel.duration = inMilliseconds;
       mediaModel.ext = _videoFile.path.split('.').last;
@@ -553,7 +590,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
+      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(
+              dateString: _localReportModel!.createdAt)
+          .toString();
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
         dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
       )!;
@@ -571,7 +610,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           "localReportModel": _localReportModel,
         };
       } else {
-        FailedDialog.show(context, text: "Created video media and update local report error");
+        FailedDialog.show(context,
+            text: "Created video media and update local report error");
       }
 
       _isShowVideoRecoderPanel = false;
@@ -582,7 +622,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       FailedDialog.show(context, text: "Creating video media error");
     }
 
-    onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
+    onNewCameraSelected(cameraController!.description,
+        _appDataProvider!.appDataState.settingsModel!.photoResolution!);
   }
 
   @override
@@ -595,11 +636,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     if (state == AppLifecycleState.inactive) {
       cameraController!.dispose();
     } else if (state == AppLifecycleState.resumed) {
-      onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
+      onNewCameraSelected(cameraController!.description,
+          _appDataProvider!.appDataState.settingsModel!.photoResolution!);
     }
   }
 
-  void onNewCameraSelected(CameraDescription cameraDescription, int resolution) async {
+  void onNewCameraSelected(
+      CameraDescription cameraDescription, int resolution) async {
     if (cameraDescription == null) return;
 
     if (cameraController != null) {
@@ -638,7 +681,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       // If the cameraController is updated then update the UI.
       newCameraController.addListener(() {
         if (newCameraController.value.hasError) {
-          showInSnackBar('Camera error ${cameraController!.value.errorDescription}');
+          showInSnackBar(
+              'Camera error ${cameraController!.value.errorDescription}');
         }
       });
 
@@ -646,8 +690,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         await newCameraController.initialize();
         await newCameraController.lockCaptureOrientation(_cameraOrientation);
         await Future.wait([
-          newCameraController.getMaxZoomLevel().then((value) => _maxAvailableZoom = value),
-          newCameraController.getMinZoomLevel().then((value) => _minAvailableZoom = value),
+          newCameraController
+              .getMaxZoomLevel()
+              .then((value) => _maxAvailableZoom = value),
+          newCameraController
+              .getMinZoomLevel()
+              .then((value) => _minAvailableZoom = value),
         ]);
         if (Platform.isIOS) {
           try {
@@ -668,10 +716,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   }
 
   void _closeHandler() {
-    if ((_cameraProvider!.audioRecordStatus != "stopped") || _cameraProvider!.videoRecordStatus != "stopped") {
+    if ((_cameraProvider!.audioRecordStatus != "stopped") ||
+        _cameraProvider!.videoRecordStatus != "stopped") {
       NormalAskDialog.show(
         context,
-        content: "Un enregistrement est en cours, si vous quittez cette page, il sera perdu",
+        content:
+            "Un enregistrement est en cours, si vous quittez cette page, il sera perdu",
         okButton: "Quitter",
         cancelButton: "Annuler",
         callback: () {
@@ -710,7 +760,10 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                     height: deviceHeight,
                     child: _cameraPreviewWidget(),
                   ),
-                  Container(width: deviceWidth, height: statusbarHeight, color: Colors.black),
+                  Container(
+                      width: deviceWidth,
+                      height: statusbarHeight,
+                      color: Colors.black),
                   Positioned(
                     top: statusbarHeight,
                     child: _cameraToolTopPanel(orientation: _orientation),
@@ -727,23 +780,36 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                                 child: Row(
                                   children: [
                                     RotatedBox(
-                                      quarterTurns:
-                                          (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                              ? 0
-                                              : 1,
+                                      quarterTurns: (_cameraOrientation ==
+                                                  DeviceOrientation
+                                                      .portraitDown ||
+                                              _cameraOrientation ==
+                                                  DeviceOrientation.portraitUp)
+                                          ? 0
+                                          : 1,
                                       child: AudioRecoderPanel(
                                         scaffoldKey: _scaffoldKey,
-                                        keicyProgressDialog: _keicyProgressDialog,
-                                        width: (_cameraOrientation == DeviceOrientation.portraitDown ||
-                                                _cameraOrientation == DeviceOrientation.portraitUp)
+                                        keicyProgressDialog:
+                                            _keicyProgressDialog,
+                                        width: (_cameraOrientation ==
+                                                    DeviceOrientation
+                                                        .portraitDown ||
+                                                _cameraOrientation ==
+                                                    DeviceOrientation
+                                                        .portraitUp)
                                             ? deviceWidth
-                                            : _cameraViewHeiht - heightDp! * 120,
-                                        recordingStatusCallback: (bool isAudioRecording) {
+                                            : _cameraViewHeiht -
+                                                heightDp! * 120,
+                                        recordingStatusCallback:
+                                            (bool isAudioRecording) {
                                           _isAudioRecording = isAudioRecording;
                                           setState(() {});
                                         },
-                                        audioSaveHandler: (String tmpPath, int inMilliseconds) {
-                                          _audioHandler(tmpPath: tmpPath, inMilliseconds: inMilliseconds);
+                                        audioSaveHandler: (String tmpPath,
+                                            int inMilliseconds) {
+                                          _audioHandler(
+                                              tmpPath: tmpPath,
+                                              inMilliseconds: inMilliseconds);
                                         },
                                       ),
                                     ),
@@ -757,22 +823,35 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                                 child: Row(
                                   children: [
                                     RotatedBox(
-                                      quarterTurns:
-                                          (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                              ? 0
-                                              : 1,
+                                      quarterTurns: (_cameraOrientation ==
+                                                  DeviceOrientation
+                                                      .portraitDown ||
+                                              _cameraOrientation ==
+                                                  DeviceOrientation.portraitUp)
+                                          ? 0
+                                          : 1,
                                       child: VideoRecoderPanel(
                                         scaffoldKey: _scaffoldKey,
                                         cameraController: cameraController,
-                                        keicyProgressDialog: _keicyProgressDialog,
-                                        width: (_cameraOrientation == DeviceOrientation.portraitDown ||
-                                                _cameraOrientation == DeviceOrientation.portraitUp)
+                                        keicyProgressDialog:
+                                            _keicyProgressDialog,
+                                        width: (_cameraOrientation ==
+                                                    DeviceOrientation
+                                                        .portraitDown ||
+                                                _cameraOrientation ==
+                                                    DeviceOrientation
+                                                        .portraitUp)
                                             ? deviceWidth
-                                            : _cameraViewHeiht - heightDp! * 120,
-                                        videoSaveHandler: (XFile xfile, int inMilliseconds) {
-                                          _videoHandler(videoFile: xfile, inMilliseconds: inMilliseconds);
+                                            : _cameraViewHeiht -
+                                                heightDp! * 120,
+                                        videoSaveHandler:
+                                            (XFile xfile, int inMilliseconds) {
+                                          _videoHandler(
+                                              videoFile: xfile,
+                                              inMilliseconds: inMilliseconds);
                                         },
-                                        onAudioModeButtonPressed: onAudioModeButtonPressed,
+                                        onAudioModeButtonPressed:
+                                            onAudioModeButtonPressed,
                                       ),
                                     ),
                                   ],
@@ -794,9 +873,11 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
   Widget _cameraToolTopPanel({@required NativeDeviceOrientation? orientation}) {
     double angle = 0;
-    if (orientation == NativeDeviceOrientation.portraitUp || orientation == NativeDeviceOrientation.portraitUp) {
+    if (orientation == NativeDeviceOrientation.portraitUp ||
+        orientation == NativeDeviceOrientation.portraitUp) {
       angle = 0;
-    } else if (orientation == NativeDeviceOrientation.landscapeLeft || orientation == NativeDeviceOrientation.landscapeRight) {
+    } else if (orientation == NativeDeviceOrientation.landscapeLeft ||
+        orientation == NativeDeviceOrientation.landscapeRight) {
       angle = pi / 2;
     }
     return Container(
@@ -811,7 +892,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           Transform.rotate(
             angle: angle,
             child: IconButton(
-              icon: Icon(Icons.cancel_outlined, size: heightDp! * 20, color: Colors.white),
+              icon: Icon(Icons.cancel_outlined,
+                  size: heightDp! * 20, color: Colors.white),
               onPressed: () {
                 _closeHandler();
               },
@@ -828,18 +910,22 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                       _locationSubscription!.cancel();
                       _locationSubscription = null;
                     }
-                    _locationSubscription = Geolocator.getPositionStream().listen((position) {
+                    _locationSubscription =
+                        Geolocator.getPositionStream().listen((position) {
                       _currentPosition = position;
                       setState(() {});
                     });
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: widthDp! * 10, vertical: heightDp! * 5),
                     color: Colors.transparent,
                     child: Icon(
                       Icons.gps_fixed_outlined,
                       size: heightDp! * 20,
-                      color: _currentPosition != null ? AppColors.green : AppColors.red,
+                      color: _currentPosition != null
+                          ? AppColors.green
+                          : AppColors.red,
                     ),
                   ),
                 ),
@@ -848,7 +934,10 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                     dateTime: DateTime.now(),
                     formats: "h:i",
                   ),
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Colors.white),
                 ),
               ],
             ),
@@ -861,7 +950,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                 child: FlashModeControllWidget(
                   cameraController: cameraController,
                   iconSize: heightDp! * 20,
-                  onPressHandler: (nextMode) => onSetFlashModeButtonPressed(nextMode),
+                  onPressHandler: (nextMode) =>
+                      onSetFlashModeButtonPressed(nextMode),
                 ),
               ),
               Transform.rotate(
@@ -870,7 +960,10 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                   cameraController: cameraController,
                   cameras: cameras,
                   onPressHandler: (CameraDescription description) =>
-                      onNewCameraSelected(description, _appDataProvider!.appDataState.settingsModel!.photoResolution!),
+                      onNewCameraSelected(
+                          description,
+                          _appDataProvider!
+                              .appDataState.settingsModel!.photoResolution!),
                 ),
               ),
             ],
@@ -886,9 +979,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       double aspectRatio = 1;
       print("--------ssssss------------");
       print(_isInit);
-      print(!_isInit || cameraController == null || !cameraController!.value.isInitialized);
+      print(!_isInit ||
+          cameraController == null ||
+          !cameraController!.value.isInitialized);
       print("----------sss----------");
-      if (!_isInit || cameraController == null || !cameraController!.value.isInitialized) {
+      if (!_isInit ||
+          cameraController == null ||
+          !cameraController!.value.isInitialized) {
         return Center(
           child: Text(
             'Tap a camera',
@@ -917,10 +1014,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           aspectRatio = cameraController!.value.aspectRatio;
           xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
           yScale = 1;
-          if (_cameraOrientation == null || (_cameraOrientation != DeviceOrientation.landscapeRight)) {
+          if (_cameraOrientation == null ||
+              (_cameraOrientation != DeviceOrientation.landscapeRight)) {
             _cameraOrientation = DeviceOrientation.landscapeRight;
             WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-              await cameraController!.lockCaptureOrientation(_cameraOrientation);
+              await cameraController!
+                  .lockCaptureOrientation(_cameraOrientation);
               setState(() {});
             });
           }
@@ -930,10 +1029,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           aspectRatio = cameraController!.value.aspectRatio;
           xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
           yScale = 1;
-          if (_cameraOrientation == null || (_cameraOrientation != DeviceOrientation.landscapeRight)) {
+          if (_cameraOrientation == null ||
+              (_cameraOrientation != DeviceOrientation.landscapeRight)) {
             _cameraOrientation = DeviceOrientation.landscapeRight;
             WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-              await cameraController!.lockCaptureOrientation(_cameraOrientation);
+              await cameraController!
+                  .lockCaptureOrientation(_cameraOrientation);
               setState(() {});
             });
           }
@@ -944,10 +1045,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           yScale = aspectRatio / deviceRatio;
           xScale = 1;
 
-          if (_cameraOrientation == null || (_cameraOrientation != DeviceOrientation.portraitDown)) {
+          if (_cameraOrientation == null ||
+              (_cameraOrientation != DeviceOrientation.portraitDown)) {
             _cameraOrientation = DeviceOrientation.portraitDown;
             WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-              await cameraController!.lockCaptureOrientation(_cameraOrientation);
+              await cameraController!
+                  .lockCaptureOrientation(_cameraOrientation);
               setState(() {});
             });
           }
@@ -958,10 +1061,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           yScale = aspectRatio / deviceRatio;
           xScale = 1;
 
-          if (_cameraOrientation == null || (_cameraOrientation != DeviceOrientation.portraitUp)) {
+          if (_cameraOrientation == null ||
+              (_cameraOrientation != DeviceOrientation.portraitUp)) {
             _cameraOrientation = DeviceOrientation.portraitUp;
             WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-              await cameraController!.lockCaptureOrientation(_cameraOrientation);
+              await cameraController!
+                  .lockCaptureOrientation(_cameraOrientation);
               setState(() {});
             });
           }
@@ -986,12 +1091,14 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
               aspectRatio: aspectRatio,
               child: CameraPreview(
                 cameraController!,
-                child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onScaleStart: _handleScaleStart,
                     onScaleUpdate: _handleScaleUpdate,
-                    onTapDown: (details) => onViewFinderTap(details, constraints),
+                    onTapDown: (details) =>
+                        onViewFinderTap(details, constraints),
                   );
                 }),
               ),
@@ -1006,9 +1113,11 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
   Widget _categoryToolPanel({@required NativeDeviceOrientation? orientation}) {
     double angle = 0;
-    if (orientation == NativeDeviceOrientation.portraitUp || orientation == NativeDeviceOrientation.portraitUp) {
+    if (orientation == NativeDeviceOrientation.portraitUp ||
+        orientation == NativeDeviceOrientation.portraitUp) {
       angle = 0;
-    } else if (orientation == NativeDeviceOrientation.landscapeLeft || orientation == NativeDeviceOrientation.landscapeRight) {
+    } else if (orientation == NativeDeviceOrientation.landscapeLeft ||
+        orientation == NativeDeviceOrientation.landscapeRight) {
       angle = pi / 2;
     }
 
@@ -1037,7 +1146,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     return Consumer<CameraProvider>(builder: (context, cameraProvider, _) {
       return Container(
         width: deviceWidth,
-        padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 10),
+        padding: EdgeInsets.symmetric(
+            horizontal: widthDp! * 15, vertical: heightDp! * 10),
         // height: heightDp! * 80,
         alignment: Alignment.bottomCenter,
         decoration: BoxDecoration(
@@ -1064,7 +1174,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                         color: Colors.blue,
                         iconSize: heightDp! * 30,
                         onPressed: () async {
-                          var note = await NotePanelDialog.show(context, isNew: true, topMargin: heightDp! * 40);
+                          var note = await NotePanelDialog.show(context,
+                              isNew: true, topMargin: heightDp! * 40);
                           if (note != null) {
                             _noteHandler(note: note, isNew: true);
                           }
@@ -1074,15 +1185,21 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                         child: Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthDp! * 3,
+                                  vertical: heightDp! * 3),
                               decoration: BoxDecoration(
                                 color: AppColors.yello,
-                                borderRadius: BorderRadius.circular(heightDp! * 3),
+                                borderRadius:
+                                    BorderRadius.circular(heightDp! * 3),
                               ),
                               alignment: Alignment.center,
                               child: Text(
                                 "$notesCount",
-                                style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .overline!
+                                    .copyWith(color: Colors.white),
                               ),
                             ),
                           ],
@@ -1119,15 +1236,21 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                         child: Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthDp! * 3,
+                                  vertical: heightDp! * 3),
                               decoration: BoxDecoration(
                                 color: AppColors.yello,
-                                borderRadius: BorderRadius.circular(heightDp! * 3),
+                                borderRadius:
+                                    BorderRadius.circular(heightDp! * 3),
                               ),
                               alignment: Alignment.center,
                               child: Text(
                                 "$photosCount",
-                                style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .overline!
+                                    .copyWith(color: Colors.white),
                               ),
                             ),
                           ],
@@ -1147,7 +1270,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                         _cameraProvider!.setVideoRecordStatus("stopped");
                       }
                     } else if (!_isShowVideoRecoderPanel) {
-                      if (cameraController != null && cameraController!.value.isInitialized && !cameraController!.value.isRecordingVideo) {
+                      if (cameraController != null &&
+                          cameraController!.value.isInitialized &&
+                          !cameraController!.value.isRecordingVideo) {
                         _onTakePictureButtonPressed();
                       }
                     }
@@ -1163,16 +1288,27 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: cameraController != null && _isShowVideoRecoderPanel && _cameraProvider!.videoRecordStatus == "recording"
+                          width: cameraController != null &&
+                                  _isShowVideoRecoderPanel &&
+                                  _cameraProvider!.videoRecordStatus ==
+                                      "recording"
                               ? heightDp! * 35
                               : heightDp! * 48,
-                          height: cameraController != null && _isShowVideoRecoderPanel && _cameraProvider!.videoRecordStatus == "recording"
+                          height: cameraController != null &&
+                                  _isShowVideoRecoderPanel &&
+                                  _cameraProvider!.videoRecordStatus ==
+                                      "recording"
                               ? heightDp! * 35
                               : heightDp! * 48,
                           decoration: BoxDecoration(
-                            color: _isShowVideoRecoderPanel ? Colors.red : AppColors.yello,
+                            color: _isShowVideoRecoderPanel
+                                ? Colors.red
+                                : AppColors.yello,
                             borderRadius: BorderRadius.circular(
-                              cameraController != null && _isShowVideoRecoderPanel && _cameraProvider!.videoRecordStatus == "recording"
+                              cameraController != null &&
+                                      _isShowVideoRecoderPanel &&
+                                      _cameraProvider!.videoRecordStatus ==
+                                          "recording"
                                   ? heightDp! * 6
                                   : heightDp! * 48,
                             ),
@@ -1191,7 +1327,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                       IconButton(
                         icon: Icon(
                           Icons.videocam,
-                          color: (_isAudioRecording || cameraController == null || !cameraController!.value.isInitialized)
+                          color: (_isAudioRecording ||
+                                  cameraController == null ||
+                                  !cameraController!.value.isInitialized)
                               ? Colors.white.withOpacity(0.6)
                               : _isShowVideoRecoderPanel
                                   ? AppColors.yello
@@ -1203,17 +1341,30 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                                 cameraController!.value.isInitialized &&
                                 !cameraController!.value.isRecordingVideo
                             ? () {
-                                _isShowVideoRecoderPanel = !_isShowVideoRecoderPanel;
+                                _isShowVideoRecoderPanel =
+                                    !_isShowVideoRecoderPanel;
                                 _isShowAudioRecoderPanel = false;
-                                _cameraProvider!.setIsAudioRecord(_isShowAudioRecoderPanel, isNotifiable: false);
-                                _cameraProvider!.setIsVideoRecord(_isShowVideoRecoderPanel, isNotifiable: false);
-                                _cameraProvider!.setAudioRecordStatus("stopped", isNotifiable: false);
-                                _cameraProvider!.setVideoRecordStatus("stopped", isNotifiable: false);
+                                _cameraProvider!.setIsAudioRecord(
+                                    _isShowAudioRecoderPanel,
+                                    isNotifiable: false);
+                                _cameraProvider!.setIsVideoRecord(
+                                    _isShowVideoRecoderPanel,
+                                    isNotifiable: false);
+                                _cameraProvider!.setAudioRecordStatus("stopped",
+                                    isNotifiable: false);
+                                _cameraProvider!.setVideoRecordStatus("stopped",
+                                    isNotifiable: false);
 
                                 if (_isShowVideoRecoderPanel)
-                                  onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.videoResolution!);
+                                  onNewCameraSelected(
+                                      cameraController!.description,
+                                      _appDataProvider!.appDataState
+                                          .settingsModel!.videoResolution!);
                                 else
-                                  onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
+                                  onNewCameraSelected(
+                                      cameraController!.description,
+                                      _appDataProvider!.appDataState
+                                          .settingsModel!.photoResolution!);
                               }
                             : null,
                       ),
@@ -1221,15 +1372,21 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                         child: Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthDp! * 3,
+                                  vertical: heightDp! * 3),
                               decoration: BoxDecoration(
                                 color: AppColors.yello,
-                                borderRadius: BorderRadius.circular(heightDp! * 3),
+                                borderRadius:
+                                    BorderRadius.circular(heightDp! * 3),
                               ),
                               alignment: Alignment.center,
                               child: Text(
                                 "$videosCount",
-                                style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .overline!
+                                    .copyWith(color: Colors.white),
                               ),
                             ),
                           ],
@@ -1246,7 +1403,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                     children: [
                       IconButton(
                         icon: Icon(Icons.mic),
-                        color: (cameraController != null && cameraController!.value.isInitialized && !cameraController!.value.isRecordingVideo)
+                        color: (cameraController != null &&
+                                cameraController!.value.isInitialized &&
+                                !cameraController!.value.isRecordingVideo)
                             ? _isShowAudioRecoderPanel
                                 ? AppColors.yello
                                 : Colors.white
@@ -1255,19 +1414,31 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                         onPressed: cameraController != null &&
                                 cameraController!.value.isInitialized &&
                                 !cameraController!.value.isRecordingVideo &&
-                                _cameraProvider!.audioRecordStatus != "recording"
+                                _cameraProvider!.audioRecordStatus !=
+                                    "recording"
                             ? () {
                                 setState(() {
-                                  _isShowAudioRecoderPanel = !_isShowAudioRecoderPanel;
+                                  _isShowAudioRecoderPanel =
+                                      !_isShowAudioRecoderPanel;
                                   _isShowVideoRecoderPanel = false;
-                                  _cameraProvider!.setIsAudioRecord(_isShowAudioRecoderPanel, isNotifiable: false);
-                                  _cameraProvider!.setIsVideoRecord(_isShowVideoRecoderPanel, isNotifiable: false);
-                                  _cameraProvider!.setVideoRecordStatus("stopped", isNotifiable: false);
-                                  _cameraProvider!.setAudioRecordStatus("stopped", isNotifiable: false);
+                                  _cameraProvider!.setIsAudioRecord(
+                                      _isShowAudioRecoderPanel,
+                                      isNotifiable: false);
+                                  _cameraProvider!.setIsVideoRecord(
+                                      _isShowVideoRecoderPanel,
+                                      isNotifiable: false);
+                                  _cameraProvider!.setVideoRecordStatus(
+                                      "stopped",
+                                      isNotifiable: false);
+                                  _cameraProvider!.setAudioRecordStatus(
+                                      "stopped",
+                                      isNotifiable: false);
 
                                   if (_isShowAudioRecoderPanel) {
-                                    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                                      _cameraProvider!.setAudioRecordStatus("recording");
+                                    WidgetsBinding.instance!
+                                        .addPostFrameCallback((timeStamp) {
+                                      _cameraProvider!
+                                          .setAudioRecordStatus("recording");
                                     });
                                   }
                                 });
@@ -1278,15 +1449,21 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                         child: Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthDp! * 3,
+                                  vertical: heightDp! * 3),
                               decoration: BoxDecoration(
                                 color: AppColors.yello,
-                                borderRadius: BorderRadius.circular(heightDp! * 3),
+                                borderRadius:
+                                    BorderRadius.circular(heightDp! * 3),
                               ),
                               alignment: Alignment.center,
                               child: Text(
                                 "$audiosCount",
-                                style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .overline!
+                                    .copyWith(color: Colors.white),
                               ),
                             ),
                           ],
@@ -1319,7 +1496,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   void onAudioModeButtonPressed() {
     enableAudio = !enableAudio;
     if (cameraController != null && !cameraController!.value.isRecordingVideo) {
-      onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
+      onNewCameraSelected(cameraController!.description,
+          _appDataProvider!.appDataState.settingsModel!.photoResolution!);
     }
   }
 
@@ -1333,7 +1511,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       return;
     }
 
-    _currentScale = (_baseScale * details.scale).clamp(_minAvailableZoom, _maxAvailableZoom);
+    _currentScale = (_baseScale * details.scale)
+        .clamp(_minAvailableZoom, _maxAvailableZoom);
 
     await cameraController!.setZoomLevel(_currentScale);
   }

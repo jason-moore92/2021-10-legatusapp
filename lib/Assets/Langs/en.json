@@ -19,6 +19,7 @@
     "noPlanning": "No planning Data"
   },
   "PlanningPageString": {
+    "name": "Name",
     "date": "Date",
     "state": "State",
     "type": "Type",

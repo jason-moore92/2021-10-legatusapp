@@ -19,6 +19,7 @@
     "noPlanning": "Aucun constat dans votre planning"
   },
   "PlanningPageString": {
+    "name": "Name",
     "date": "Date",
     "state": "Statut",
     "type": "Type",

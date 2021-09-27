@@ -28,7 +28,8 @@ class BottomNavbar extends StatefulWidget {
   _BottomNavbarState createState() => _BottomNavbarState();
 }
 
-class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderStateMixin {
+class _BottomNavbarState extends State<BottomNavbar>
+    with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -41,7 +42,6 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
 
   String responsiveStyle = "";
   double iconSize = 0;
-  double iconPadding = 0;
   TextStyle? textStyle;
   double navBarHeight = 0;
   ///////////////////////////////
@@ -87,17 +87,26 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     Size? designSize;
-    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
-      designSize = Size(ResponsiveDesignSettings.desktopDesignWidth, ResponsiveDesignSettings.desktopDesignHeight);
-    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
-      designSize = Size(ResponsiveDesignSettings.tabletDesignWidth, ResponsiveDesignSettings.tabletDesignHeight);
-    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
-      designSize = Size(ResponsiveDesignSettings.mobileDesignWidth, ResponsiveDesignSettings.mobileDesignHeight);
+    if (MediaQuery.of(context).size.width >=
+        ResponsiveDesignSettings.tableteMaxWidth) {
+      designSize = Size(ResponsiveDesignSettings.desktopDesignWidth,
+          ResponsiveDesignSettings.desktopDesignHeight);
+    } else if (MediaQuery.of(context).size.width >=
+            ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width <
+            ResponsiveDesignSettings.tableteMaxWidth) {
+      designSize = Size(ResponsiveDesignSettings.tabletDesignWidth,
+          ResponsiveDesignSettings.tabletDesignHeight);
+    } else if (MediaQuery.of(context).size.width <
+        ResponsiveDesignSettings.mobileMaxWidth) {
+      designSize = Size(ResponsiveDesignSettings.mobileDesignWidth,
+          ResponsiveDesignSettings.mobileDesignHeight);
     }
 
     ScreenUtil.init(
-      BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
+      BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width,
+          maxHeight: MediaQuery.of(context).size.height),
       designSize: designSize!,
       orientation: Orientation.portrait,
     );
@@ -130,27 +139,28 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
     // fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     // ///////////////////////////////
 
-    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >=
+        ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >=
+            ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width <
+            ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width <
+        ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
-    // iconSize = heightDp! * 20;
-    iconSize = 24;
-    // iconPadding = widthDp! * 10;
-    iconPadding = 10;
+    iconSize = heightDp! * 22;
     textStyle = Theme.of(context).textTheme.overline;
     navBarHeight = kBottomNavigationBarHeight;
 
     if (responsiveStyle != "mobile") {
       navBarHeight = heightDp! * 80;
-      // iconSize = heightDp! * 35;
-      // iconPadding = widthDp! * 20;
-      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      iconSize = heightDp! * 32;
+      textStyle =
+          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
     return WillPopScope(
@@ -175,14 +185,16 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
         navBarHeight: navBarHeight,
         backgroundColor: AppColors.primayColor,
         handleAndroidBackButtonPress: false, // Default is true.
-        resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+        resizeToAvoidBottomInset:
+            true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
         stateManagement: false, // Default is true.
-        hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+        hideNavigationBarWhenKeyboardShows:
+            true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
         decoration: NavBarDecoration(
           borderRadius: BorderRadius.zero,
           colorBehindNavBar: Colors.white,
         ),
-        padding: NavBarPadding.symmetric(vertical: heightDp! * 5),
+        padding: NavBarPadding.symmetric(vertical: heightDp! * 8),
         popAllScreensOnTapOfSelectedTab: true,
         popActionScreens: PopActionScreensType.all,
         itemAnimationProperties: ItemAnimationProperties(
@@ -196,7 +208,8 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle: NavBarStyle.style8, // Choose the nav bar style with this property.
+        navBarStyle:
+            NavBarStyle.style8, // Choose the nav bar style with this property.
         onItemSelected: (int index) {
           LocalReportListProvider.of(context).setLocalReportListState(
             LocalReportListProvider.of(context).localReportListState.update(

@@ -28,6 +28,7 @@ abstract class LocaleKeys {
   static const PlanningListPageString_noPlanning =
       'PlanningListPageString.noPlanning';
   static const PlanningListPageString = 'PlanningListPageString';
+  static const PlanningPageString_name = 'PlanningPageString.name';
   static const PlanningPageString_date = 'PlanningPageString.date';
   static const PlanningPageString_state = 'PlanningPageString.state';
   static const PlanningPageString_type = 'PlanningPageString.type';

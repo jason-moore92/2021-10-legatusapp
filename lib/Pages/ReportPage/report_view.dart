@@ -696,8 +696,8 @@ class _ReportViewState extends State<ReportView>
     double iconPadding = widthDp! * 10;
 
     if (responsiveStyle != "mobile") {
-      iconSize = heightDp! * 45;
-      iconPadding = widthDp! * 20;
+      iconSize = heightDp! * 38;
+      iconPadding = widthDp! * 25;
     }
 
     return Container(
