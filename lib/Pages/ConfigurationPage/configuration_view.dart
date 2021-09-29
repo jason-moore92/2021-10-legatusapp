@@ -260,8 +260,8 @@ class _ConfigurationViewState extends State<ConfigurationView>
                         else
                           _logoutPanel(),
                         SizedBox(height: heightDp! * 20),
-                        _permissionPanel(),
-                        SizedBox(height: heightDp! * 20),
+/*                         _permissionPanel(),
+                        SizedBox(height: heightDp! * 20), */
                         _storagePanel(),
                         SizedBox(height: heightDp! * 20),
                         _pictureResolutionPanel(),
