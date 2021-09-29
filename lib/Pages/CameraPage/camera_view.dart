@@ -16,11 +16,11 @@ import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Providers/index.dart';
-import 'package:legatus/generated/locale_keys.g.dart';
+// import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-import 'package:easy_localization/easy_localization.dart';
+// import 'package:easy_localization/easy_localization.dart';
 import 'package:image/image.dart' as IMG;
 
 import 'index.dart';
@@ -642,7 +642,7 @@ class _CameraViewState extends State<CameraView>
   }
 
   void onNewCameraSelected(
-      CameraDescription cameraDescription, int resolution) async {
+      CameraDescription? cameraDescription, int resolution) async {
     if (cameraDescription == null) return;
 
     if (cameraController != null) {
@@ -1003,17 +1003,17 @@ class _CameraViewState extends State<CameraView>
 
       int turns;
 
-      double deviceRatio = deviceWidth! / (deviceHeight! - statusbarHeight!);
+      // double deviceRatio = deviceWidth! / (deviceHeight! - statusbarHeight!);
       // double deviceRatio = deviceWidth! / (deviceHeight! - heightDp! * 120 - statusbarHeight!);
-      double yScale = 1;
-      double xScale = 1;
+      // double yScale = 1;
+      // double xScale = 1;
 
       switch (_orientation) {
         case NativeDeviceOrientation.landscapeLeft:
           turns = 1;
           aspectRatio = cameraController!.value.aspectRatio;
-          xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
-          yScale = 1;
+          // xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
+          // yScale = 1;
           if (_cameraOrientation == null ||
               (_cameraOrientation != DeviceOrientation.landscapeRight)) {
             _cameraOrientation = DeviceOrientation.landscapeRight;
@@ -1027,8 +1027,8 @@ class _CameraViewState extends State<CameraView>
         case NativeDeviceOrientation.landscapeRight:
           turns = -1;
           aspectRatio = cameraController!.value.aspectRatio;
-          xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
-          yScale = 1;
+          // xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
+          // yScale = 1;
           if (_cameraOrientation == null ||
               (_cameraOrientation != DeviceOrientation.landscapeRight)) {
             _cameraOrientation = DeviceOrientation.landscapeRight;
@@ -1042,8 +1042,8 @@ class _CameraViewState extends State<CameraView>
         case NativeDeviceOrientation.portraitDown:
           turns = 0;
           aspectRatio = 1 / cameraController!.value.aspectRatio;
-          yScale = aspectRatio / deviceRatio;
-          xScale = 1;
+          // yScale = aspectRatio / deviceRatio;
+          // xScale = 1;
 
           if (_cameraOrientation == null ||
               (_cameraOrientation != DeviceOrientation.portraitDown)) {
@@ -1058,8 +1058,8 @@ class _CameraViewState extends State<CameraView>
         default:
           turns = 0;
           aspectRatio = 1 / cameraController!.value.aspectRatio;
-          yScale = aspectRatio / deviceRatio;
-          xScale = 1;
+          // yScale = aspectRatio / deviceRatio;
+          // xScale = 1;
 
           if (_cameraOrientation == null ||
               (_cameraOrientation != DeviceOrientation.portraitUp)) {
@@ -1555,7 +1555,7 @@ class _CameraViewState extends State<CameraView>
     showInSnackBar('Error: ${e.code}\n${e.description}');
   }
 
-  void logError(String code, String message) {
+  void logError(String code, String? message) {
     if (message != null) {
       print('Error: $code\nError Message: $message');
     } else {

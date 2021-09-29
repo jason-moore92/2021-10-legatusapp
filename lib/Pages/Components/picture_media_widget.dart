@@ -85,14 +85,13 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     }
 
     double iconSize = heightDp! * 20;
-    double iconPadding = widthDp! * 10;
-    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+    // double iconPadding = widthDp! * 10;
+    // TextStyle? textStyle = Theme.of(context).textTheme.overline;
 
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 35;
-      iconPadding = widthDp! * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      // iconPadding = widthDp! * 20;
+      // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
     if (widget.isUploading!) {

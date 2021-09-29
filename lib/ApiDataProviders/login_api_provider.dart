@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginApiProvider {
   static Box<dynamic>? appSettingsBox;
@@ -55,7 +55,7 @@ class LoginApiProvider {
         "message": "Something went wrong",
         "statusCode": e.osError!.errorCode,
       };
-    } on PlatformException catch (e) {
+    } on PlatformException catch (_) {
       return {
         "success": false,
         "message": "Something went wrong",
@@ -104,7 +104,7 @@ class LoginApiProvider {
         "message": "Something went wrong",
         "statusCode": e.osError!.errorCode,
       };
-    } on PlatformException catch (e) {
+    } on PlatformException catch (_) {
       return {
         "success": false,
         "message": "Something went wrong",

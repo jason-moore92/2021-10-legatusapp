@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/custom_url_lancher.dart';
-import 'package:legatus/Helpers/index.dart';
-import 'package:legatus/Models/MediaModel.dart';
+// import 'package:legatus/Helpers/index.dart';
+// import 'package:legatus/Models/MediaModel.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
@@ -18,7 +18,7 @@ class UploadReportDialog {
   }) {
     double widthDp = ScreenUtil().setWidth(1);
     double heightDp = ScreenUtil().setWidth(1);
-    double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+    // double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
 
     showDialog(
       context: context,

@@ -39,7 +39,7 @@ class KeicyValidators {
     return imageNameRegExp.hasMatch(imageName);
   }
 
-  static bool isEmpty(String string) {
+  static bool isEmpty(String? string) {
     return (string == '' || string == null) ? false : true;
   }
 }

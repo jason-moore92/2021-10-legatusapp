@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:device_info/device_info.dart';
+// import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -1090,13 +1090,12 @@ class _ReportViewState extends State<ReportView>
   Widget _selectToolPanel() {
     double iconSize = heightDp! * 20;
     double iconPadding = widthDp! * 10;
-    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+    // TextStyle? textStyle = Theme.of(context).textTheme.overline;
 
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 35;
       iconPadding = widthDp! * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
     return Container(
@@ -1234,14 +1233,13 @@ class _ReportViewState extends State<ReportView>
 
   Widget _uploadingPanel() {
     double iconSize = heightDp! * 20;
-    double iconPadding = widthDp! * 10;
-    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+    // double iconPadding = widthDp! * 10;
+    // TextStyle? textStyle = Theme.of(context).textTheme.overline;
 
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 35;
-      iconPadding = widthDp! * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      // iconPadding = widthDp! * 20;
+      // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
     return Container(

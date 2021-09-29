@@ -45,7 +45,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
 
   VideoPlayerController? _videoPlayerController;
-  VoidCallback? _videoPlayerListener;
+  // VoidCallback? _videoPlayerListener;
 
   MediaPlayProvider? _mediaPlayProvider;
 
@@ -53,7 +53,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
 
   double _maxDuration = 1.0;
   double _sliderCurrentPosition = 0.0;
-  String _playerTxt = '00:00:00';
+  // String _playerTxt = '00:00:00';
 
   Timer? uploadTimer;
   double angle = 0;
@@ -118,7 +118,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
     super.dispose();
   }
 
-  void _onStartPlay() async {
+/*   void _onStartPlay() async {
     if (_videoPlayerController == null ||
         !_videoPlayerController!.value.isInitialized) return;
     try {
@@ -155,7 +155,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
         }
       });
     } catch (e) {}
-  }
+  } */
 
   Future<void> _seekToPlayer(int milliSecs) async {
     if (_videoPlayerController == null ||
@@ -207,14 +207,13 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
     }
 
     double iconSize = heightDp * 20;
-    double iconPadding = widthDp * 10;
-    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+    // double iconPadding = widthDp * 10;
+    // TextStyle? textStyle = Theme.of(context).textTheme.overline;
 
     if (responsiveStyle != "mobile") {
       iconSize = heightDp * 35;
-      iconPadding = widthDp * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      // iconPadding = widthDp * 20;
+      // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
     if (_videoPlayerController == null ||
@@ -240,10 +239,10 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
     var maxTime =
         DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
     var maxTimeString = DateFormat('mm:ss').format(maxTime);
-    var currentTime = DateTime.fromMillisecondsSinceEpoch(
+/*     var currentTime = DateTime.fromMillisecondsSinceEpoch(
         _sliderCurrentPosition.toInt(),
-        isUtc: true);
-    var currentTimeString = DateFormat('mm:ss').format(currentTime);
+        isUtc: true); */
+    // var currentTimeString = DateFormat('mm:ss').format(currentTime);
 
     if (widget.isUploading!) {
       if (uploadTimer != null) uploadTimer!.cancel();
@@ -295,9 +294,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                     borderRadius: BorderRadius.circular(heightDp * 0),
                     child: AspectRatio(
                       // aspectRatio: (MediaQuery.of(context).size.width - widthDp * 20) / heightDp * 200,
-                      aspectRatio: _videoPlayerController!.value.size != null
-                          ? _videoPlayerController!.value.aspectRatio
-                          : 1.0,
+                      aspectRatio: _videoPlayerController!.value.aspectRatio,
                       child: VideoPlayer(_videoPlayerController!),
                     ),
                   ),
@@ -451,7 +448,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
 
   double _maxDuration = 1.0;
   double _sliderCurrentPosition = 0.0;
-  String _playerTxt = '00:00:00';
+  // String _playerTxt = '00:00:00';
 
   @override
   void initState() {
@@ -504,7 +501,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
     double deviceHeight = 1.sh;
     double widthDp = ScreenUtil().setWidth(1);
     double heightDp = ScreenUtil().setWidth(1);
-    double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+    // double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     double statusbarHeight = ScreenUtil().statusBarHeight;
 
     if (_videoPlayerController == null ||
@@ -540,9 +537,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
               children: [
                 Center(
                   child: AspectRatio(
-                    aspectRatio: _videoPlayerController!.value.size != null
-                        ? _videoPlayerController!.value.aspectRatio
-                        : 1.0,
+                    aspectRatio: _videoPlayerController!.value.aspectRatio,
                     child: VideoPlayer(_videoPlayerController!),
                   ),
                 ),

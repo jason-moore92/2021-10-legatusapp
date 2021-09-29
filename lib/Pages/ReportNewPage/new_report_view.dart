@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +21,10 @@ import 'package:legatus/Pages/ReportPage/report_page.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:uuid/uuid.dart';
-import 'package:device_info/device_info.dart';
+// import 'package:device_info/device_info.dart';
 
 class NewReportView extends StatefulWidget {
   final bool? isNew;
@@ -111,7 +111,7 @@ class _NewReportViewState extends State<NewReportView>
 
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  bool _init = false;
+  // bool _init = false;
   bool? _isNew;
 
   LocalReportProvider? _localReportProvider;
@@ -122,7 +122,7 @@ class _NewReportViewState extends State<NewReportView>
 
   Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
 
-  Position? _currentPosition;
+  // Position? _currentPosition;
   StreamSubscription? _locationSubscription;
 
   @override
@@ -229,7 +229,7 @@ class _NewReportViewState extends State<NewReportView>
       _localReportProvider!.addListener(_localReportProviderListener);
 
       _locationSubscription = Geolocator.getPositionStream().listen((position) {
-        _currentPosition = position;
+        // _currentPosition = position;
         _latitudeController.text = position.latitude.toString();
         _longitudeController.text = position.longitude.toString();
         setState(() {});

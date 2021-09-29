@@ -9,7 +9,7 @@ import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/http_plus.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:http/http.dart' as httpOld;
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalMediaApiProvider {
   static Box<dynamic>? appSettingsBox;
@@ -69,7 +69,7 @@ class LocalMediaApiProvider {
         "message": "Something went wrong",
         "statusCode": e.osError!.errorCode,
       };
-    } on PlatformException catch (e) {
+    } on PlatformException catch (_) {
       return {
         "success": false,
         "message": "Something went wrong",
@@ -109,7 +109,7 @@ class LocalMediaApiProvider {
         "message": "Something went wrong",
         "statusCode": e.osError!.errorCode,
       };
-    } on PlatformException catch (e) {
+    } on PlatformException catch (_) {
       return {
         "success": false,
         "message": "Something went wrong",

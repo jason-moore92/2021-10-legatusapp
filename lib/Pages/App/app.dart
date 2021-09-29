@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
-import 'package:legatus/Pages/Dialogs/normal_dialog.dart';
+// import 'package:legatus/Pages/Dialogs/normal_dialog.dart';
 import 'package:legatus/Pages/SplashPage/splash_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:legatus/Providers/index.dart';

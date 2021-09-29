@@ -185,7 +185,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
       _timer!.cancel();
       controller!.stop();
       controller!.reset();
-      widget.cameraController!.stopVideoRecording().then((XFile file) async {
+      widget.cameraController!.stopVideoRecording().then((XFile? file) async {
         if (mounted) setState(() {});
         if (file != null) {
           if (widget.videoSaveHandler != null) {
@@ -213,22 +213,22 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
     String txt = DateFormat('mm:ss:SS').format(date);
     videoRecorderTxt = txt.substring(0, 5);
 
-    String statusString = "";
+    // String statusString = "";
     if (widget.cameraController != null &&
         !widget.cameraController!.value.isInitialized) {
-      statusString = "Video Record is initializing";
+      // statusString = "Video Record is initializing";
     } else if (widget.cameraController != null &&
         widget.cameraController!.value.isInitialized &&
         !widget.cameraController!.value.isRecordingVideo) {
-      statusString = "Video Record is ready";
+      // statusString = "Video Record is ready";
     } else if (widget.cameraController != null &&
         widget.cameraController!.value.isInitialized &&
         widget.cameraController!.value.isRecordingPaused) {
-      statusString = "Video Record is stopped";
+      // statusString = "Video Record is stopped";
     } else if (widget.cameraController != null &&
         widget.cameraController!.value.isInitialized &&
         widget.cameraController!.value.isRecordingVideo) {
-      statusString = "Video Record is recording";
+      // statusString = "Video Record is recording";
     }
 
     return Consumer<CameraProvider>(builder: (context, cameraProvider, _) {

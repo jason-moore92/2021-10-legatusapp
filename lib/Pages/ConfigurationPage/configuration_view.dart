@@ -9,8 +9,8 @@ import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/custom_url_lancher.dart';
 import 'package:legatus/Helpers/file_helpers.dart';
 import 'package:legatus/Helpers/index.dart';
-import 'package:legatus/Models/index.dart';
-import 'package:legatus/Models/user_model.dart';
+// import 'package:legatus/Models/index.dart';
+// import 'package:legatus/Models/user_model.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
@@ -19,7 +19,7 @@ import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfigurationView extends StatefulWidget {
   ConfigurationView({Key? key}) : super(key: key);
@@ -480,7 +480,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
     );
   }
 
-  Widget _permissionPanel() {
+/*   Widget _permissionPanel() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -658,7 +658,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         ),
       ],
     );
-  }
+  } */
 
   Widget _storagePanel() {
     return Column(

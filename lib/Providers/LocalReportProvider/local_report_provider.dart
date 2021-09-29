@@ -105,7 +105,7 @@ class LocalReportProvider extends ChangeNotifier {
       }
 
       if (medias.isNotEmpty) {
-        var result = await updateLocalReport(
+        await updateLocalReport(
           localReportModel: localReportModel,
         );
         _localReportState = _localReportState.update(

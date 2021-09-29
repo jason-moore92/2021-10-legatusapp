@@ -1,4 +1,4 @@
-import 'dart:async';
+// import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -8,8 +8,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:legatus/Models/LocalReportModel.dart';
 import 'package:legatus/Models/MediaModel.dart';
 import 'package:legatus/Models/SettingsModel.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'Config/config.dart';
+// import 'package:sentry_flutter/sentry_flutter.dart';
+// import 'Config/config.dart';
 import 'Pages/App/Styles/index.dart';
 import 'Pages/App/app.dart';
 
