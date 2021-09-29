@@ -49,6 +49,8 @@
 	<string>Legatus doit avoir accès à la caméra de cet appareil pour réaliser vos photos de constatations.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Legatus doit avoir accès au micro de cet appareil lors du fonctionnement de l'application pour enregistrer vos dictées audios.</string>
 	<key>UIBackgroundModes</key>
