@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
+// import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
@@ -10,12 +10,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
-import 'package:intl/date_symbol_data_local.dart';
+// import 'package:intl/date_symbol_data_local.dart';
 import 'package:legatus/Pages/App/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Providers/index.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:permission_handler/permission_handler.dart';
 
 class AudioMediaWidget extends StatefulWidget {
   final MediaModel? mediaModel;
@@ -165,23 +165,26 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
     if (mounted) setState(() {});
   }
 
-  void _pauseResumePlayer() async {
+/*   void _pauseResumePlayer() async {
     try {
       if (audioPlayer.state == PlayerState.PLAYING) {
-        int result = await audioPlayer.pause();
+        // int result = await audioPlayer.pause();
+        await audioPlayer.pause();
       } else {
-        int result = await audioPlayer.resume();
+        // int result = await audioPlayer.resume();
+        await audioPlayer.resume();
       }
     } on Exception catch (err) {
       print('error: $err');
     }
     if (mounted) setState(() {});
-  }
+  } */
 
   Future<void> _seekToPlayer(int milliSecs) async {
     try {
       if (audioPlayer.state == PlayerState.PLAYING) {
-        int result = await audioPlayer.seek(Duration(milliseconds: milliSecs));
+        // int result = await audioPlayer.seek(Duration(milliseconds: milliSecs));
+        await audioPlayer.seek(Duration(milliseconds: milliSecs));
       }
     } on Exception catch (err) {
       print('error: $err');
@@ -189,13 +192,13 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
     if (mounted) setState(() {});
   }
 
-  void Function()? _onPauseResumePlayerPressed() {
+/*   void Function()? _onPauseResumePlayerPressed() {
     if (audioPlayer.state == PlayerState.PAUSED ||
         audioPlayer.state == PlayerState.PLAYING) {
       return _pauseResumePlayer;
     }
     return null;
-  }
+  } */
 
   void Function()? _onStopPlayerPressed() {
     return (audioPlayer.state == PlayerState.PLAYING ||
@@ -231,14 +234,13 @@ class _AudioMediaWidgetState extends State<AudioMediaWidget> {
     }
 
     double iconSize = heightDp * 20;
-    double iconPadding = widthDp * 10;
-    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+    // double iconPadding = widthDp * 10;
+    // TextStyle? textStyle = Theme.of(context).textTheme.overline;
 
     if (responsiveStyle != "mobile") {
       iconSize = heightDp * 35;
-      iconPadding = widthDp * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      // iconPadding = widthDp * 20;
+      // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
     var maxTime =

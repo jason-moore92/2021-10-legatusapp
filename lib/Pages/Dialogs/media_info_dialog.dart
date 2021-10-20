@@ -16,7 +16,7 @@ class MediaInfoDialog {
     double? borderRadius,
   }) {
     double heightDp = ScreenUtil().setWidth(1);
-    double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+    // double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
 
     String mediaType = "";
 

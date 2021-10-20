@@ -65,8 +65,11 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     statusbarHeight = ScreenUtil().statusBarHeight;
 
-    picWidth = (deviceWidth! - widthDp! * 40) / 3;
-    picHeight = (deviceWidth! - widthDp! * 40) / 3;
+    // Vlad => adding .floorToDouble() to round to lower double value, for iPhones
+    picWidth = ((deviceWidth! - widthDp! * 40) / 3).floorToDouble();
+    picHeight = ((deviceWidth! - widthDp! * 40) / 3).floorToDouble();
+
+    print(picWidth);
 
     if (MediaQuery.of(context).size.width >=
         ResponsiveDesignSettings.tableteMaxWidth) {
@@ -82,14 +85,13 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     }
 
     double iconSize = heightDp! * 20;
-    double iconPadding = widthDp! * 10;
-    TextStyle? textStyle = Theme.of(context).textTheme.overline;
+    // double iconPadding = widthDp! * 10;
+    // TextStyle? textStyle = Theme.of(context).textTheme.overline;
 
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 35;
-      iconPadding = widthDp! * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      // iconPadding = widthDp! * 20;
+      // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
 
     if (widget.isUploading!) {

@@ -1,6 +1,6 @@
 import "package:equatable/equatable.dart";
 import 'package:legatus/Models/address_model.dart';
-import 'package:legatus/Models/MediaModel.dart';
+// import 'package:legatus/Models/MediaModel.dart';
 import 'package:legatus/Models/recipient_model.dart';
 
 class CustomerModel extends Equatable {

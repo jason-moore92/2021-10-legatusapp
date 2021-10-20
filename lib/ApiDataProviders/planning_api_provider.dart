@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/date_time_convert.dart';
 import 'package:legatus/Helpers/http_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class PlanningApiProvider {
   static Box<dynamic>? appSettingsBox;
@@ -67,7 +67,7 @@ class PlanningApiProvider {
         "message": "Something went wrong",
         "statusCode": e.osError!.errorCode,
       };
-    } on PlatformException catch (e) {
+    } on PlatformException catch (_) {
       return {
         "success": false,
         "message": "Something went wrong",

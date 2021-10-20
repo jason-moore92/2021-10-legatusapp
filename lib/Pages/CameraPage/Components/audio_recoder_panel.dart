@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +86,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
   String? _audioRecorderTxt = '00:00';
   int? _inMilliseconds = 0;
   int? _resumeMillseconds = 0;
-  double? _dbLevel;
+  // double? _dbLevel;
   String? _path;
 
   /// audio status variable
@@ -226,7 +226,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
   }
   /////////////////////////////////////////////////////////////////
 
-  Future<void> _setCodec(Codec codec) async {
+/*   Future<void> _setCodec(Codec codec) async {
     /// recoder setting
     await _recorderModule.setSubscriptionDuration(Duration(milliseconds: 10));
 
@@ -237,7 +237,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
       _codec = codec;
       _isInitialized = true;
     });
-  }
+  } */
 
   void startRecorder() async {
     if (!_encoderSupported) return null;
@@ -284,7 +284,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
         setState(() {
           // _audioRecorderTxt = txt.substring(0, 8);
           _audioRecorderTxt = txt;
-          _dbLevel = e.decibels;
+          // _dbLevel = e.decibels;
         });
       });
 
@@ -340,7 +340,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
           setState(() {
             // _audioRecorderTxt = txt.substring(0, 8);
             _audioRecorderTxt = txt;
-            _dbLevel = e.decibels;
+            // _dbLevel = e.decibels;
           });
         });
       } else {
@@ -391,7 +391,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
 
   @override
   Widget build(BuildContext context) {
-    String recorderStation = "";
+/*     String recorderStation = "";
 
     if (!_isInitialized) {
       recorderStation = "Audio Record is initializing";
@@ -401,7 +401,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
       recorderStation = "Audio Record is recording";
     } else if (_isInitialized && _recorderModule.isPaused) {
       recorderStation = "Audio Record is paused";
-    }
+    } */
 
     return Consumer<CameraProvider>(builder: (context, cameraProvider, _) {
       return Container(

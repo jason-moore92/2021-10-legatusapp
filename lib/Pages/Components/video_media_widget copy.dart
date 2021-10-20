@@ -44,7 +44,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
 
   VideoPlayerController? _videoPlayerController;
-  VoidCallback? _videoPlayerListener;
+  // VoidCallback? _videoPlayerListener;
 
   MediaPlayProvider? _mediaPlayProvider;
 
@@ -52,7 +52,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
 
   double _maxDuration = 1.0;
   double _sliderCurrentPosition = 0.0;
-  String _playerTxt = '00:00:00';
+  // String _playerTxt = '00:00:00';
 
   Timer? uploadTimer;
   double angle = 0;
@@ -269,9 +269,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                     borderRadius: BorderRadius.circular(heightDp * 0),
                     child: AspectRatio(
                       // aspectRatio: (MediaQuery.of(context).size.width - widthDp * 20) / heightDp * 200,
-                      aspectRatio: _videoPlayerController!.value.size != null
-                          ? _videoPlayerController!.value.aspectRatio
-                          : 1.0,
+                      aspectRatio: _videoPlayerController!.value.aspectRatio,
                       child: VideoPlayer(_videoPlayerController!),
                     ),
                   ),
@@ -460,7 +458,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
 
   double _maxDuration = 1.0;
   double _sliderCurrentPosition = 0.0;
-  String _playerTxt = '00:00:00';
+  // String _playerTxt = '00:00:00';
 
   @override
   void initState() {
@@ -512,7 +510,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
     double deviceHeight = 1.sh;
     double widthDp = ScreenUtil().setWidth(1);
     double heightDp = ScreenUtil().setWidth(1);
-    double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+    // double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     double statusbarHeight = ScreenUtil().statusBarHeight;
 
     if (_videoPlayerController == null ||
@@ -548,9 +546,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
               children: [
                 Center(
                   child: AspectRatio(
-                    aspectRatio: _videoPlayerController!.value.size != null
-                        ? _videoPlayerController!.value.aspectRatio
-                        : 1.0,
+                    aspectRatio: _videoPlayerController!.value.aspectRatio,
                     child: VideoPlayer(_videoPlayerController!),
                   ),
                 ),

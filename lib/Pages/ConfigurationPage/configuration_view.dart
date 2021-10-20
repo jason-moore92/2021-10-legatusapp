@@ -9,8 +9,8 @@ import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/custom_url_lancher.dart';
 import 'package:legatus/Helpers/file_helpers.dart';
 import 'package:legatus/Helpers/index.dart';
-import 'package:legatus/Models/index.dart';
-import 'package:legatus/Models/user_model.dart';
+// import 'package:legatus/Models/index.dart';
+// import 'package:legatus/Models/user_model.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
@@ -19,7 +19,7 @@ import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfigurationView extends StatefulWidget {
   ConfigurationView({Key? key}) : super(key: key);
@@ -259,9 +259,9 @@ class _ConfigurationViewState extends State<ConfigurationView>
                           _logInPanel()
                         else
                           _logoutPanel(),
-                        // SizedBox(height: heightDp! * 20),
-                        // _permissionPanel(),
                         SizedBox(height: heightDp! * 20),
+/*                         _permissionPanel(),
+                        SizedBox(height: heightDp! * 20), */
                         _storagePanel(),
                         SizedBox(height: heightDp! * 20),
                         _pictureResolutionPanel(),
@@ -291,7 +291,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
       children: [
         Row(
           children: [
-            Icon(Icons.login, size: heightDp! * 25, color: Colors.black),
+            Icon(Icons.login, size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_login.tr(),
@@ -415,7 +415,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
       children: [
         Row(
           children: [
-            Icon(Icons.login, size: heightDp! * 25, color: Colors.black),
+            Icon(Icons.login, size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_login.tr(),
@@ -480,14 +480,14 @@ class _ConfigurationViewState extends State<ConfigurationView>
     );
   }
 
-  Widget _permissionPanel() {
+/*   Widget _permissionPanel() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             Icon(Icons.toggle_on_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_application_permission.tr(),
@@ -614,62 +614,9 @@ class _ConfigurationViewState extends State<ConfigurationView>
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: LocaleKeys.ConfigurationPageString_obligatory
-                                  .tr() +
-                              " - ",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: LocaleKeys
-                              .ConfigurationPageString_photo_permission.tr(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2!
-                              .copyWith(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    LocaleKeys.ConfigurationPageString_photo_permission_desc
-                        .tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2!
-                        .copyWith(fontStyle: FontStyle.italic),
-                  ),
-                ],
-              ),
-            ),
-            // Switch(
-            //   activeColor: AppColors.yello,
-            //   inactiveTrackColor: Colors.grey,
-            //   value: _appDataProvider!.appDataState.settingsModel!.allowLocation!,
-            //   onChanged: (value) {
-            //     _appDataProvider!.settingsHandler(allowLocation: value);
-            //   },
-            // ),
-          ],
-        ),
-        SizedBox(height: heightDp! * 10),
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: LocaleKeys.ConfigurationPageString_obligatory
-                                  .tr() +
-                              " - ",
+                          text:
+                              LocaleKeys.ConfigurationPageString_optional.tr() +
+                                  " - ",
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2!
@@ -711,7 +658,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         ),
       ],
     );
-  }
+  } */
 
   Widget _storagePanel() {
     return Column(
@@ -719,7 +666,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
       children: [
         Row(
           children: [
-            Icon(Icons.storage, size: heightDp! * 25, color: Colors.black),
+            Icon(Icons.storage, size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_storage.tr(),
@@ -805,7 +752,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.photo_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_photoResolutionTitle.tr(),
@@ -1037,7 +984,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.videocam_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_videoResolutionTitle.tr(),
@@ -1269,7 +1216,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.error_outline,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_infomation.tr(),
@@ -1324,7 +1271,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.bug_report_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_analyse.tr(),
@@ -1374,7 +1321,7 @@ class _ConfigurationViewState extends State<ConfigurationView>
         Row(
           children: [
             Icon(Icons.developer_mode_outlined,
-                size: heightDp! * 25, color: Colors.black),
+                size: heightDp! * 28, color: Colors.black),
             SizedBox(width: widthDp! * 10),
             Text(
               LocaleKeys.ConfigurationPageString_developMode.tr(),

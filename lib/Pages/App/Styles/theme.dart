@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../responsive_settings.dart';
+// import '../responsive_settings.dart';
 import 'index.dart';
 
 ThemeData buildLightTheme(BuildContext context) {
   double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
-  double deviceWidth = 1.sw;
+  // double deviceWidth = 1.sw;
   return ThemeData(
     fontFamily: "Roboto",
     brightness: Brightness.light,
     primaryColor: AppColors.primayColor,
     scaffoldBackgroundColor: AppColors.backColor,
-    accentColor: AppColors.primayColor,
+    // accentColor: AppColors.primayColor,
     focusColor: AppColors.primayColor,
     hintColor: AppColors.primayColor,
     appBarTheme: AppBarTheme(
-      brightness: Brightness.dark,
+      // brightness: Brightness.dark,
       backgroundColor: AppColors.primayColor,
     ),
     textTheme: TextTheme(
