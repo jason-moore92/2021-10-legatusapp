@@ -45,7 +45,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
   double? fontSp;
   ///////////////////////////////
 
-  bool _isInitialized = false;
+  // bool _isInitialized = false;
   FlutterSoundRecorder _recorderModule = FlutterSoundRecorder();
   // ignore: cancel_subscriptions
   StreamSubscription? _recorderSubscription;
@@ -139,7 +139,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
   Future<void> _initSettings() async {
     await _initRecoderSettings();
     await initializeDateFormatting();
-    _isInitialized = true;
+    // _isInitialized = true;
 
     setState(() {});
   }

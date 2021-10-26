@@ -70,6 +70,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   bool _selectStatus = false;
 
   Position? _currentPosition;
+  // ignore: cancel_subscriptions
   StreamSubscription? _locationSubscription;
 
   int photosCount = 0;

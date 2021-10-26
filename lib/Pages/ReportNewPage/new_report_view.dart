@@ -120,6 +120,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
   Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
 
   // Position? _currentPosition;
+  // ignore: cancel_subscriptions
   StreamSubscription? _locationSubscription;
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 
+// ignore: must_be_immutable
 class ErrorPage extends StatelessWidget {
   final String? message;
   final Function? callback;

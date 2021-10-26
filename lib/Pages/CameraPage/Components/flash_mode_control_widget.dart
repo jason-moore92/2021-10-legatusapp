@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FlashModeControllWidget extends StatelessWidget {
   final GlobalKey<ScaffoldState>? scaffoldKey;
@@ -16,24 +15,8 @@ class FlashModeControllWidget extends StatelessWidget {
     @required this.onPressHandler,
   }) : super(key: key);
 
-  /// Responsive design variables
-  double? deviceWidth;
-  double? deviceHeight;
-  double? widthDp;
-  double? heightDp;
-  double? fontSp;
-  ///////////////////////////////
-
   @override
   Widget build(BuildContext context) {
-    /// Responsive design variables
-    deviceWidth = 1.sw;
-    deviceHeight = 1.sh;
-    widthDp = ScreenUtil().setWidth(1);
-    heightDp = ScreenUtil().setWidth(1);
-    fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
-    ///////////////////////////////
-
     Icon icon;
     FlashMode nextMode;
 
