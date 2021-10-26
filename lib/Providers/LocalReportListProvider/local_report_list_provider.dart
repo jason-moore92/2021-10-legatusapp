@@ -8,15 +8,12 @@ import 'package:provider/provider.dart';
 import 'index.dart';
 
 class LocalReportListProvider extends ChangeNotifier {
-  static LocalReportListProvider of(BuildContext context,
-          {bool listen = false}) =>
-      Provider.of<LocalReportListProvider>(context, listen: listen);
+  static LocalReportListProvider of(BuildContext context, {bool listen = false}) => Provider.of<LocalReportListProvider>(context, listen: listen);
 
   LocalReportListState _localReportListState = LocalReportListState.init();
   LocalReportListState get localReportListState => _localReportListState;
 
-  void setLocalReportListState(LocalReportListState localReportListState,
-      {bool isNotifiable = true}) {
+  void setLocalReportListState(LocalReportListState localReportListState, {bool isNotifiable = true}) {
     if (_localReportListState != localReportListState) {
       _localReportListState = localReportListState;
       if (isNotifiable) notifyListeners();
@@ -24,17 +21,13 @@ class LocalReportListProvider extends ChangeNotifier {
   }
 
   Future<void> getLocalReportList() async {
-    List<dynamic> localReportListData =
-        _localReportListState.localReportListData!;
-    Map<String, dynamic> localReportMetaData =
-        _localReportListState.localReportMetaData!;
+    List<dynamic> localReportListData = _localReportListState.localReportListData!;
+    Map<String, dynamic> localReportMetaData = _localReportListState.localReportMetaData!;
     try {
       var result;
 
       result = await LocalReportApiProvider.getLocalReportList(
-        page: localReportMetaData.isEmpty
-            ? 0
-            : (localReportMetaData["nextPage"] ?? 0),
+        page: localReportMetaData.isEmpty ? 0 : (localReportMetaData["nextPage"] ?? 0),
         limit: AppConfig.refreshListLimit,
       );
 

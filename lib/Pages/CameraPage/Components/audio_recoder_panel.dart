@@ -36,8 +36,7 @@ class AudioRecoderPanel extends StatefulWidget {
   _AudioRecoderPanelState createState() => _AudioRecoderPanelState();
 }
 
-class _AudioRecoderPanelState extends State<AudioRecoderPanel>
-    with SingleTickerProviderStateMixin {
+class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -48,6 +47,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
 
   bool _isInitialized = false;
   FlutterSoundRecorder _recorderModule = FlutterSoundRecorder();
+  // ignore: cancel_subscriptions
   StreamSubscription? _recorderSubscription;
 
   CameraProvider? _cameraProvider;
@@ -120,8 +120,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
     _cameraProvider = CameraProvider.of(context);
     _cameraProvider!.addListener(_cameraProviderListener);
 
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     animation = Tween<double>(begin: 0, end: 1).animate(controller!)
       ..addListener(() {
         if (controller!.status == AnimationStatus.completed) {
@@ -139,7 +138,6 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
   /// --- init Settings
   Future<void> _initSettings() async {
     await _initRecoderSettings();
-    await _initPlayerSettings();
     await initializeDateFormatting();
     _isInitialized = true;
 
@@ -157,40 +155,25 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
     _encoderSupported = await _recorderModule.isEncoderSupported(_codec);
   }
 
-  Future<void> _initPlayerSettings() async {
-    // _isAudioPlayer = false;
-    // await _playerModule.closeAudioSession();
-    // await _playerModule.openAudioSession(
-    //   withUI: false,
-    //   focus: AudioFocus.requestFocusAndStopOthers,
-    //   category: SessionCategory.playAndRecord,
-    //   mode: SessionMode.modeDefault,
-    //   device: AudioDevice.speaker,
-    // );
-    // await _playerModule.setSubscriptionDuration(Duration(milliseconds: 10));
-    // _decoderSupported = await _playerModule.isDecoderSupported(codec);
-  }
-  /////////////////////////////////////////////////////////////////
-
   @override
   void dispose() {
     _cameraProvider!.removeListener(_cameraProviderListener);
     _cancelRecorderSubscriptions();
     _disposeRecorderSettings();
-
-    _cancelPlayerSubscriptions();
-    _disposePlaySettings();
+    controller!.stop();
+    controller!.reset();
+    controller!.dispose();
 
     super.dispose();
   }
 
   void _cameraProviderListener() async {
-    if (_cameraProvider!.isAudioRecord! &&
-        _cameraProvider!.audioRecordStatus == "recording") {
-      startRecorder();
-    } else if (_cameraProvider!.isAudioRecord! &&
-        _cameraProvider!.audioRecordStatus == "stopped") {
-      stopRecorder();
+    if (_cameraProvider!.cameraState.isShowAudioRecoderPanel!) {
+      if (_cameraProvider!.cameraState.isAudioRecord! && _cameraProvider!.cameraState.audioRecordStatus == "recording") {
+        startRecorder();
+      } else if (!_cameraProvider!.cameraState.isAudioRecord! && _cameraProvider!.cameraState.audioRecordStatus == "stopped") {
+        stopRecorder();
+      }
     }
   }
 
@@ -210,35 +193,6 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
     }
   }
 
-  void _cancelPlayerSubscriptions() {
-    // if (_playerSubscription != null) {
-    //   _playerSubscription!.cancel();
-    //   _playerSubscription = null;
-    // }
-  }
-
-  Future<void> _disposePlaySettings() async {
-    try {
-      // await _playerModule.closeAudioSession();
-    } on Exception {
-      print('Released unsuccessful');
-    }
-  }
-  /////////////////////////////////////////////////////////////////
-
-/*   Future<void> _setCodec(Codec codec) async {
-    /// recoder setting
-    await _recorderModule.setSubscriptionDuration(Duration(milliseconds: 10));
-
-    // /// player setting
-    // _decoderSupported = await _playerModule.isDecoderSupported(codec);
-
-    setState(() {
-      _codec = codec;
-      _isInitialized = true;
-    });
-  } */
-
   void startRecorder() async {
     if (!_encoderSupported) return null;
 
@@ -247,9 +201,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
       if (!kIsWeb) {
         var status = await Permission.microphone.request();
         if (status != PermissionStatus.granted) {
-          throw RecordingPermissionException(
-              'Microphone permission not granted');
-          return;
+          throw RecordingPermissionException('Microphone permission not granted');
         }
       }
       var path = '';
@@ -275,10 +227,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
 
       _recorderSubscription = _recorderModule.onProgress!.listen((e) {
         _inMilliseconds = e.duration.inMilliseconds;
-        print("---------------------");
-        print(_inMilliseconds);
-        var date =
-            DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
+        var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
         var txt = DateFormat('mm:ss').format(date);
 
         setState(() {
@@ -328,13 +277,11 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
           if (_resumeMillseconds == 0) {
             _resumeMillseconds = e.duration.inMilliseconds;
           }
-          _inMilliseconds = _inMilliseconds! +
-              (e.duration.inMilliseconds - _resumeMillseconds!);
+          _inMilliseconds = _inMilliseconds! + (e.duration.inMilliseconds - _resumeMillseconds!);
           _resumeMillseconds = e.duration.inMilliseconds;
           print("--------resume-------------");
           print(_inMilliseconds);
-          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!,
-              isUtc: true);
+          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
           var txt = DateFormat('mm:ss').format(date);
 
           setState(() {
@@ -424,19 +371,18 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      GestureDetector(
-                        onTap: stopRecorder,
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: widthDp! * 10),
-                          color: Colors.transparent,
-                          child: Icon(
-                            Icons.stop,
-                            color: Colors.white,
-                            size: heightDp! * 20,
-                          ),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: stopRecorder,
+                      //   child: Container(
+                      //     padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
+                      //     color: Colors.transparent,
+                      //     child: Icon(
+                      //       Icons.stop,
+                      //       color: Colors.white,
+                      //       size: heightDp! * 20,
+                      //     ),
+                      //   ),
+                      // ),
                       // if (_isInitialized && _recorderModule.isStopped)
                       //   GestureDetector(
                       //     child: Container(
@@ -449,35 +395,26 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
                       //       ),
                       //     ),
                       //   ),
-                      if (_isInitialized)
-                        GestureDetector(
-                          onTap: pauseResumeRecorder,
-                          child: Container(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: widthDp! * 10),
-                            color: Colors.transparent,
-                            child: Icon(
-                              _recorderModule.isRecording
-                                  ? Icons.pause_circle_outline_outlined
-                                  : Icons.play_circle_outline_outlined,
-                              size: heightDp! * 20,
-                              color: _recorderModule.isRecording
-                                  ? Colors.white
-                                  : Colors.red,
-                            ),
-                          ),
-                        ),
+                      // if (_isInitialized)
+                      //   GestureDetector(
+                      //     onTap: pauseResumeRecorder,
+                      //     child: Container(
+                      //       padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
+                      //       color: Colors.transparent,
+                      //       child: Icon(
+                      //         _recorderModule.isRecording ? Icons.pause_circle_outline_outlined : Icons.play_circle_outline_outlined,
+                      //         size: heightDp! * 20,
+                      //         color: _recorderModule.isRecording ? Colors.white : Colors.red,
+                      //       ),
+                      //     ),
+                      //   ),
                       AnimatedBuilder(
                         animation: animation!,
                         builder: (context, child) {
                           return Opacity(
-                            opacity: _recorderModule.isRecording
-                                ? 1 - animation!.value
-                                : 0,
+                            opacity: _recorderModule.isRecording ? 1 - animation!.value : 0,
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: widthDp! * 10,
-                                  vertical: heightDp! * 5),
+                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
                               child: Icon(
                                 Icons.fiber_manual_record,
                                 size: heightDp! * 20,
@@ -487,9 +424,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
                           );
                         },
                       ),
-                      Text(_audioRecorderTxt!,
-                          style: TextStyle(
-                              fontSize: fontSp! * 14, color: Colors.white)),
+                      Text(_audioRecorderTxt!, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
+                      SizedBox(width: widthDp! * 5),
                     ],
                   ),
                 ),

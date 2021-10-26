@@ -22,8 +22,7 @@ class PlanningApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> getPlanning(
-      {@required String? startDate}) async {
+  static Future<Map<String, dynamic>> getPlanning({@required String? startDate}) async {
     String apiUrl = '/planning';
 
     try {
@@ -38,8 +37,7 @@ class PlanningApiProvider {
         url = AppConfig.productionApiBaseUrl + apiUrl;
       }
 
-      startDate = startDate ??
-          KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now());
+      startDate = startDate ?? KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now());
       url += "?start_date=$startDate";
 
       var response = await http.get(

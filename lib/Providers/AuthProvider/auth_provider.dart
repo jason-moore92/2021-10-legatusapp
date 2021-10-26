@@ -44,7 +44,6 @@ class AuthProvider extends ChangeNotifier {
   Future<void> init() async {
     try {
       _prefs = await SharedPreferences.getInstance();
-      await _prefs!.setBool("local_report_list_page", false);
       await initHiveObject();
       String? result = _prefs!.getString(_rememberUserKey);
       if (result != null && result != "null") {

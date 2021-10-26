@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import "package:equatable/equatable.dart";
 import 'package:hive/hive.dart';
 
@@ -44,6 +46,10 @@ class MediaModel extends Equatable {
   String? latitude;
   @HiveField(15)
   String? longitude;
+  @HiveField(16)
+  int? width;
+  @HiveField(17)
+  int? height;
 
   MediaModel({
     this.reportId = 0,
@@ -62,6 +68,8 @@ class MediaModel extends Equatable {
     this.content = "",
     this.latitude = "",
     this.longitude = "",
+    this.width = 0,
+    this.height = 0,
   });
 
   factory MediaModel.fromJson(Map<String, dynamic> map) {
@@ -82,6 +90,8 @@ class MediaModel extends Equatable {
       content: map["content"] ?? "",
       latitude: map["latitude"] ?? "",
       longitude: map["longitude"] ?? "",
+      width: map["width"] ?? 0,
+      height: map["height"] ?? 0,
     );
   }
 
@@ -103,6 +113,8 @@ class MediaModel extends Equatable {
       "content": content ?? "",
       "latitude": latitude ?? "",
       "longitude": longitude ?? "",
+      "width": width ?? 0,
+      "height": height ?? 0,
     };
   }
 
@@ -124,6 +136,8 @@ class MediaModel extends Equatable {
       content: model.content,
       latitude: model.latitude,
       longitude: model.longitude,
+      width: model.width,
+      height: model.height,
     );
   }
 
@@ -145,6 +159,8 @@ class MediaModel extends Equatable {
         content!,
         latitude!,
         longitude!,
+        width!,
+        height!,
       ];
 
   @override

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
-import 'package:card_swiper/card_swiper.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +12,9 @@ import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/App/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Providers/MediaPlayProvider/index.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class PictureMediaWidget extends StatefulWidget {
-  final LocalReportModel? localReportModel;
   final MediaModel? mediaModel;
   final int? totalMediaCount;
   final bool? isSelected;
@@ -28,7 +25,6 @@ class PictureMediaWidget extends StatefulWidget {
 
   PictureMediaWidget({
     Key? key,
-    @required this.localReportModel,
     @required this.mediaModel,
     @required this.totalMediaCount,
     this.isSelected = false,
@@ -110,6 +106,9 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
         child: Stack(
           children: [
             GestureDetector(
+              // onDoubleTap: () {
+              //   _viewHandler(context);
+              // },
               onTap: () => _tapHandler(context, mediaPlayProvider),
               onLongPress: () {
                 if (widget.longPressHandler != null) {
@@ -261,109 +260,182 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     }
   }
 
-  Future<void> _viewHandler(BuildContext context) async {
-    pushNewScreen(
-      context,
-      screen: GallaryPage(
-        localReportModel: widget.localReportModel,
-        mediaModel: widget.mediaModel,
-      ),
-      pageTransitionAnimation: PageTransitionAnimation.fade,
-      withNavBar: false,
-    );
-  }
-}
+  void _viewHandler(BuildContext context) {
+    File file = File(widget.mediaModel!.path!);
 
-class GallaryPage extends StatefulWidget {
-  final LocalReportModel? localReportModel;
-  final MediaModel? mediaModel;
+    Image image = new Image.file(file);
+    Completer<ui.Image> completer = new Completer<ui.Image>();
+    image.image.resolve(new ImageConfiguration()).addListener(
+          ImageStreamListener((ImageInfo info, bool _) => completer.complete(info.image)),
+        );
 
-  const GallaryPage({Key? key, @required this.localReportModel, @required this.mediaModel}) : super(key: key);
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.9),
+      builder: (context) {
+        return Material(
+          color: Colors.transparent,
+          child: Wrap(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FutureBuilder<ui.Image>(
+                      future: completer.future,
+                      builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data!.width > snapshot.data!.height) {
+                            ExtendedImage imageWidget = ExtendedImage.file(
+                              file,
+                              height: MediaQuery.of(context).size.height * 0.7,
+                              fit: BoxFit.fitHeight,
+                              mode: ExtendedImageMode.gesture,
+                              enableMemoryCache: true,
+                              loadStateChanged: (ExtendedImageState state) {
+                                if (state.extendedImageLoadState == LoadState.loading) {
+                                  return Center(
+                                      child: Theme(
+                                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                                    child: Center(child: CupertinoActivityIndicator()),
+                                  ));
+                                }
+                              },
+                              initGestureConfigHandler: (state) {
+                                return GestureConfig(
+                                  minScale: 0.9,
+                                  animationMinScale: 0.7,
+                                  maxScale: 3.0,
+                                  animationMaxScale: 3.5,
+                                  speed: 1.0,
+                                  inertialSpeed: 100.0,
+                                  initialScale: 1.0,
+                                  inPageView: false,
+                                  initialAlignment: InitialAlignment.center,
+                                );
+                              },
+                            );
 
-  @override
-  _GallaryPageState createState() => _GallaryPageState();
-}
+                            return Material(
+                              color: Colors.transparent,
+                              child: Wrap(
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height,
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: heightDp! * 10),
+                                        Container(
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.width / snapshot.data!.height),
+                                          alignment: Alignment.centerRight,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            icon: Icon(Icons.close_outlined, size: heightDp! * 30, color: Colors.white),
+                                          ),
+                                        ),
+                                        SizedBox(height: heightDp! * 10),
+                                        Container(
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.width / snapshot.data!.height),
+                                          height: MediaQuery.of(context).size.height * 0.7,
+                                          child: RotatedBox(
+                                            quarterTurns: 1,
+                                            child: imageWidget,
+                                          ),
+                                        ),
+                                        SizedBox(height: statusbarHeight! + heightDp! * 30),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            ExtendedImage imageWidget = ExtendedImage.file(
+                              file,
+                              width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
+                              fit: BoxFit.fitWidth,
+                              mode: ExtendedImageMode.gesture,
+                              enableMemoryCache: true,
+                              initGestureConfigHandler: (state) {
+                                return GestureConfig(
+                                  minScale: 0.9,
+                                  animationMinScale: 0.7,
+                                  maxScale: 3.0,
+                                  animationMaxScale: 3.5,
+                                  speed: 1.0,
+                                  inertialSpeed: 100.0,
+                                  initialScale: 1.0,
+                                  inPageView: false,
+                                  initialAlignment: InitialAlignment.center,
+                                );
+                              },
+                            );
 
-class _GallaryPageState extends State<GallaryPage> {
-  @override
-  Widget build(BuildContext context) {
-    double heightDp = ScreenUtil().setWidth(1);
-    List<MediaModel> medias = [];
-    int index = 0;
-
-    for (var i = 0; i < widget.localReportModel!.medias!.length; i++) {
-      if (widget.localReportModel!.medias![i].type == MediaType.picture) {
-        medias.add(widget.localReportModel!.medias![i]);
-        if (widget.mediaModel!.rank == widget.localReportModel!.medias![i].rank &&
-            widget.mediaModel!.uuid == widget.localReportModel!.medias![i].uuid) {
-          index = medias.length - 1;
-        }
-      }
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        automaticallyImplyLeading: false,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Icon(Icons.close, size: heightDp * 25, color: Colors.white),
+                            return Material(
+                              color: Colors.transparent,
+                              child: Wrap(
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height,
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: heightDp! * 10),
+                                        Container(
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
+                                          alignment: Alignment.centerRight,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            icon: Icon(Icons.close_outlined, size: heightDp! * 30, color: Colors.white),
+                                          ),
+                                        ),
+                                        SizedBox(height: heightDp! * 10),
+                                        Container(
+                                          width: MediaQuery.of(context).size.height * 0.7 / (snapshot.data!.height / snapshot.data!.width),
+                                          height: MediaQuery.of(context).size.height * 0.7,
+                                          child: imageWidget,
+                                        ),
+                                        SizedBox(height: statusbarHeight! + heightDp! * 30),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        } else {
+                          return Material(
+                            color: Colors.transparent,
+                            child: Wrap(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
+                                  child: Theme(
+                                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                                    child: Center(child: CupertinoActivityIndicator()),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Swiper(
-        itemCount: medias.length,
-        pagination: SwiperPagination(),
-        loop: false,
-        index: index,
-        control: SwiperControl(color: Colors.white),
-        itemBuilder: (BuildContext context, int index) {
-          File file = File(medias[index].path!);
-
-          Image image = new Image.file(file);
-          Completer<ui.Image> completer = new Completer<ui.Image>();
-          image.image.resolve(new ImageConfiguration()).addListener(
-                ImageStreamListener((ImageInfo info, bool _) => completer.complete(info.image)),
-              );
-
-          return FutureBuilder<ui.Image>(
-            future: completer.future,
-            builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data!.width > snapshot.data!.height) {
-                  Image imageWidget = Image.file(
-                    file,
-                    fit: BoxFit.cover,
-                  );
-
-                  return RotatedBox(
-                    quarterTurns: 1,
-                    child: imageWidget,
-                  );
-                } else {
-                  Image imageWidget = Image.file(
-                    file,
-                    fit: BoxFit.cover,
-                  );
-
-                  return imageWidget;
-                }
-              } else {
-                return Container(
-                  child: Theme(
-                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
-                    child: Center(child: CupertinoActivityIndicator()),
-                  ),
-                );
-              }
-            },
-          );
-        },
-      ),
+        );
+      },
     );
   }
 }

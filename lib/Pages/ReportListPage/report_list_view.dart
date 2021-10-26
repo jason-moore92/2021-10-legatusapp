@@ -20,7 +20,6 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 // import 'package:uuid/uuid.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ReportListView extends StatefulWidget {
   ReportListView({Key? key}) : super(key: key);
@@ -29,8 +28,7 @@ class ReportListView extends StatefulWidget {
   _ReportListViewState createState() => _ReportListViewState();
 }
 
-class _ReportListViewState extends State<ReportListView>
-    with SingleTickerProviderStateMixin {
+class _ReportListViewState extends State<ReportListView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -42,12 +40,9 @@ class _ReportListViewState extends State<ReportListView>
   double? fontSp;
   ///////////////////////////////
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   LocalReportListProvider? _localReportListProvider;
-
-  SharedPreferences? _prefs;
 
   @override
   void initState() {
@@ -66,42 +61,15 @@ class _ReportListViewState extends State<ReportListView>
 
     _localReportListProvider = LocalReportListProvider.of(context);
     _localReportListProvider!.setLocalReportListState(
-      // LocalReportListState.init().copyWith(contextName: "PlanningPage"),
-      _localReportListProvider!.localReportListState
-          .update(contextName: "PlanningPage"),
-
+      _localReportListProvider!.localReportListState.update(contextName: "PlanningPage"),
       isNotifiable: false,
     );
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _localReportListProvider!.addListener(_localReportListProviderListener);
 
-      _prefs = await SharedPreferences.getInstance();
-
-      bool? isInit = _prefs!.getBool("local_report_list_page") ?? false;
-
-      if (!isInit) {
-        if (_localReportListProvider!.localReportListState.progressState != 2 &&
-            _localReportListProvider!.localReportListState.progressState != 1) {
-          isInit = true;
-          await _prefs!.setBool("local_report_list_page", true);
-          _localReportListProvider!.setLocalReportListState(
-            _localReportListProvider!.localReportListState.update(
-              localReportListData: [],
-              localReportMetaData: Map<String, dynamic>(),
-              progressState: 1,
-            ),
-          );
-
-          _localReportListProvider!.getLocalReportList();
-        }
-      }
-
-      if (_localReportListProvider!
-              .localReportListState.localReportModel!.reportId !=
-          0) {
-        LocalReportModel localReportModel =
-            _localReportListProvider!.localReportListState.localReportModel!;
+      if (_localReportListProvider!.localReportListState.localReportModel!.reportId != 0) {
+        LocalReportModel localReportModel = _localReportListProvider!.localReportListState.localReportModel!;
 
         var result = await pushNewScreen(
           context,
@@ -110,8 +78,7 @@ class _ReportListViewState extends State<ReportListView>
         );
 
         _localReportListProvider!.setLocalReportListState(
-          _localReportListProvider!.localReportListState
-              .update(localReportModel: LocalReportModel()),
+          _localReportListProvider!.localReportListState.update(localReportModel: LocalReportModel()),
           isNotifiable: false,
         );
 
@@ -138,6 +105,18 @@ class _ReportListViewState extends State<ReportListView>
           setState(() {});
         }
       }
+
+      if (_localReportListProvider!.localReportListState.progressState != 2) {
+        _localReportListProvider!.setLocalReportListState(
+          _localReportListProvider!.localReportListState.update(
+            localReportListData: [],
+            localReportMetaData: Map<String, dynamic>(),
+            progressState: 1,
+          ),
+        );
+
+        _localReportListProvider!.getLocalReportList();
+      }
     });
   }
 
@@ -150,50 +129,41 @@ class _ReportListViewState extends State<ReportListView>
   void _localReportListProviderListener() async {
     if (_localReportListProvider!.localReportListState.refreshList!) {
       _localReportListProvider!.setLocalReportListState(
-        _localReportListProvider!.localReportListState
-            .update(refreshList: false),
+        _localReportListProvider!.localReportListState.update(refreshList: false),
         isNotifiable: false,
       );
       _onRefresh();
     }
-    if (_localReportListProvider!.localReportListState.contextName !=
-        "PlanningPage") return;
+    if (_localReportListProvider!.localReportListState.contextName != "PlanningPage") return;
 
     if (_localReportListProvider!.localReportListState.progressState == -1) {
       if (_localReportListProvider!.localReportListState.isRefresh!) {
         _localReportListProvider!.setLocalReportListState(
-          _localReportListProvider!.localReportListState
-              .update(isRefresh: false),
+          _localReportListProvider!.localReportListState.update(isRefresh: false),
           isNotifiable: false,
         );
         _refreshController.refreshFailed();
       } else {
         _refreshController.loadFailed();
       }
-    } else if (_localReportListProvider!.localReportListState.progressState ==
-        2) {
+    } else if (_localReportListProvider!.localReportListState.progressState == 2) {
       if (_localReportListProvider!.localReportListState.isRefresh!) {
         _localReportListProvider!.setLocalReportListState(
-          _localReportListProvider!.localReportListState
-              .update(isRefresh: false),
+          _localReportListProvider!.localReportListState.update(isRefresh: false),
           isNotifiable: false,
         );
         _refreshController.refreshCompleted();
       } else {
         _refreshController.loadComplete();
       }
-      await _prefs!.setBool("local_report_list_page", false);
     }
   }
 
   void _onRefresh() async {
-    if (_localReportListProvider!.localReportListState.progressState == 1)
-      return;
+    if (_localReportListProvider!.localReportListState.progressState == 1) return;
 
-    List<dynamic> localReportListData =
-        _localReportListProvider!.localReportListState.localReportListData!;
-    Map<String, dynamic> localReportMetaData =
-        _localReportListProvider!.localReportListState.localReportMetaData!;
+    List<dynamic> localReportListData = _localReportListProvider!.localReportListState.localReportListData!;
+    Map<String, dynamic> localReportMetaData = _localReportListProvider!.localReportListState.localReportMetaData!;
 
     localReportListData = [];
     localReportMetaData = Map<String, dynamic>();
@@ -210,8 +180,7 @@ class _ReportListViewState extends State<ReportListView>
   }
 
   void _onLoading() async {
-    if (_localReportListProvider!.localReportListState.progressState == 1)
-      return;
+    if (_localReportListProvider!.localReportListState.progressState == 1) return;
 
     _localReportListProvider!.setLocalReportListState(
       _localReportListProvider!.localReportListState.update(progressState: 1),
@@ -220,8 +189,7 @@ class _ReportListViewState extends State<ReportListView>
   }
 
   void _deleteLocalReportHandler(LocalReportModel localReportModel) async {
-    var progressState = await LocalReportProvider.of(context)
-        .deleteLocalReport(localReportModel: localReportModel);
+    var progressState = await LocalReportProvider.of(context).deleteLocalReport(localReportModel: localReportModel);
     if (progressState == 2) {
       SuccessDialog.show(
         context,
@@ -237,11 +205,8 @@ class _ReportListViewState extends State<ReportListView>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LocalReportListProvider>(
-        builder: (context, localReportListProvider, _) {
-      if (localReportListProvider
-              .localReportListState.localReportModel!.reportId !=
-          0) {
+    return Consumer<LocalReportListProvider>(builder: (context, localReportListProvider, _) {
+      if (localReportListProvider.localReportListState.localReportModel!.reportId != 0) {
         // return ReportPage(localReportModel: localReportListProvider.localReportListState.localReportModel);
         return Scaffold(
           appBar: AppBar(
@@ -289,8 +254,7 @@ class _ReportListViewState extends State<ReportListView>
           child: Icon(Icons.add, size: heightDp! * 25, color: Colors.white),
           onPressed: () async {
             var result = await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => NewReportPage()),
+              MaterialPageRoute(builder: (BuildContext context) => NewReportPage()),
             );
 
             if (result != null && result.isNotEmpty) {
@@ -306,23 +270,17 @@ class _ReportListViewState extends State<ReportListView>
     List<dynamic> localReportsList = [];
     Map<String, dynamic> localReportsMetaData = Map<String, dynamic>();
 
-    if (_localReportListProvider!.localReportListState.localReportListData !=
-        null) {
-      localReportsList =
-          _localReportListProvider!.localReportListState.localReportListData!;
+    if (_localReportListProvider!.localReportListState.localReportListData != null) {
+      localReportsList = _localReportListProvider!.localReportListState.localReportListData!;
     }
-    if (_localReportListProvider!.localReportListState.localReportMetaData !=
-        null) {
-      localReportsMetaData =
-          _localReportListProvider!.localReportListState.localReportMetaData!;
+    if (_localReportListProvider!.localReportListState.localReportMetaData != null) {
+      localReportsMetaData = _localReportListProvider!.localReportListState.localReportMetaData!;
     }
 
     int itemCount = 0;
 
-    if (_localReportListProvider!.localReportListState.localReportListData !=
-        null) {
-      itemCount += _localReportListProvider!
-          .localReportListState.localReportListData!.length;
+    if (_localReportListProvider!.localReportListState.localReportListData != null) {
+      itemCount += _localReportListProvider!.localReportListState.localReportListData!.length;
     }
 
     if (_localReportListProvider!.localReportListState.progressState == 1) {
@@ -339,16 +297,13 @@ class _ReportListViewState extends State<ReportListView>
             },
             child: Container(
               decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.grey.withOpacity(0.6))),
+                border: Border(bottom: BorderSide(color: Colors.grey.withOpacity(0.6))),
               ),
               child: SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: (localReportsMetaData["isEnd"] != null &&
                     !localReportsMetaData["isEnd"] &&
-                    _localReportListProvider!
-                            .localReportListState.progressState !=
-                        1),
+                    _localReportListProvider!.localReportListState.progressState != 1),
                 header: WaterDropHeader(),
                 footer: ClassicFooter(),
                 controller: _refreshController,
@@ -358,9 +313,7 @@ class _ReportListViewState extends State<ReportListView>
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     LocalReportModel localReportsModel =
-                        (index >= localReportsList.length)
-                            ? LocalReportModel(reportId: -1)
-                            : localReportsList[index];
+                        (index >= localReportsList.length) ? LocalReportModel(reportId: -1) : localReportsList[index];
                     return Slidable(
                       enabled: true,
                       actionPane: SlidableDrawerActionPane(),
@@ -373,14 +326,10 @@ class _ReportListViewState extends State<ReportListView>
                           onTap: () {
                             NormalAskDialog.show(
                               context,
-                              title: LocaleKeys.DeleteReportDialogString_title
-                                  .tr(),
-                              content: LocaleKeys
-                                  .DeleteReportDialogString_content.tr(),
-                              okButton: LocaleKeys
-                                  .DeleteReportDialogString_delete.tr(),
-                              cancelButton: LocaleKeys
-                                  .DeleteReportDialogString_cancel.tr(),
+                              title: LocaleKeys.DeleteReportDialogString_title.tr(),
+                              content: LocaleKeys.DeleteReportDialogString_content.tr(),
+                              okButton: LocaleKeys.DeleteReportDialogString_delete.tr(),
+                              cancelButton: LocaleKeys.DeleteReportDialogString_cancel.tr(),
                               callback: () {
                                 _deleteLocalReportHandler(localReportsModel);
                               },
@@ -392,8 +341,7 @@ class _ReportListViewState extends State<ReportListView>
                         onTap: () async {
                           var result = await Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (BuildContext context) => ReportPage(
-                                  localReportModel: localReportsModel),
+                              builder: (BuildContext context) => ReportPage(localReportModel: localReportsModel),
                             ),
                           );
 
@@ -409,10 +357,7 @@ class _ReportListViewState extends State<ReportListView>
                     );
                   },
                   separatorBuilder: (context, index) {
-                    return Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: Colors.grey.withOpacity(0.6));
+                    return Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.6));
                   },
                 ),
               ),

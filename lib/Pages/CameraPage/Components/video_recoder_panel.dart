@@ -13,14 +13,14 @@ class VideoRecoderPanel extends StatefulWidget {
   const VideoRecoderPanel({
     Key? key,
     @required this.scaffoldKey,
-    @required this.cameraController,
+    // @required this.cameraController,
     @required this.keicyProgressDialog,
     @required this.width,
     @required this.videoSaveHandler,
     @required this.onAudioModeButtonPressed,
   }) : super(key: key);
 
-  final CameraController? cameraController;
+  // final CameraController? cameraController;
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final KeicyProgressDialog? keicyProgressDialog;
   final double? width;
@@ -31,8 +31,7 @@ class VideoRecoderPanel extends StatefulWidget {
   _VideoRecoderPanelState createState() => _VideoRecoderPanelState();
 }
 
-class _VideoRecoderPanelState extends State<VideoRecoderPanel>
-    with SingleTickerProviderStateMixin {
+class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTickerProviderStateMixin {
   double? deviceHeight;
 
   /// Responsive design variables
@@ -53,6 +52,9 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   @override
   void dispose() {
     _cameraProvider!.removeListener(_cameraProviderListener);
+    controller!.stop();
+    controller!.reset();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -70,8 +72,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
 
     _cameraProvider = CameraProvider.of(context);
 
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     animation = Tween<double>(begin: 0, end: 1).animate(controller!)
       ..addListener(() {
         if (controller!.status == AnimationStatus.completed) {
@@ -87,12 +88,12 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   void _cameraProviderListener() async {
-    if (_cameraProvider!.isVideoRecord! &&
-        _cameraProvider!.videoRecordStatus == "recording") {
-      startVideoRecording();
-    } else if (_cameraProvider!.isVideoRecord! &&
-        _cameraProvider!.videoRecordStatus == "stopped") {
-      stopVideoRecording();
+    if (_cameraProvider!.cameraState.isShowVideoRecoderPanel! && _cameraProvider!.cameraState.changedCameraResolution!) {
+      if (_cameraProvider!.cameraState.isVideoRecord! && _cameraProvider!.cameraState.videoRecordStatus == "recording") {
+        startVideoRecording();
+      } else if (!_cameraProvider!.cameraState.isVideoRecord! && _cameraProvider!.cameraState.videoRecordStatus == "stopped") {
+        stopVideoRecording();
+      }
     }
   }
 
@@ -107,13 +108,12 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   Future<void> startVideoRecording() async {
-    if (widget.cameraController == null ||
-        !widget.cameraController!.value.isInitialized) {
+    if (_cameraProvider!.cameraState.cameraController == null || !_cameraProvider!.cameraState.cameraController!.value.isInitialized) {
       showInSnackBar('Error: select a camera first.');
       return;
     }
 
-    if (widget.cameraController!.value.isRecordingVideo) {
+    if (_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo) {
       return;
     }
 
@@ -125,7 +125,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
         });
       });
       controller!.forward();
-      await widget.cameraController!.startVideoRecording();
+      await _cameraProvider!.cameraState.cameraController!.startVideoRecording();
       if (mounted) setState(() {});
       showInSnackBar('Video recording started');
     } on CameraException catch (e) {
@@ -135,8 +135,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   Future<void> resumeVideoRecording() async {
-    if (widget.cameraController == null ||
-        !widget.cameraController!.value.isRecordingVideo) {
+    if (_cameraProvider!.cameraState.cameraController == null || !_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo) {
       return null;
     }
 
@@ -147,7 +146,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
         });
       });
       controller!.forward();
-      await widget.cameraController!.resumeVideoRecording();
+      await _cameraProvider!.cameraState.cameraController!.resumeVideoRecording();
       if (mounted) setState(() {});
       showInSnackBar('Video recording resumed');
     } on CameraException catch (e) {
@@ -157,8 +156,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   Future<void> pauseVideoRecording() async {
-    if (widget.cameraController == null ||
-        !widget.cameraController!.value.isRecordingVideo) {
+    if (_cameraProvider!.cameraState.cameraController == null || !_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo) {
       return null;
     }
 
@@ -166,7 +164,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
       _timer!.cancel();
       controller!.stop();
       controller!.reset();
-      await widget.cameraController!.pauseVideoRecording();
+      await _cameraProvider!.cameraState.cameraController!.pauseVideoRecording();
       if (mounted) setState(() {});
       showInSnackBar('Video recording paused');
     } on CameraException catch (e) {
@@ -176,8 +174,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
   }
 
   Future<void> stopVideoRecording() async {
-    if (widget.cameraController == null ||
-        !widget.cameraController!.value.isRecordingVideo) {
+    if (_cameraProvider!.cameraState.cameraController == null || !_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo) {
       return null;
     }
 
@@ -185,7 +182,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
       _timer!.cancel();
       controller!.stop();
       controller!.reset();
-      widget.cameraController!.stopVideoRecording().then((XFile? file) async {
+      _cameraProvider!.cameraState.cameraController!.stopVideoRecording().then((XFile? file) async {
         if (mounted) setState(() {});
         if (file != null) {
           if (widget.videoSaveHandler != null) {
@@ -205,7 +202,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.cameraController == null) return SizedBox();
+    if (_cameraProvider!.cameraState.cameraController == null) return SizedBox();
 
     String videoRecorderTxt = "";
     // var date = DateTime(2021, 01, 01, 0, 0, 0, _milliseconds);
@@ -214,20 +211,19 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
     videoRecorderTxt = txt.substring(0, 5);
 
     // String statusString = "";
-    if (widget.cameraController != null &&
-        !widget.cameraController!.value.isInitialized) {
+    if (_cameraProvider!.cameraState.cameraController != null && !_cameraProvider!.cameraState.cameraController!.value.isInitialized) {
       // statusString = "Video Record is initializing";
-    } else if (widget.cameraController != null &&
-        widget.cameraController!.value.isInitialized &&
-        !widget.cameraController!.value.isRecordingVideo) {
+    } else if (_cameraProvider!.cameraState.cameraController != null &&
+        _cameraProvider!.cameraState.cameraController!.value.isInitialized &&
+        !_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo) {
       // statusString = "Video Record is ready";
-    } else if (widget.cameraController != null &&
-        widget.cameraController!.value.isInitialized &&
-        widget.cameraController!.value.isRecordingPaused) {
+    } else if (_cameraProvider!.cameraState.cameraController != null &&
+        _cameraProvider!.cameraState.cameraController!.value.isInitialized &&
+        _cameraProvider!.cameraState.cameraController!.value.isRecordingPaused) {
       // statusString = "Video Record is stopped";
-    } else if (widget.cameraController != null &&
-        widget.cameraController!.value.isInitialized &&
-        widget.cameraController!.value.isRecordingVideo) {
+    } else if (_cameraProvider!.cameraState.cameraController != null &&
+        _cameraProvider!.cameraState.cameraController!.value.isInitialized &&
+        _cameraProvider!.cameraState.cameraController!.value.isRecordingVideo) {
       // statusString = "Video Record is recording";
     }
 
@@ -252,24 +248,20 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                     ),
                     IconButton(
                       icon: Icon(
-                        widget.cameraController!.enableAudio
-                            ? Icons.volume_up
-                            : Icons.volume_mute,
-                        color: widget.cameraController != null &&
-                                !widget.cameraController!.value.isRecordingVideo
+                        _cameraProvider!.cameraState.cameraController!.enableAudio ? Icons.volume_up : Icons.volume_mute,
+                        color: _cameraProvider!.cameraState.cameraController != null &&
+                                !_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo
                             ? Colors.white
                             : Colors.white.withOpacity(0.6),
                         size: heightDp! * 20,
                       ),
-                      onPressed: widget.cameraController != null
-                          ? widget.onAudioModeButtonPressed!
-                          : null,
+                      onPressed: _cameraProvider!.cameraState.cameraController != null ? widget.onAudioModeButtonPressed! : null,
                     ),
                     Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          // if (!widget.cameraController!.value.isRecordingVideo)
+                          // if (!_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo)
                           //   Padding(
                           //     padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
                           //     child: Icon(
@@ -278,14 +270,12 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                           //       size: heightDp! * 20,
                           //     ),
                           //   ),
-                          if (widget.cameraController!.value.isRecordingVideo &&
-                              !widget.cameraController!.value.isRecordingPaused)
+                          if (_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo &&
+                              !_cameraProvider!.cameraState.cameraController!.value.isRecordingPaused)
                             GestureDetector(
                               onTap: pauseVideoRecording,
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: widthDp! * 10,
-                                    vertical: heightDp! * 5),
+                                padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
                                 child: Icon(
                                   Icons.pause_circle_outline_outlined,
                                   size: heightDp! * 20,
@@ -293,14 +283,12 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                                 ),
                               ),
                             ),
-                          if (widget.cameraController!.value.isRecordingVideo &&
-                              widget.cameraController!.value.isRecordingPaused)
+                          if (_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo &&
+                              _cameraProvider!.cameraState.cameraController!.value.isRecordingPaused)
                             GestureDetector(
                               onTap: resumeVideoRecording,
                               child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: widthDp! * 10,
-                                    vertical: heightDp! * 5),
+                                padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
                                 child: Icon(
                                   Icons.play_circle_outline_outlined,
                                   size: heightDp! * 20,
@@ -312,16 +300,12 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                             animation: animation!,
                             builder: (context, child) {
                               return Opacity(
-                                opacity: (widget.cameraController!.value
-                                            .isRecordingVideo &&
-                                        !widget.cameraController!.value
-                                            .isRecordingPaused)
+                                opacity: (_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo &&
+                                        !_cameraProvider!.cameraState.cameraController!.value.isRecordingPaused)
                                     ? 1 - animation!.value
                                     : 0,
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: widthDp! * 10,
-                                      vertical: heightDp! * 5),
+                                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
                                   child: Icon(
                                     Icons.fiber_manual_record,
                                     size: heightDp! * 20,
@@ -331,9 +315,8 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
                               );
                             },
                           ),
-                          Text(videoRecorderTxt,
-                              style: TextStyle(
-                                  fontSize: fontSp! * 14, color: Colors.white)),
+                          Text(videoRecorderTxt, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
+                          SizedBox(width: widthDp! * 5),
                         ],
                       ),
                     ),
@@ -345,68 +328,5 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
         ],
       );
     });
-
-    // return Consumer<CameraProvider>(builder: (context, cameraProvider, _) {
-    //   return Container(
-    //     width: deviceWidth,
-    //     color: Colors.black.withOpacity(0.7),
-    //     child: Column(
-    //       children: [
-    //         Row(
-    //           children: <Widget>[
-    //             // IconButton(
-    //             //   icon: Icon(
-    //             //     Icons.fiber_manual_record,
-    //             //     size: heightDp! * 20,
-    //             //     color: widget.cameraController!.value.isRecordingVideo ? Colors.grey.withOpacity(0.6) : Colors.red,
-    //             //   ),
-    //             //   onPressed: widget.cameraController!.value.isRecordingVideo ? null : startVideoRecording,
-    //             // ),
-    //             IconButton(
-    //               icon: widget.cameraController != null && widget.cameraController!.value.isRecordingPaused
-    //                   ? Icon(
-    //                       Icons.play_arrow,
-    //                       size: heightDp! * 20,
-    //                       color: widget.cameraController!.value.isRecordingVideo ? Colors.white : Colors.grey,
-    //                     )
-    //                   : Icon(
-    //                       Icons.pause,
-    //                       size: heightDp! * 20,
-    //                       color: widget.cameraController!.value.isRecordingVideo ? Colors.white : Colors.grey,
-    //                     ),
-    //               onPressed: widget.cameraController != null &&
-    //                       widget.cameraController!.value.isInitialized &&
-    //                       widget.cameraController!.value.isRecordingVideo
-    //                   ? (widget.cameraController!.value.isRecordingPaused)
-    //                       ? resumeVideoRecording
-    //                       : pauseVideoRecording
-    //                   : null,
-    //             ),
-    //             // IconButton(
-    //             //   icon: Icon(
-    //             //     Icons.stop,
-    //             //     size: heightDp! * 20,
-    //             //     color: widget.cameraController!.value.isRecordingVideo ? Colors.white : Colors.grey,
-    //             //   ),
-    //             //   onPressed: widget.cameraController != null &&
-    //             //           widget.cameraController!.value.isInitialized &&
-    //             //           widget.cameraController!.value.isRecordingVideo
-    //             //       ? stopVideoRecording
-    //             //       : null,
-    //             // ),
-    //             Expanded(
-    //               child: Row(
-    //                 mainAxisAlignment: MainAxisAlignment.center,
-    //                 children: [
-    //                   Text(videoRecorderTxt, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
-    //                 ],
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // });
   }
 }

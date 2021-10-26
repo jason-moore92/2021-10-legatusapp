@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import "package:equatable/equatable.dart";
 import 'package:legatus/Models/address_model.dart';
 // import 'package:legatus/Models/MediaModel.dart';

@@ -16,22 +16,10 @@ class CameraToggleWidget extends StatelessWidget {
     @required this.onPressHandler,
   }) : super(key: key);
 
-  /// Responsive design variables
-  double? deviceWidth;
-  double? deviceHeight;
-  double? widthDp;
-  double? heightDp;
-  double? fontSp;
-  ///////////////////////////////
-
   @override
   Widget build(BuildContext context) {
     /// Responsive design variables
-    deviceWidth = 1.sw;
-    deviceHeight = 1.sh;
-    widthDp = ScreenUtil().setWidth(1);
-    heightDp = ScreenUtil().setWidth(1);
-    fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
+    double heightDp = ScreenUtil().setWidth(1);
     ///////////////////////////////
 
     Widget? backWidget;
@@ -39,8 +27,7 @@ class CameraToggleWidget extends StatelessWidget {
     Widget? externalWidgdet;
     bool isAvailable = true;
 
-    isAvailable =
-        !(cameraController != null && cameraController!.value.isRecordingVideo);
+    isAvailable = !(cameraController != null && cameraController!.value.isRecordingVideo);
 
     for (var i = 0; i < cameras!.length; i++) {
       switch (cameras![i].lensDirection) {
@@ -49,7 +36,7 @@ class CameraToggleWidget extends StatelessWidget {
             icon: Icon(
               Icons.camera_front_outlined,
               color: isAvailable ? Colors.white : Colors.white.withOpacity(0.6),
-              size: heightDp! * 20,
+              size: heightDp * 20,
             ),
             onPressed: !isAvailable
                 ? null
@@ -63,7 +50,7 @@ class CameraToggleWidget extends StatelessWidget {
             icon: Icon(
               Icons.camera_rear_outlined,
               color: isAvailable ? Colors.white : Colors.white.withOpacity(0.6),
-              size: heightDp! * 20,
+              size: heightDp * 20,
             ),
             onPressed: !isAvailable
                 ? null
@@ -77,7 +64,7 @@ class CameraToggleWidget extends StatelessWidget {
             icon: Icon(
               Icons.switch_camera,
               color: isAvailable ? Colors.white : Colors.white.withOpacity(0.5),
-              size: heightDp! * 20,
+              size: heightDp * 20,
             ),
             onPressed: !isAvailable
                 ? null
@@ -94,7 +81,7 @@ class CameraToggleWidget extends StatelessWidget {
         icon: Icon(
           Icons.camera_rear_outlined,
           color: Colors.transparent,
-          size: heightDp! * 20,
+          size: heightDp * 20,
         ),
         onPressed: null,
       );

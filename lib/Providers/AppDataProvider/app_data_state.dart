@@ -9,7 +9,8 @@ class AppDataState extends Equatable {
   final String? message;
   final String? contextName;
   final SettingsModel? settingsModel;
-  final PersistentTabController? bottomTabController;
+  // final PersistentTabController? bottomTabController;
+  final int? bottomIndex;
   final Map<String, dynamic>? androidInfo;
   final Map<String, dynamic>? iosInfo;
 
@@ -18,7 +19,8 @@ class AppDataState extends Equatable {
     @required this.message,
     @required this.contextName,
     @required this.settingsModel,
-    @required this.bottomTabController,
+    @required this.bottomIndex,
+    // @required this.bottomTabController,
     @required this.androidInfo,
     @required this.iosInfo,
   });
@@ -29,7 +31,8 @@ class AppDataState extends Equatable {
       message: "",
       contextName: "",
       settingsModel: SettingsModel(),
-      bottomTabController: PersistentTabController(),
+      bottomIndex: 0,
+      // bottomTabController: PersistentTabController(),
       androidInfo: null,
       iosInfo: null,
     );
@@ -40,7 +43,8 @@ class AppDataState extends Equatable {
     String? message,
     String? contextName,
     SettingsModel? settingsModel,
-    PersistentTabController? bottomTabController,
+    // PersistentTabController? bottomTabController,
+    int? bottomIndex,
     Map<String, dynamic>? androidInfo,
     Map<String, dynamic>? iosInfo,
   }) {
@@ -49,7 +53,8 @@ class AppDataState extends Equatable {
       message: message ?? this.message,
       contextName: contextName ?? this.contextName,
       settingsModel: settingsModel ?? this.settingsModel,
-      bottomTabController: bottomTabController ?? this.bottomTabController,
+      // bottomTabController: bottomTabController ?? this.bottomTabController,
+      bottomIndex: bottomIndex ?? this.bottomIndex,
       androidInfo: androidInfo ?? this.androidInfo,
       iosInfo: iosInfo ?? this.iosInfo,
     );
@@ -60,7 +65,8 @@ class AppDataState extends Equatable {
     String? message,
     String? contextName,
     SettingsModel? settingsModel,
-    PersistentTabController? bottomTabController,
+    int? bottomIndex,
+    // PersistentTabController? bottomTabController,
     Map<String, dynamic>? androidInfo,
     Map<String, dynamic>? iosInfo,
   }) {
@@ -69,7 +75,8 @@ class AppDataState extends Equatable {
       message: message,
       contextName: contextName,
       settingsModel: settingsModel,
-      bottomTabController: bottomTabController,
+      bottomIndex: bottomIndex,
+      // bottomTabController: bottomTabController,
       androidInfo: androidInfo,
       iosInfo: iosInfo,
     );
@@ -81,7 +88,8 @@ class AppDataState extends Equatable {
       "message": message,
       "contextName": contextName,
       "settingsModel": settingsModel!.toJson(),
-      "bottomTabController": bottomTabController,
+      "bottomIndex": bottomIndex,
+      // "bottomTabController": bottomTabController,
       "androidInfo": androidInfo,
       "iosInfo": iosInfo,
     };
@@ -92,7 +100,8 @@ class AppDataState extends Equatable {
         progressState!,
         message!,
         settingsModel!,
-        bottomTabController!,
+        // bottomTabController!,
+        bottomIndex!,
       ];
 
   @override

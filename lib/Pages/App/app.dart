@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:hive_flutter/hive_flutter.dart';
-import 'package:legatus/Pages/Dialogs/index.dart';
-// import 'package:legatus/Pages/Dialogs/normal_dialog.dart';
+import 'package:legatus/Pages/BottomNavbar/index.dart';
 import 'package:legatus/Pages/SplashPage/splash_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:legatus/Providers/index.dart';
@@ -16,8 +14,7 @@ import 'fallback_cupertino.dart';
 
 class App extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-      GlobalKey<ScaffoldMessengerState>();
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +28,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MediaPlayProvider()),
       ],
       child: ScreenUtilInit(
-        designSize: Size(ResponsiveDesignSettings.mobileDesignWidth,
-            ResponsiveDesignSettings.mobileDesignHeight),
+        designSize: Size(ResponsiveDesignSettings.mobileDesignWidth, ResponsiveDesignSettings.mobileDesignHeight),
         builder: () {
           return MaterialApp(
             navigatorKey: navigatorKey,
@@ -56,12 +52,7 @@ class App extends StatelessWidget {
               return StreamBuilder<BridgeState>(
                 stream: BridgeProvider().getStream(),
                 builder: (context, snapshot) {
-                  if (snapshot.data != null) {
-                    print(snapshot.data!.event);
-                  }
-                  if (snapshot.hasData &&
-                      snapshot.data != null &&
-                      snapshot.data!.event == "log_out") {
+                  if (snapshot.hasData && snapshot.data != null && snapshot.data!.event == "log_out") {
                     BridgeProvider().update(
                       BridgeState(
                         event: "init",
@@ -71,21 +62,30 @@ class App extends StatelessWidget {
                       ),
                     );
 
-                    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                      AuthProvider.of(navigatorKey.currentContext!)
-                          .logout(context)
-                          .then((value) {
-                        try {
-                          FailedDialog.show(
-                            navigatorKey.currentContext!,
-                            text: snapshot.data!.data!["message"] ??
-                                "Your account logout",
-                          );
-                        } catch (e) {
-                          print(e);
-                        }
-                      });
-                    });
+                    WidgetsBinding.instance!.addPostFrameCallback(
+                      (timeStamp) async {
+                        await AuthProvider.of(navigatorKey.currentContext!).logout(context);
+                        // try {
+                        //   FailedDialog.show(
+                        //     navigatorKey.currentContext!,
+                        //     text: snapshot.data!.data!["message"] ?? "Your account logout",
+                        //   );
+                        // } catch (e) {
+                        //   print(e);
+                        // }
+                        // AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(2);
+                        AppDataProvider.of(context).setAppDataState(
+                          AppDataProvider.of(context).appDataState.update(bottomIndex: 2),
+                          isNotifiable: false,
+                        );
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => BottomNavbar(),
+                            ),
+                            (route) => false);
+                      },
+                    );
                   }
                   return child!;
                 },
