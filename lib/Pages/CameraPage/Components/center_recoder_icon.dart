@@ -38,10 +38,10 @@ class CenterRecorderIcon extends StatelessWidget {
         onTap: () async {
           if (cameraProvider.cameraState.isShowVideoRecoderPanel!) {
             if (!cameraController!.value.isRecordingVideo) {
-              await onNewCameraSelected!(
-                cameraController!.description,
-                AppDataProvider.of(context).appDataState.settingsModel!.videoResolution!,
-              );
+              // await onNewCameraSelected!(
+              //   cameraController!.description,
+              //   AppDataProvider.of(context).appDataState.settingsModel!.videoResolution!,
+              // );
               WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
                 cameraProvider.setCameraState(
                   cameraProvider.cameraState.update(

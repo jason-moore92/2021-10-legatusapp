@@ -15,6 +15,7 @@ class PictureIcon extends StatelessWidget {
   final LocalReportModel? localReportModel;
   final NativeDeviceOrientation? orientation;
   final Function()? onTakePictureButtonPressed;
+  final Function(CameraDescription, int)? onNewCameraSelected;
 
   const PictureIcon({
     Key? key,
@@ -22,6 +23,7 @@ class PictureIcon extends StatelessWidget {
     @required this.localReportModel,
     @required this.orientation,
     @required this.onTakePictureButtonPressed,
+    @required this.onNewCameraSelected,
   }) : super(key: key);
 
   @override
@@ -64,8 +66,34 @@ class PictureIcon extends StatelessWidget {
                 color: enable ? Colors.white : Colors.white.withOpacity(0.6),
                 size: heightDp * 30,
               ),
-              onPressed: null,
-              // onPressed: enable ? onTakePictureButtonPressed : null,
+              onPressed: cameraProvider.cameraState.isShowVideoRecoderPanel! || cameraProvider.cameraState.isShowAudioRecoderPanel!
+                  ? () async {
+                      cameraProvider.setCameraState(
+                        cameraProvider.cameraState.update(
+                          isShowVideoRecoderPanel: false,
+                          isShowAudioRecoderPanel: false,
+                          videoRecordStatus: "stopped",
+                          audioRecordStatus: "stopped",
+                          isAudioRecord: false,
+                          isVideoRecord: false,
+                        ),
+                        isNotifiable: false,
+                      );
+
+                      if (!cameraProvider.cameraState.isPhotoResolution!) {
+                        cameraProvider.setCameraState(
+                          cameraProvider.cameraState.update(
+                            isPhotoResolution: true,
+                          ),
+                          isNotifiable: false,
+                        );
+                        await onNewCameraSelected!(
+                          cameraController!.description,
+                          AppDataProvider.of(context).appDataState.settingsModel!.photoResolution!,
+                        );
+                      }
+                    }
+                  : null,
             ),
             Positioned(
               child: Column(

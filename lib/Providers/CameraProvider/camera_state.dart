@@ -14,6 +14,7 @@ class CameraState extends Equatable {
   final bool? isShowAudioRecoderPanel;
   final bool? changedCameraResolution;
   final CameraController? cameraController;
+  final bool? isPhotoResolution;
 
   CameraState({
     @required this.progressState,
@@ -26,6 +27,7 @@ class CameraState extends Equatable {
     @required this.isShowAudioRecoderPanel,
     @required this.changedCameraResolution,
     @required this.cameraController,
+    @required this.isPhotoResolution,
   });
 
   factory CameraState.init() {
@@ -40,6 +42,7 @@ class CameraState extends Equatable {
       isShowAudioRecoderPanel: false,
       changedCameraResolution: true,
       cameraController: null,
+      isPhotoResolution: true,
     );
   }
 
@@ -54,6 +57,7 @@ class CameraState extends Equatable {
     bool? isShowAudioRecoderPanel,
     bool? changedCameraResolution,
     CameraController? cameraController,
+    bool? isPhotoResolution,
   }) {
     return CameraState(
       progressState: progressState ?? this.progressState,
@@ -66,6 +70,7 @@ class CameraState extends Equatable {
       isShowAudioRecoderPanel: isShowAudioRecoderPanel ?? this.isShowAudioRecoderPanel,
       changedCameraResolution: changedCameraResolution ?? this.changedCameraResolution,
       cameraController: cameraController ?? this.cameraController,
+      isPhotoResolution: isPhotoResolution ?? this.isPhotoResolution,
     );
   }
 
@@ -80,6 +85,7 @@ class CameraState extends Equatable {
     bool? isShowAudioRecoderPanel,
     bool? changedCameraResolution,
     CameraController? cameraController,
+    bool? isPhotoResolution,
   }) {
     return copyWith(
       progressState: progressState,
@@ -92,6 +98,7 @@ class CameraState extends Equatable {
       isShowAudioRecoderPanel: isShowAudioRecoderPanel,
       changedCameraResolution: changedCameraResolution,
       cameraController: cameraController,
+      isPhotoResolution: isPhotoResolution,
     );
   }
 
@@ -106,6 +113,7 @@ class CameraState extends Equatable {
       "isShowVideoRecoderPanel": isShowVideoRecoderPanel,
       "isShowAudioRecoderPanel": isShowAudioRecoderPanel,
       "changedCameraResolution": changedCameraResolution,
+      "isPhotoResolution": isPhotoResolution,
     };
   }
 
@@ -120,6 +128,7 @@ class CameraState extends Equatable {
         isShowVideoRecoderPanel!,
         isShowAudioRecoderPanel!,
         changedCameraResolution!,
+        isPhotoResolution!,
       ];
 
   @override

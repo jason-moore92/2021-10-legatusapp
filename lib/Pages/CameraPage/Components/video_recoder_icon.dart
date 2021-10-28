@@ -14,12 +14,14 @@ class VideoRecorderIcon extends StatelessWidget {
   final CameraController? cameraController;
   final LocalReportModel? localReportModel;
   final NativeDeviceOrientation? orientation;
+  final Function(CameraDescription, int)? onNewCameraSelected;
 
   const VideoRecorderIcon({
     Key? key,
     @required this.cameraController,
     @required this.localReportModel,
     @required this.orientation,
+    @required this.onNewCameraSelected,
   }) : super(key: key);
 
   @override
@@ -62,17 +64,33 @@ class VideoRecorderIcon extends StatelessWidget {
                 size: heightDp * 30,
               ),
               onPressed: enable
-                  ? () {
-                      cameraProvider.setCameraState(
-                        cameraProvider.cameraState.update(
-                          isShowVideoRecoderPanel: !cameraProvider.cameraState.isShowVideoRecoderPanel!,
-                          isShowAudioRecoderPanel: false,
-                          videoRecordStatus: "stopped",
-                          audioRecordStatus: "stopped",
-                          isAudioRecord: false,
-                          isVideoRecord: false,
-                        ),
-                      );
+                  ? () async {
+                      if (!cameraProvider.cameraState.isShowVideoRecoderPanel!) {
+                        cameraProvider.setCameraState(
+                          cameraProvider.cameraState.update(
+                            isShowVideoRecoderPanel: !cameraProvider.cameraState.isShowVideoRecoderPanel!,
+                            isShowAudioRecoderPanel: false,
+                            videoRecordStatus: "stopped",
+                            audioRecordStatus: "stopped",
+                            isAudioRecord: false,
+                            isVideoRecord: false,
+                          ),
+                          isNotifiable: false,
+                        );
+
+                        if (cameraProvider.cameraState.isPhotoResolution!) {
+                          cameraProvider.setCameraState(
+                            cameraProvider.cameraState.update(
+                              isPhotoResolution: false,
+                            ),
+                            isNotifiable: false,
+                          );
+                          await onNewCameraSelected!(
+                            cameraController!.description,
+                            AppDataProvider.of(context).appDataState.settingsModel!.videoResolution!,
+                          );
+                        }
+                      }
                     }
                   : null,
             ),

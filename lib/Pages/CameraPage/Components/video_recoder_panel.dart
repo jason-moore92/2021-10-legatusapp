@@ -189,6 +189,8 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTicker
             await widget.keicyProgressDialog!.show();
 
             widget.videoSaveHandler!(file, _milliseconds);
+            _milliseconds = 0;
+            setState(() {});
           }
           showInSnackBar('Video recorded to ${file.path}');
         }
@@ -270,19 +272,19 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTicker
                           //       size: heightDp! * 20,
                           //     ),
                           //   ),
-                          if (_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo &&
-                              !_cameraProvider!.cameraState.cameraController!.value.isRecordingPaused)
-                            GestureDetector(
-                              onTap: pauseVideoRecording,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
-                                child: Icon(
-                                  Icons.pause_circle_outline_outlined,
-                                  size: heightDp! * 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                          // if (_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo &&
+                          //     !_cameraProvider!.cameraState.cameraController!.value.isRecordingPaused)
+                          //   GestureDetector(
+                          //     onTap: pauseVideoRecording,
+                          //     child: Container(
+                          //       padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
+                          //       child: Icon(
+                          //         Icons.pause_circle_outline_outlined,
+                          //         size: heightDp! * 20,
+                          //         color: Colors.white,
+                          //       ),
+                          //     ),
+                          //   ),
                           if (_cameraProvider!.cameraState.cameraController!.value.isRecordingVideo &&
                               _cameraProvider!.cameraState.cameraController!.value.isRecordingPaused)
                             GestureDetector(

@@ -502,11 +502,11 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         FailedDialog.show(context, text: "Created video media and update local report error");
       }
 
-      _cameraProvider!.setCameraState(
-        _cameraProvider!.cameraState.update(
-          isShowVideoRecoderPanel: false,
-        ),
-      );
+      // _cameraProvider!.setCameraState(
+      //   _cameraProvider!.cameraState.update(
+      //     isShowVideoRecoderPanel: false,
+      //   ),
+      // );
     } catch (e) {
       print(e);
 
@@ -514,7 +514,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       FailedDialog.show(context, text: "Creating video media error");
     }
 
-    onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
+    // onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
   }
 
   @override
@@ -971,6 +971,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                 localReportModel: _localReportModel,
                 orientation: orientation,
                 onTakePictureButtonPressed: _onTakePictureButtonPressed,
+                onNewCameraSelected: onNewCameraSelected,
               ),
 
               ///
@@ -993,6 +994,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                 cameraController: cameraController,
                 localReportModel: _localReportModel,
                 orientation: orientation,
+                onNewCameraSelected: onNewCameraSelected,
               ),
             ],
           ),

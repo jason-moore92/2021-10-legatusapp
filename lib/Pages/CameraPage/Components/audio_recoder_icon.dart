@@ -64,16 +64,18 @@ class AudioRecorderIcon extends StatelessWidget {
               disabledColor: Colors.white.withOpacity(0.6),
               onPressed: enable
                   ? () {
-                      cameraProvider.setCameraState(
-                        cameraProvider.cameraState.update(
-                          isShowAudioRecoderPanel: !cameraProvider.cameraState.isShowAudioRecoderPanel!,
-                          isShowVideoRecoderPanel: false,
-                          videoRecordStatus: "stopped",
-                          audioRecordStatus: "stopped",
-                          isAudioRecord: false,
-                          isVideoRecord: false,
-                        ),
-                      );
+                      if (!cameraProvider.cameraState.isShowAudioRecoderPanel!) {
+                        cameraProvider.setCameraState(
+                          cameraProvider.cameraState.update(
+                            isShowAudioRecoderPanel: !cameraProvider.cameraState.isShowAudioRecoderPanel!,
+                            isShowVideoRecoderPanel: false,
+                            videoRecordStatus: "stopped",
+                            audioRecordStatus: "stopped",
+                            isAudioRecord: false,
+                            isVideoRecord: false,
+                          ),
+                        );
+                      }
                     }
                   : null,
             ),

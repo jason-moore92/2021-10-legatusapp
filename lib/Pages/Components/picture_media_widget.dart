@@ -317,7 +317,7 @@ class _GallaryPageState extends State<GallaryPage> {
       ),
       body: Swiper(
         itemCount: medias.length,
-        pagination: SwiperPagination(),
+        pagination: SwiperPagination(builder: SwiperPagination.rect),
         loop: false,
         index: index,
         control: SwiperControl(color: Colors.white),
