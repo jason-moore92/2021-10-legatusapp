@@ -3,6 +3,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:legatus/Providers/index.dart';
 
 class CameraToggleWidget extends StatelessWidget {
   final CameraController? cameraController;
@@ -27,7 +28,10 @@ class CameraToggleWidget extends StatelessWidget {
     Widget? externalWidgdet;
     bool isAvailable = true;
 
-    isAvailable = !(cameraController != null && cameraController!.value.isRecordingVideo);
+    isAvailable = cameraController != null &&
+        !cameraController!.value.isRecordingVideo &&
+        !CameraProvider.of(context).cameraState.isVideoRecord! &&
+        !CameraProvider.of(context).cameraState.isAudioRecord!;
 
     for (var i = 0; i < cameras!.length; i++) {
       switch (cameras![i].lensDirection) {

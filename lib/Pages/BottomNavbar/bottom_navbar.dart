@@ -169,9 +169,19 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
           bottomNavigationBar: BottomNavigationBar(
             elevation: 1,
             onTap: (value) {
-              appDataProvider.setAppDataState(
-                appDataProvider.appDataState.update(bottomIndex: value),
-              );
+              if (value != appDataProvider.appDataState.bottomIndex) {
+                appDataProvider.setAppDataState(
+                  appDataProvider.appDataState.update(bottomIndex: value),
+                );
+                if (value == 0) {
+                  PlanningProvider.of(context).setPlanningState(
+                    PlanningProvider.of(context).planningState.update(
+                          progressState: 1,
+                        ),
+                  );
+                  PlanningProvider.of(context).getPlanningList();
+                }
+              }
             },
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.white.withOpacity(0.6),
