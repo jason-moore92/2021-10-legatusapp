@@ -66,22 +66,32 @@ class LocalReportApiProvider {
     try {
       await initHiveObject();
 
+      await Future.delayed(Duration(seconds: 1));
+
       int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportIdStr = "${reportDateTime}_$createAt";
 
-      /// store local report
-      localReportsBox!.put(reportIdStr, localReportModel);
-
-      /// update local reportsIds
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
-      reportIds!.add(reportIdStr);
-      reportIds.sort(sortReportIdHandler);
-      localReportIdsBox!.put("ids", reportIds);
 
-      viewLocalReportData();
+      /// if check reportid is override,
+      if (!reportIds!.contains(reportIdStr)) {
+        /// store local report
+        localReportsBox!.put(reportIdStr, localReportModel);
 
-      return {"success": true};
+        /// update local reportsIds
+        reportIds.add(reportIdStr);
+        reportIds.sort(sortReportIdHandler);
+        localReportIdsBox!.put("ids", reportIds);
+
+        viewLocalReportData();
+        return {"success": true};
+      } else {
+        return {
+          "success": false,
+          "message": "This local report is created already",
+        };
+      }
     } catch (e) {
       return {"success": false};
     }
@@ -90,6 +100,8 @@ class LocalReportApiProvider {
   static Future<Map<String, dynamic>> getLocalReportModel({@required LocalReportModel? localReportModel}) async {
     try {
       await initHiveObject();
+
+      await Future.delayed(Duration(seconds: 1));
 
       int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
@@ -135,6 +147,8 @@ class LocalReportApiProvider {
   }) async {
     try {
       await initHiveObject();
+
+      await Future.delayed(Duration(seconds: 1));
 
       List<dynamic>? orderList = [];
 
@@ -194,9 +208,12 @@ class LocalReportApiProvider {
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
       String reportIdStr = "${reportDateTime}_$createAt";
 
+      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+
       /// if updated local report, delete old local report;
       if (oldReportIdStr != null && oldReportIdStr != reportIdStr) {
-        localReportsBox!.delete(oldReportIdStr);
+        await localReportsBox!.delete(oldReportIdStr);
+        reportIds!.remove(oldReportIdStr);
         viewLocalReportData();
       }
 
@@ -204,9 +221,7 @@ class LocalReportApiProvider {
       localReportsBox!.put(reportIdStr, localReportModel);
 
       /// update local reportIds
-      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
-      reportIds!.remove(oldReportIdStr);
-      reportIds.add(reportIdStr);
+      reportIds!.add(reportIdStr);
       reportIds.sort(sortReportIdHandler);
       localReportIdsBox!.put("ids", reportIds);
 
@@ -221,6 +236,8 @@ class LocalReportApiProvider {
   static Future<LocalReportModel?> getLocalReportModelByReportId({int? reportId}) async {
     try {
       await initHiveObject();
+
+      await Future.delayed(Duration(seconds: 1));
 
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
 
@@ -246,6 +263,8 @@ class LocalReportApiProvider {
   static Future<Map<String, dynamic>> getLocalReportList({@required int? limit, int page = 0}) async {
     try {
       await initHiveObject();
+
+      await Future.delayed(Duration(seconds: 1));
 
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
       List<LocalReportModel> reportModelList = [];
@@ -300,6 +319,8 @@ class LocalReportApiProvider {
     try {
       await initHiveObject();
 
+      await Future.delayed(Duration(seconds: 1));
+
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
       List<LocalReportModel> reportModelList = [];
 
@@ -343,6 +364,8 @@ class LocalReportApiProvider {
     try {
       await initHiveObject();
 
+      await Future.delayed(Duration(seconds: 1));
+
       ///
       int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
       int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
@@ -370,6 +393,8 @@ class LocalReportApiProvider {
 
     try {
       await initHiveObject();
+
+      await Future.delayed(Duration(seconds: 1));
 
       dynamic modeValue = appSettingsBox!.get("develop_mode");
       String url;
