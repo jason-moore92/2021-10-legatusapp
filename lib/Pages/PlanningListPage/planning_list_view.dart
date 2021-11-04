@@ -67,6 +67,13 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
       );
     }
 
+    _planningProvider!.setPlanningState(
+      _planningProvider!.planningState.update(
+        progressState: 0,
+      ),
+      isNotifiable: false,
+    );
+
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _planningProvider!.addListener(_planningProviderListener);
       if (_planningProvider!.planningState.progressState == 0 && AuthProvider.of(context).authState.loginState == LoginState.IsLogin) {

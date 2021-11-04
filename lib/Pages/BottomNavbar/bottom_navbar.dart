@@ -174,12 +174,16 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
                   appDataProvider.appDataState.update(bottomIndex: value),
                 );
                 if (value == 0) {
-                  PlanningProvider.of(context).setPlanningState(
-                    PlanningProvider.of(context).planningState.update(
-                          progressState: 1,
-                        ),
-                  );
-                  PlanningProvider.of(context).getPlanningList();
+                  // if (PlanningProvider.of(context).planningState.progressState == 0 &&
+                  //     AuthProvider.of(context).authState.loginState == LoginState.IsLogin) {
+                  // if (AuthProvider.of(context).authState.loginState == LoginState.IsLogin) {
+                  //   PlanningProvider.of(context).setPlanningState(
+                  //     PlanningProvider.of(context).planningState.update(
+                  //           progressState: 1,
+                  //         ),
+                  //   );
+                  //   PlanningProvider.of(context).getPlanningList();
+                  // }
                 }
               }
             },
