@@ -437,13 +437,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   }
 
   Future<bool> _updateLocalReport(LocalReportModel localReportModel) async {
-    String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel.createdAt).toString();
-    int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-      dateString: "${localReportModel.date} ${localReportModel.time}",
-    )!;
     var result = await LocalReportApiProvider.update(
       localReportModel: localReportModel,
-      oldReportIdStr: "${reportDateTime}_$createdAt",
+      oldReportIdStr: "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}",
     );
     LocalReportListProvider.of(context).setLocalReportListState(
       LocalReportListProvider.of(context).localReportListState.update(

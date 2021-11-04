@@ -8,25 +8,21 @@ import 'package:provider/provider.dart';
 import 'index.dart';
 
 class LocalReportProvider extends ChangeNotifier {
-  static LocalReportProvider of(BuildContext context, {bool listen = false}) =>
-      Provider.of<LocalReportProvider>(context, listen: listen);
+  static LocalReportProvider of(BuildContext context, {bool listen = false}) => Provider.of<LocalReportProvider>(context, listen: listen);
 
   LocalReportState _localReportState = LocalReportState.init();
   LocalReportState get localReportState => _localReportState;
 
-  void setLocalReportState(LocalReportState localReportState,
-      {bool isNotifiable = true}) {
+  void setLocalReportState(LocalReportState localReportState, {bool isNotifiable = true}) {
     if (_localReportState != localReportState) {
       _localReportState = localReportState;
       if (isNotifiable) notifyListeners();
     }
   }
 
-  Future<int> createLocalReport(
-      {@required LocalReportModel? localReportModel}) async {
+  Future<int> createLocalReport({@required LocalReportModel? localReportModel}) async {
     try {
-      var result = await LocalReportApiProvider.create(
-          localReportModel: localReportModel);
+      var result = await LocalReportApiProvider.create(localReportModel: localReportModel);
 
       if (result["success"]) {
         _localReportState = _localReportState.update(
@@ -83,8 +79,7 @@ class LocalReportProvider extends ChangeNotifier {
     return _localReportState.progressState!;
   }
 
-  Future<int> deleteLocalReport(
-      {@required LocalReportModel? localReportModel}) async {
+  Future<int> deleteLocalReport({@required LocalReportModel? localReportModel}) async {
     try {
       List<MediaModel>? medias = [];
       for (var i = 0; i < localReportModel!.medias!.length; i++) {
@@ -116,8 +111,7 @@ class LocalReportProvider extends ChangeNotifier {
         return _localReportState.progressState!;
       }
 
-      var result = await LocalReportApiProvider.delete(
-          localReportModel: localReportModel);
+      var result = await LocalReportApiProvider.delete(localReportModel: localReportModel);
 
       if (result["success"]) {
         _localReportState = _localReportState.update(
@@ -141,14 +135,11 @@ class LocalReportProvider extends ChangeNotifier {
     return _localReportState.progressState!;
   }
 
-  Future<void> uploadMedials(
-      {@required LocalReportModel? localReportModel,
-      bool isNotifiable = true}) async {
+  Future<void> uploadMedials({@required LocalReportModel? localReportModel, bool isNotifiable = true}) async {
     try {
       /// if this report model is new
       if (_localReportState.isUploading! && localReportModel!.reportId == 0) {
-        var result = await LocalReportApiProvider.storeReport(
-            localReportModel: localReportModel);
+        var result = await LocalReportApiProvider.storeReport(localReportModel: localReportModel);
         if (!result["success"]) {
           _localReportState = _localReportState.update(
             progressState: -1,
@@ -160,18 +151,12 @@ class LocalReportProvider extends ChangeNotifier {
         }
 
         /// if store Report is success, update local roport
-        String createdAt = KeicyDateTime.convertDateStringToMilliseconds(
-                dateString: localReportModel.createdAt)
-            .toString();
-        int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-          dateString: "${localReportModel.date} ${localReportModel.time}",
-        )!;
 
         localReportModel.reportId = result["data"]["report_id"];
 
         var result1 = await LocalReportApiProvider.update(
           localReportModel: localReportModel,
-          oldReportIdStr: "${reportDateTime}_$createdAt",
+          oldReportIdStr: "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}",
         );
 
         if (!result1["success"]) {
@@ -207,11 +192,8 @@ class LocalReportProvider extends ChangeNotifier {
         );
         notifyListeners();
 
-        var result =
-            await LocalMediaApiProvider.uploadMedia(mediaModel: mediaModel);
-        if (result["success"] &&
-            result["statusCode"] == 200 &&
-            result["data"]["presigned_url"] != null) {
+        var result = await LocalMediaApiProvider.uploadMedia(mediaModel: mediaModel);
+        if (result["success"] && result["statusCode"] == 200 && result["data"]["presigned_url"] != null) {
           mediaModel.state = "uploading";
           _localReportState = _localReportState.update(
             progressState: 3,

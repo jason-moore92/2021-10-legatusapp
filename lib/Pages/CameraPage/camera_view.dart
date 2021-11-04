@@ -224,14 +224,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-        dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
-      )!;
-
       var progressState = await _localReportProvider!.updateLocalReport(
         localReportModel: _localReportModel,
-        oldReportIdStr: "${reportDateTime}_$createdAt",
+        oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
       await _keicyProgressDialog!.hide();
@@ -318,14 +313,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-        dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
-      )!;
-
       var progressState = await _localReportProvider!.updateLocalReport(
         localReportModel: _localReportModel,
-        oldReportIdStr: "${reportDateTime}_$createdAt",
+        oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
       await _keicyProgressDialog!.hide();
@@ -398,14 +388,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-        dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
-      )!;
-
       var progressState = await _localReportProvider!.updateLocalReport(
         localReportModel: _localReportModel,
-        oldReportIdStr: "${reportDateTime}_$createdAt",
+        oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
       await _keicyProgressDialog!.hide();
@@ -481,14 +466,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
 
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-        dateString: "${_localReportModel!.date} ${_localReportModel!.time}",
-      )!;
-
       var progressState = await _localReportProvider!.updateLocalReport(
         localReportModel: _localReportModel,
-        oldReportIdStr: "${reportDateTime}_$createdAt",
+        oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
       await _keicyProgressDialog!.hide();

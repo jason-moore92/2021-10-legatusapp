@@ -26,13 +26,10 @@ class LocalMediaListProvider extends ChangeNotifier {
 
   Future<void> getLocalMediaList() async {
     if (_localMediaListState.localLocalReportModel!.medias!.length != _localMediaListState.localLocalReportModel!.orderList!.length) {
-      String createdAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localMediaListState.localLocalReportModel!.createdAt).toString();
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-        dateString: "${_localMediaListState.localLocalReportModel!.date} ${_localMediaListState.localLocalReportModel!.time}",
-      )!;
       var result = await LocalReportApiProvider.update(
         localReportModel: _localMediaListState.localLocalReportModel,
-        oldReportIdStr: "${reportDateTime}_$createdAt",
+        oldReportIdStr:
+            "${_localMediaListState.localLocalReportModel!.date} ${_localMediaListState.localLocalReportModel!.time}_${_localMediaListState.localLocalReportModel!.createdAt}",
       );
 
       _localMediaListState = _localMediaListState.update(localLocalReportModel: result["data"]);

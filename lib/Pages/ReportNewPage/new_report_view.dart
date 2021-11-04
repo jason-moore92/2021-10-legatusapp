@@ -302,13 +302,9 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
         localReportModel: _localReportModel,
       );
     } else {
-      String reportId = KeicyDateTime.convertDateStringToMilliseconds(dateString: _localReportModel!.createdAt).toString();
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(
-        dateString: "${widget.localReportModel!.date} ${widget.localReportModel!.time}",
-      )!;
       _localReportProvider!.updateLocalReport(
         localReportModel: _localReportModel,
-        oldReportIdStr: "${reportDateTime}_$reportId",
+        oldReportIdStr: "${widget.localReportModel!.date} ${widget.localReportModel!.time}_${_localReportModel!.createdAt}",
       );
     }
   }

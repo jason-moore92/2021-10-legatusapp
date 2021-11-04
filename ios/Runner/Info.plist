@@ -29,6 +29,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -47,9 +49,9 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Legatus doit avoir accès à la caméra de cet appareil pour réaliser vos photos de constatations.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Legatus doit avoir accès au micro de cet appareil lors du fonctionnement de l'application pour enregistrer vos dictées audios.</string>
@@ -74,8 +76,6 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>
 </plist>

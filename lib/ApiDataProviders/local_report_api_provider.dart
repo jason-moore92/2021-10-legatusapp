@@ -68,9 +68,7 @@ class LocalReportApiProvider {
 
       await Future.delayed(Duration(seconds: 1));
 
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
-      String reportIdStr = "${reportDateTime}_$createAt";
+      String reportIdStr = "${localReportModel!.date} ${localReportModel.time}_${localReportModel.createdAt}";
 
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
 
@@ -82,6 +80,8 @@ class LocalReportApiProvider {
         /// update local reportsIds
         reportIds.add(reportIdStr);
         reportIds.sort(sortReportIdHandler);
+
+        ///
         localReportIdsBox!.put("ids", reportIds);
 
         viewLocalReportData();
@@ -103,9 +103,7 @@ class LocalReportApiProvider {
 
       await Future.delayed(Duration(seconds: 1));
 
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
-      String reportIdStr = "${reportDateTime}_$createAt";
+      String reportIdStr = "${localReportModel!.date} ${localReportModel.time}_${localReportModel.createdAt}";
 
       LocalReportModel? newReport = localReportsBox!.get(reportIdStr);
       if (newReport != null) {
@@ -122,18 +120,18 @@ class LocalReportApiProvider {
   }
 
   static int sortReportIdHandler(dynamic a, dynamic b) {
-    int aReportDateTime = int.parse(a.toString().split("_").first);
-    int aCreateDateTime = int.parse(a.toString().split("_").last);
+    DateTime? aReportDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: a.toString().split("_").first);
+    DateTime? aCreateDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: a.toString().split("_").last);
 
-    int bReportDateTime = int.parse(b.toString().split("_").first);
-    int bCreateDateTime = int.parse(b.toString().split("_").last);
+    DateTime? bReportDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: b.toString().split("_").first);
+    DateTime? bCreateDateTime = KeicyDateTime.convertDateStringToDateTime(dateString: b.toString().split("_").last);
 
-    if (aReportDateTime > bReportDateTime) {
+    if (aReportDateTime!.difference(bReportDateTime!).inMilliseconds > 0) {
       return -1;
-    } else if (aReportDateTime < bReportDateTime) {
+    } else if (aReportDateTime.difference(bReportDateTime).inMilliseconds < 0) {
       return 1;
     } else {
-      if (aCreateDateTime >= bCreateDateTime) {
+      if (aCreateDateTime!.difference(bCreateDateTime!).inMilliseconds >= 0) {
         return -1;
       } else {
         return 1;
@@ -204,28 +202,27 @@ class LocalReportApiProvider {
       }
 
       ///
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
-      String reportIdStr = "${reportDateTime}_$createAt";
-
-      List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+      String reportIdStr = "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}";
 
       /// if updated local report, delete old local report;
       if (oldReportIdStr != null && oldReportIdStr != reportIdStr) {
         await localReportsBox!.delete(oldReportIdStr);
+
+        List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
+
         reportIds!.remove(oldReportIdStr);
+        viewLocalReportData();
+
+        /// update local reportIds
+        reportIds.add(reportIdStr);
+        reportIds.sort(sortReportIdHandler);
+        localReportIdsBox!.put("ids", reportIds);
+
         viewLocalReportData();
       }
 
       /// update local report;
       localReportsBox!.put(reportIdStr, localReportModel);
-
-      /// update local reportIds
-      reportIds!.add(reportIdStr);
-      reportIds.sort(sortReportIdHandler);
-      localReportIdsBox!.put("ids", reportIds);
-
-      viewLocalReportData();
 
       return {"success": true, "data": localReportModel};
     } catch (e) {
@@ -367,9 +364,7 @@ class LocalReportApiProvider {
       await Future.delayed(Duration(seconds: 1));
 
       ///
-      int createAt = KeicyDateTime.convertDateStringToMilliseconds(dateString: localReportModel!.createdAt)!;
-      int reportDateTime = KeicyDateTime.convertDateStringToMilliseconds(dateString: "${localReportModel.date} ${localReportModel.time}")!;
-      String reportIdStr = "${reportDateTime}_$createAt";
+      String reportIdStr = "${localReportModel!.date} ${localReportModel.time}_${localReportModel.createdAt}";
 
       ///
       localReportsBox!.delete(reportIdStr);
