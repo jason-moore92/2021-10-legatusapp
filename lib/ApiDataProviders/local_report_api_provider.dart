@@ -66,8 +66,6 @@ class LocalReportApiProvider {
     try {
       await initHiveObject();
 
-      await Future.delayed(Duration(seconds: 1));
-
       String reportIdStr = "${localReportModel!.date} ${localReportModel.time}_${localReportModel.createdAt}";
 
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
@@ -100,8 +98,6 @@ class LocalReportApiProvider {
   static Future<Map<String, dynamic>> getLocalReportModel({@required LocalReportModel? localReportModel}) async {
     try {
       await initHiveObject();
-
-      await Future.delayed(Duration(seconds: 1));
 
       String reportIdStr = "${localReportModel!.date} ${localReportModel.time}_${localReportModel.createdAt}";
 
@@ -145,8 +141,6 @@ class LocalReportApiProvider {
   }) async {
     try {
       await initHiveObject();
-
-      await Future.delayed(Duration(seconds: 1));
 
       List<dynamic>? orderList = [];
 
@@ -234,8 +228,6 @@ class LocalReportApiProvider {
     try {
       await initHiveObject();
 
-      await Future.delayed(Duration(seconds: 1));
-
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
 
       for (var i = 0; i < reportIds!.length; i++) {
@@ -260,8 +252,6 @@ class LocalReportApiProvider {
   static Future<Map<String, dynamic>> getLocalReportList({@required int? limit, int page = 0}) async {
     try {
       await initHiveObject();
-
-      await Future.delayed(Duration(seconds: 1));
 
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
       List<LocalReportModel> reportModelList = [];
@@ -316,8 +306,6 @@ class LocalReportApiProvider {
     try {
       await initHiveObject();
 
-      await Future.delayed(Duration(seconds: 1));
-
       List<dynamic>? reportIds = localReportIdsBox!.get("ids", defaultValue: []);
       List<LocalReportModel> reportModelList = [];
 
@@ -361,8 +349,6 @@ class LocalReportApiProvider {
     try {
       await initHiveObject();
 
-      await Future.delayed(Duration(seconds: 1));
-
       ///
       String reportIdStr = "${localReportModel!.date} ${localReportModel.time}_${localReportModel.createdAt}";
 
@@ -388,8 +374,6 @@ class LocalReportApiProvider {
 
     try {
       await initHiveObject();
-
-      await Future.delayed(Duration(seconds: 1));
 
       dynamic modeValue = appSettingsBox!.get("develop_mode");
       String url;

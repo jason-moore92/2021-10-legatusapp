@@ -499,7 +499,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.close_outlined, color: Colors.white, size: heightDp * 25),
+                    icon: Icon(Icons.close, color: Colors.white, size: heightDp * 25),
                     onPressed: () async {
                       await _onStopPlay();
                       Navigator.of(context).pop();
@@ -507,67 +507,69 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
                   ),
                 ],
               ),
-              RotatedBox(
-                quarterTurns: _videoPlayerController!.value.aspectRatio < 1 ? 0 : 1,
-                child: Stack(
-                  children: [
-                    Center(
-                      child: AspectRatio(
-                        aspectRatio: _videoPlayerController!.value.aspectRatio,
-                        child: VideoPlayer(_videoPlayerController!),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: heightDp * 5,
-                      child: Container(
-                        width: _videoPlayerController!.value.aspectRatio < 1 ? deviceWidth : deviceHeight - statusbarHeight,
-                        padding: EdgeInsets.symmetric(horizontal: widthDp * 10),
-                        color: Colors.black.withOpacity(0.3),
-                        child: Row(
-                          children: [
-                            SizedBox(width: widthDp * 5),
-                            if (!_videoPlayerController!.value.isPlaying)
-                              GestureDetector(
-                                onTap: _onStartPlay,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: widthDp * 3, vertical: heightDp * 5),
-                                  child: Icon(Icons.play_arrow, size: heightDp * 25, color: Colors.white),
-                                ),
-                              ),
-                            if (_videoPlayerController!.value.isPlaying)
-                              GestureDetector(
-                                onTap: _onStopPlay,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 5),
-                                  child: Icon(Icons.stop, size: heightDp * 25, color: Colors.white),
-                                ),
-                              ),
-                            Expanded(
-                              child: Container(
-                                height: heightDp * 20,
-                                child: Slider(
-                                  value: min(_sliderCurrentPosition, _maxDuration),
-                                  min: 0.0,
-                                  max: _maxDuration,
-                                  activeColor: Colors.white,
-                                  inactiveColor: Colors.white,
-                                  onChanged: (value) async {
-                                    await _seekToPlayer(value.toInt());
-                                  },
-                                  divisions: _maxDuration == 0.0 ? 1 : _maxDuration.toInt(),
-                                ),
-                              ),
-                            ),
-                            Text(
-                              "$currentTimeString/$maxTimeString",
-                              style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
-                            ),
-                            SizedBox(width: widthDp * 5),
-                          ],
+              Expanded(
+                child: RotatedBox(
+                  quarterTurns: _videoPlayerController!.value.aspectRatio < 1 ? 0 : 1,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: AspectRatio(
+                          aspectRatio: _videoPlayerController!.value.aspectRatio,
+                          child: VideoPlayer(_videoPlayerController!),
                         ),
                       ),
-                    ),
-                  ],
+                      Positioned(
+                        bottom: heightDp * 0,
+                        child: Container(
+                          width: _videoPlayerController!.value.aspectRatio < 1 ? deviceWidth : deviceHeight - statusbarHeight,
+                          padding: EdgeInsets.symmetric(horizontal: widthDp * 10),
+                          color: Colors.black.withOpacity(0.5),
+                          child: Row(
+                            children: [
+                              SizedBox(width: widthDp * 5),
+                              if (!_videoPlayerController!.value.isPlaying)
+                                GestureDetector(
+                                  onTap: _onStartPlay,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: widthDp * 3, vertical: heightDp * 5),
+                                    child: Icon(Icons.play_arrow, size: heightDp * 25, color: Colors.white),
+                                  ),
+                                ),
+                              if (_videoPlayerController!.value.isPlaying)
+                                GestureDetector(
+                                  onTap: _onStopPlay,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 5),
+                                    child: Icon(Icons.stop, size: heightDp * 25, color: Colors.white),
+                                  ),
+                                ),
+                              Expanded(
+                                child: Container(
+                                  height: heightDp * 20,
+                                  child: Slider(
+                                    value: min(_sliderCurrentPosition, _maxDuration),
+                                    min: 0.0,
+                                    max: _maxDuration,
+                                    activeColor: Colors.white,
+                                    inactiveColor: Colors.white,
+                                    onChanged: (value) async {
+                                      await _seekToPlayer(value.toInt());
+                                    },
+                                    divisions: _maxDuration == 0.0 ? 1 : _maxDuration.toInt(),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "$currentTimeString/$maxTimeString",
+                                style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                              ),
+                              SizedBox(width: widthDp * 5),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
