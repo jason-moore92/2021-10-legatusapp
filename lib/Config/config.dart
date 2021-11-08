@@ -1,5 +1,5 @@
 class AppConfig {
-  static String dsn = "https://8d58ffcb46fe47639a25f2ac530c84da@o889269.ingest.sentry.io/5838633";
+  static String dsn = "https://e7575cc6d8aa11eb96e8dafdda227419@o889269.ingest.sentry.io/5838633";
   static String phoneCountrycode = "+330";
   static String testApiBaseUrl = "https://webapp.legatus.fr/api/mobile/v1";
   static String productionApiBaseUrl = "https://app.legatus.fr/api/mobile/v1";
