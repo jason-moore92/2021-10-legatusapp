@@ -44,7 +44,7 @@ dependencies:
   card_swiper: ^1.0.4
 
   ####################
-  camera: ^0.8.1+4
+  camera: ^0.9.4+3
   native_device_orientation:
   video_player: ^2.1.10
   path: ^1.8.0

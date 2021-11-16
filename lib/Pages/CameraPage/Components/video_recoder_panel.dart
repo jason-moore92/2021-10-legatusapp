@@ -179,10 +179,10 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTicker
     }
 
     try {
-      _timer!.cancel();
       controller!.stop();
       controller!.reset();
       _cameraProvider!.cameraState.cameraController!.stopVideoRecording().then((XFile? file) async {
+        _timer!.cancel();
         if (mounted) setState(() {});
         if (file != null) {
           if (widget.videoSaveHandler != null) {
