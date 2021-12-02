@@ -10,7 +10,7 @@ import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-class UploadReportDialog {
+class EditionConnectionDialog {
   static show(
     BuildContext context, {
     double? borderRadius,
@@ -41,11 +41,11 @@ class UploadReportDialog {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.cloud_upload_outlined, size: heightDp * 20, color: Colors.black),
+                    Icon(Icons.history_edu, size: heightDp * 20, color: Colors.black),
                     SizedBox(width: heightDp * 10),
                     Text(
-                      LocaleKeys.UploadDialogString_title.tr(),
-                      style: Theme.of(context).textTheme.caption,
+                      "Externaliser la frappe",
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(fontWeight: FontWeight.bold, color: Colors.black),
                     ),
                   ],
                 ),
@@ -53,7 +53,7 @@ class UploadReportDialog {
                 ///
                 SizedBox(height: heightDp * 10),
                 Text(
-                  "${LocaleKeys.UploadDialogString_content1.tr()}",
+                  "Vous devez vous connecter à votre compte Legatus pour bénéficier de l’externalisation de la frappe de vos constats :",
                   style: Theme.of(context).textTheme.caption,
                 ),
 
@@ -71,7 +71,7 @@ class UploadReportDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content2.tr()}",
+                        "vos dictées transcrites par le prestataire de votre choix",
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -92,7 +92,7 @@ class UploadReportDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content3.tr()}",
+                        "vos modèles et matrices respectés",
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -134,28 +134,7 @@ class UploadReportDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content5.tr()}",
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                    ),
-                  ],
-                ),
-
-                ///
-                SizedBox(height: heightDp * 5),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "  ∙  ",
-                      style: Theme.of(context).textTheme.caption!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        "${LocaleKeys.UploadDialogString_content6.tr()}",
+                        "les positions des transcriptions et photos conservées",
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),

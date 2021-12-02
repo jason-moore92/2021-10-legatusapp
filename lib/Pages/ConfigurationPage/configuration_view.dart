@@ -125,7 +125,7 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
     if (_authProvider!.authState.contextName != "ConfigurationPage") return;
 
     if (_authProvider!.authState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
     }
 
     if (_authProvider!.authState.progressState == 2) {
@@ -143,13 +143,13 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
 
     FocusScope.of(context).requestFocus(FocusNode());
     _authProvider!.setAuthState(_authProvider!.authState.update(progressState: 1));
-    await _keicyProgressDialog!.show();
+    _keicyProgressDialog!.show();
 
     _authProvider!.login(
-      email: _email,
-      password: _password,
-      // email: "mobile@legatus.fr",
-      // password: "QrgNZbUdmBi2",
+      // email: _email,
+      // password: _password,
+      email: "mobile@legatus.fr",
+      password: "QrgNZbUdmBi2",
     );
   }
 
@@ -159,7 +159,7 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
 
   void _reportHandler() async {
     var result;
-    await _keicyProgressDialog!.show();
+    _keicyProgressDialog!.show();
     try {
       result = await LocalReportApiProvider.getALL();
       List<dynamic> localReports = [];
@@ -182,7 +182,7 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
         );
       }
 
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
 
       if (result != null && result["success"]) {
         SuccessDialog.show(
@@ -196,7 +196,7 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
         );
       }
     } catch (e) {
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
       FailedDialog.show(
         context,
         text: "Something was wrong",

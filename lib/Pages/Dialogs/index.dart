@@ -7,3 +7,4 @@ export './media_info_dialog.dart';
 export './normal_dialog.dart';
 export './journal_panel_dialog.dart';
 export './upload_report_dialog.dart';
+export './edition_connection_dialog.dart';

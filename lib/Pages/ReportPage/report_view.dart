@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:legatus/Pages/AddEditoinPage/index.dart';
 import 'package:legatus/Pages/App/index.dart';
+import 'package:legatus/Pages/BottomNavbar/index.dart';
 import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legatus/ApiDataProviders/index.dart';
 import 'package:legatus/Config/config.dart';
@@ -199,7 +201,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     if (_localReportProvider!.localReportState.contextName != "ReportPage") return;
 
     if (_localReportProvider!.localReportState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
     }
 
     if (_localReportProvider!.localReportState.progressState == 2) {
@@ -299,12 +301,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
   Future<void> _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
     LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
-    await _keicyProgressDialog!.show();
+    _keicyProgressDialog!.show();
     try {
       // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
       //   Map<String, int> result = await FileHelpers.dirStatSync();
       //   if ((result["size"]! + (note!.length * 2) ~/ 1024) > 1250 * 1024) {
-      //     await _keicyProgressDialog!.hide();
+      //     _keicyProgressDialog!.hide();
       //     NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
       //     return;
       //   }
@@ -318,7 +320,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         );
 
         if (path == null) {
-          await _keicyProgressDialog!.hide();
+          _keicyProgressDialog!.hide();
           FailedDialog.show(context, text: "Creating new note file path occur error");
           return;
         }
@@ -326,7 +328,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
 
         if (textFile == null) {
-          await _keicyProgressDialog!.hide();
+          _keicyProgressDialog!.hide();
           FailedDialog.show(context, text: "Creating new note file occur error");
           return;
         }
@@ -364,7 +366,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               await oldTextFile.delete();
             } catch (e) {
               print(e);
-              await _keicyProgressDialog!.hide();
+              _keicyProgressDialog!.hide();
               FailedDialog.show(context, text: "Deleting old note file occur error");
               return;
             }
@@ -372,7 +374,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             File? textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
 
             if (textFile == null) {
-              await _keicyProgressDialog!.hide();
+              _keicyProgressDialog!.hide();
               FailedDialog.show(context, text: "Creating update note file occur error");
               return;
             }
@@ -396,7 +398,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
       bool success = await _updateLocalReport(localReportModel);
 
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
 
       if (success) {
         var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
@@ -509,12 +511,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   }
 
   void _journalHandler(String email) async {
-    await _keicyProgressDialog!.show();
+    _keicyProgressDialog!.show();
     var result = await JournalApiProvider.sendJournal(
       email: email,
       localMediaModel: _localReportModel,
     );
-    await _keicyProgressDialog!.hide();
+    _keicyProgressDialog!.hide();
 
     print(result);
     if (result["success"]) {
@@ -543,12 +545,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 ),
             isNotifiable: false,
           );
-
           Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => ConfigurationPage()),
-            (route) => false,
-          );
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => BottomNavbar(),
+              ),
+              (route) => false);
         },
       );
     } else {
@@ -562,6 +564,95 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       Wakelock.enable();
       _localReportProvider!.uploadMedials(localReportModel: LocalReportModel.copy(_localReportModel!));
     }
+  }
+
+  void _editionHandler() async {
+    /// upload count
+    if (nonUploadedCount != 0) {
+      FailedDialog.show(
+        context,
+        text: "Vous devez uploader tous les médias du constat pour externaliser la frappe.",
+      );
+      return;
+    }
+
+    /// if the user is not login
+    if (AuthProvider.of(context).authState.loginState == LoginState.IsNotLogin) {
+      EditionConnectionDialog.show(
+        context,
+        callback: () {
+          AppDataProvider.of(context).setAppDataState(
+            AppDataProvider.of(context).appDataState.update(
+                  bottomIndex: 2,
+                ),
+            isNotifiable: false,
+          );
+
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute<void>(
+                builder: (BuildContext context) => BottomNavbar(),
+              ),
+              (route) => false);
+        },
+      );
+      return;
+    }
+
+    /// if the user is login
+    _keicyProgressDialog = KeicyProgressDialog.of(
+      context,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      layout: Layout.Column,
+      padding: EdgeInsets.zero,
+      width: heightDp! * 120,
+      height: heightDp! * 120,
+      progressWidget: Container(
+        width: heightDp! * 120,
+        height: heightDp! * 120,
+        padding: EdgeInsets.all(heightDp! * 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(heightDp! * 10),
+        ),
+        child: SpinKitFadingCircle(
+          color: AppColors.primayColor,
+          size: heightDp! * 80,
+        ),
+      ),
+      message: "",
+    );
+    _keicyProgressDialog!.show();
+    DateTime startDate = DateTime.now();
+    var result = await EditionApiProvider.getEditionOptions(
+      reportId: _localReportModel!.reportId,
+    );
+    _keicyProgressDialog!.hide();
+
+    /// if failed
+    if (!result["success"]) {
+      FailedDialog.show(
+        context,
+        text: result["message"],
+      );
+      return;
+    }
+
+    /// if timeout is more than 60s
+    if (DateTime.now().difference(startDate).inSeconds > 60) {
+      FailedDialog.show(
+        context,
+        text: "La requête a dépassé la limite de 60 secondes. Vérifiez votre connexion ou réessayez plus tard",
+      );
+      return;
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => AddEditionPage(editions: result["data"]),
+      ),
+    );
   }
 
   @override
@@ -645,7 +736,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
   Widget _appBarWidget() {
     double iconSize = heightDp! * 25;
-    double iconPadding = widthDp! * 10;
+    double iconPadding = widthDp! * 7;
 
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 38;
@@ -745,12 +836,24 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 ),
               ),
               GestureDetector(
+                onTap: _editionHandler,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: iconPadding),
+                  child: Icon(
+                    Icons.history_edu,
+                    size: iconSize,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              GestureDetector(
                 onTap: _editHandler,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: iconPadding),
                   child: Icon(Icons.info_outline_rounded, size: iconSize, color: Colors.white),
                 ),
               ),
+              SizedBox(width: widthDp! * 5),
             ],
           ),
         ],

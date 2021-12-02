@@ -177,7 +177,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   }
 
   void _noteHandler(String note) async {
-    await _keicyProgressDialog!.show();
+    _keicyProgressDialog!.show();
     try {
       String? path = await FileHelpers.getFilePath(
         mediaType: MediaType.note,
@@ -186,7 +186,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       if (path == null) {
-        await _keicyProgressDialog!.hide();
+        _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating new note file path occur error");
         return;
       }
@@ -194,7 +194,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
 
       if (textFile == null) {
-        await _keicyProgressDialog!.hide();
+        _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating new note file occur error");
         return;
       }
@@ -229,7 +229,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {
@@ -259,7 +259,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       if (path == null) {
-        await _keicyProgressDialog!.hide();
+        _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating image file path occur error");
         return;
       }
@@ -267,7 +267,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? _imageFile = await FileHelpers.writeImageFile(imageFile: imageFile, path: path);
 
       if (_imageFile == null) {
-        await _keicyProgressDialog!.hide();
+        _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating image file occur error");
         return;
       }
@@ -318,7 +318,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {
@@ -332,7 +332,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       }
     } catch (e) {
       print(e);
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
       FailedDialog.show(context, text: "Creating picture media error");
       return;
     }
@@ -347,7 +347,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       if (path == null) {
-        await _keicyProgressDialog!.hide();
+        _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating audio file path occur error");
         return;
       }
@@ -355,7 +355,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? _audioFile = await FileHelpers.writeAudioFile(tmpPath: tmpPath, path: path);
 
       if (_audioFile == null) {
-        await _keicyProgressDialog!.hide();
+        _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating audio file occur error");
         return;
       }
@@ -393,7 +393,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {
@@ -405,7 +405,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       }
     } catch (e) {
       print(e);
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
       FailedDialog.show(context, text: "Creating audio media error");
     }
 
@@ -425,7 +425,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       if (path == null) {
-        await _keicyProgressDialog!.hide();
+        _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating video file occur error");
         return;
       }
@@ -433,7 +433,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? _videoFile = await FileHelpers.writeVideoFile(videoFile: videoFile, path: path);
 
       if (_videoFile == null) {
-        await _keicyProgressDialog!.hide();
+        _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating video file occur error");
         return;
       }
@@ -471,7 +471,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {
@@ -490,7 +490,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     } catch (e) {
       print(e);
 
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
       FailedDialog.show(context, text: "Creating video media error");
     }
 
@@ -1040,12 +1040,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     if (cameraController!.value.isTakingPicture) return;
 
     try {
-      await _keicyProgressDialog!.show();
+      _keicyProgressDialog!.show();
       XFile file = await cameraController!.takePicture();
       _pictureHandler(imageFile: file);
       if (file.path != "") showInSnackBar('Picture saved to ${file.path}');
     } on CameraException catch (e) {
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
       _showCameraException(e);
       return;
     }

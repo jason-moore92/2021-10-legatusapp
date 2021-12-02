@@ -24,6 +24,7 @@ class NormalAskDialog {
             style: TextStyle(fontSize: fontSp * 18, color: Colors.black),
             textAlign: TextAlign.start,
           ),
+          titlePadding: title == "" ? EdgeInsets.zero : null,
           content: Text(
             content,
             style: TextStyle(fontSize: fontSp * 14, color: Colors.black),

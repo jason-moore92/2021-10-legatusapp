@@ -244,7 +244,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     if (_localReportProvider!.localReportState.contextName != "NewReportPage") return;
 
     if (_localReportProvider!.localReportState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
-      await _keicyProgressDialog!.hide();
+      _keicyProgressDialog!.hide();
     }
 
     if (_localReportProvider!.localReportState.progressState == 2) {
@@ -254,12 +254,14 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
           "localReportModel": _localReportModel,
         };
         _isNew = false;
-        Navigator.of(context).pop(_updatedStatus);
-        Navigator.of(context).push(
+
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (BuildContext context) => ReportPage(localReportModel: _localReportModel),
           ),
+          result: _updatedStatus,
         );
+        return;
       } else {
         SuccessDialog.show(
           context,
@@ -272,8 +274,8 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
           "isUpdated": true,
           "localReportModel": _localReportModel,
         };
+        return;
       }
-      setState(() {});
     } else if (_localReportProvider!.localReportState.progressState == -1) {
       FailedDialog.show(context, text: _localReportProvider!.localReportState.message!);
     }
@@ -285,7 +287,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
     FocusScope.of(context).requestFocus(FocusNode());
 
-    await _keicyProgressDialog!.show();
+    _keicyProgressDialog!.show();
 
     if (_isNew!) {
       _localReportModel!.uuid = Uuid().v4();
