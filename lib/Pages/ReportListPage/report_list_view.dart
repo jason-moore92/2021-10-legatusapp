@@ -1,11 +1,7 @@
-// import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:geolocator/geolocator.dart';
 import 'package:legatus/Config/config.dart';
-// import 'package:legatus/Helpers/index.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
@@ -19,7 +15,6 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-// import 'package:uuid/uuid.dart';
 
 class ReportListView extends StatefulWidget {
   ReportListView({Key? key}) : super(key: key);

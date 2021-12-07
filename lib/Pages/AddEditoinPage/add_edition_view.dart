@@ -272,7 +272,7 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
                     maxLines: 4,
                     textInputAction: TextInputAction.newline,
                     keyboardType: TextInputType.multiline,
-                    validator: (input) => input.isEmpty ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(args: ["note"]) : null,
+                    // validator: (input) => input.isEmpty ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(args: ["note"]) : null,
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
                   ),
