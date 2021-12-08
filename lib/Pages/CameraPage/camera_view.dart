@@ -177,7 +177,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   }
 
   void _noteHandler(String note) async {
-    _keicyProgressDialog!.show();
+    // _keicyProgressDialog!.show();
     try {
       String? path = await FileHelpers.getFilePath(
         mediaType: MediaType.note,
@@ -186,7 +186,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       if (path == null) {
-        _keicyProgressDialog!.hide();
+        // _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating new note file path occur error");
         return;
       }
@@ -194,7 +194,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
 
       if (textFile == null) {
-        _keicyProgressDialog!.hide();
+        // _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating new note file occur error");
         return;
       }
@@ -229,7 +229,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      _keicyProgressDialog!.hide();
+      // _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {

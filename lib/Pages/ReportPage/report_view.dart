@@ -301,7 +301,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
   Future<void> _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
     LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
-    _keicyProgressDialog!.show();
+    // _keicyProgressDialog!.show();
     try {
       // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
       //   Map<String, int> result = await FileHelpers.dirStatSync();
@@ -320,7 +320,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         );
 
         if (path == null) {
-          _keicyProgressDialog!.hide();
+          // _keicyProgressDialog!.hide();
           FailedDialog.show(context, text: "Creating new note file path occur error");
           return;
         }
@@ -328,7 +328,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
 
         if (textFile == null) {
-          _keicyProgressDialog!.hide();
+          // _keicyProgressDialog!.hide();
           FailedDialog.show(context, text: "Creating new note file occur error");
           return;
         }
@@ -366,7 +366,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               await oldTextFile.delete();
             } catch (e) {
               print(e);
-              _keicyProgressDialog!.hide();
+              // _keicyProgressDialog!.hide();
               FailedDialog.show(context, text: "Deleting old note file occur error");
               return;
             }
@@ -374,7 +374,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             File? textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
 
             if (textFile == null) {
-              _keicyProgressDialog!.hide();
+              // _keicyProgressDialog!.hide();
               FailedDialog.show(context, text: "Creating update note file occur error");
               return;
             }
@@ -398,7 +398,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
       bool success = await _updateLocalReport(localReportModel);
 
-      _keicyProgressDialog!.hide();
+      // _keicyProgressDialog!.hide();
 
       if (success) {
         var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
