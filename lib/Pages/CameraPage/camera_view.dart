@@ -68,7 +68,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
   LocalReportModel? _localReportModel;
 
-  KeicyProgressDialog? _keicyProgressDialog;
+  // KeicyProgressDialog? _keicyProgressDialog;
   LocalReportProvider? _localReportProvider;
   CameraProvider? _cameraProvider;
   AppDataProvider? _appDataProvider;
@@ -105,29 +105,29 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
     _localReportModel = LocalReportModel.copy(widget.localReportModel!);
 
-    _keicyProgressDialog = KeicyProgressDialog.of(
-      context,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      layout: Layout.Column,
-      padding: EdgeInsets.zero,
-      width: heightDp! * 120,
-      height: heightDp! * 120,
-      progressWidget: Container(
-        width: heightDp! * 120,
-        height: heightDp! * 120,
-        padding: EdgeInsets.all(heightDp! * 20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(heightDp! * 10),
-        ),
-        child: SpinKitFadingCircle(
-          color: AppColors.primayColor,
-          size: heightDp! * 80,
-        ),
-      ),
-      message: "",
-    );
+    // _keicyProgressDialog = KeicyProgressDialog.of(
+    //   context,
+    //   backgroundColor: Colors.transparent,
+    //   elevation: 0,
+    //   layout: Layout.Column,
+    //   padding: EdgeInsets.zero,
+    //   width: heightDp! * 120,
+    //   height: heightDp! * 120,
+    //   progressWidget: Container(
+    //     width: heightDp! * 120,
+    //     height: heightDp! * 120,
+    //     padding: EdgeInsets.all(heightDp! * 20),
+    //     decoration: BoxDecoration(
+    //       color: Colors.white,
+    //       borderRadius: BorderRadius.circular(heightDp! * 10),
+    //     ),
+    //     child: SpinKitFadingCircle(
+    //       color: AppColors.primayColor,
+    //       size: heightDp! * 80,
+    //     ),
+    //   ),
+    //   message: "",
+    // );
     _localReportProvider = LocalReportProvider.of(context);
     _cameraProvider = CameraProvider.of(context);
     _appDataProvider = AppDataProvider.of(context);
@@ -144,8 +144,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.dark, //status bar brigtness
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light, //status bar brigtness
       ));
       setState(() {});
       cameras = await availableCameras();
@@ -162,8 +162,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   void dispose() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: AppColors.primayColor,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.dark, //status bar brigtness
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light, //status bar brigtness
     ));
     WidgetsBinding.instance?.removeObserver(this);
 
@@ -177,7 +177,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
   }
 
   void _noteHandler(String note) async {
-    // _keicyProgressDialog!.show();
+    // await _keicyProgressDialog!.show();
     try {
       String? path = await FileHelpers.getFilePath(
         mediaType: MediaType.note,
@@ -186,7 +186,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       if (path == null) {
-        // _keicyProgressDialog!.hide();
+        // await _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating new note file path occur error");
         return;
       }
@@ -194,7 +194,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
 
       if (textFile == null) {
-        // _keicyProgressDialog!.hide();
+        // await _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating new note file occur error");
         return;
       }
@@ -229,17 +229,27 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      // _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {
           "isUpdated": true,
           "localReportModel": _localReportModel,
         };
-        setState(() {});
+
+        int notesCount = 0;
+
+        for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+          switch (_localReportModel!.medias![i].type) {
+            case MediaType.note:
+              notesCount++;
+              break;
+            default:
+          }
+        }
 
         Fluttertoast.showToast(
-          msg: "Note enregistrée avec succès",
+          msg: "Note n°$notesCount enregistrée",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 1,
@@ -251,6 +261,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     } catch (e) {
       print(e);
     }
+    setState(() {});
   }
 
   void _pictureHandler({@required XFile? imageFile}) async {
@@ -269,7 +280,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       // );
 
       if (path == null) {
-        _keicyProgressDialog!.hide();
+        // await _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating image file path occur error");
         return;
       }
@@ -277,7 +288,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? _imageFile = await FileHelpers.writeImageFile(imageFile: imageFile, path: path);
 
       if (_imageFile == null) {
-        _keicyProgressDialog!.hide();
+        // await _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating image file occur error");
         return;
       }
@@ -328,24 +339,45 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {
           "isUpdated": true,
           "localReportModel": _localReportModel,
         };
-        setState(() {});
+
+        int pictureCount = 0;
+
+        for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+          switch (_localReportModel!.medias![i].type) {
+            case MediaType.picture:
+              pictureCount++;
+              break;
+            default:
+          }
+        }
+
+        Fluttertoast.showToast(
+          msg: "Photographie n°$pictureCount enregistrée",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.greenAccent,
+          fontSize: 16.0,
+        );
       } else {
         FailedDialog.show(context, text: "Created picture media and update local report error");
         return;
       }
     } catch (e) {
       print(e);
-      _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
       FailedDialog.show(context, text: "Creating picture media error");
       return;
     }
+    setState(() {});
   }
 
   void _audioHandler({@required String? tmpPath, @required int? inMilliseconds}) async {
@@ -357,7 +389,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       if (path == null) {
-        _keicyProgressDialog!.hide();
+        // await _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating audio file path occur error");
         return;
       }
@@ -365,7 +397,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? _audioFile = await FileHelpers.writeAudioFile(tmpPath: tmpPath, path: path);
 
       if (_audioFile == null) {
-        _keicyProgressDialog!.hide();
+        // await _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating audio file occur error");
         return;
       }
@@ -403,21 +435,44 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {
           "isUpdated": true,
           "localReportModel": _localReportModel,
         };
+
+        int audioCount = 0;
+
+        for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+          switch (_localReportModel!.medias![i].type) {
+            case MediaType.audio:
+              audioCount++;
+              break;
+            default:
+          }
+        }
+
+        Fluttertoast.showToast(
+          msg: "Dictée n°$audioCount enregistrée",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.greenAccent,
+          fontSize: 16.0,
+        );
       } else {
         FailedDialog.show(context, text: "Created audio media and update local report error");
       }
     } catch (e) {
       print(e);
-      _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
       FailedDialog.show(context, text: "Creating audio media error");
     }
+
+    // setState(() {});
 
     _cameraProvider!.setCameraState(
       _cameraProvider!.cameraState.update(
@@ -435,7 +490,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       if (path == null) {
-        _keicyProgressDialog!.hide();
+        // await _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating video file occur error");
         return;
       }
@@ -443,7 +498,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       File? _videoFile = await FileHelpers.writeVideoFile(videoFile: videoFile, path: path);
 
       if (_videoFile == null) {
-        _keicyProgressDialog!.hide();
+        // await _keicyProgressDialog!.hide();
         FailedDialog.show(context, text: "Creating video file occur error");
         return;
       }
@@ -481,13 +536,34 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         oldReportIdStr: "${_localReportModel!.date} ${_localReportModel!.time}_${_localReportModel!.createdAt}",
       );
 
-      _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
 
       if (progressState == 2) {
         _updatedStatus = {
           "isUpdated": true,
           "localReportModel": _localReportModel,
         };
+
+        int videoCount = 0;
+
+        for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+          switch (_localReportModel!.medias![i].type) {
+            case MediaType.video:
+              videoCount++;
+              break;
+            default:
+          }
+        }
+
+        Fluttertoast.showToast(
+          msg: "Vidéo n°$videoCount enregitrée",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.greenAccent,
+          fontSize: 16.0,
+        );
       } else {
         FailedDialog.show(context, text: "Created video media and update local report error");
       }
@@ -500,9 +576,10 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     } catch (e) {
       print(e);
 
-      _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
       FailedDialog.show(context, text: "Creating video media error");
     }
+    setState(() {});
 
     // onNewCameraSelected(cameraController!.description, _appDataProvider!.appDataState.settingsModel!.photoResolution!);
   }
@@ -625,7 +702,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       },
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Colors.black,
+        // backgroundColor: Colors.black,
         body: Consumer<CameraProvider>(builder: (context, cameraProvider, _) {
           return NativeDeviceOrientationReader(
             useSensor: true,
@@ -674,7 +751,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                               (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp) ? 0 : 1,
                           child: AudioRecoderPanel(
                             scaffoldKey: _scaffoldKey,
-                            keicyProgressDialog: _keicyProgressDialog,
+                            // keicyProgressDialog: _keicyProgressDialog,
                             width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
                                 ? deviceWidth
                                 : _cameraViewHeiht - heightDp! * 130,
@@ -700,7 +777,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                           child: VideoRecoderPanel(
                             scaffoldKey: _scaffoldKey,
                             // cameraController: cameraController,
-                            keicyProgressDialog: _keicyProgressDialog,
+                            // keicyProgressDialog: _keicyProgressDialog,
                             width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
                                 ? deviceWidth
                                 : _cameraViewHeiht - heightDp! * 130,
@@ -726,8 +803,10 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     double angle = 0;
     if (orientation == NativeDeviceOrientation.portraitUp || orientation == NativeDeviceOrientation.portraitUp) {
       angle = 0;
-    } else if (orientation == NativeDeviceOrientation.landscapeLeft || orientation == NativeDeviceOrientation.landscapeRight) {
+    } else if (orientation == NativeDeviceOrientation.landscapeLeft) {
       angle = pi / 2;
+    } else if (orientation == NativeDeviceOrientation.landscapeRight) {
+      angle = -pi / 2;
     }
 
     return Container(
@@ -846,8 +925,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           aspectRatio = cameraController!.value.aspectRatio;
           // xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
           // yScale = 1;
-          if (_cameraOrientation == null || (_cameraOrientation != DeviceOrientation.landscapeRight)) {
-            _cameraOrientation = DeviceOrientation.landscapeRight;
+          if (_cameraOrientation == null || (_cameraOrientation != DeviceOrientation.landscapeLeft)) {
+            _cameraOrientation = DeviceOrientation.landscapeLeft;
             WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
               await cameraController!.lockCaptureOrientation(_cameraOrientation);
               setState(() {});
@@ -1050,12 +1129,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
     if (cameraController!.value.isTakingPicture) return;
 
     try {
-      _keicyProgressDialog!.show();
+      // await _keicyProgressDialog!.show();
       XFile file = await cameraController!.takePicture();
       _pictureHandler(imageFile: file);
       if (file.path != "") showInSnackBar('Picture saved to ${file.path}');
     } on CameraException catch (e) {
-      _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
       _showCameraException(e);
       return;
     }

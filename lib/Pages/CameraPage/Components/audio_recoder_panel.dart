@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 
 class AudioRecoderPanel extends StatefulWidget {
   final GlobalKey<ScaffoldState>? scaffoldKey;
-  final KeicyProgressDialog? keicyProgressDialog;
+  // final KeicyProgressDialog? keicyProgressDialog;
   final String? recoderName;
   final double? width;
   final Function(bool)? recordingStatusCallback;
@@ -25,7 +25,7 @@ class AudioRecoderPanel extends StatefulWidget {
   AudioRecoderPanel({
     Key? key,
     @required this.scaffoldKey,
-    @required this.keicyProgressDialog,
+    // @required this.keicyProgressDialog,
     this.recoderName = "Flutter_sound",
     @required this.width,
     @required this.recordingStatusCallback,
@@ -306,7 +306,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
 
   void stopRecorder() async {
     try {
-      await widget.keicyProgressDialog!.show();
+      // await widget.keicyProgressDialog!.show();
       await _recorderModule.stopRecorder();
       controller!.stop();
       controller!.reset();
@@ -326,7 +326,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
 
       _showInSnackBar("Audio saved in '$_path'");
     } on Exception catch (err) {
-      await widget.keicyProgressDialog!.hide();
+      // await widget.keicyProgressDialog!.hide();
       print('stopRecorder error: $err');
     }
   }

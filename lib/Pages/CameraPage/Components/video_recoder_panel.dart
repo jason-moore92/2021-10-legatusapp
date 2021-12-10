@@ -13,7 +13,7 @@ class VideoRecoderPanel extends StatefulWidget {
     Key? key,
     @required this.scaffoldKey,
     // @required this.cameraController,
-    @required this.keicyProgressDialog,
+    // @required this.keicyProgressDialog,
     @required this.width,
     @required this.videoSaveHandler,
     @required this.onAudioModeButtonPressed,
@@ -21,7 +21,7 @@ class VideoRecoderPanel extends StatefulWidget {
 
   // final CameraController? cameraController;
   final GlobalKey<ScaffoldState>? scaffoldKey;
-  final KeicyProgressDialog? keicyProgressDialog;
+  // final KeicyProgressDialog? keicyProgressDialog;
   final double? width;
   final Function(XFile, int)? videoSaveHandler;
   final Function()? onAudioModeButtonPressed;
@@ -185,7 +185,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTicker
         if (mounted) setState(() {});
         if (file != null) {
           if (widget.videoSaveHandler != null) {
-            await widget.keicyProgressDialog!.show();
+            // await widget.keicyProgressDialog!.show();
 
             widget.videoSaveHandler!(file, _milliseconds);
             _milliseconds = 0;
@@ -195,7 +195,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTicker
         }
       });
     } on CameraException catch (e) {
-      await widget.keicyProgressDialog!.hide();
+      // await widget.keicyProgressDialog!.hide();
       _showCameraException(e);
       return null;
     }

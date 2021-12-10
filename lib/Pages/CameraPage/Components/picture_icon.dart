@@ -33,10 +33,13 @@ class PictureIcon extends StatelessWidget {
 
     return Consumer<CameraProvider>(builder: (context, cameraProvider, _) {
       double angle = 0;
-      if (orientation == NativeDeviceOrientation.portraitUp || orientation == NativeDeviceOrientation.portraitUp) {
+
+      if (orientation == NativeDeviceOrientation.portraitUp || orientation == NativeDeviceOrientation.portraitDown) {
         angle = 0;
-      } else if (orientation == NativeDeviceOrientation.landscapeLeft || orientation == NativeDeviceOrientation.landscapeRight) {
+      } else if (orientation == NativeDeviceOrientation.landscapeLeft) {
         angle = pi / 2;
+      } else if (orientation == NativeDeviceOrientation.landscapeRight) {
+        angle = -pi / 2;
       }
 
       int photosCount = 0;

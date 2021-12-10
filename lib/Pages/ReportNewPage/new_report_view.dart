@@ -244,7 +244,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     if (_localReportProvider!.localReportState.contextName != "NewReportPage") return;
 
     if (_localReportProvider!.localReportState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
-      _keicyProgressDialog!.hide();
+      await _keicyProgressDialog!.hide();
     }
 
     if (_localReportProvider!.localReportState.progressState == 2) {
@@ -287,7 +287,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
     FocusScope.of(context).requestFocus(FocusNode());
 
-    _keicyProgressDialog!.show();
+    await _keicyProgressDialog!.show();
 
     if (_isNew!) {
       _localReportModel!.uuid = Uuid().v4();

@@ -16,6 +16,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_video_info/flutter_video_info.dart';
 
 class VideoMediaWidget extends StatefulWidget {
   final MediaModel? mediaModel;
@@ -58,6 +59,9 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   Timer? uploadTimer;
   double angle = 0;
 
+  FlutterVideoInfo videoInfo = FlutterVideoInfo();
+  VideoData? info;
+
   @override
   void initState() {
     super.initState();
@@ -89,7 +93,8 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
     }
   }
 
-  void _init() {
+  void _init() async {
+    info = await videoInfo.getVideoInfo(widget.mediaModel!.path!);
     _videoPlayerController = VideoPlayerController.file(File(widget.mediaModel!.path!))
       ..initialize().then(
         (_) {
@@ -241,6 +246,10 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
     }
 
     return Consumer<MediaPlayProvider>(builder: (context, mediaPlayProvider, _) {
+      int quarterTurns = 0;
+      if (info!.orientation == 0) {
+        quarterTurns = 2;
+      }
       return GestureDetector(
         onTap: () {
           if (widget.tapHandler != null) {
@@ -275,10 +284,13 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
                 child: Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(heightDp * 0),
-                    child: AspectRatio(
-                      // aspectRatio: (MediaQuery.of(context).size.width - widthDp * 20) / heightDp * 200,
-                      aspectRatio: _videoPlayerController!.value.aspectRatio,
-                      child: VideoPlayer(_videoPlayerController!),
+                    child: RotatedBox(
+                      quarterTurns: quarterTurns,
+                      child: AspectRatio(
+                        // aspectRatio: (MediaQuery.of(context).size.width - widthDp * 20) / heightDp * 200,
+                        aspectRatio: _videoPlayerController!.value.aspectRatio,
+                        child: VideoPlayer(_videoPlayerController!),
+                      ),
                     ),
                   ),
                 ),
@@ -419,6 +431,9 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
   double _sliderCurrentPosition = 0.0;
   // String _playerTxt = '00:00:00';
 
+  FlutterVideoInfo videoInfo = FlutterVideoInfo();
+  VideoData? info;
+
   @override
   void initState() {
     super.initState();
@@ -427,13 +442,15 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.dark, //status bar brigtness
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light, //status bar brigtness
       ));
     });
   }
 
-  void _init() {
+  void _init() async {
+    info = await videoInfo.getVideoInfo(widget.mediaModel!.path!);
+
     _videoPlayerController = VideoPlayerController.file(File(widget.mediaModel!.path!))
       ..initialize().then(
         (_) {
@@ -454,8 +471,8 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
     _videoPlayerController!.dispose();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: AppColors.primayColor,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.dark, //status bar brigtness
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.light, //status bar brigtness
     ));
 
     super.dispose();
@@ -495,17 +512,20 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
           ),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.close, color: Colors.white, size: heightDp * 25),
-                    onPressed: () async {
-                      await _onStopPlay();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
+              Container(
+                height: heightDp * 25,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.close, color: Colors.white, size: heightDp * 25),
+                      onPressed: () async {
+                        await _onStopPlay();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
               ),
               Expanded(
                 child: RotatedBox(
@@ -513,16 +533,19 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
                   child: Stack(
                     children: [
                       Center(
-                        child: AspectRatio(
-                          aspectRatio: _videoPlayerController!.value.aspectRatio,
-                          child: VideoPlayer(_videoPlayerController!),
+                        child: RotatedBox(
+                          quarterTurns: info!.orientation == 0 ? 2 : 0,
+                          child: AspectRatio(
+                            aspectRatio: _videoPlayerController!.value.aspectRatio,
+                            child: VideoPlayer(_videoPlayerController!),
+                          ),
                         ),
                       ),
                       Positioned(
                         bottom: heightDp * 0,
                         child: Container(
-                          width: _videoPlayerController!.value.aspectRatio < 1 ? deviceWidth : deviceHeight - statusbarHeight,
-                          padding: EdgeInsets.symmetric(horizontal: widthDp * 10),
+                          width: _videoPlayerController!.value.aspectRatio < 1 ? deviceWidth : deviceHeight - statusbarHeight - heightDp * 25,
+                          padding: EdgeInsets.symmetric(horizontal: widthDp * 5),
                           color: Colors.black.withOpacity(0.5),
                           child: Row(
                             children: [

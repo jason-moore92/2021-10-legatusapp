@@ -201,7 +201,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     if (_localReportProvider!.localReportState.contextName != "ReportPage") return;
 
     if (_localReportProvider!.localReportState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
-      _keicyProgressDialog!.hide();
+      await _keicyProgressDialog!.hide();
     }
 
     if (_localReportProvider!.localReportState.progressState == 2) {
@@ -301,12 +301,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
   Future<void> _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
     LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
-    // _keicyProgressDialog!.show();
+    // await _keicyProgressDialog!.show();
     try {
       // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
       //   Map<String, int> result = await FileHelpers.dirStatSync();
       //   if ((result["size"]! + (note!.length * 2) ~/ 1024) > 1250 * 1024) {
-      //     _keicyProgressDialog!.hide();
+      //     await _keicyProgressDialog!.hide();
       //     NormalDialog.show(context, content: LocaleKeys.StorageLimitDialogString_content.tr());
       //     return;
       //   }
@@ -320,7 +320,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         );
 
         if (path == null) {
-          // _keicyProgressDialog!.hide();
+          // await _keicyProgressDialog!.hide();
           FailedDialog.show(context, text: "Creating new note file path occur error");
           return;
         }
@@ -328,7 +328,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
 
         if (textFile == null) {
-          // _keicyProgressDialog!.hide();
+          // await _keicyProgressDialog!.hide();
           FailedDialog.show(context, text: "Creating new note file occur error");
           return;
         }
@@ -366,7 +366,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               await oldTextFile.delete();
             } catch (e) {
               print(e);
-              // _keicyProgressDialog!.hide();
+              // await _keicyProgressDialog!.hide();
               FailedDialog.show(context, text: "Deleting old note file occur error");
               return;
             }
@@ -374,7 +374,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             File? textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
 
             if (textFile == null) {
-              // _keicyProgressDialog!.hide();
+              // await _keicyProgressDialog!.hide();
               FailedDialog.show(context, text: "Creating update note file occur error");
               return;
             }
@@ -398,7 +398,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
       bool success = await _updateLocalReport(localReportModel);
 
-      // _keicyProgressDialog!.hide();
+      // await _keicyProgressDialog!.hide();
 
       if (success) {
         var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
@@ -529,12 +529,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   }
 
   void _journalHandler(String email) async {
-    _keicyProgressDialog!.show();
+    await _keicyProgressDialog!.show();
     var result = await JournalApiProvider.sendJournal(
       email: email,
       localMediaModel: _localReportModel,
     );
-    _keicyProgressDialog!.hide();
+    await _keicyProgressDialog!.hide();
 
     print(result);
     if (result["success"]) {
@@ -641,12 +641,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       ),
       message: "",
     );
-    _keicyProgressDialog!.show();
+    await _keicyProgressDialog!.show();
     DateTime startDate = DateTime.now();
     var result = await EditionApiProvider.getEditionOptions(
       reportId: _localReportModel!.reportId,
     );
-    _keicyProgressDialog!.hide();
+    await _keicyProgressDialog!.hide();
 
     /// if failed
     if (!result["success"]) {

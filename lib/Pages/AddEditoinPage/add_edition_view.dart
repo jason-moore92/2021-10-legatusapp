@@ -111,13 +111,13 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
       message: "",
     );
 
-    _keicyProgressDialog!.show();
+    await _keicyProgressDialog!.show();
 
     DateTime startDate = DateTime.now();
 
     var result = await EditionApiProvider.assignEditionJob(jobId: jobId, note: _noteController.text.trim());
 
-    _keicyProgressDialog!.hide();
+    await _keicyProgressDialog!.hide();
 
     /// if timeout is more than 60s
     if (DateTime.now().difference(startDate).inSeconds > 60) {

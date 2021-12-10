@@ -43,6 +43,7 @@ dependencies:
   hive_flutter: ^1.1.0
   card_swiper: ^1.0.4
   fluttertoast: ^8.0.8
+  flutter_video_info: ^1.2.0
 
   ####################
   camera: ^0.9.4+3

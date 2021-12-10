@@ -31,8 +31,10 @@ class NoteIcon extends StatelessWidget {
       double angle = 0;
       if (orientation == NativeDeviceOrientation.portraitUp || orientation == NativeDeviceOrientation.portraitUp) {
         angle = 0;
-      } else if (orientation == NativeDeviceOrientation.landscapeLeft || orientation == NativeDeviceOrientation.landscapeRight) {
+      } else if (orientation == NativeDeviceOrientation.landscapeLeft) {
         angle = pi / 2;
+      } else if (orientation == NativeDeviceOrientation.landscapeRight) {
+        angle = -pi / 2;
       }
 
       int notesCount = 0;

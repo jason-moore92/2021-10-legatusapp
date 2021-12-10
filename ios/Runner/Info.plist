@@ -55,6 +55,8 @@
 	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Legatus doit avoir accès au micro de cet appareil lors du fonctionnement de l'application pour enregistrer vos dictées audios.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Do you wnat to use phto library</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
