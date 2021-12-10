@@ -206,11 +206,11 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTicker
   Widget build(BuildContext context) {
     if (_cameraProvider!.cameraState.cameraController == null) return SizedBox();
 
-    String videoRecorderTxt = "";
+    // String videoRecorderTxt = "";
     // var date = DateTime(2021, 01, 01, 0, 0, 0, _milliseconds);
     var date = DateTime.fromMillisecondsSinceEpoch(_milliseconds, isUtc: true);
     String txt = DateFormat('mm:ss:SS').format(date);
-    videoRecorderTxt = txt.substring(0, 5);
+    // videoRecorderTxt = txt.substring(0, 5);
 
     // String statusString = "";
     if (_cameraProvider!.cameraState.cameraController != null && !_cameraProvider!.cameraState.cameraController!.value.isInitialized) {
@@ -317,8 +317,8 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTicker
                               );
                             },
                           ),
-                          Text(videoRecorderTxt, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
-                          SizedBox(width: widthDp! * 5),
+                          // Text(videoRecorderTxt, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
+                          // SizedBox(width: widthDp! * 5),
                         ],
                       ),
                     ),
