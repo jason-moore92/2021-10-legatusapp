@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legatus/Helpers/file_helpers.dart';
@@ -237,6 +238,15 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           "localReportModel": _localReportModel,
         };
         setState(() {});
+
+        Fluttertoast.showToast(
+            msg: "Note enregistrée avec succès",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     } catch (e) {
       print(e);
@@ -250,13 +260,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         rank: widget.localReportModel!.medias!.length + 1,
         fileType: imageFile!.path.split(".").last,
       );
-      // ignore: unused_local_variable
-      String? thumPath = await FileHelpers.getFilePath(
-        mediaType: "photographie-thum",
-        subDirectory: "vignettes",
-        rank: widget.localReportModel!.medias!.length + 1,
-        fileType: imageFile.path.split(".").last,
-      );
+      // // ignore: unused_local_variable
+      // String? thumPath = await FileHelpers.getFilePath(
+      //   mediaType: "photographie-thum",
+      //   subDirectory: "vignettes",
+      //   rank: widget.localReportModel!.medias!.length + 1,
+      //   fileType: imageFile.path.split(".").last,
+      // );
 
       if (path == null) {
         _keicyProgressDialog!.hide();
@@ -299,16 +309,16 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       mediaModel.type = MediaType.picture;
       mediaModel.uuid = Uuid().v4();
 
-      /// image size
-      Image image = new Image.file(_imageFile);
-      Completer<ui.Image> completer = new Completer<ui.Image>();
-      image.image.resolve(new ImageConfiguration()).addListener(
-            ImageStreamListener((ImageInfo info, bool _) => completer.complete(info.image)),
-          );
-      ui.Image img = await completer.future;
-      mediaModel.width = img.width;
-      mediaModel.height = img.height;
-      /////////////////////////////////
+      // /// image size
+      // Image image = new Image.file(_imageFile);
+      // Completer<ui.Image> completer = new Completer<ui.Image>();
+      // image.image.resolve(new ImageConfiguration()).addListener(
+      //       ImageStreamListener((ImageInfo info, bool _) => completer.complete(info.image)),
+      //     );
+      // ui.Image img = await completer.future;
+      // mediaModel.width = img.width;
+      // mediaModel.height = img.height;
+      // /////////////////////////////////
 
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
       _localReportModel!.medias!.add(mediaModel);
