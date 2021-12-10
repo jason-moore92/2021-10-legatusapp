@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -240,13 +239,14 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         setState(() {});
 
         Fluttertoast.showToast(
-            msg: "Note enregistrée avec succès",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.black,
-            textColor: Colors.white,
-            fontSize: 16.0);
+          msg: "Note enregistrée avec succès",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.greenAccent,
+          fontSize: 16.0,
+        );
       }
     } catch (e) {
       print(e);

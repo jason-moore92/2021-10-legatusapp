@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/http_plus.dart';
-import 'package:legatus/Models/index.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class EditionApiProvider {

@@ -8,8 +8,6 @@ import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
-import 'package:legatus/generated/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class AddEditionView extends StatefulWidget {
   final List<dynamic>? editions;

@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:legatus/Pages/AddEditoinPage/index.dart';
 import 'package:legatus/Pages/App/index.dart';
@@ -20,7 +21,6 @@ import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/CameraPage/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
-import 'package:legatus/Pages/ConfigurationPage/configuration_page.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Pages/ReportNewPage/new_report_page.dart';
 import 'package:legatus/Providers/LocalMediaListProvider/index.dart';
@@ -420,7 +420,16 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         );
 
         String message = isNew ? "Note enregistrée avec succès" : "Note mise à jour avec succès";
-        SuccessDialog.show(context, text: message);
+        // SuccessDialog.show(context, text: message);
+        Fluttertoast.showToast(
+          msg: message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.greenAccent,
+          fontSize: 16.0,
+        );
 
         if (isNew) {
           _onRefresh();
@@ -483,7 +492,16 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     bool success = await _updateLocalReport(localReportModel);
 
     if (success) {
-      SuccessDialog.show(context, text: "Médias supprimés de cet appareil avec succès.");
+      // SuccessDialog.show(context, text: "Médias supprimés de cet appareil avec succès.");
+      Fluttertoast.showToast(
+        msg: "Médias supprimés de cet appareil avec succès.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.greenAccent,
+        fontSize: 16.0,
+      );
       var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
       if (result["success"]) {
         _localReportModel = result["data"];

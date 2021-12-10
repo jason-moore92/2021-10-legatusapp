@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:provider/provider.dart';
@@ -208,8 +207,8 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel> with SingleTicker
 
     // String videoRecorderTxt = "";
     // var date = DateTime(2021, 01, 01, 0, 0, 0, _milliseconds);
-    var date = DateTime.fromMillisecondsSinceEpoch(_milliseconds, isUtc: true);
-    String txt = DateFormat('mm:ss:SS').format(date);
+    // var date = DateTime.fromMillisecondsSinceEpoch(_milliseconds, isUtc: true);
+    // String txt = DateFormat('mm:ss:SS').format(date);
     // videoRecorderTxt = txt.substring(0, 5);
 
     // String statusString = "";

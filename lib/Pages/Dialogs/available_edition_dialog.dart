@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:legatus/Config/config.dart';
-import 'package:legatus/Helpers/custom_url_lancher.dart';
 // import 'package:legatus/Helpers/index.dart';
 // import 'package:legatus/Models/MediaModel.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
@@ -17,7 +15,7 @@ class AvailableEditionDialog {
     double? borderRadius,
     Function? callback,
   }) {
-    double widthDp = ScreenUtil().setWidth(1);
+    // double widthDp = ScreenUtil().setWidth(1);
     double heightDp = ScreenUtil().setWidth(1);
     double deviceHeight = 1.sh;
     // double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;

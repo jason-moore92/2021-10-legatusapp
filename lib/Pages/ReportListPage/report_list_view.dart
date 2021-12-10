@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
@@ -186,11 +187,20 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
   void _deleteLocalReportHandler(LocalReportModel localReportModel) async {
     var progressState = await LocalReportProvider.of(context).deleteLocalReport(localReportModel: localReportModel);
     if (progressState == 2) {
-      SuccessDialog.show(
-        context,
-        text: "Constat supprimé de cet appareil avec succès.",
-        callBack: () {},
+      Fluttertoast.showToast(
+        msg: "Constat supprimé de cet appareil avec succès.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.greenAccent,
+        fontSize: 16.0,
       );
+      // SuccessDialog.show(
+      //   context,
+      //   text: "Constat supprimé de cet appareil avec succès.",
+      //   callBack: () {},
+      // );
       _onRefresh();
     } else {
       FailedDialog.show(context);

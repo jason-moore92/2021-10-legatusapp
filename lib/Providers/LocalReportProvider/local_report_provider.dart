@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:legatus/ApiDataProviders/index.dart';
-import 'package:legatus/Helpers/index.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:provider/provider.dart';
 import 'index.dart';
