@@ -247,7 +247,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
 
     return Consumer<MediaPlayProvider>(builder: (context, mediaPlayProvider, _) {
       int quarterTurns = 0;
-      if (info!.orientation == 0) {
+      if (info!.orientation == 0 && Platform.isAndroid) {
         quarterTurns = 2;
       }
       return GestureDetector(
@@ -534,7 +534,7 @@ class _VideoPlayFullScreenState extends State<VideoPlayFullScreen> {
                     children: [
                       Center(
                         child: RotatedBox(
-                          quarterTurns: info!.orientation == 0 ? 2 : 0,
+                          quarterTurns: info!.orientation == 0 && Platform.isAndroid ? 2 : 0,
                           child: AspectRatio(
                             aspectRatio: _videoPlayerController!.value.aspectRatio,
                             child: VideoPlayer(_videoPlayerController!),

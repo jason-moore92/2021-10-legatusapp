@@ -912,7 +912,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       _cameraViewHeiht = deviceHeight! - statusbarHeight!;
       // _cameraViewHeiht = deviceHeight! - heightDp! * 150 - statusbarHeight!;
 
-      int turns;
+      int turns = 0;
 
       // double deviceRatio = deviceWidth! / (deviceHeight! - statusbarHeight!);
       // double deviceRatio = deviceWidth! / (deviceHeight! - heightDp! * 120 - statusbarHeight!);
@@ -921,12 +921,21 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
       switch (_orientation) {
         case NativeDeviceOrientation.landscapeLeft:
-          turns = 1;
+          if (Platform.isAndroid) {
+            turns = 1;
+          } else if (Platform.isIOS) {
+            turns = 1;
+          }
           aspectRatio = cameraController!.value.aspectRatio;
           // xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
           // yScale = 1;
           if (_cameraOrientation == null || (_cameraOrientation != DeviceOrientation.landscapeLeft)) {
             _cameraOrientation = DeviceOrientation.landscapeLeft;
+            if (Platform.isAndroid) {
+              _cameraOrientation = DeviceOrientation.landscapeLeft;
+            } else if (Platform.isIOS) {
+              _cameraOrientation = DeviceOrientation.landscapeRight;
+            }
             WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
               await cameraController!.lockCaptureOrientation(_cameraOrientation);
               setState(() {});
@@ -934,12 +943,21 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           }
           break;
         case NativeDeviceOrientation.landscapeRight:
-          turns = -1;
+          if (Platform.isAndroid) {
+            turns = -1;
+          } else if (Platform.isIOS) {
+            turns = -1;
+          }
           aspectRatio = cameraController!.value.aspectRatio;
           // xScale = (1 / cameraController!.value.aspectRatio) / deviceRatio;
           // yScale = 1;
           if (_cameraOrientation == null || (_cameraOrientation != DeviceOrientation.landscapeRight)) {
             _cameraOrientation = DeviceOrientation.landscapeRight;
+            if (Platform.isAndroid) {
+              _cameraOrientation = DeviceOrientation.landscapeRight;
+            } else if (Platform.isIOS) {
+              _cameraOrientation = DeviceOrientation.landscapeLeft;
+            }
             WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
               await cameraController!.lockCaptureOrientation(_cameraOrientation);
               setState(() {});
