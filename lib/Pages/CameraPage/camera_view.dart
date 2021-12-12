@@ -253,8 +253,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.greenAccent,
+          backgroundColor: Colors.greenAccent,
+          textColor: Colors.black87,
           fontSize: 16.0,
         );
       }
@@ -363,8 +363,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.greenAccent,
+          backgroundColor: Colors.greenAccent,
+          textColor: Colors.black87,
           fontSize: 16.0,
         );
       } else {
@@ -459,8 +459,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.greenAccent,
+          backgroundColor: Colors.greenAccent,
+          textColor: Colors.black87,
           fontSize: 16.0,
         );
       } else {
@@ -560,8 +560,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.TOP,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.greenAccent,
+          backgroundColor: Colors.greenAccent,
+          textColor: Colors.black87,
           fontSize: 16.0,
         );
       } else {
@@ -747,14 +747,11 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                     child: Row(
                       children: [
                         RotatedBox(
-                          quarterTurns:
-                              (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp) ? 0 : 1,
+                          quarterTurns: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp) ? 0 : 1,
                           child: AudioRecoderPanel(
                             scaffoldKey: _scaffoldKey,
                             // keicyProgressDialog: _keicyProgressDialog,
-                            width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                ? deviceWidth
-                                : _cameraViewHeiht - heightDp! * 130,
+                            width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp) ? deviceWidth : _cameraViewHeiht - heightDp! * 130,
                             recordingStatusCallback: (bool isAudioRecording) {
                               setState(() {});
                             },
@@ -772,15 +769,12 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                     child: Row(
                       children: [
                         RotatedBox(
-                          quarterTurns:
-                              (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp) ? 0 : 1,
+                          quarterTurns: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp) ? 0 : 1,
                           child: VideoRecoderPanel(
                             scaffoldKey: _scaffoldKey,
                             // cameraController: cameraController,
                             // keicyProgressDialog: _keicyProgressDialog,
-                            width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp)
-                                ? deviceWidth
-                                : _cameraViewHeiht - heightDp! * 130,
+                            width: (_cameraOrientation == DeviceOrientation.portraitDown || _cameraOrientation == DeviceOrientation.portraitUp) ? deviceWidth : _cameraViewHeiht - heightDp! * 130,
                             videoSaveHandler: (XFile xfile, int inMilliseconds) {
                               _videoHandler(videoFile: xfile, inMilliseconds: inMilliseconds);
                             },
