@@ -321,27 +321,34 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
                         (index >= localReportsList.length) ? LocalReportModel(reportId: -1) : localReportsList[index];
                     return Slidable(
                       enabled: true,
-                      actionPane: SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.2,
-                      secondaryActions: [
-                        IconSlideAction(
-                          caption: LocaleKeys.ReportListPageString_delete.tr(),
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          onTap: () {
-                            NormalAskDialog.show(
-                              context,
-                              title: LocaleKeys.DeleteReportDialogString_title.tr(),
-                              content: LocaleKeys.DeleteReportDialogString_content.tr(),
-                              okButton: LocaleKeys.DeleteReportDialogString_delete.tr(),
-                              cancelButton: LocaleKeys.DeleteReportDialogString_cancel.tr(),
-                              callback: () {
-                                _deleteLocalReportHandler(localReportsModel);
-                              },
-                            );
-                          },
-                        ),
-                      ],
+                      // closeOnScroll: false,
+                      endActionPane: ActionPane(
+                        motion: ScrollMotion(),
+                        extentRatio: 0.3,
+                        children: [
+                          SlidableAction(
+                            flex: 1,
+                            autoClose: true,
+                            // An action can be bigger than the others.
+                            onPressed: (context) {
+                              NormalAskDialog.show(
+                                context,
+                                title: LocaleKeys.DeleteReportDialogString_title.tr(),
+                                content: LocaleKeys.DeleteReportDialogString_content.tr(),
+                                okButton: LocaleKeys.DeleteReportDialogString_delete.tr(),
+                                cancelButton: LocaleKeys.DeleteReportDialogString_cancel.tr(),
+                                callback: () {
+                                  _deleteLocalReportHandler(localReportsModel);
+                                },
+                              );
+                            },
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: LocaleKeys.ReportListPageString_delete.tr(),
+                          ),
+                        ],
+                      ),
                       child: GestureDetector(
                         onTap: () async {
                           var result = await Navigator.of(context).push(

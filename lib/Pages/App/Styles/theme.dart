@@ -6,8 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'index.dart';
 
 ThemeData buildLightTheme(BuildContext context) {
-  double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
-  // double deviceWidth = 1.sw;
+  double fontSp = 1.sp / ScreenUtil().textScaleFactor;
+
   return ThemeData(
     fontFamily: "Roboto",
     brightness: Brightness.light,

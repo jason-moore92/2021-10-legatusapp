@@ -1,19 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-// import 'package:legatus/ApiDataProviders/index.dart';
 import 'package:legatus/Models/index.dart';
-// import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 import 'index.dart';
 
 class AppDataProvider extends ChangeNotifier {
-  static AppDataProvider of(BuildContext context, {bool listen = false}) =>
-      Provider.of<AppDataProvider>(context, listen: listen);
+  static AppDataProvider of(BuildContext context, {bool listen = false}) => Provider.of<AppDataProvider>(context, listen: listen);
 
   AppDataState _appDataState = AppDataState.init();
   AppDataState get appDataState => _appDataState;
@@ -125,17 +121,14 @@ class AppDataProvider extends ChangeNotifier {
   }) async {
     await initHiveObject();
 
-    SettingsModel settingsModel =
-        SettingsModel.copy(_appDataState.settingsModel!);
+    SettingsModel settingsModel = SettingsModel.copy(_appDataState.settingsModel!);
 
     // if (allowCamera != null) settingsModel.allowCamera = allowCamera;
     // if (allowLocation != null) settingsModel.allowLocation = allowLocation;
     // if (allowMicrophone != null) settingsModel.allowMicrophone = allowMicrophone;
     // if (withRestriction != null) settingsModel.withRestriction = withRestriction;
-    if (photoResolution != null)
-      settingsModel.photoResolution = photoResolution;
-    if (videoResolution != null)
-      settingsModel.videoResolution = videoResolution;
+    if (photoResolution != null) settingsModel.photoResolution = photoResolution;
+    if (videoResolution != null) settingsModel.videoResolution = videoResolution;
 
     _appSettingsBox!.put("settings", settingsModel);
 

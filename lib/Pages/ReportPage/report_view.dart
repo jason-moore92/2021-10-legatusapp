@@ -18,19 +18,17 @@ import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/file_helpers.dart';
 import 'package:legatus/Helpers/index.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/CameraPage/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Pages/ReportNewPage/new_report_page.dart';
-import 'package:legatus/Providers/LocalMediaListProvider/index.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -1347,8 +1345,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     return Container(
       padding: EdgeInsets.symmetric(horizontal: widthDp! * 10),
       child: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (localReports) {
-          localReports.disallowGlow();
+        onNotification: (notification) {
+          notification.disallowIndicator();
           return true;
         },
         child: SmartRefresher(

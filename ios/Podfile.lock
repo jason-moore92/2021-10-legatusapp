@@ -1,85 +1,87 @@
 PODS:
+  - audio_session (0.0.1):
+    - Flutter
   - audioplayers (0.0.1):
     - Flutter
   - camera (0.0.1):
     - Flutter
-  - device_info (0.0.1):
+  - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_sound (8.3.9):
+  - flutter_sound (9.1.6):
     - Flutter
-    - mobile-ffmpeg-audio (= 4.4.LTS)
-    - tau_core (= 8.3.9)
+    - flutter_sound_core (= 9.1.6)
+  - flutter_sound_core (9.1.6)
   - flutter_video_info (1.1.0):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - geolocator (6.2.0):
+  - geolocator_apple (1.2.0):
     - Flutter
-  - mobile-ffmpeg-audio (4.4.LTS)
   - native_device_orientation (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
-  - path_provider (0.0.1):
+  - path_provider_ios (0.0.1):
     - Flutter
-  - "permission_handler (5.1.0+2)":
+  - permission_handler_apple (9.0.2):
     - Flutter
-  - Sentry (7.1.4):
-    - Sentry/Core (= 7.1.4)
-  - Sentry/Core (7.1.4)
+  - Sentry (7.9.0):
+    - Sentry/Core (= 7.9.0)
+  - Sentry/Core (7.9.0)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry (~> 7.1.3)
-  - share (0.0.1):
+    - Sentry (~> 7.9.0)
+  - share_plus (0.0.1):
     - Flutter
-  - shared_preferences (0.0.1):
+  - shared_preferences_ios (0.0.1):
     - Flutter
-  - tau_core (8.3.9)
   - Toast (4.0.0)
-  - url_launcher (0.0.1):
+  - url_launcher_ios (0.0.1):
     - Flutter
-  - video_player (0.0.1):
+  - video_player_avfoundation (0.0.1):
     - Flutter
   - wakelock (0.0.1):
     - Flutter
 
 DEPENDENCIES:
+  - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
   - camera (from `.symlinks/plugins/camera/ios`)
-  - device_info (from `.symlinks/plugins/device_info/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
   - flutter_video_info (from `.symlinks/plugins/flutter_video_info/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - geolocator (from `.symlinks/plugins/geolocator/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
-  - share (from `.symlinks/plugins/share/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - video_player (from `.symlinks/plugins/video_player/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
   trunk:
-    - mobile-ffmpeg-audio
+    - flutter_sound_core
     - Sentry
-    - tau_core
     - Toast
 
 EXTERNAL SOURCES:
+  audio_session:
+    :path: ".symlinks/plugins/audio_session/ios"
   audioplayers:
     :path: ".symlinks/plugins/audioplayers/ios"
   camera:
     :path: ".symlinks/plugins/camera/ios"
-  device_info:
-    :path: ".symlinks/plugins/device_info/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   flutter_sound:
@@ -88,53 +90,53 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_video_info/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  geolocator:
-    :path: ".symlinks/plugins/geolocator/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/ios"
   native_device_orientation:
     :path: ".symlinks/plugins/native_device_orientation/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
-  share:
-    :path: ".symlinks/plugins/share/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
-  url_launcher:
-    :path: ".symlinks/plugins/url_launcher/ios"
-  video_player:
-    :path: ".symlinks/plugins/video_player/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/ios"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
+  audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   audioplayers: 455322b54050b30ea4b1af7cd9e9d105f74efa8c
-  camera: fe33292aff715a981eb34d7ce7b35b54337ff34c
-  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  camera: 9993f92f2c793e87b65e35f3a23c70582afb05b1
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_sound: 91c069f33d811a4c98b9aa7cec9cd1dbfd1786d9
+  flutter_sound: 31492c4f9a78eba7a7ed2c176df09e78aee59d90
+  flutter_sound_core: 5f299c70abd0280a98c1a17275181b240f15f463
   flutter_video_info: a932e1b0da369bba95c3a14b7f61d5f8b0d03280
-  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
-  geolocator: f5e3de65e241caba7ce3e8a618803387bda73384
-  mobile-ffmpeg-audio: 1e0a053f8a6de57114e50ff48b3a85ff1c60f902
+  fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
+  geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   native_device_orientation: 3b4cfc9565a7b879cc4fde282b3e27745e852d0d
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider: d1e9807085df1f9cc9318206cd649dc0b76be3de
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  Sentry: 1d3eb1a25f8c5333c88dd5603904a6d461cd9fcf
-  sentry_flutter: f20d4f199442900fbdab2b8496f1d2091d8b94d9
-  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
-  shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
-  tau_core: f7bbd1c6a632f52c2fa7c14feea385ab966b1e45
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  permission_handler_apple: d21b38e1a4b2e041c63af9568f9165e114e507a6
+  Sentry: 2f7e91f247cfb05b05bd01e0b5d0692557a7687b
+  sentry_flutter: 7c3cb050dc23563a4ea5db438c83afdb460a2ae6
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
-  video_player: ecd305f42e9044793efd34846e1ce64c31ea6fcb
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
-PODFILE CHECKSUM: ab94ded4bcbf41e93aed1d059c9a6b122f4e826d
+PODFILE CHECKSUM: 7e1c8de8c28050f90e1cc34116a6c073810d54c7
 
 COCOAPODS: 1.11.2

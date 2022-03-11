@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:json_patch/json_patch.dart';
 import 'package:legatus/ApiDataProviders/index.dart';
 import 'package:legatus/Helpers/custom_url_lancher.dart';
 import 'package:legatus/Helpers/index.dart';
@@ -13,7 +14,6 @@ import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 // import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:json_diff/json_diff.dart';
 import 'package:uuid/uuid.dart';
 
 class PlanningView extends StatefulWidget {
@@ -360,7 +360,8 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                   ),
 
                 /// Address
-                if (!JsonDiffer.fromJson(widget.planningReportModel!.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
+                if (!JsonPatch.diff(widget.planningReportModel!.addressModel!.toJson(), AddressModel().toJson()).isEmpty)
+                  // if (!JsonDiffer.fromJson(widget.planningReportModel!.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
                   Column(
                     children: [
                       SizedBox(height: heightDp! * 8),
@@ -497,7 +498,8 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                   Column(
                     children: List.generate(widget.planningReportModel!.customers!.length, (index) {
                       CustomerModel customerModel = widget.planningReportModel!.customers![index];
-                      if (JsonDiffer.fromJson(customerModel.toJson(), CustomerModel().toJson()).diff().hasNothing) return SizedBox();
+                      if (JsonPatch.diff(customerModel.toJson(), CustomerModel().toJson()).isEmpty) return SizedBox();
+                      // if (JsonDiffer.fromJson(customerModel.toJson(), CustomerModel().toJson()).diff().hasNothing) return SizedBox();
 
                       return Column(
                         children: [
@@ -535,7 +537,8 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                           ),
 
                           /// Address
-                          if (!JsonDiffer.fromJson(customerModel.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
+                          if (!JsonPatch.diff(customerModel.addressModel!.toJson(), AddressModel().toJson()).isEmpty)
+                            // if (!JsonDiffer.fromJson(customerModel.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
                             Column(
                               children: [
                                 SizedBox(height: heightDp! * 8),
@@ -750,9 +753,12 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: List.generate(customerModel.recipients!.length, (index) {
-                                          if (JsonDiffer.fromJson(customerModel.recipients![index].toJson(), RecipientModel().toJson())
-                                              .diff()
-                                              .hasNothing) return SizedBox();
+                                          if (JsonPatch.diff(customerModel.recipients![index].toJson(), RecipientModel().toJson()).isEmpty)
+                                            return SizedBox();
+                                          // if (JsonDiffer.fromJson(customerModel.recipients![index].toJson(), RecipientModel().toJson())
+                                          //     .diff()
+                                          //     .hasNothing) return SizedBox();
+
                                           return Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [

@@ -18,82 +18,86 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => AppDataProvider()),
-        ChangeNotifierProvider(create: (_) => LocalReportListProvider()),
-        ChangeNotifierProvider(create: (_) => LocalReportProvider()),
-        ChangeNotifierProvider(create: (_) => PlanningProvider()),
-        ChangeNotifierProvider(create: (_) => MediaPlayProvider()),
-      ],
-      child: ScreenUtilInit(
+    return ScreenUtilInit(
         designSize: Size(ResponsiveDesignSettings.mobileDesignWidth, ResponsiveDesignSettings.mobileDesignHeight),
+        minTextAdapt: false,
+        splitScreenMode: false,
         builder: () {
-          return MaterialApp(
-            navigatorKey: navigatorKey,
-            scaffoldMessengerKey: scaffoldMessengerKey,
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              EasyLocalization.of(context)!.delegate,
-              RefreshLocalizations.delegate,
-              const FallbackCupertinoLocalisationsDelegate(),
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => AuthProvider()),
+              ChangeNotifierProvider(create: (_) => AppDataProvider()),
+              ChangeNotifierProvider(create: (_) => LocalReportListProvider()),
+              ChangeNotifierProvider(create: (_) => LocalReportProvider()),
+              ChangeNotifierProvider(create: (_) => PlanningProvider()),
+              ChangeNotifierProvider(create: (_) => MediaPlayProvider()),
             ],
-            supportedLocales: EasyLocalization.of(context)!.supportedLocales,
-            locale: EasyLocalization.of(context)!.locale,
-            // localizationsDelegates: context.localizationDelegates,
-            // supportedLocales: context.supportedLocales,
-            // locale: context.locale,
-            theme: buildLightTheme(context),
-            // themeMode: ThemeMode.dark,
-            home: SplashPage(),
-            builder: (context, child) {
-              return StreamBuilder<BridgeState>(
-                stream: BridgeProvider().getStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data != null && snapshot.data!.event == "log_out") {
-                    BridgeProvider().update(
-                      BridgeState(
-                        event: "init",
-                        data: {
-                          "message": "init",
-                        },
-                      ),
-                    );
+            child: MaterialApp(
+              navigatorKey: navigatorKey,
+              scaffoldMessengerKey: scaffoldMessengerKey,
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                EasyLocalization.of(context)!.delegate,
+                RefreshLocalizations.delegate,
+                const FallbackCupertinoLocalisationsDelegate(),
+              ],
+              supportedLocales: EasyLocalization.of(context)!.supportedLocales,
+              locale: EasyLocalization.of(context)!.locale,
+              // localizationsDelegates: context.localizationDelegates,
+              // supportedLocales: context.supportedLocales,
+              // locale: context.locale,
+              theme: buildLightTheme(context),
+              // themeMode: ThemeMode.dark,
+              home: SplashPage(),
+              builder: (context, child) {
+                return StreamBuilder<BridgeState>(
+                  stream: BridgeProvider().getStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null && snapshot.data!.event == "log_out") {
+                      BridgeProvider().update(
+                        BridgeState(
+                          event: "init",
+                          data: {
+                            "message": "init",
+                          },
+                        ),
+                      );
 
-                    WidgetsBinding.instance!.addPostFrameCallback(
-                      (timeStamp) async {
-                        await AuthProvider.of(navigatorKey.currentContext!).logout(context);
-                        // try {
-                        //   FailedDialog.show(
-                        //     navigatorKey.currentContext!,
-                        //     text: snapshot.data!.data!["message"] ?? "Your account logout",
-                        //   );
-                        // } catch (e) {
-                        //   print(e);
-                        // }
-                        // AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(2);
-                        AppDataProvider.of(context).setAppDataState(
-                          AppDataProvider.of(context).appDataState.update(bottomIndex: 2),
-                          isNotifiable: false,
-                        );
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => BottomNavbar(),
-                            ),
-                            (route) => false);
-                      },
-                    );
-                  }
-                  return child!;
-                },
-              );
-            },
+                      WidgetsBinding.instance!.addPostFrameCallback(
+                        (timeStamp) async {
+                          await AuthProvider.of(navigatorKey.currentContext!).logout(context);
+                          // try {
+                          //   FailedDialog.show(
+                          //     navigatorKey.currentContext!,
+                          //     text: snapshot.data!.data!["message"] ?? "Your account logout",
+                          //   );
+                          // } catch (e) {
+                          //   print(e);
+                          // }
+                          // AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(2);
+                          AppDataProvider.of(context).setAppDataState(
+                            AppDataProvider.of(context).appDataState.update(bottomIndex: 2),
+                            isNotifiable: false,
+                          );
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) => BottomNavbar(),
+                              ),
+                              (route) => false);
+                        },
+                      );
+                    }
+
+                    ScreenUtil.setContext(context);
+
+                    return child!;
+                  },
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
+        });
   }
 }

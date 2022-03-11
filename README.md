@@ -1,4 +1,4 @@
-# Legatus app v2
+# legatus
 
 A new Flutter project.
 

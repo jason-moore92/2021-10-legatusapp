@@ -87,6 +87,7 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
       BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
       designSize: designSize!,
       orientation: Orientation.portrait,
+      context: context,
     );
 
     /// Responsive design variables
