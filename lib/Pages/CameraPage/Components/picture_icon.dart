@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/index.dart';
-import 'package:legatus/Providers/CameraProvider/camera_provider.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';

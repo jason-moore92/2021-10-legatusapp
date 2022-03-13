@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legatus/Pages/Dialogs/failed_dialog.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:path_provider/path_provider.dart';

@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/App/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 
@@ -50,8 +49,7 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       if (_key.currentContext == null) return;
-      RenderBox renderBox =
-          _key.currentContext!.findRenderObject() as RenderBox;
+      RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
       widgetWidth = renderBox.size.width;
       widgetHeight = renderBox.size.height;
       setState(() {});
@@ -66,16 +64,12 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.of(context).size.width >=
-        ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >=
-            ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width <
-            ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width <
-        ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
@@ -115,14 +109,12 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
           child: Container(
             key: _key,
             margin: EdgeInsets.symmetric(vertical: heightDp * 5),
-            padding: EdgeInsets.symmetric(
-                horizontal: widthDp * 5, vertical: heightDp * 10),
+            padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 10),
             decoration: BoxDecoration(
               color: Color(0xFFE7E7E7),
               borderRadius: BorderRadius.circular(heightDp * 0),
               border: Border.all(
-                color:
-                    widget.isSelected! ? AppColors.yello : Colors.transparent,
+                color: widget.isSelected! ? AppColors.yello : Colors.transparent,
                 width: widget.isSelected! ? 3 : 0,
               ),
             ),
@@ -140,10 +132,7 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
                                   ? Icons.cloud_done_outlined
                                   : Icons.cloud_off_outlined,
                           size: iconSize,
-                          color: widget.mediaModel!.state == "error" ||
-                                  widget.mediaModel!.state == "uploaded"
-                              ? Colors.white
-                              : Colors.transparent,
+                          color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
                         ),
                         Icon(
                           widget.mediaModel!.state == "error"
@@ -166,10 +155,7 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
                 Expanded(
                   child: Text(
                     "${widget.mediaModel!.content!}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2!
-                        .copyWith(color: Colors.black),
+                    style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black),
                   ),
                 ),
                 GestureDetector(
@@ -208,17 +194,14 @@ class _NoteMediaWidgetState extends State<NoteMediaWidget> {
             top: heightDp * 5,
             child: Container(
               width: widgetWidth,
-              height: widgetHeight != null
-                  ? widgetHeight! - heightDp * 10
-                  : widgetHeight,
+              height: widgetHeight != null ? widgetHeight! - heightDp * 10 : widgetHeight,
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.5),
               ),
               child: Center(
                 child: Transform.rotate(
                   angle: angle / 180 * pi,
-                  child: Icon(Icons.autorenew,
-                      size: iconSize, color: Colors.white),
+                  child: Icon(Icons.autorenew, size: iconSize, color: Colors.white),
                 ),
               ),
             ),

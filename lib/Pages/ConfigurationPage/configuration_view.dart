@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +13,6 @@ import 'package:legatus/Helpers/index.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
-import 'package:legatus/Pages/Dialogs/normal_ask_dialog.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -226,7 +224,7 @@ class _ConfigurationViewState extends State<ConfigurationView> with SingleTicker
 
             return NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (notification) {
-                notification.disallowGlow();
+                notification.disallowIndicator();
                 return true;
               },
               child: SingleChildScrollView(

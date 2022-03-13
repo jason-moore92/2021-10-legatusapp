@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Helpers/validators.dart';
@@ -66,9 +65,7 @@ class JournalPanelDialog {
                               bottomRight: Radius.circular(heightDp * 15),
                             ),
                           ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: heightDp * 20,
-                              vertical: heightDp * 20),
+                          padding: EdgeInsets.symmetric(horizontal: heightDp * 20, vertical: heightDp * 20),
                           child: Column(
                             children: [
                               Row(
@@ -89,8 +86,7 @@ class JournalPanelDialog {
                               Text(
                                   // LocaleKeys.JournalDialogString_content.tr(),
                                   "Recevez gratuitement et instantanément une base de PV de constat au format Word, par email. Elle reprendra les informations du constat et la chronologie des constatations. En cliquant sur Recevoir une base de PV, vous acceptez de transmettre à Legatus les données locales de ce constat stockées dans votre appareil.",
-                                  style:
-                                      Theme.of(context).textTheme.bodyText1!),
+                                  style: Theme.of(context).textTheme.bodyText1!),
 
                               ///
                               SizedBox(height: heightDp * 20),
@@ -99,45 +95,25 @@ class JournalPanelDialog {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    LocaleKeys.JournalDialogString_emailLabel
-                                        .tr(),
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
+                                    LocaleKeys.JournalDialogString_emailLabel.tr(),
+                                    style: Theme.of(context).textTheme.bodyText1,
                                   ),
                                   SizedBox(height: heightDp * 5),
                                   CustomTextFormField(
                                     controller: _controller,
                                     focusNode: _focusNode,
                                     hintText: "vladimir@legatus.fr",
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .copyWith(
-                                            color:
-                                                Colors.grey.withOpacity(0.8)),
-                                    errorStyle: Theme.of(context)
-                                        .textTheme
-                                        .overline!
-                                        .copyWith(color: Colors.red),
+                                    hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
+                                    errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),
                                     border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey.withOpacity(0.8)),
-                                      borderRadius:
-                                          BorderRadius.circular(heightDp * 6),
+                                      borderSide: BorderSide(color: Colors.grey.withOpacity(0.8)),
+                                      borderRadius: BorderRadius.circular(heightDp * 6),
                                     ),
                                     readOnly: email != "",
-                                    validator: (input) => !KeicyValidators
-                                            .isValidEmail(input.trim())
-                                        ? LocaleKeys
-                                                .ValidateErrorString_emailErrorText
-                                            .tr()
-                                        : null,
-                                    onFieldSubmitted: (input) =>
-                                        FocusScope.of(context)
-                                            .requestFocus(FocusNode()),
-                                    onEditingComplete: () =>
-                                        FocusScope.of(context)
-                                            .requestFocus(FocusNode()),
+                                    validator: (input) =>
+                                        !KeicyValidators.isValidEmail(input.trim()) ? LocaleKeys.ValidateErrorString_emailErrorText.tr() : null,
+                                    onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
+                                    onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
                                   ),
                                 ],
                               ),
@@ -148,13 +124,8 @@ class JournalPanelDialog {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   CustomTextButton(
-                                    text: LocaleKeys.JournalDialogString_cancel
-                                            .tr()
-                                        .toUpperCase(),
-                                    textStyle: Theme.of(context)
-                                        .textTheme
-                                        .button!
-                                        .copyWith(color: AppColors.yello),
+                                    text: LocaleKeys.JournalDialogString_cancel.tr().toUpperCase(),
+                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                                     // width: widthDp * 100,
                                     // bordercolor: Colors.grey.withOpacity(0.7),
                                     // borderRadius: heightDp * 6,
@@ -165,13 +136,8 @@ class JournalPanelDialog {
                                   ),
                                   SizedBox(width: widthDp * 20),
                                   CustomTextButton(
-                                    text:
-                                        LocaleKeys.JournalDialogString_send.tr()
-                                            .toUpperCase(),
-                                    textStyle: Theme.of(context)
-                                        .textTheme
-                                        .button!
-                                        .copyWith(color: AppColors.yello),
+                                    text: LocaleKeys.JournalDialogString_send.tr().toUpperCase(),
+                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                                     // width: widthDp * 120,
                                     // bordercolor: AppColors.yello,
                                     // borderRadius: heightDp * 6,

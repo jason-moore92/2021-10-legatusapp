@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/App/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Providers/index.dart';

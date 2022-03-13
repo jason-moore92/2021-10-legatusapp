@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Pages/Components/index.dart';
@@ -25,13 +24,9 @@ class FailedDialog {
         return AlertDialog(
           elevation: 0.0,
           backgroundColor: Colors.white,
-          insetPadding: insetPadding ??
-              EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
-          shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(borderRadius ?? heightDp * 10)),
-          title: Icon(Icons.error_outline,
-              size: heightDp * 60, color: Colors.redAccent),
+          insetPadding: insetPadding ?? EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? heightDp * 10)),
+          title: Icon(Icons.error_outline, size: heightDp * 60, color: Colors.redAccent),
           titlePadding: titlePadding ??
               EdgeInsets.only(
                 left: heightDp * 10,

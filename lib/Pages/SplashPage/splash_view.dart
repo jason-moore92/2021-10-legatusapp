@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
@@ -12,8 +11,7 @@ class SplashView extends StatefulWidget {
   _SplashViewState createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView>
-    with SingleTickerProviderStateMixin {
+class _SplashViewState extends State<SplashView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -45,8 +43,7 @@ class _SplashViewState extends State<SplashView>
       await AppDataProvider.of(context).init();
       Future.delayed(Duration(seconds: 3), () {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute<void>(
-              builder: (BuildContext context) => BottomNavbar()),
+          MaterialPageRoute<void>(builder: (BuildContext context) => BottomNavbar()),
         );
       });
     });
@@ -63,13 +60,9 @@ class _SplashViewState extends State<SplashView>
       body: Container(
         width: deviceWidth,
         height: deviceHeight,
-        padding: EdgeInsets.symmetric(
-            horizontal: widthDp! * 20, vertical: heightDp! * 20),
+        padding: EdgeInsets.symmetric(horizontal: widthDp! * 20, vertical: heightDp! * 20),
         child: Center(
-          child: Image.asset(AppAsssets.logoImage,
-              width: heightDp! * 150,
-              height: heightDp! * 150,
-              fit: BoxFit.cover),
+          child: Image.asset(AppAsssets.logoImage, width: heightDp! * 150, height: heightDp! * 150, fit: BoxFit.cover),
         ),
       ),
     );

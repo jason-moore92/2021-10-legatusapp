@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:geolocator/geolocator.dart';
 // import 'package:hive/hive.dart';
-import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/App/index.dart';
 import 'package:legatus/Pages/ConfigurationPage/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';

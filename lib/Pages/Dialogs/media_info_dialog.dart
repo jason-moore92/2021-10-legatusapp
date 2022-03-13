@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Helpers/index.dart';
@@ -39,8 +38,7 @@ class MediaInfoDialog {
     var date;
     var durationString;
     if (mediaModel.duration! != -1) {
-      date = DateTime.fromMillisecondsSinceEpoch(mediaModel.duration!,
-          isUtc: true);
+      date = DateTime.fromMillisecondsSinceEpoch(mediaModel.duration!, isUtc: true);
       durationString = DateFormat('mm:ss').format(date);
     }
 
@@ -51,11 +49,8 @@ class MediaInfoDialog {
         return SimpleDialog(
           elevation: 0.0,
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(borderRadius ?? heightDp * 10)),
-          insetPadding: EdgeInsets.symmetric(
-              horizontal: heightDp * 30.0, vertical: heightDp * 20.0),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? heightDp * 10)),
+          insetPadding: EdgeInsets.symmetric(horizontal: heightDp * 30.0, vertical: heightDp * 20.0),
           titlePadding: EdgeInsets.zero,
           contentPadding: EdgeInsets.only(
             left: heightDp * 15,
@@ -66,8 +61,7 @@ class MediaInfoDialog {
           children: [
             Row(
               children: [
-                Icon(Icons.info_outline,
-                    size: heightDp * 20, color: Colors.black),
+                Icon(Icons.info_outline, size: heightDp * 20, color: Colors.black),
                 SizedBox(width: heightDp * 10),
                 Text(
                   mediaModel.filename!,
@@ -212,12 +206,8 @@ class MediaInfoDialog {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 CustomTextButton(
-                  text:
-                      LocaleKeys.MediaInfoDialogString_close.tr().toUpperCase(),
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .button!
-                      .copyWith(color: AppColors.yello),
+                  text: LocaleKeys.MediaInfoDialogString_close.tr().toUpperCase(),
+                  textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
                   // width: widthDp * 120,
                   // bordercolor: AppColors.yello,
                   // borderRadius: heightDp * 6,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:legatus/Models/LocalReportModel.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/App/responsive_settings.dart';
 import 'package:legatus/generated/locale_keys.g.dart';

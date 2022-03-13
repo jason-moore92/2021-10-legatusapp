@@ -297,7 +297,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
         Expanded(
           child: NotificationListener<OverscrollIndicatorNotification>(
             onNotification: (localReports) {
-              localReports.disallowGlow();
+              localReports.disallowIndicator();
               return true;
             },
             child: Container(

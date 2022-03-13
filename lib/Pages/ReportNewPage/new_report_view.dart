@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,12 +9,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legatus/Helpers/index.dart';
-import 'package:legatus/Helpers/validators.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
-import 'package:legatus/Pages/Dialogs/success_dialog.dart';
 import 'package:legatus/Pages/ReportPage/report_page.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
@@ -340,7 +337,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
   Widget _mainPanel() {
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (notification) {
-        notification.disallowGlow();
+        notification.disallowIndicator();
         return true;
       },
       child: SingleChildScrollView(

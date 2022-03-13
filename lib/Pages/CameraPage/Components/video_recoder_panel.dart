@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:provider/provider.dart';
 

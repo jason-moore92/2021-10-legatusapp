@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:json_patch/json_patch.dart';
@@ -143,7 +142,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
       ),
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (notification) {
-          notification.disallowGlow();
+          notification.disallowIndicator();
           return true;
         },
         child: SingleChildScrollView(
