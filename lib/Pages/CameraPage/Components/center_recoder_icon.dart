@@ -40,23 +40,19 @@ class CenterRecorderIcon extends StatelessWidget {
               //   cameraController!.description,
               //   AppDataProvider.of(context).appDataState.settingsModel!.videoResolution!,
               // );
-              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                cameraProvider.setCameraState(
-                  cameraProvider.cameraState.update(
-                    videoRecordStatus: "recording",
-                    isVideoRecord: true,
-                  ),
-                );
-              });
+              cameraProvider.setCameraState(
+                cameraProvider.cameraState.update(
+                  videoRecordStatus: "recording",
+                  isVideoRecord: true,
+                ),
+              );
             } else if (cameraController!.value.isRecordingVideo) {
-              WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-                cameraProvider.setCameraState(
-                  cameraProvider.cameraState.update(
-                    videoRecordStatus: "stopped",
-                    isVideoRecord: false,
-                  ),
-                );
-              });
+              cameraProvider.setCameraState(
+                cameraProvider.cameraState.update(
+                  videoRecordStatus: "stopped",
+                  isVideoRecord: false,
+                ),
+              );
             }
           } else if (cameraProvider.cameraState.isShowAudioRecoderPanel!) {
             if (!cameraProvider.cameraState.isAudioRecord!) {
