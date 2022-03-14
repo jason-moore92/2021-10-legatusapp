@@ -216,12 +216,25 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _localReportProvider!.addListener(_localReportProviderListener);
 
-      _locationSubscription = Geolocator.getPositionStream().listen((position) {
-        // _currentPosition = position;
-        _latitudeController.text = position.latitude.toString();
-        _longitudeController.text = position.longitude.toString();
-        setState(() {});
-      });
+      _permissionHander();
+    });
+  }
+
+  void _permissionHander() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+      var position = await Geolocator.getCurrentPosition();
+      _latitudeController.text = position.latitude.toString();
+      _longitudeController.text = position.longitude.toString();
+      setState(() {});
+    }
+
+    _locationSubscription = Geolocator.getPositionStream().listen((position) async {
+      var position = await Geolocator.getCurrentPosition();
+      _latitudeController.text = position.latitude.toString();
+      _longitudeController.text = position.longitude.toString();
+      setState(() {});
     });
   }
 

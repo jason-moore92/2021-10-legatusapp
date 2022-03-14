@@ -15,6 +15,7 @@ import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wakelock/wakelock.dart';
@@ -145,13 +146,28 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
         statusBarBrightness: Brightness.light, //status bar brigtness
       ));
       setState(() {});
-      cameras = await availableCameras();
-      onNewCameraSelected(cameras[0], _appDataProvider!.appDataState.settingsModel!.photoResolution!);
+      await Permission.camera.request();
+      await Permission.microphone.request();
+      await Permission.storage.request();
 
-      _locationSubscription = Geolocator.getPositionStream().listen((position) {
-        _currentPosition = position;
-        setState(() {});
-      });
+      cameras = await availableCameras();
+      await onNewCameraSelected(cameras[0], _appDataProvider!.appDataState.settingsModel!.photoResolution!);
+
+      _permissionHander();
+    });
+  }
+
+  void _permissionHander() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+      _currentPosition = await Geolocator.getCurrentPosition();
+      setState(() {});
+    }
+
+    _locationSubscription = Geolocator.getPositionStream().listen((position) {
+      _currentPosition = position;
+      setState(() {});
     });
   }
 
@@ -637,11 +653,11 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       );
 
       // If the cameraController is updated then update the UI.
-      newCameraController.addListener(() {
-        if (newCameraController.value.hasError) {
-          showInSnackBar('Camera error ${cameraController!.value.errorDescription}');
-        }
-      });
+      // newCameraController.addListener(() {
+      //   if (newCameraController.value.hasError) {
+      //     showInSnackBar('Camera error ${cameraController!.value.errorDescription}');
+      //   }
+      // });
 
       try {
         await newCameraController.initialize();
@@ -835,10 +851,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
                       _locationSubscription!.cancel();
                       _locationSubscription = null;
                     }
-                    _locationSubscription = Geolocator.getPositionStream().listen((position) {
-                      _currentPosition = position;
-                      setState(() {});
-                    });
+
+                    _permissionHander();
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
