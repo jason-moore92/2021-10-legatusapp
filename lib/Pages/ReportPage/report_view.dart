@@ -139,9 +139,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     );
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      _locationSubscription = Geolocator.getPositionStream().listen((position) {
-        _currentPosition = position;
-      });
+      _permissionHander();
 
       _localMediaListProvider!.addListener(_localMediaListProviderListener);
       _localReportProvider!.addListener(_localReportProviderListener);
@@ -153,6 +151,20 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       );
 
       _localMediaListProvider!.getLocalMediaList();
+    });
+  }
+
+  void _permissionHander() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+      _currentPosition = await Geolocator.getCurrentPosition();
+      setState(() {});
+    }
+
+    _locationSubscription = Geolocator.getPositionStream().listen((position) {
+      _currentPosition = position;
+      setState(() {});
     });
   }
 

@@ -25,7 +25,8 @@ class PlanningListView extends StatefulWidget {
   _PlanningListViewState createState() => _PlanningListViewState();
 }
 
-class _PlanningListViewState extends State<PlanningListView> with SingleTickerProviderStateMixin {
+class _PlanningListViewState extends State<PlanningListView>
+    with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -39,7 +40,8 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
 
   PlanningProvider? _planningProvider;
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -61,7 +63,8 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
     if (_planningProvider!.planningState.currentDate == "") {
       _planningProvider!.setPlanningState(
         _planningProvider!.planningState.update(
-          currentDate: KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now()),
+          currentDate: KeicyDateTime.convertDateTimeToDateString(
+              dateTime: DateTime.now()),
         ),
         isNotifiable: false,
       );
@@ -76,7 +79,8 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       _planningProvider!.addListener(_planningProviderListener);
-      if (_planningProvider!.planningState.progressState == 0 && AuthProvider.of(context).authState.loginState == LoginState.IsLogin) {
+      if (_planningProvider!.planningState.progressState == 0 &&
+          AuthProvider.of(context).authState.loginState == LoginState.IsLogin) {
         _getPlanningListHandler();
       }
     });
@@ -89,7 +93,8 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
   }
 
   void _planningProviderListener() async {
-    if (_planningProvider!.planningState.contextName != "PlanningListPage") return;
+    if (_planningProvider!.planningState.contextName != "PlanningListPage")
+      return;
 
     if (_planningProvider!.planningState.progressState == -1) {
       _refreshController.refreshFailed();
@@ -130,18 +135,22 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
                   if (dateTime != null) {
                     _planningProvider!.setPlanningState(
                       _planningProvider!.planningState.update(
-                        currentDate: KeicyDateTime.convertDateTimeToDateString(dateTime: dateTime),
+                        currentDate: KeicyDateTime.convertDateTimeToDateString(
+                            dateTime: dateTime),
                       ),
                       isNotifiable: false,
                     );
                     _getPlanningListHandler();
                   }
                 },
-                icon: Icon(Icons.history, size: heightDp! * 25, color: Colors.white),
+                icon: Icon(Icons.history,
+                    size: heightDp! * 25, color: Colors.white),
               ),
           ],
         ),
-        body: (authProvider.authState.loginState == LoginState.IsNotLogin) ? _logoutPanel() : _loginPanel(),
+        body: (authProvider.authState.loginState == LoginState.IsNotLogin)
+            ? _logoutPanel()
+            : _loginPanel(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColors.yello,
           child: Icon(Icons.add, size: heightDp! * 25, color: Colors.white),
@@ -168,11 +177,13 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
       child: Container(
         width: deviceWidth! / 2,
         height: deviceHeight,
-        padding: EdgeInsets.symmetric(horizontal: widthDp! * 20, vertical: heightDp! * 20),
+        padding: EdgeInsets.symmetric(
+            horizontal: widthDp! * 20, vertical: heightDp! * 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(AppAsssets.logoGreyImage, height: heightDp! * 180, fit: BoxFit.fitWidth),
+            Image.asset(AppAsssets.logoGreyImage,
+                height: heightDp! * 180, fit: BoxFit.fitWidth),
             SizedBox(height: heightDp! * 20),
             Text(
               LocaleKeys.PlanningListPageString_login_description.tr(),
@@ -181,8 +192,12 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
             ),
             SizedBox(height: heightDp! * 20),
             CustomTextButton(
-              text: LocaleKeys.PlanningListPageString_login_button.tr().toUpperCase(),
-              textStyle: Theme.of(context).textTheme.button!.copyWith(color: AppColors.yello),
+              text: LocaleKeys.PlanningListPageString_login_button.tr()
+                  .toUpperCase(),
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .button!
+                  .copyWith(color: AppColors.yello),
               bordercolor: AppColors.yello,
               borderRadius: heightDp! * 6,
               elevation: 0,
@@ -210,7 +225,8 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
             return SizedBox();
           }
 
-          if (planningProvider.planningState.progressState == 1) return Center(child: CupertinoActivityIndicator());
+          if (planningProvider.planningState.progressState == 1)
+            return Center(child: CupertinoActivityIndicator());
 
           if (planningProvider.planningState.progressState == -1) {
             return ErrorPage(
@@ -227,8 +243,15 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
             controller: _refreshController,
             onRefresh: _getPlanningListHandler,
             onLoading: null,
-            child: planningProvider.planningState.planningData![planningProvider.planningState.currentDate] == null ||
-                    planningProvider.planningState.planningData![planningProvider.planningState.currentDate].length == 0
+            child: planningProvider.planningState.planningData![
+                            planningProvider.planningState.currentDate] ==
+                        null ||
+                    planningProvider
+                            .planningState
+                            .planningData![
+                                planningProvider.planningState.currentDate]
+                            .length ==
+                        0
                 ? Center(
                     child: Text(
                       LocaleKeys.PlanningListPageString_noPlanning.tr(),
@@ -236,23 +259,37 @@ class _PlanningListViewState extends State<PlanningListView> with SingleTickerPr
                     ),
                   )
                 : ListView.builder(
-                    itemCount: planningProvider.planningState.planningData![planningProvider.planningState.currentDate].length,
+                    itemCount: planningProvider
+                        .planningState
+                        .planningData![
+                            planningProvider.planningState.currentDate]
+                        .length,
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
                           PlanningWidget(
-                            data: planningProvider.planningState.planningData![planningProvider.planningState.currentDate][index],
-                            onDetailHandler: (PlanningReportModel planningReportModel) async {
+                            data: planningProvider.planningState.planningData![
+                                    planningProvider.planningState.currentDate]
+                                [index],
+                            onDetailHandler: (PlanningReportModel
+                                planningReportModel) async {
                               await Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => PlanningPage(
+                                  builder: (BuildContext context) =>
+                                      PlanningPage(
                                     planningReportModel: planningReportModel,
                                   ),
                                 ),
                               );
                             },
                           ),
-                          if (index == planningProvider.planningState.planningData![planningProvider.planningState.currentDate].length - 1)
+                          if (index ==
+                              planningProvider
+                                      .planningState
+                                      .planningData![planningProvider
+                                          .planningState.currentDate]
+                                      .length -
+                                  1)
                             SizedBox(height: heightDp! * 30),
                         ],
                       );
