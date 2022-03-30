@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:legatus/Models/index.dart';
 // import 'package:intl/date_symbol_data_local.dart';
 import 'package:legatus/Pages/App/index.dart';
-import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Providers/index.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
@@ -207,29 +206,29 @@ class _AudioGalleryWidgetState extends State<AudioGalleryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String responsiveStyle = "";
-    if (MediaQuery.of(context).size.width >=
-        ResponsiveDesignSettings.tableteMaxWidth) {
-      responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >=
-            ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width <
-            ResponsiveDesignSettings.tableteMaxWidth) {
-      responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width <
-        ResponsiveDesignSettings.mobileMaxWidth) {
-      responsiveStyle = "mobile";
-    }
+    // String responsiveStyle = "";
+    // if (MediaQuery.of(context).size.width >=
+    //     ResponsiveDesignSettings.tableteMaxWidth) {
+    //   responsiveStyle = "desktop";
+    // } else if (MediaQuery.of(context).size.width >=
+    //         ResponsiveDesignSettings.mobileMaxWidth &&
+    //     MediaQuery.of(context).size.width <
+    //         ResponsiveDesignSettings.tableteMaxWidth) {
+    //   responsiveStyle = "tablet";
+    // } else if (MediaQuery.of(context).size.width <
+    //     ResponsiveDesignSettings.mobileMaxWidth) {
+    //   responsiveStyle = "mobile";
+    // }
 
-    double iconSize = heightDp * 20;
-    // double iconPadding = widthDp * 10;
-    // TextStyle? textStyle = Theme.of(context).textTheme.overline;
+    // double iconSize = heightDp * 20;
+    // // double iconPadding = widthDp * 10;
+    // // TextStyle? textStyle = Theme.of(context).textTheme.overline;
 
-    if (responsiveStyle != "mobile") {
-      iconSize = heightDp * 35;
-      // iconPadding = widthDp * 20;
-      // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
-    }
+    // if (responsiveStyle != "mobile") {
+    //   iconSize = heightDp * 35;
+    //   // iconPadding = widthDp * 20;
+    //   // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+    // }
 
     var maxTime =
         DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);

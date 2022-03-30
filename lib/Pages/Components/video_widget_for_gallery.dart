@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/index.dart';
-import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -169,19 +168,19 @@ class _VideoWidgetForGalleryState extends State<VideoWidgetForGallery> {
 
   @override
   Widget build(BuildContext context) {
-    String responsiveStyle = "";
-    if (MediaQuery.of(context).size.width >=
-        ResponsiveDesignSettings.tableteMaxWidth) {
-      responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >=
-            ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width <
-            ResponsiveDesignSettings.tableteMaxWidth) {
-      responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width <
-        ResponsiveDesignSettings.mobileMaxWidth) {
-      responsiveStyle = "mobile";
-    }
+    // String responsiveStyle = "";
+    // if (MediaQuery.of(context).size.width >=
+    //     ResponsiveDesignSettings.tableteMaxWidth) {
+    //   responsiveStyle = "desktop";
+    // } else if (MediaQuery.of(context).size.width >=
+    //         ResponsiveDesignSettings.mobileMaxWidth &&
+    //     MediaQuery.of(context).size.width <
+    //         ResponsiveDesignSettings.tableteMaxWidth) {
+    //   responsiveStyle = "tablet";
+    // } else if (MediaQuery.of(context).size.width <
+    //     ResponsiveDesignSettings.mobileMaxWidth) {
+    //   responsiveStyle = "mobile";
+    // }
 
     if (_videoPlayerController == null ||
         !_videoPlayerController!.value.isInitialized ||

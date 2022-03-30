@@ -12,7 +12,7 @@ import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Providers/MediaPlayProvider/index.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+// import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class PictureMediaWidget extends StatefulWidget {
@@ -280,17 +280,17 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     // }
   }
 
-  Future<void> _viewHandler(BuildContext context) async {
-    pushNewScreen(
-      context,
-      screen: GallaryPage(
-        localReportModel: widget.localReportModel,
-        mediaModel: widget.mediaModel,
-      ),
-      pageTransitionAnimation: PageTransitionAnimation.fade,
-      withNavBar: false,
-    );
-  }
+  // Future<void> _viewHandler(BuildContext context) async {
+  //   pushNewScreen(
+  //     context,
+  //     screen: GallaryPage(
+  //       localReportModel: widget.localReportModel,
+  //       mediaModel: widget.mediaModel,
+  //     ),
+  //     pageTransitionAnimation: PageTransitionAnimation.fade,
+  //     withNavBar: false,
+  //   );
+  // }
 }
 
 class GallaryPage extends StatefulWidget {

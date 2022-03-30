@@ -7,7 +7,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:legatus/Helpers/date_time_convert.dart';
 import 'package:legatus/Models/index.dart';
 // import 'package:intl/date_symbol_data_local.dart';
@@ -48,7 +47,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
   AudioPlayer audioPlayer = AudioPlayer();
 
   double _maxDuration = 1.0;
-  double _sliderCurrentPosition = 0.0;
+  // double _sliderCurrentPosition = 0.0;
 
   MediaPlayProvider? _mediaPlayProvider;
 
@@ -83,7 +82,7 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
 
     audioPlayer.onAudioPositionChanged.listen((Duration p) {
       print('Current position: $p');
-      setState(() => _sliderCurrentPosition = p.inMilliseconds.toDouble());
+      // setState(() => _sliderCurrentPosition = p.inMilliseconds.toDouble());
     });
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
@@ -112,53 +111,53 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
             widget.mediaModel!.uuid) {
       if (audioPlayer.state == PlayerState.PLAYING) {
         await _seekToPlayer(0);
-        _sliderCurrentPosition = 0;
+        // _sliderCurrentPosition = 0;
         await _stopPlayer();
       } else {
         await _seekToPlayer(0);
-        _sliderCurrentPosition = 0;
+        // _sliderCurrentPosition = 0;
         if (mounted) setState(() {});
       }
     }
   }
 
-  Future<void> _startPlayer() async {
-    try {
-      if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank !=
-              widget.mediaModel!.rank &&
-          _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid !=
-              widget.mediaModel!.uuid) {
-        ///
-        _mediaPlayProvider!.setMediaPlayState(
-          _mediaPlayProvider!.mediaPlayState
-              .update(isNew: true, selectedMediaModel: widget.mediaModel),
-        );
-      } else if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank ==
-              widget.mediaModel!.rank &&
-          _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid ==
-              widget.mediaModel!.uuid) {
-        ///
-        _mediaPlayProvider!.setMediaPlayState(
-          _mediaPlayProvider!.mediaPlayState.update(
-            isNew: false,
-          ),
-        );
-      }
+  // Future<void> _startPlayer() async {
+  //   try {
+  //     if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank !=
+  //             widget.mediaModel!.rank &&
+  //         _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid !=
+  //             widget.mediaModel!.uuid) {
+  //       ///
+  //       _mediaPlayProvider!.setMediaPlayState(
+  //         _mediaPlayProvider!.mediaPlayState
+  //             .update(isNew: true, selectedMediaModel: widget.mediaModel),
+  //       );
+  //     } else if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank ==
+  //             widget.mediaModel!.rank &&
+  //         _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid ==
+  //             widget.mediaModel!.uuid) {
+  //       ///
+  //       _mediaPlayProvider!.setMediaPlayState(
+  //         _mediaPlayProvider!.mediaPlayState.update(
+  //           isNew: false,
+  //         ),
+  //       );
+  //     }
 
-      int result =
-          await audioPlayer.play(widget.mediaModel!.path!, isLocal: true);
-      if (result == 1) {}
-      setState(() {});
-    } on Exception catch (err) {
-      print('error: $err');
-    }
-  }
+  //     int result =
+  //         await audioPlayer.play(widget.mediaModel!.path!, isLocal: true);
+  //     if (result == 1) {}
+  //     setState(() {});
+  //   } on Exception catch (err) {
+  //     print('error: $err');
+  //   }
+  // }
 
   Future<void> _stopPlayer() async {
     try {
       int result = await audioPlayer.stop();
       if (result == 1) {
-        _sliderCurrentPosition = 0.0;
+        // _sliderCurrentPosition = 0.0;
       }
     } on Exception catch (err) {
       print('error: $err');
@@ -201,22 +200,22 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
     return null;
   } */
 
-  void Function()? _onStopPlayerPressed() {
-    return (audioPlayer.state == PlayerState.PLAYING ||
-            audioPlayer.state == PlayerState.PAUSED)
-        ? _stopPlayer
-        : null;
-  }
+  // void Function()? _onStopPlayerPressed() {
+  //   return (audioPlayer.state == PlayerState.PLAYING ||
+  //           audioPlayer.state == PlayerState.PAUSED)
+  //       ? _stopPlayer
+  //       : null;
+  // }
 
-  void Function()? _onStartPlayerPressed() {
-    if (widget.mediaModel!.path == "" || widget.mediaModel!.path == null)
-      return null;
+  // void Function()? _onStartPlayerPressed() {
+  //   if (widget.mediaModel!.path == "" || widget.mediaModel!.path == null)
+  //     return null;
 
-    return audioPlayer.state == PlayerState.STOPPED ||
-            audioPlayer.state == PlayerState.COMPLETED
-        ? _startPlayer
-        : null;
-  }
+  //   return audioPlayer.state == PlayerState.STOPPED ||
+  //           audioPlayer.state == PlayerState.COMPLETED
+  //       ? _startPlayer
+  //       : null;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -247,10 +246,10 @@ class _VideoMediaWidgetState extends State<VideoMediaWidget> {
     var maxTime =
         DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
     var maxTimeString = DateFormat('mm:ss').format(maxTime);
-    var currentTime = DateTime.fromMillisecondsSinceEpoch(
-        _sliderCurrentPosition.toInt(),
-        isUtc: true);
-    var currentTimeString = DateFormat('mm:ss').format(currentTime);
+    // var currentTime = DateTime.fromMillisecondsSinceEpoch(
+    //     _sliderCurrentPosition.toInt(),
+    //     isUtc: true);
+    // var currentTimeString = DateFormat('mm:ss').format(currentTime);
 
     if (widget.isUploading!) {
       if (uploadTimer != null) uploadTimer!.cancel();

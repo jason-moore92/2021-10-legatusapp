@@ -147,10 +147,10 @@ class _ConfigurationViewState extends State<ConfigurationView>
     await _keicyProgressDialog!.show();
 
     _authProvider!.login(
-      // email: _email,
-      // password: _password,
-      email: "mobile@legatus.fr",
-      password: "QrgNZbUdmBi2",
+      email: _email,
+      password: _password,
+      // email: "mobile@legatus.fr",
+      // password: "QrgNZbUdmBi2",
     );
   }
 

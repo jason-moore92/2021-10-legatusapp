@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:legatus/ApiDataProviders/local_report_api_provider.dart';
@@ -11,14 +10,12 @@ import 'package:legatus/Helpers/date_time_convert.dart';
 import 'package:legatus/Helpers/file_helpers.dart';
 import 'package:legatus/Pages/App/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
-import 'package:legatus/Pages/Components/keicy_progress_dialog.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/Dialogs/failed_dialog.dart';
 import 'package:legatus/Pages/Dialogs/note_panel_dialog.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class GalleryView extends StatefulWidget {
@@ -50,7 +47,7 @@ class _GalleryViewState extends State<GalleryView>
   double? fontSp;
   ///////////////////////////////
 
-  KeicyProgressDialog? _keicyProgressDialog;
+  // KeicyProgressDialog? _keicyProgressDialog;
 
   LocalReportModel? _localReportModel;
   MediaModel? _selectedMediaModel;
@@ -84,29 +81,29 @@ class _GalleryViewState extends State<GalleryView>
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    _keicyProgressDialog = KeicyProgressDialog.of(
-      context,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      layout: Layout.Column,
-      padding: EdgeInsets.zero,
-      width: heightDp! * 120,
-      height: heightDp! * 120,
-      progressWidget: Container(
-        width: heightDp! * 120,
-        height: heightDp! * 120,
-        padding: EdgeInsets.all(heightDp! * 20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(heightDp! * 10),
-        ),
-        child: SpinKitFadingCircle(
-          color: AppColors.primayColor,
-          size: heightDp! * 80,
-        ),
-      ),
-      message: "",
-    );
+    // _keicyProgressDialog = KeicyProgressDialog.of(
+    //   context,
+    //   backgroundColor: Colors.transparent,
+    //   elevation: 0,
+    //   layout: Layout.Column,
+    //   padding: EdgeInsets.zero,
+    //   width: heightDp! * 120,
+    //   height: heightDp! * 120,
+    //   progressWidget: Container(
+    //     width: heightDp! * 120,
+    //     height: heightDp! * 120,
+    //     padding: EdgeInsets.all(heightDp! * 20),
+    //     decoration: BoxDecoration(
+    //       color: Colors.white,
+    //       borderRadius: BorderRadius.circular(heightDp! * 10),
+    //     ),
+    //     child: SpinKitFadingCircle(
+    //       color: AppColors.primayColor,
+    //       size: heightDp! * 80,
+    //     ),
+    //   ),
+    //   message: "",
+    // );
 
     _localReportModel = LocalReportModel.copy(widget.localReportModel);
     selectedIndex = widget.index;
@@ -133,6 +130,7 @@ class _GalleryViewState extends State<GalleryView>
 
   @override
   void dispose() {
+    _locationSubscription?.cancel();
     super.dispose();
   }
 

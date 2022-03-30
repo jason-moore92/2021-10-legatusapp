@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -134,6 +135,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
       // showInSnackBar('Video recording started');
     } on CameraException catch (e) {
       // _showCameraException(e);
+      log(e.toString());
       return;
     }
   }
@@ -158,6 +160,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
       // showInSnackBar('Video recording resumed');
     } on CameraException catch (e) {
       // _showCameraException(e);
+      log(e.toString());
       rethrow;
     }
   }
@@ -178,6 +181,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
       if (mounted) setState(() {});
       // showInSnackBar('Video recording paused');
     } on CameraException catch (e) {
+      log(e.toString());
       // _showCameraException(e);
       rethrow;
     }
@@ -212,6 +216,7 @@ class _VideoRecoderPanelState extends State<VideoRecoderPanel>
     } on CameraException catch (e) {
       // await widget.keicyProgressDialog!.hide();
       // _showCameraException(e);
+      log(e.toString());
       return null;
     }
   }

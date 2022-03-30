@@ -1,19 +1,11 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 import 'dart:ui' as ui;
 
-import 'package:card_swiper/card_swiper.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:legatus/Pages/App/index.dart';
-import 'package:legatus/Pages/Dialogs/index.dart';
-import 'package:legatus/Providers/MediaPlayProvider/index.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:provider/provider.dart';
 
 class PictureGalleryWidget extends StatefulWidget {
   final MediaModel? mediaModel;
@@ -28,8 +20,8 @@ class PictureGalleryWidget extends StatefulWidget {
 class _PictureGalleryWidgetState extends State<PictureGalleryWidget> {
   @override
   Widget build(BuildContext context) {
-    double heightDp = ScreenUtil().setWidth(1);
-    double statusbarHeight = ScreenUtil().statusBarHeight;
+    // double heightDp = ScreenUtil().setWidth(1);
+    // double statusbarHeight = ScreenUtil().statusBarHeight;
 
     File file = File(widget.mediaModel!.path!);
 
