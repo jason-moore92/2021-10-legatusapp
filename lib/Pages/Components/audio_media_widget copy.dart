@@ -1,19 +1,19 @@
 // import 'dart:async';
+// import 'dart:io';
 // import 'dart:math';
-// import 'dart:typed_data';
+// // import 'dart:typed_data';
 
-// import 'package:flutter/foundation.dart';
+// import 'package:audioplayers/audioplayers.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:flutter_sound/flutter_sound.dart';
 // import 'package:intl/intl.dart';
 // import 'package:legatus/Models/index.dart';
-// import 'package:legatus/Pages/App/Styles/index.dart';
-// import 'package:intl/date_symbol_data_local.dart';
+// // import 'package:intl/date_symbol_data_local.dart';
+// import 'package:legatus/Pages/App/index.dart';
 // import 'package:legatus/Pages/Dialogs/index.dart';
 // import 'package:legatus/Providers/index.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:permission_handler/permission_handler.dart';
+// // import 'package:path_provider/path_provider.dart';
+// // import 'package:permission_handler/permission_handler.dart';
 
 // class AudioMediaWidget extends StatefulWidget {
 //   final MediaModel? mediaModel;
@@ -42,17 +42,10 @@
 //   double heightDp = ScreenUtil().setWidth(1);
 //   double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
 
-//   FlutterSoundPlayer _playerModule = FlutterSoundPlayer();
-//   StreamSubscription? _playerSubscription;
-
-//   Codec _codec = Codec.pcm16WAV;
-//   int _tSTREAMSAMPLERATE = 44000; // 44100 does not work for recorder on iOS
+//   AudioPlayer audioPlayer = AudioPlayer();
 
 //   double _maxDuration = 1.0;
 //   double _sliderCurrentPosition = 0.0;
-//   String _playerTxt = '00:00:00';
-//   bool _decoderSupported = true;
-//   double? _duration;
 
 //   MediaPlayProvider? _mediaPlayProvider;
 
@@ -68,17 +61,33 @@
 //   void initState() {
 //     super.initState();
 
+//     if (Platform.isIOS) {
+//       audioPlayer.notificationService.startHeadlessService();
+//     }
+
 //     _maxDuration = widget.mediaModel!.duration!.toDouble();
 //     _mediaPlayProvider = MediaPlayProvider.of(context);
 
-//     _mediaPlayProvider!.setMediaPlayState(MediaPlayState.init(), isNotifiable: false);
+//     _mediaPlayProvider!
+//         .setMediaPlayState(MediaPlayState.init(), isNotifiable: false);
 
-//     _initialize();
+//     audioPlayer.onDurationChanged.listen((Duration d) {
+//       print('Max duration: $d');
+//       setState(
+//         () => _maxDuration = d.inMilliseconds.toDouble(),
+//       );
+//     });
+
+//     audioPlayer.onAudioPositionChanged.listen((Duration p) {
+//       print('Current position: $p');
+//       setState(() => _sliderCurrentPosition = p.inMilliseconds.toDouble());
+//     });
 
 //     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
 //       _mediaPlayProvider!.addListener(_mediaPlayProviderListener);
 
-//       RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
+//       RenderBox renderBox =
+//           _key.currentContext!.findRenderObject() as RenderBox;
 //       widgetWidth = renderBox.size.width;
 //       widgetHeight = renderBox.size.height;
 //       setState(() {});
@@ -89,16 +98,16 @@
 //   void dispose() {
 //     if (uploadTimer != null) uploadTimer!.cancel();
 //     _mediaPlayProvider!.removeListener(_mediaPlayProviderListener);
-//     _cancelPlayerSubscriptions();
-//     _disposePlayModel();
 //     super.dispose();
 //   }
 
 //   void _mediaPlayProviderListener() async {
 //     if (_mediaPlayProvider!.mediaPlayState.isNew! &&
-//         _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank != widget.mediaModel!.rank &&
-//         _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid != widget.mediaModel!.uuid) {
-//       if (_playerModule.isPlaying) {
+//         _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank !=
+//             widget.mediaModel!.rank &&
+//         _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid !=
+//             widget.mediaModel!.uuid) {
+//       if (audioPlayer.state == PlayerState.PLAYING) {
 //         await _seekToPlayer(0);
 //         _sliderCurrentPosition = 0;
 //         await _stopPlayer();
@@ -110,93 +119,32 @@
 //     }
 //   }
 
-//   Future<void> _initialize() async {
-//     // await _playerModule.closeAudioSession();
-//     await _playerModule.openAudioSession(
-//       withUI: false,
-//       focus: AudioFocus.requestFocusAndStopOthers,
-//       category: SessionCategory.playAndRecord,
-//       mode: SessionMode.modeDefault,
-//       device: AudioDevice.speaker,
-//     );
-//     await _playerModule.setSubscriptionDuration(Duration(milliseconds: 10));
-//     await initializeDateFormatting();
-//     await _setCodec(_codec);
-//     await _getDuration();
-//   }
-
-//   Future<void> _setCodec(Codec codec) async {
-//     _decoderSupported = await _playerModule.isDecoderSupported(codec);
-//   }
-
-//   Future<void> _getDuration() async {
-//     var path = widget.mediaModel!.path;
-//     var d = path != null ? await flutterSoundHelper.duration(path) : null;
-//     _duration = d != null ? d.inMilliseconds / 1000.0 : null;
-//   }
-
-//   void _cancelPlayerSubscriptions() {
-//     if (_playerSubscription != null) {
-//       _playerSubscription!.cancel();
-//       _playerSubscription = null;
-//     }
-//   }
-
-//   Future<void> _disposePlayModel() async {
-//     try {
-//       await _playerModule.closeAudioSession();
-//     } on Exception {
-//       print('Released unsuccessful');
-//     }
-//   }
-
-//   void _addListeners() {
-//     _cancelPlayerSubscriptions();
-//     _playerSubscription = _playerModule.onProgress!.listen((e) {
-//       _maxDuration = e.duration.inMilliseconds.toDouble();
-//       if (_maxDuration <= 0) _maxDuration = 0.0;
-
-//       _sliderCurrentPosition = min(e.position.inMilliseconds.toDouble(), _maxDuration);
-//       if (_sliderCurrentPosition < 0.0) {
-//         _sliderCurrentPosition = 0.0;
-//       }
-
-//       var date = DateTime.fromMillisecondsSinceEpoch(e.position.inMilliseconds, isUtc: true);
-//       var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
-//       setState(() {
-//         _playerTxt = txt.substring(0, 8);
-//       });
-//     });
-//   }
-
 //   Future<void> _startPlayer() async {
 //     try {
-//       if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank != widget.mediaModel!.rank &&
-//           _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid != widget.mediaModel!.uuid) {
+//       if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank !=
+//               widget.mediaModel!.rank &&
+//           _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid !=
+//               widget.mediaModel!.uuid) {
 //         ///
 //         _mediaPlayProvider!.setMediaPlayState(
-//           _mediaPlayProvider!.mediaPlayState.update(isNew: true, selectedMediaModel: widget.mediaModel),
+//           _mediaPlayProvider!.mediaPlayState
+//               .update(isNew: true, selectedMediaModel: widget.mediaModel),
 //         );
-//       } else if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank == widget.mediaModel!.rank &&
-//           _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid == widget.mediaModel!.uuid) {
+//       } else if (_mediaPlayProvider!.mediaPlayState.selectedMediaModel!.rank ==
+//               widget.mediaModel!.rank &&
+//           _mediaPlayProvider!.mediaPlayState.selectedMediaModel!.uuid ==
+//               widget.mediaModel!.uuid) {
 //         ///
 //         _mediaPlayProvider!.setMediaPlayState(
 //           _mediaPlayProvider!.mediaPlayState.update(
 //             isNew: false,
 //           ),
 //         );
-//       } else {}
+//       }
 
-//       await _playerModule.startPlayer(
-//         fromURI: widget.mediaModel!.path!,
-//         codec: _codec,
-//         sampleRate: _tSTREAMSAMPLERATE,
-//         whenFinished: () {
-//           print('Play finished');
-//           setState(() {});
-//         },
-//       );
-//       _addListeners();
+//       int result =
+//           await audioPlayer.play(widget.mediaModel!.path!, isLocal: true);
+//       if (result == 1) {}
 //       setState(() {});
 //     } on Exception catch (err) {
 //       print('error: $err');
@@ -205,35 +153,36 @@
 
 //   Future<void> _stopPlayer() async {
 //     try {
-//       await _playerModule.stopPlayer();
-//       if (_playerSubscription != null) {
-//         await _playerSubscription!.cancel();
-//         _playerSubscription = null;
+//       int result = await audioPlayer.stop();
+//       if (result == 1) {
+//         _sliderCurrentPosition = 0.0;
 //       }
-//       _sliderCurrentPosition = 0.0;
 //     } on Exception catch (err) {
 //       print('error: $err');
 //     }
 //     if (mounted) setState(() {});
 //   }
 
-//   void _pauseResumePlayer() async {
+// /*   void _pauseResumePlayer() async {
 //     try {
-//       if (_playerModule.isPlaying) {
-//         await _playerModule.pausePlayer();
+//       if (audioPlayer.state == PlayerState.PLAYING) {
+//         // int result = await audioPlayer.pause();
+//         await audioPlayer.pause();
 //       } else {
-//         await _playerModule.resumePlayer();
+//         // int result = await audioPlayer.resume();
+//         await audioPlayer.resume();
 //       }
 //     } on Exception catch (err) {
 //       print('error: $err');
 //     }
 //     if (mounted) setState(() {});
-//   }
+//   } */
 
 //   Future<void> _seekToPlayer(int milliSecs) async {
 //     try {
-//       if (_playerModule.isPlaying) {
-//         await _playerModule.seekToPlayer(Duration(milliseconds: milliSecs));
+//       if (audioPlayer.state == PlayerState.PLAYING) {
+//         // int result = await audioPlayer.seek(Duration(milliseconds: milliSecs));
+//         await audioPlayer.seek(Duration(milliseconds: milliSecs));
 //       }
 //     } on Exception catch (err) {
 //       print('error: $err');
@@ -241,33 +190,63 @@
 //     if (mounted) setState(() {});
 //   }
 
-//   void Function()? _onPauseResumePlayerPressed() {
-//     if (_playerModule.isPaused || _playerModule.isPlaying) {
+// /*   void Function()? _onPauseResumePlayerPressed() {
+//     if (audioPlayer.state == PlayerState.PAUSED ||
+//         audioPlayer.state == PlayerState.PLAYING) {
 //       return _pauseResumePlayer;
 //     }
 //     return null;
-//   }
+//   } */
 
 //   void Function()? _onStopPlayerPressed() {
-//     return (_playerModule.isPlaying || _playerModule.isPaused) ? _stopPlayer : null;
+//     return (audioPlayer.state == PlayerState.PLAYING ||
+//             audioPlayer.state == PlayerState.PAUSED)
+//         ? _stopPlayer
+//         : null;
 //   }
 
 //   void Function()? _onStartPlayerPressed() {
-//     if (widget.mediaModel!.path == "" || widget.mediaModel!.path == null) return null;
-
-//     // Disable the button if the selected codec is not supported
-//     if (!(_decoderSupported || _codec == Codec.pcm16)) {
+//     if (widget.mediaModel!.path == "" || widget.mediaModel!.path == null)
 //       return null;
-//     }
 
-//     return (_playerModule.isStopped) ? _startPlayer : null;
+//     return audioPlayer.state == PlayerState.STOPPED ||
+//             audioPlayer.state == PlayerState.COMPLETED
+//         ? _startPlayer
+//         : null;
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     var maxTime = DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
+//     String responsiveStyle = "";
+//     if (MediaQuery.of(context).size.width >=
+//         ResponsiveDesignSettings.tableteMaxWidth) {
+//       responsiveStyle = "desktop";
+//     } else if (MediaQuery.of(context).size.width >=
+//             ResponsiveDesignSettings.mobileMaxWidth &&
+//         MediaQuery.of(context).size.width <
+//             ResponsiveDesignSettings.tableteMaxWidth) {
+//       responsiveStyle = "tablet";
+//     } else if (MediaQuery.of(context).size.width <
+//         ResponsiveDesignSettings.mobileMaxWidth) {
+//       responsiveStyle = "mobile";
+//     }
+
+//     double iconSize = heightDp * 20;
+//     // double iconPadding = widthDp * 10;
+//     // TextStyle? textStyle = Theme.of(context).textTheme.overline;
+
+//     if (responsiveStyle != "mobile") {
+//       iconSize = heightDp * 35;
+//       // iconPadding = widthDp * 20;
+//       // textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+//     }
+
+//     var maxTime =
+//         DateTime.fromMillisecondsSinceEpoch(_maxDuration.toInt(), isUtc: true);
 //     var maxTimeString = DateFormat('mm:ss').format(maxTime);
-//     var currentTime = DateTime.fromMillisecondsSinceEpoch(_sliderCurrentPosition.toInt(), isUtc: true);
+//     var currentTime = DateTime.fromMillisecondsSinceEpoch(
+//         _sliderCurrentPosition.toInt(),
+//         isUtc: true);
 //     var currentTimeString = DateFormat('mm:ss').format(currentTime);
 
 //     if (widget.isUploading!) {
@@ -296,12 +275,14 @@
 //           child: Container(
 //             key: _key,
 //             margin: EdgeInsets.symmetric(vertical: heightDp * 5),
-//             padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 10),
+//             padding: EdgeInsets.symmetric(
+//                 horizontal: widthDp * 5, vertical: heightDp * 10),
 //             decoration: BoxDecoration(
 //               color: Color(0xFFE7E7E7),
-//               borderRadius: BorderRadius.circular(heightDp * 6),
+//               borderRadius: BorderRadius.circular(heightDp * 0),
 //               border: Border.all(
-//                 color: widget.isSelected! ? AppColors.yello : Colors.transparent,
+//                 color:
+//                     widget.isSelected! ? AppColors.yello : Colors.transparent,
 //                 width: widget.isSelected! ? 3 : 0,
 //               ),
 //             ),
@@ -316,8 +297,11 @@
 //                           : widget.mediaModel!.state == "uploaded"
 //                               ? Icons.cloud_done_outlined
 //                               : Icons.cloud_off_outlined,
-//                       size: heightDp * 20,
-//                       color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
+//                       size: iconSize,
+//                       color: widget.mediaModel!.state == "error" ||
+//                               widget.mediaModel!.state == "uploaded"
+//                           ? Colors.white
+//                           : Colors.transparent,
 //                     ),
 //                     Icon(
 //                       widget.mediaModel!.state == "error"
@@ -325,7 +309,7 @@
 //                           : widget.mediaModel!.state == "uploaded"
 //                               ? Icons.cloud_done
 //                               : Icons.cloud_off,
-//                       size: heightDp * 20,
+//                       size: iconSize,
 //                       color: widget.mediaModel!.state == "error"
 //                           ? AppColors.red
 //                           : widget.mediaModel!.state == "uploaded"
@@ -337,35 +321,44 @@
 //                 Expanded(
 //                   child: Row(
 //                     children: [
-//                       if (_playerModule.isStopped)
+//                       if (audioPlayer.state == PlayerState.COMPLETED ||
+//                           audioPlayer.state == PlayerState.STOPPED)
 //                         GestureDetector(
 //                           onTap: _onStartPlayerPressed(),
 //                           child: Container(
-//                             padding: EdgeInsets.symmetric(horizontal: widthDp * 3, vertical: heightDp * 5),
-//                             child: Icon(Icons.play_arrow, size: heightDp * 25, color: AppColors.yello),
+//                             padding: EdgeInsets.symmetric(
+//                                 horizontal: widthDp * 3,
+//                                 vertical: heightDp * 5),
+//                             child: Icon(Icons.play_arrow,
+//                                 size: heightDp * 25, color: AppColors.yello),
 //                           ),
 //                         ),
-//                       if (_playerModule.isPlaying)
+//                       if (audioPlayer.state == PlayerState.PLAYING)
 //                         GestureDetector(
 //                           onTap: _onStopPlayerPressed(),
 //                           child: Container(
-//                             padding: EdgeInsets.symmetric(horizontal: widthDp * 5, vertical: heightDp * 5),
-//                             child: Icon(Icons.stop, size: heightDp * 25, color: AppColors.yello),
+//                             padding: EdgeInsets.symmetric(
+//                                 horizontal: widthDp * 5,
+//                                 vertical: heightDp * 5),
+//                             child: Icon(Icons.stop,
+//                                 size: heightDp * 25, color: AppColors.yello),
 //                           ),
 //                         ),
 //                       Expanded(
 //                         child: Container(
 //                           // height: heightDp * 25,
 //                           child: Slider(
-//                             value: min(_sliderCurrentPosition, _maxDuration),
+//                             value: min(_sliderCurrentPosition,
+//                                 _maxDuration < 0 ? 0 : _maxDuration),
 //                             min: 0.0,
-//                             max: _maxDuration,
+//                             max: _maxDuration < 0 ? 0 : _maxDuration,
 //                             activeColor: AppColors.yello,
 //                             inactiveColor: AppColors.yello,
 //                             onChanged: (value) async {
 //                               await _seekToPlayer(value.toInt());
 //                             },
-//                             divisions: _maxDuration == 0.0 ? 1 : _maxDuration.toInt(),
+//                             divisions:
+//                                 _maxDuration < 0.0 ? 1 : _maxDuration.toInt(),
 //                           ),
 //                         ),
 //                       ),
@@ -388,12 +381,12 @@
 //                             children: [
 //                               Icon(
 //                                 Icons.info_outline,
-//                                 size: heightDp * 20,
+//                                 size: iconSize,
 //                                 color: Colors.white,
 //                               ),
 //                               Icon(
 //                                 Icons.info,
-//                                 size: heightDp * 20,
+//                                 size: iconSize,
 //                                 color: AppColors.yello,
 //                               ),
 //                             ],
@@ -412,15 +405,18 @@
 //             top: heightDp * 5,
 //             child: Container(
 //               width: widgetWidth,
-//               height: widgetHeight != null ? widgetHeight! - heightDp * 10 : widgetHeight,
+//               height: widgetHeight != null
+//                   ? widgetHeight! - heightDp * 10
+//                   : widgetHeight,
 //               decoration: BoxDecoration(
 //                 color: Colors.black.withOpacity(0.5),
-//                 borderRadius: BorderRadius.circular(heightDp * 6),
+//                 borderRadius: BorderRadius.circular(heightDp * 0),
 //               ),
 //               child: Center(
 //                 child: Transform.rotate(
 //                   angle: angle / 180 * pi,
-//                   child: Icon(Icons.autorenew, size: heightDp * 25, color: Colors.white),
+//                   child: Icon(Icons.autorenew,
+//                       size: iconSize, color: Colors.white),
 //                 ),
 //               ),
 //             ),

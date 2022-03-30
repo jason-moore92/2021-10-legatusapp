@@ -147,6 +147,13 @@ abstract class  LocaleKeys {
   static const ReportPageString_selecteAll = 'ReportPageString.selecteAll';
   static const ReportPageString_noMediaDescription = 'ReportPageString.noMediaDescription';
   static const ReportPageString = 'ReportPageString';
+  static const GalleryPageString_gallery = 'GalleryPageString.gallery';
+  static const GalleryPageString_photo = 'GalleryPageString.photo';
+  static const GalleryPageString_note = 'GalleryPageString.note';
+  static const GalleryPageString_audio = 'GalleryPageString.audio';
+  static const GalleryPageString_video = 'GalleryPageString.video';
+  static const GalleryPageString_on = 'GalleryPageString.on';
+  static const GalleryPageString = 'GalleryPageString';
   static const NoteDialogString_newNots = 'NoteDialogString.newNots';
   static const NoteDialogString_save = 'NoteDialogString.save';
   static const NoteDialogString_close = 'NoteDialogString.close';

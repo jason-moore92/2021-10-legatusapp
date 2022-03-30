@@ -50,6 +50,7 @@ dependencies:
   card_swiper: ^2.0.1
   fluttertoast: ^8.0.9
   flutter_video_info: ^1.2.0
+  fijkplayer: ^0.10.1
 
   ####################
   camera: ^0.9.4+16

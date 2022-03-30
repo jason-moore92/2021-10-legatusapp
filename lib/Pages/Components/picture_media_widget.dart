@@ -74,12 +74,16 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
 
     print(picWidth);
 
-    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >=
+        ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >=
+            ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width <
+            ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width <
+        ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
@@ -103,7 +107,8 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
       angle = 0;
     }
 
-    return Consumer<MediaPlayProvider>(builder: (context, mediaPlayProvider, _) {
+    return Consumer<MediaPlayProvider>(
+        builder: (context, mediaPlayProvider, _) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: heightDp! * 5),
         child: Stack(
@@ -122,18 +127,23 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                   color: Color(0xFFE7E7E7),
                   borderRadius: BorderRadius.circular(heightDp! * 0),
                   border: Border.all(
-                    color: widget.isSelected! ? AppColors.yello : Colors.transparent,
+                    color: widget.isSelected!
+                        ? AppColors.yello
+                        : Colors.transparent,
                     width: widget.isSelected! ? 3 : 0,
                   ),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(heightDp! * 0),
                   child: Image.file(
-                    widget.mediaModel!.thumPath != "" ? File(widget.mediaModel!.thumPath!) : File(widget.mediaModel!.path!),
+                    widget.mediaModel!.thumPath != ""
+                        ? File(widget.mediaModel!.thumPath!)
+                        : File(widget.mediaModel!.path!),
                     width: picWidth,
                     height: picHeight,
                     fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
                       return Container(
                         width: picWidth,
                         height: picHeight,
@@ -165,7 +175,10 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                             ? Icons.cloud_done_outlined
                             : Icons.cloud_off_outlined,
                     size: iconSize,
-                    color: widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
+                    color: widget.mediaModel!.state == "error" ||
+                            widget.mediaModel!.state == "uploaded"
+                        ? Colors.white
+                        : Colors.transparent,
                   ),
                   Icon(
                     widget.mediaModel!.state == "error"
@@ -225,7 +238,8 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                 child: Center(
                   child: Transform.rotate(
                     angle: angle / 180 * pi,
-                    child: Icon(Icons.autorenew, size: picHeight! / 2, color: Colors.white),
+                    child: Icon(Icons.autorenew,
+                        size: picHeight! / 2, color: Colors.white),
                   ),
                 ),
               ),
@@ -236,28 +250,34 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
   }
 
   void _tapHandler(BuildContext context, MediaPlayProvider mediaPlayProvider) {
-    if (widget.selectStatus!) {
-      if (widget.tapHandler != null) {
-        widget.tapHandler!();
-      }
-    } else {
-      if (mediaPlayProvider.mediaPlayState.selectedMediaModel!.rank != widget.mediaModel!.rank &&
-          mediaPlayProvider.mediaPlayState.selectedMediaModel!.uuid != widget.mediaModel!.uuid) {
-        ///
-        mediaPlayProvider.setMediaPlayState(
-          mediaPlayProvider.mediaPlayState.update(isNew: true, selectedMediaModel: widget.mediaModel),
-        );
-      } else if (mediaPlayProvider.mediaPlayState.selectedMediaModel!.rank == widget.mediaModel!.rank &&
-          mediaPlayProvider.mediaPlayState.selectedMediaModel!.uuid == widget.mediaModel!.uuid) {
-        ///
-        mediaPlayProvider.setMediaPlayState(
-          mediaPlayProvider.mediaPlayState.update(
-            isNew: false,
-          ),
-        );
-      } else {}
-      _viewHandler(context);
-    }
+    widget.tapHandler!();
+    // if (widget.selectStatus!) {
+    //   if (widget.tapHandler != null) {
+    //     widget.tapHandler!();
+    //   }
+    // } else {
+    //   if (mediaPlayProvider.mediaPlayState.selectedMediaModel!.rank !=
+    //           widget.mediaModel!.rank &&
+    //       mediaPlayProvider.mediaPlayState.selectedMediaModel!.uuid !=
+    //           widget.mediaModel!.uuid) {
+    //     ///
+    //     mediaPlayProvider.setMediaPlayState(
+    //       mediaPlayProvider.mediaPlayState
+    //           .update(isNew: true, selectedMediaModel: widget.mediaModel),
+    //     );
+    //   } else if (mediaPlayProvider.mediaPlayState.selectedMediaModel!.rank ==
+    //           widget.mediaModel!.rank &&
+    //       mediaPlayProvider.mediaPlayState.selectedMediaModel!.uuid ==
+    //           widget.mediaModel!.uuid) {
+    //     ///
+    //     mediaPlayProvider.setMediaPlayState(
+    //       mediaPlayProvider.mediaPlayState.update(
+    //         isNew: false,
+    //       ),
+    //     );
+    //   } else {}
+    //   _viewHandler(context);
+    // }
   }
 
   Future<void> _viewHandler(BuildContext context) async {
@@ -277,7 +297,9 @@ class GallaryPage extends StatefulWidget {
   final LocalReportModel? localReportModel;
   final MediaModel? mediaModel;
 
-  const GallaryPage({Key? key, @required this.localReportModel, @required this.mediaModel}) : super(key: key);
+  const GallaryPage(
+      {Key? key, @required this.localReportModel, @required this.mediaModel})
+      : super(key: key);
 
   @override
   _GallaryPageState createState() => _GallaryPageState();
@@ -293,8 +315,10 @@ class _GallaryPageState extends State<GallaryPage> {
     for (var i = 0; i < widget.localReportModel!.medias!.length; i++) {
       if (widget.localReportModel!.medias![i].type == MediaType.picture) {
         medias.add(widget.localReportModel!.medias![i]);
-        if (widget.mediaModel!.rank == widget.localReportModel!.medias![i].rank &&
-            widget.mediaModel!.uuid == widget.localReportModel!.medias![i].uuid) {
+        if (widget.mediaModel!.rank ==
+                widget.localReportModel!.medias![i].rank &&
+            widget.mediaModel!.uuid ==
+                widget.localReportModel!.medias![i].uuid) {
           index = medias.length - 1;
         }
       }
@@ -326,7 +350,8 @@ class _GallaryPageState extends State<GallaryPage> {
           Image image = new Image.file(file);
           Completer<ui.Image> completer = new Completer<ui.Image>();
           image.image.resolve(new ImageConfiguration()).addListener(
-                ImageStreamListener((ImageInfo info, bool _) => completer.complete(info.image)),
+                ImageStreamListener(
+                    (ImageInfo info, bool _) => completer.complete(info.image)),
               );
 
           return FutureBuilder<ui.Image>(
@@ -354,7 +379,8 @@ class _GallaryPageState extends State<GallaryPage> {
               } else {
                 return Container(
                   child: Theme(
-                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                    data:
+                        Theme.of(context).copyWith(brightness: Brightness.dark),
                     child: Center(child: CupertinoActivityIndicator()),
                   ),
                 );

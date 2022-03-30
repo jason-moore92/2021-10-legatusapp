@@ -155,9 +155,17 @@
     "noMedial": "Aucun média"
   },
   "ReportPageString": {
-    "share":"Partager",
+    "share": "Partager",
     "selecteAll": "Tout selectionner",
     "noMediaDescription": "Aucun média sur cet appareil pour ce constat.\n\nUtilisez les boutons ci-dessous pour prendre des notes ou lancer le mode photos / vidéos et dictées."
+  },
+  "GalleryPageString": {
+    "gallery": "Galerie",
+    "phto": "Photographie",
+    "note": "Note",
+    "audio": "Dictée",
+    "video": "Vidéo",
+    "on":"sur"
   },
   "NoteDialogString": {
     "newNots": "Nouvelle note",

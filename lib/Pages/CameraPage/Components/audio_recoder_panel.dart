@@ -36,7 +36,8 @@ class AudioRecoderPanel extends StatefulWidget {
   _AudioRecoderPanelState createState() => _AudioRecoderPanelState();
 }
 
-class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTickerProviderStateMixin {
+class _AudioRecoderPanelState extends State<AudioRecoderPanel>
+    with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -120,7 +121,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
     _cameraProvider = CameraProvider.of(context);
     _cameraProvider!.addListener(_cameraProviderListener);
 
-    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
     animation = Tween<double>(begin: 0, end: 1).animate(controller!)
       ..addListener(() {
         if (controller!.status == AnimationStatus.completed) {
@@ -157,9 +159,12 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
       final session = await AudioSession.instance;
       await session.configure(AudioSessionConfiguration(
         avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
-        avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.allowBluetooth | AVAudioSessionCategoryOptions.defaultToSpeaker,
+        avAudioSessionCategoryOptions:
+            AVAudioSessionCategoryOptions.allowBluetooth |
+                AVAudioSessionCategoryOptions.defaultToSpeaker,
         avAudioSessionMode: AVAudioSessionMode.spokenAudio,
-        avAudioSessionRouteSharingPolicy: AVAudioSessionRouteSharingPolicy.defaultPolicy,
+        avAudioSessionRouteSharingPolicy:
+            AVAudioSessionRouteSharingPolicy.defaultPolicy,
         avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
         androidAudioAttributes: const AndroidAudioAttributes(
           contentType: AndroidAudioContentType.speech,
@@ -203,9 +208,11 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
 
   void _cameraProviderListener() async {
     if (_cameraProvider!.cameraState.isShowAudioRecoderPanel!) {
-      if (_cameraProvider!.cameraState.isAudioRecord! && _cameraProvider!.cameraState.audioRecordStatus == "recording") {
+      if (_cameraProvider!.cameraState.isAudioRecord! &&
+          _cameraProvider!.cameraState.audioRecordStatus == "recording") {
         startRecorder();
-      } else if (!_cameraProvider!.cameraState.isAudioRecord! && _cameraProvider!.cameraState.audioRecordStatus == "stopped") {
+      } else if (!_cameraProvider!.cameraState.isAudioRecord! &&
+          _cameraProvider!.cameraState.audioRecordStatus == "stopped") {
         stopRecorder();
       }
     }
@@ -235,7 +242,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
       if (!kIsWeb) {
         var status = await Permission.microphone.request();
         if (status != PermissionStatus.granted) {
-          throw RecordingPermissionException('Microphone permission not granted');
+          throw RecordingPermissionException(
+              'Microphone permission not granted');
         }
       }
       var path = '';
@@ -261,7 +269,8 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
 
       _recorderSubscription = _recorderModule.onProgress!.listen((e) {
         _inMilliseconds = e.duration.inMilliseconds;
-        var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
+        var date =
+            DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
         var txt = DateFormat('mm:ss').format(date);
 
         setState(() {
@@ -311,11 +320,13 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
           if (_resumeMillseconds == 0) {
             _resumeMillseconds = e.duration.inMilliseconds;
           }
-          _inMilliseconds = _inMilliseconds! + (e.duration.inMilliseconds - _resumeMillseconds!);
+          _inMilliseconds = _inMilliseconds! +
+              (e.duration.inMilliseconds - _resumeMillseconds!);
           _resumeMillseconds = e.duration.inMilliseconds;
           print("--------resume-------------");
           print(_inMilliseconds);
-          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
+          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!,
+              isUtc: true);
           var txt = DateFormat('mm:ss').format(date);
 
           setState(() {
@@ -358,17 +369,17 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
         }
       });
 
-      _showInSnackBar("Audio saved in '$_path'");
+      // _showInSnackBar("Audio saved in '$_path'");
     } on Exception catch (err) {
       // await widget.keicyProgressDialog!.hide();
       print('stopRecorder error: $err');
     }
   }
 
-  void _showInSnackBar(String message) {
-    // ignore: deprecated_member_use
-    // widget.scaffoldKey!.currentState?.showSnackBar(SnackBar(content: Text(message)));
-  }
+  // void _showInSnackBar(String message) {
+  //   // ignore: deprecated_member_use
+  //   // widget.scaffoldKey!.currentState?.showSnackBar(SnackBar(content: Text(message)));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -446,9 +457,13 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
                         animation: animation!,
                         builder: (context, child) {
                           return Opacity(
-                            opacity: _recorderModule.isRecording ? 1 - animation!.value : 0,
+                            opacity: _recorderModule.isRecording
+                                ? 1 - animation!.value
+                                : 0,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: widthDp! * 10,
+                                  vertical: heightDp! * 5),
                               child: Icon(
                                 Icons.fiber_manual_record,
                                 size: heightDp! * 20,
@@ -458,7 +473,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTicker
                           );
                         },
                       ),
-                      Text(_audioRecorderTxt!, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
+                      Text(_audioRecorderTxt!,
+                          style: TextStyle(
+                              fontSize: fontSp! * 14, color: Colors.white)),
                       SizedBox(width: widthDp! * 5),
                     ],
                   ),

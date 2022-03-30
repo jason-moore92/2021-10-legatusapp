@@ -21,6 +21,7 @@ import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/CameraPage/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
+import 'package:legatus/Pages/GalleryPage/gallery_page.dart';
 import 'package:legatus/Pages/ReportNewPage/new_report_page.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
@@ -41,7 +42,8 @@ class ReportView extends StatefulWidget {
   _ReportViewState createState() => _ReportViewState();
 }
 
-class _ReportViewState extends State<ReportView> with SingleTickerProviderStateMixin {
+class _ReportViewState extends State<ReportView>
+    with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -62,7 +64,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   LocalMediaListProvider? _localMediaListProvider;
   LocalReportProvider? _localReportProvider;
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   ScrollController? _controller = ScrollController();
 
@@ -157,14 +160,13 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   void _permissionHander() async {
     LocationPermission permission = await Geolocator.requestPermission();
 
-    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
       _currentPosition = await Geolocator.getCurrentPosition();
-      setState(() {});
     }
 
     _locationSubscription = Geolocator.getPositionStream().listen((position) {
       _currentPosition = position;
-      setState(() {});
     });
   }
 
@@ -190,7 +192,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       } else {
         _refreshController.loadFailed();
       }
-    } else if (_localMediaListProvider!.localMediaListState.progressState == 2) {
+    } else if (_localMediaListProvider!.localMediaListState.progressState ==
+        2) {
       if (_localMediaListProvider!.localMediaListState.isRefresh!) {
         _localMediaListProvider!.setLocalMediaListState(
           _localMediaListProvider!.localMediaListState.update(isRefresh: false),
@@ -201,21 +204,26 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         _refreshController.loadComplete();
       }
 
-      if (_localMediaListProvider!.localMediaListState.localMediaMetaData!["nextPage"] == 1) {
+      if (_localMediaListProvider!
+              .localMediaListState.localMediaMetaData!["nextPage"] ==
+          1) {
         // _controller!.jumpTo(0);
       }
     }
   }
 
   void _localReportProviderListener() async {
-    if (_localReportProvider!.localReportState.contextName != "ReportPage") return;
+    if (_localReportProvider!.localReportState.contextName != "ReportPage")
+      return;
 
-    if (_localReportProvider!.localReportState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
+    if (_localReportProvider!.localReportState.progressState != 1 &&
+        _keicyProgressDialog!.isShowing()) {
       await _keicyProgressDialog!.hide();
     }
 
     if (_localReportProvider!.localReportState.progressState == 2) {
-      _localReportModel!.reportId = _localReportProvider!.localReportState.reportId;
+      _localReportModel!.reportId =
+          _localReportProvider!.localReportState.reportId;
       _updatedStatus = _updatedStatus = {
         "isUpdated": true,
         "localReportModel": _localReportModel,
@@ -227,21 +235,28 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         text: _localReportProvider!.localReportState.message!,
       );
     } else if (_localReportProvider!.localReportState.progressState == 3) {
-      _localReportModel!.reportId = _localReportProvider!.localReportState.reportId;
+      _localReportModel!.reportId =
+          _localReportProvider!.localReportState.reportId;
       for (var i = 0; i < _localReportModel!.medias!.length; i++) {
-        if (_localReportModel!.medias![i].rank! == _localReportProvider!.localReportState.uploadingMediaModel!.rank!) {
-          _localReportModel!.medias![i] = _localReportProvider!.localReportState.uploadingMediaModel!;
+        if (_localReportModel!.medias![i].rank! ==
+            _localReportProvider!.localReportState.uploadingMediaModel!.rank!) {
+          _localReportModel!.medias![i] =
+              _localReportProvider!.localReportState.uploadingMediaModel!;
           _updateLocalReport(_localReportModel!);
           break;
         }
       }
-      List<dynamic> localMediaListData = _localMediaListProvider!.localMediaListState.localMediaListData!;
+      List<dynamic> localMediaListData =
+          _localMediaListProvider!.localMediaListState.localMediaListData!;
       for (var i = 0; i < localMediaListData.length; i++) {
         List<MediaModel> mediaModelList = localMediaListData[i];
         bool isFind = false;
         for (var k = 0; k < mediaModelList.length; k++) {
-          if (mediaModelList[k].rank! == _localReportProvider!.localReportState.uploadingMediaModel!.rank!) {
-            mediaModelList[k] = _localReportProvider!.localReportState.uploadingMediaModel!;
+          if (mediaModelList[k].rank! ==
+              _localReportProvider!
+                  .localReportState.uploadingMediaModel!.rank!) {
+            mediaModelList[k] =
+                _localReportProvider!.localReportState.uploadingMediaModel!;
             isFind = true;
             break;
           }
@@ -270,8 +285,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   void _onRefresh() async {
     _selectStatus = false;
     _selectedMediaRanks = [];
-    List<dynamic> localMediaListData = _localMediaListProvider!.localMediaListState.localMediaListData!;
-    Map<String, dynamic> localMediaMetaData = _localMediaListProvider!.localMediaListState.localMediaMetaData!;
+    List<dynamic> localMediaListData =
+        _localMediaListProvider!.localMediaListState.localMediaListData!;
+    Map<String, dynamic> localMediaMetaData =
+        _localMediaListProvider!.localMediaListState.localMediaMetaData!;
 
     localMediaListData = [];
     localMediaMetaData = Map<String, dynamic>();
@@ -297,7 +314,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   void _editHandler() async {
     var result = await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) => NewReportPage(isNew: false, localReportModel: _localReportModel!),
+        builder: (BuildContext context) =>
+            NewReportPage(isNew: false, localReportModel: _localReportModel!),
       ),
     );
     if (result != null && result.isNotEmpty) {
@@ -309,8 +327,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     }
   }
 
-  Future<void> _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
-    LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
+  Future<void> _noteHandler(
+      {String? note, bool? isNew = true, MediaModel? mediaModel}) async {
+    LocalReportModel localReportModel =
+        LocalReportModel.copy(_localReportModel!);
     // await _keicyProgressDialog!.show();
     try {
       // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
@@ -331,25 +351,31 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
         if (path == null) {
           // await _keicyProgressDialog!.hide();
-          FailedDialog.show(context, text: "Creating new note file path occur error");
+          FailedDialog.show(context,
+              text: "Creating new note file path occur error");
           return;
         }
 
-        File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
+        File? textFile =
+            await FileHelpers.writeTextFile(text: note, path: path);
 
         if (textFile == null) {
           // await _keicyProgressDialog!.hide();
-          FailedDialog.show(context, text: "Creating new note file occur error");
+          FailedDialog.show(context,
+              text: "Creating new note file occur error");
           return;
         }
 
         mediaModel = MediaModel();
         mediaModel.content = note;
-        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(
+            dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
         if (Platform.isAndroid) {
-          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
+          mediaModel.deviceInfo =
+              AppDataProvider.of(context).appDataState.androidInfo;
         } else if (Platform.isIOS) {
-          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
+          mediaModel.deviceInfo =
+              AppDataProvider.of(context).appDataState.iosInfo;
         }
         mediaModel.duration = -1;
         mediaModel.ext = textFile.path.split('.').last;
@@ -377,15 +403,18 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             } catch (e) {
               print(e);
               // await _keicyProgressDialog!.hide();
-              FailedDialog.show(context, text: "Deleting old note file occur error");
+              FailedDialog.show(context,
+                  text: "Deleting old note file occur error");
               return;
             }
 
-            File? textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
+            File? textFile = await FileHelpers.writeTextFile(
+                text: note, path: mediaModel.path!);
 
             if (textFile == null) {
               // await _keicyProgressDialog!.hide();
-              FailedDialog.show(context, text: "Creating update note file occur error");
+              FailedDialog.show(context,
+                  text: "Creating update note file occur error");
               return;
             }
 
@@ -411,7 +440,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
       // await _keicyProgressDialog!.hide();
 
       if (success) {
-        var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
+        var result = await LocalReportApiProvider.getLocalReportModel(
+            localReportModel: localReportModel);
         if (result["success"]) {
           _localReportModel = result["data"];
         } else {
@@ -429,7 +459,9 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           isNotifiable: true,
         );
 
-        String message = isNew ? "Note enregistrée avec succès" : "Note mise à jour avec succès";
+        String message = isNew
+            ? "Note enregistrée avec succès"
+            : "Note mise à jour avec succès";
         // SuccessDialog.show(context, text: message);
         Fluttertoast.showToast(
           msg: message,
@@ -447,12 +479,14 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           setState(() {});
         }
       } else {
-        FailedDialog.show(context, text: isNew ? "New note error" : "Update note error");
+        FailedDialog.show(context,
+            text: isNew ? "New note error" : "Update note error");
         return;
       }
     } catch (e) {
       print(e);
-      FailedDialog.show(context, text: isNew! ? "New note error" : "Update note error");
+      FailedDialog.show(context,
+          text: isNew! ? "New note error" : "Update note error");
       return;
     }
   }
@@ -460,7 +494,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   Future<bool> _updateLocalReport(LocalReportModel localReportModel) async {
     var result = await LocalReportApiProvider.update(
       localReportModel: localReportModel,
-      oldReportIdStr: "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}",
+      oldReportIdStr:
+          "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}",
     );
     LocalReportListProvider.of(context).setLocalReportListState(
       LocalReportListProvider.of(context).localReportListState.update(
@@ -471,11 +506,13 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   }
 
   void _deleteLocalMedias() async {
-    LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
+    LocalReportModel localReportModel =
+        LocalReportModel.copy(_localReportModel!);
     List<MediaModel> newMedias = [];
     for (var i = 0; i < localReportModel.medias!.length; i++) {
       MediaModel mediaModel = localReportModel.medias![i];
-      if (_selectedMediaRanks!.contains(mediaModel.rank) && mediaModel.path! != "") {
+      if (_selectedMediaRanks!.contains(mediaModel.rank) &&
+          mediaModel.path! != "") {
         File oldFile = File(mediaModel.path!);
         try {
           await oldFile.delete();
@@ -512,7 +549,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         textColor: Colors.greenAccent,
         fontSize: 16.0,
       );
-      var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
+      var result = await LocalReportApiProvider.getLocalReportModel(
+          localReportModel: localReportModel);
       if (result["success"]) {
         _localReportModel = result["data"];
       } else {
@@ -563,7 +601,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
   void _uploadHandler() async {
     if (_localReportProvider!.localReportState.isUploading!) return;
 
-    if (AuthProvider.of(context).authState.loginState == LoginState.IsNotLogin) {
+    if (AuthProvider.of(context).authState.loginState ==
+        LoginState.IsNotLogin) {
       UploadReportDialog.show(
         context,
         callback: () {
@@ -590,7 +629,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         ),
       );
       Wakelock.enable();
-      _localReportProvider!.uploadMedials(localReportModel: LocalReportModel.copy(_localReportModel!));
+      _localReportProvider!.uploadMedials(
+          localReportModel: LocalReportModel.copy(_localReportModel!));
     }
   }
 
@@ -599,13 +639,15 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     if (nonUploadedCount != 0) {
       FailedDialog.show(
         context,
-        text: "Vous devez uploader tous les médias du constat pour externaliser la frappe.",
+        text:
+            "Vous devez uploader tous les médias du constat pour externaliser la frappe.",
       );
       return;
     }
 
     /// if the user is not login
-    if (AuthProvider.of(context).authState.loginState == LoginState.IsNotLogin) {
+    if (AuthProvider.of(context).authState.loginState ==
+        LoginState.IsNotLogin) {
       EditionConnectionDialog.show(
         context,
         callback: () {
@@ -671,26 +713,32 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     if (DateTime.now().difference(startDate).inSeconds > 60) {
       FailedDialog.show(
         context,
-        text: "La requête a dépassé la limite de 60 secondes. Vérifiez votre connexion ou réessayez plus tard",
+        text:
+            "La requête a dépassé la limite de 60 secondes. Vérifiez votre connexion ou réessayez plus tard",
       );
       return;
     }
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) => AddEditionPage(editions: result["data"]),
+        builder: (BuildContext context) =>
+            AddEditionPage(editions: result["data"]),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >=
+        ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >=
+            ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width <
+            ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width <
+        ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
@@ -699,7 +747,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
         Navigator.of(context).pop(_updatedStatus);
         return false;
       },
-      child: Consumer2<LocalMediaListProvider, LocalReportProvider>(builder: (context, localMediaListProvider, localReportProvider, _) {
+      child: Consumer2<LocalMediaListProvider, LocalReportProvider>(
+          builder: (context, localMediaListProvider, localReportProvider, _) {
         photosCount = 0;
         audiosCount = 0;
         notesCount = 0;
@@ -741,7 +790,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             height: deviceHeight,
             child: Column(
               children: [
-                Container(width: deviceWidth, height: statusbarHeight!, color: AppColors.primayColor),
+                Container(
+                    width: deviceWidth,
+                    height: statusbarHeight!,
+                    color: AppColors.primayColor),
                 _appBarWidget(),
                 localReportProvider.localReportState.isUploading!
                     ? _uploadingPanel()
@@ -750,12 +802,15 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                         : _mediaCountPanel(),
                 SizedBox(height: heightDp! * 5),
                 Expanded(
-                  child: _localReportModel!.medias!.isEmpty ? _noMediaPanel() : _mediaPanel1(),
+                  child: _localReportModel!.medias!.isEmpty
+                      ? _noMediaPanel()
+                      : _mediaPanel1(),
                 ),
               ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
           floatingActionButton: _floatingButtonPanel(),
         );
       }),
@@ -783,7 +838,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               child: Row(
                 children: [
                   SizedBox(width: iconPadding),
-                  Icon(Icons.arrow_back_ios_outlined, size: iconSize * 0.8, color: Colors.white),
+                  Icon(Icons.arrow_back_ios_outlined,
+                      size: iconSize * 0.8, color: Colors.white),
                   SizedBox(width: iconPadding),
                 ],
               ),
@@ -805,20 +861,23 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                   _selectedMediaRanks = [];
                   _selectStatus = true;
                   for (var i = 0; i < _localReportModel!.medias!.length; i++) {
-                    _selectedMediaRanks!.add(_localReportModel!.medias![i].rank!);
+                    _selectedMediaRanks!
+                        .add(_localReportModel!.medias![i].rank!);
                   }
                   setState(() {});
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: iconPadding),
-                  child: Icon(Icons.select_all_outlined, size: iconSize, color: Colors.white),
+                  child: Icon(Icons.select_all_outlined,
+                      size: iconSize, color: Colors.white),
                 ),
               ),
               GestureDetector(
                 onTap: () {
                   JournalPanelDialog.show(
                     context,
-                    email: AuthProvider.of(context).authState.loginState == LoginState.IsLogin
+                    email: AuthProvider.of(context).authState.loginState ==
+                            LoginState.IsLogin
                         ? AuthProvider.of(context).authState.userModel!.email!
                         : "",
                     callBack: (String email) => _journalHandler(email),
@@ -836,19 +895,24 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 ),
               ),
               GestureDetector(
-                onTap: _localReportProvider!.localReportState.isUploading! ? null : _uploadHandler,
+                onTap: _localReportProvider!.localReportState.isUploading!
+                    ? null
+                    : _uploadHandler,
                 child: Stack(
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: iconPadding),
-                      child: Icon(Icons.cloud_upload_outlined, size: iconSize, color: Colors.white),
+                      child: Icon(Icons.cloud_upload_outlined,
+                          size: iconSize, color: Colors.white),
                     ),
                     if (nonUploadedCount != 0)
                       Positioned(
                         right: iconPadding / 2,
                         // bottom: 0,
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 2),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: widthDp! * 3,
+                              vertical: heightDp! * 2),
                           decoration: BoxDecoration(
                             color: AppColors.red,
                             borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -856,7 +920,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                           alignment: Alignment.center,
                           child: Text(
                             "$nonUploadedCount",
-                            style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                            style: Theme.of(context)
+                                .textTheme
+                                .overline!
+                                .copyWith(color: Colors.white),
                           ),
                         ),
                       ),
@@ -878,7 +945,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 onTap: _editHandler,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: iconPadding),
-                  child: Icon(Icons.info_outline_rounded, size: iconSize, color: Colors.white),
+                  child: Icon(Icons.info_outline_rounded,
+                      size: iconSize, color: Colors.white),
                 ),
               ),
               SizedBox(width: widthDp! * 5),
@@ -927,7 +995,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             onTap: () async {
               var result = await pushNewScreen(
                 context,
-                screen: CameraPage(localReportModel: _localReportModel, isPicture: true),
+                screen: CameraPage(
+                    localReportModel: _localReportModel, isPicture: true),
                 withNavBar: false, // OPTIONAL VALUE. True by default.
                 pageTransitionAnimation: PageTransitionAnimation.fade,
               );
@@ -964,14 +1033,16 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 // ],
               ),
               alignment: Alignment.center,
-              child: Icon(Icons.photo_camera_outlined, size: heightDp! * 35, color: Colors.white),
+              child: Icon(Icons.photo_camera_outlined,
+                  size: heightDp! * 35, color: Colors.white),
             ),
           ),
           GestureDetector(
             onTap: () async {
               var result = await pushNewScreen(
                 context,
-                screen: CameraPage(localReportModel: _localReportModel, isAudio: true),
+                screen: CameraPage(
+                    localReportModel: _localReportModel, isAudio: true),
                 withNavBar: false, // OPTIONAL VALUE. True by default.
                 pageTransitionAnimation: PageTransitionAnimation.cupertino,
               );
@@ -1009,7 +1080,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 // ],
               ),
               alignment: Alignment.center,
-              child: Icon(Icons.mic_none_outlined, size: heightDp! * 25, color: Colors.white),
+              child: Icon(Icons.mic_none_outlined,
+                  size: heightDp! * 25, color: Colors.white),
             ),
           ),
         ],
@@ -1025,10 +1097,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 35;
       iconPadding = widthDp! * 20;
-      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      textStyle =
+          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+      padding: EdgeInsets.symmetric(
+          horizontal: widthDp! * 10, vertical: heightDp! * 10),
       color: Color(0xFFE7E7E7),
       child: Row(
         children: [
@@ -1036,7 +1110,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.collections_outlined, size: iconSize, color: Colors.black),
+                Icon(Icons.collections_outlined,
+                    size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_photos.tr(),
@@ -1044,7 +1119,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -1071,7 +1147,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -1090,7 +1167,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.sticky_note_2_outlined, size: iconSize, color: Colors.black),
+                Icon(Icons.sticky_note_2_outlined,
+                    size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_notes.tr(),
@@ -1098,7 +1176,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -1117,7 +1196,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.video_library_outlined, size: iconSize, color: Colors.black),
+                Icon(Icons.video_library_outlined,
+                    size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_videos.tr(),
@@ -1125,7 +1205,8 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -1167,10 +1248,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               setState(() {});
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+              padding: EdgeInsets.symmetric(
+                  horizontal: widthDp! * 10, vertical: heightDp! * 10),
               child: Transform.rotate(
                 angle: pi / 4,
-                child: Icon(Icons.add_circle_outline_outlined, size: iconSize, color: Colors.black),
+                child: Icon(Icons.add_circle_outline_outlined,
+                    size: iconSize, color: Colors.black),
               ),
             ),
           ),
@@ -1188,8 +1271,11 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                   onChangeHandler: (value) {
                     if (value) {
                       _selectedMediaRanks = [];
-                      for (var i = 0; i < _localReportModel!.medias!.length; i++) {
-                        _selectedMediaRanks!.add(_localReportModel!.medias![i].rank!);
+                      for (var i = 0;
+                          i < _localReportModel!.medias!.length;
+                          i++) {
+                        _selectedMediaRanks!
+                            .add(_localReportModel!.medias![i].rank!);
                       }
                     } else {
                       _selectedMediaRanks = [];
@@ -1200,14 +1286,19 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: widthDp! * 5),
-                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 5, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: widthDp! * 5, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
-                    borderRadius: BorderRadiusDirectional.circular(heightDp! * 4),
+                    borderRadius:
+                        BorderRadiusDirectional.circular(heightDp! * 4),
                   ),
                   child: Text(
                     "${_selectedMediaRanks!.length}",
-                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .overline!
+                        .copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -1216,9 +1307,16 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           GestureDetector(
             onTap: () {
               List<String> shareFiles = [];
-              if (_selectedMediaRanks!.isNotEmpty && _localMediaListProvider!.localMediaListState.progressState == 2) {
-                for (var i = 0; i < _localMediaListProvider!.localMediaListState.localLocalReportModel!.medias!.length; i++) {
-                  MediaModel mediaModel = _localMediaListProvider!.localMediaListState.localLocalReportModel!.medias![i];
+              if (_selectedMediaRanks!.isNotEmpty &&
+                  _localMediaListProvider!.localMediaListState.progressState ==
+                      2) {
+                for (var i = 0;
+                    i <
+                        _localMediaListProvider!.localMediaListState
+                            .localLocalReportModel!.medias!.length;
+                    i++) {
+                  MediaModel mediaModel = _localMediaListProvider!
+                      .localMediaListState.localLocalReportModel!.medias![i];
                   if (_selectedMediaRanks!.contains(mediaModel.rank)) {
                     shareFiles.add(mediaModel.path!);
                   }
@@ -1229,10 +1327,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             child: Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: iconPadding / 2, vertical: heightDp! * 10),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: iconPadding / 2, vertical: heightDp! * 10),
                   child: Transform.rotate(
                     angle: -pi / 2,
-                    child: Icon(Icons.logout, size: iconSize, color: Colors.black),
+                    child:
+                        Icon(Icons.logout, size: iconSize, color: Colors.black),
                   ),
                 ),
                 Text(
@@ -1258,8 +1358,10 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               );
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: iconPadding, vertical: heightDp! * 10),
-              child: Icon(Icons.delete_outline_outlined, size: iconSize, color: Colors.red),
+              padding: EdgeInsets.symmetric(
+                  horizontal: iconPadding, vertical: heightDp! * 10),
+              child: Icon(Icons.delete_outline_outlined,
+                  size: iconSize, color: Colors.red),
             ),
           ),
         ],
@@ -1287,11 +1389,15 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
           Expanded(
             child: Row(
               children: [
-                Icon(Icons.cloud_upload_outlined, size: iconSize, color: Colors.white),
+                Icon(Icons.cloud_upload_outlined,
+                    size: iconSize, color: Colors.white),
                 SizedBox(width: widthDp! * 5),
                 Text(
                   LocaleKeys.NewReportPageString_uploading.tr(),
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Colors.white),
                 )
               ],
             ),
@@ -1305,10 +1411,12 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
               );
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+              padding: EdgeInsets.symmetric(
+                  horizontal: widthDp! * 10, vertical: heightDp! * 10),
               child: Transform.rotate(
                 angle: pi / 4,
-                child: Icon(Icons.add_circle_outline_outlined, size: iconSize, color: Colors.white),
+                child: Icon(Icons.add_circle_outline_outlined,
+                    size: iconSize, color: Colors.white),
               ),
             ),
           ),
@@ -1334,17 +1442,23 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
     List<dynamic> localMediaListData = [];
     Map<String, dynamic> localMediaMetaData = Map<String, dynamic>();
 
-    if (_localMediaListProvider!.localMediaListState.localMediaListData != null) {
-      localMediaListData = _localMediaListProvider!.localMediaListState.localMediaListData!;
+    if (_localMediaListProvider!.localMediaListState.localMediaListData !=
+        null) {
+      localMediaListData =
+          _localMediaListProvider!.localMediaListState.localMediaListData!;
     }
-    if (_localMediaListProvider!.localMediaListState.localMediaMetaData != null) {
-      localMediaMetaData = _localMediaListProvider!.localMediaListState.localMediaMetaData!;
+    if (_localMediaListProvider!.localMediaListState.localMediaMetaData !=
+        null) {
+      localMediaMetaData =
+          _localMediaListProvider!.localMediaListState.localMediaMetaData!;
     }
 
     int itemCount = 0;
 
-    if (_localMediaListProvider!.localMediaListState.localMediaListData != null) {
-      itemCount += _localMediaListProvider!.localMediaListState.localMediaListData!.length;
+    if (_localMediaListProvider!.localMediaListState.localMediaListData !=
+        null) {
+      itemCount += _localMediaListProvider!
+          .localMediaListState.localMediaListData!.length;
     }
 
     if (_localMediaListProvider!.localMediaListState.progressState == 1) {
@@ -1375,8 +1489,14 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
             controller: _controller,
             itemCount: itemCount,
             itemBuilder: (context, index) {
-              List<MediaModel>? mediaModelList = (index >= localMediaListData.length) ? null : localMediaListData[index];
-              if (_localMediaListProvider!.localMediaListState.progressState == 2 && mediaModelList == null && index == localMediaListData.length) {
+              List<MediaModel>? mediaModelList =
+                  (index >= localMediaListData.length)
+                      ? null
+                      : localMediaListData[index];
+              if (_localMediaListProvider!.localMediaListState.progressState ==
+                      2 &&
+                  mediaModelList == null &&
+                  index == localMediaListData.length) {
                 return SizedBox(height: heightDp! * 85);
               }
               if (mediaModelList == null) {
@@ -1397,22 +1517,48 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                   children: List.generate(mediaModelList.length, (index) {
                     MediaModel mediaModel = mediaModelList[index];
 
-                    bool isUploading = _localReportProvider!.localReportState.isUploading! &&
-                        _localReportProvider!.localReportState.uploadingMediaModel!.rank != -1 &&
-                        mediaModel.rank == _localReportProvider!.localReportState.uploadingMediaModel!.rank;
+                    bool isUploading =
+                        _localReportProvider!.localReportState.isUploading! &&
+                            _localReportProvider!.localReportState
+                                    .uploadingMediaModel!.rank !=
+                                -1 &&
+                            mediaModel.rank ==
+                                _localReportProvider!
+                                    .localReportState.uploadingMediaModel!.rank;
 
                     switch (mediaModel.type) {
                       case MediaType.note:
                         return NoteMediaWidget(
                           mediaModel: mediaModel,
                           totalMediaCount: _localReportModel!.medias!.length,
-                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
+                          isSelected:
+                              _selectedMediaRanks!.contains(mediaModel.rank),
                           isUploading: isUploading,
                           tapHandler: () async {
-                            if (!_selectStatus && _selectedMediaRanks!.isEmpty) {
-                              var note = await NotePanelDialog.show(context, isNew: false, mediaModel: mediaModel);
-                              if (note != null) {
-                                _noteHandler(note: note, isNew: false, mediaModel: mediaModel);
+                            if (!_selectStatus &&
+                                _selectedMediaRanks!.isEmpty) {
+                              // var note = await NotePanelDialog.show(context,
+                              //     isNew: false, mediaModel: mediaModel);
+                              // if (note != null) {
+                              //   _noteHandler(
+                              //       note: note,
+                              //       isNew: false,
+                              //       mediaModel: mediaModel);
+                              // }
+                              var result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      GalleryPage(
+                                    localReportModel: _localReportModel!,
+                                    localMediaListProvider:
+                                        _localMediaListProvider!,
+                                    index: mediaModel.rank! - 1,
+                                  ),
+                                ),
+                              );
+
+                              if (result.isNotEmpty && result["isUpdated"]) {
+                                setState(() {});
                               }
                             } else {
                               _tapHandler(mediaModel);
@@ -1427,11 +1573,30 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                           localReportModel: _localReportModel,
                           mediaModel: mediaModel,
                           totalMediaCount: _localReportModel!.medias!.length,
-                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
+                          isSelected:
+                              _selectedMediaRanks!.contains(mediaModel.rank),
                           selectStatus: _selectStatus,
                           isUploading: isUploading,
-                          tapHandler: () {
-                            _tapHandler(mediaModel);
+                          tapHandler: () async {
+                            if (!_selectStatus) {
+                              var result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      GalleryPage(
+                                    localReportModel: _localReportModel!,
+                                    localMediaListProvider:
+                                        _localMediaListProvider!,
+                                    index: mediaModel.rank! - 1,
+                                  ),
+                                ),
+                              );
+
+                              if (result.isNotEmpty && result["isUpdated"]) {
+                                setState(() {});
+                              }
+                            } else {
+                              _tapHandler(mediaModel);
+                            }
                           },
                           longPressHandler: () {
                             _longPressHandler(mediaModel);
@@ -1441,10 +1606,29 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                         return AudioMediaWidget(
                           mediaModel: mediaModel,
                           totalMediaCount: _localReportModel!.medias!.length,
-                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
+                          isSelected:
+                              _selectedMediaRanks!.contains(mediaModel.rank),
                           isUploading: isUploading,
-                          tapHandler: () {
-                            _tapHandler(mediaModel);
+                          tapHandler: () async {
+                            if (!_selectStatus) {
+                              var result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      GalleryPage(
+                                    localReportModel: _localReportModel!,
+                                    localMediaListProvider:
+                                        _localMediaListProvider!,
+                                    index: mediaModel.rank! - 1,
+                                  ),
+                                ),
+                              );
+
+                              if (result.isNotEmpty && result["isUpdated"]) {
+                                setState(() {});
+                              }
+                            } else {
+                              _tapHandler(mediaModel);
+                            }
                           },
                           longPressHandler: () {
                             _longPressHandler(mediaModel);
@@ -1454,10 +1638,29 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                         return VideoMediaWidget(
                           mediaModel: mediaModel,
                           totalMediaCount: _localReportModel!.medias!.length,
-                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
+                          isSelected:
+                              _selectedMediaRanks!.contains(mediaModel.rank),
                           isUploading: isUploading,
-                          tapHandler: () {
-                            _tapHandler(mediaModel);
+                          tapHandler: () async {
+                            if (!_selectStatus) {
+                              var result = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      GalleryPage(
+                                    localReportModel: _localReportModel!,
+                                    localMediaListProvider:
+                                        _localMediaListProvider!,
+                                    index: mediaModel.rank! - 1,
+                                  ),
+                                ),
+                              );
+
+                              if (result.isNotEmpty && result["isUpdated"]) {
+                                setState(() {});
+                              }
+                            } else {
+                              _tapHandler(mediaModel);
+                            }
                           },
                           longPressHandler: () {
                             _longPressHandler(mediaModel);

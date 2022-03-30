@@ -159,6 +159,14 @@
     "selecteAll": "Select ALL",
     "noMediaDescription": "No media on this device for this finding.\n\nUse the buttons below to take notes or launch photos / videos and dictations mode."
   },
+  "GalleryPageString": {
+    "gallery": "Galerie",
+    "photo": "Photo",
+    "note": "Note",
+    "audio": "Audio",
+    "video": "Video",
+    "on": "sur"
+  },
   "NoteDialogString": {
     "newNots": "New Note",
     "save": "Save",

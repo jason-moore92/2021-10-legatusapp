@@ -91,6 +91,10 @@ class LocalMediaApiProvider {
       Uint8List imageByteData = await file!.readAsBytes();
       var response = await httpOld.put(
         Uri.parse(presignedUrl!),
+        headers: {
+          "Connection": "Keep-Alive",
+          "Keep-Alive": "timeout=1, max=1000",
+        },
         body: imageByteData,
       );
 
