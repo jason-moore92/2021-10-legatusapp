@@ -12,6 +12,11 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>fr</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>legatus</string>
 	<key>CFBundlePackageType</key>
@@ -21,13 +26,15 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>https</string>
 		<string>http</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -36,14 +43,20 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Legatus doit avoir accès à la caméra de cet appareil pour réaliser vos photos de constatations.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Facultatif : en ayant accès à la localisation de cet appareil lors du fonctionnement de l'application, Legatus peut enregistrer les coordonnées GPS des constats, photos, dictées, notes et vidéos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Legatus doit avoir accès au micro de cet appareil lors du fonctionnement de l'application pour enregistrer vos dictées audios.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Legatus doit avoir accès à la librairie de médias de cet appareil lors de son fonctionnement pour intéragir avec les photos et vidéos enregistrées.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
