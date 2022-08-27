@@ -153,8 +153,9 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
       setState(() {});
 
       _nativeDeviceOrientationStream.listen((event) {
-        if (!(_cameraProvider!.cameraState.isAudioRecord! || _cameraProvider!.cameraState.isVideoRecord!)) {
+        if (!(_cameraProvider!.cameraState.isAudioRecord! || _cameraProvider!.cameraState.isVideoRecord!) && _orientation != event) {
           _orientation = event;
+          setState(() {});
         }
       });
 

@@ -210,7 +210,7 @@ class VideoWidgetForGalleryState extends State<VideoWidgetForGallery> {
     return Consumer<MediaPlayProvider>(builder: (context, mediaPlayProvider, _) {
       int quarterTurns = 0;
       if (info!.orientation == 0 && Platform.isAndroid) {
-        quarterTurns = 2;
+        // quarterTurns = 2;
       }
       return Container(
         padding: EdgeInsets.symmetric(
