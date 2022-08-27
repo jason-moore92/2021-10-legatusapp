@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,19 +14,19 @@ import 'package:legatus/Pages/ReportPage/report_page.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ReportListView extends StatefulWidget {
-  ReportListView({Key? key}) : super(key: key);
+  const ReportListView({Key? key}) : super(key: key);
 
   @override
-  _ReportListViewState createState() => _ReportListViewState();
+  ReportListViewState createState() => ReportListViewState();
 }
 
-class _ReportListViewState extends State<ReportListView> with SingleTickerProviderStateMixin {
+class ReportListViewState extends State<ReportListView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -36,7 +38,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
   double? fontSp;
   ///////////////////////////////
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   LocalReportListProvider? _localReportListProvider;
 
@@ -61,7 +63,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
       isNotifiable: false,
     );
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _localReportListProvider!.addListener(_localReportListProviderListener);
 
       if (_localReportListProvider!.localReportListState.localReportModel!.reportId != 0) {
@@ -86,7 +88,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
       } else if (_localReportListProvider!.localReportListState.isNew!) {
         var result = await pushNewScreen(
           context,
-          screen: NewReportPage(),
+          screen: const NewReportPage(),
           pageTransitionAnimation: PageTransitionAnimation.fade,
         );
 
@@ -106,7 +108,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
         _localReportListProvider!.setLocalReportListState(
           _localReportListProvider!.localReportListState.update(
             localReportListData: [],
-            localReportMetaData: Map<String, dynamic>(),
+            localReportMetaData: <String, dynamic>{},
             progressState: 1,
           ),
         );
@@ -162,7 +164,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
     Map<String, dynamic> localReportMetaData = _localReportListProvider!.localReportListState.localReportMetaData!;
 
     localReportListData = [];
-    localReportMetaData = Map<String, dynamic>();
+    localReportMetaData = <String, dynamic>{};
     _localReportListProvider!.setLocalReportListState(
       _localReportListProvider!.localReportListState.update(
         progressState: 1,
@@ -221,7 +223,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
-          body: SizedBox(),
+          body: const SizedBox(),
         );
       }
 
@@ -235,7 +237,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
-          body: SizedBox(),
+          body: const SizedBox(),
         );
       }
 
@@ -248,8 +250,8 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
           ),
         ),
         body: (localReportListProvider.localReportListState.progressState == 0)
-            ? Center(child: CupertinoActivityIndicator())
-            : Container(
+            ? const Center(child: CupertinoActivityIndicator())
+            : SizedBox(
                 width: deviceWidth,
                 height: deviceHeight,
                 child: _localReportsListPanel(),
@@ -259,7 +261,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
           child: Icon(Icons.add, size: heightDp! * 25, color: Colors.white),
           onPressed: () async {
             var result = await Navigator.of(context).push(
-              MaterialPageRoute(builder: (BuildContext context) => NewReportPage()),
+              MaterialPageRoute(builder: (BuildContext context) => const NewReportPage()),
             );
 
             if (result != null && result.isNotEmpty) {
@@ -273,7 +275,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
 
   Widget _localReportsListPanel() {
     List<dynamic> localReportsList = [];
-    Map<String, dynamic> localReportsMetaData = Map<String, dynamic>();
+    Map<String, dynamic> localReportsMetaData = <String, dynamic>{};
 
     if (_localReportListProvider!.localReportListState.localReportListData != null) {
       localReportsList = _localReportListProvider!.localReportListState.localReportListData!;
@@ -309,8 +311,8 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
                 enablePullUp: (localReportsMetaData["isEnd"] != null &&
                     !localReportsMetaData["isEnd"] &&
                     _localReportListProvider!.localReportListState.progressState != 1),
-                header: WaterDropHeader(),
-                footer: ClassicFooter(),
+                header: const WaterDropHeader(),
+                footer: const ClassicFooter(),
                 controller: _refreshController,
                 onRefresh: _onRefresh,
                 onLoading: _onLoading,
@@ -323,7 +325,7 @@ class _ReportListViewState extends State<ReportListView> with SingleTickerProvid
                       enabled: true,
                       // closeOnScroll: false,
                       endActionPane: ActionPane(
-                        motion: ScrollMotion(),
+                        motion: const ScrollMotion(),
                         extentRatio: 0.3,
                         children: [
                           SlidableAction(

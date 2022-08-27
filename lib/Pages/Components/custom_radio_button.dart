@@ -7,8 +7,8 @@ class CustomRadioButton<T> extends FormField<T> {
     Key? key,
     double? width,
     double? height,
-    @required T? value,
-    @required T? groupValue,
+    required T value,
+    required T groupValue,
     Color? activeColor = Colors.blue,
     Color? focusColor,
     Color? hoverColor,
@@ -37,7 +37,7 @@ class CustomRadioButton<T> extends FormField<T> {
                 GestureDetector(
                   onTap: (enabled!)
                       ? () {
-                          state.didChange(value!);
+                          state.didChange(value);
                           if (onChanged != null) {
                             onChanged(value);
                           }
@@ -47,11 +47,11 @@ class CustomRadioButton<T> extends FormField<T> {
                     width: width,
                     height: height,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.transparent),
+                    decoration: const BoxDecoration(color: Colors.transparent),
                     child: Row(
                       children: <Widget>[
                         Radio<T>(
-                          value: value!,
+                          value: value,
                           groupValue: groupValue,
                           activeColor: activeColor,
                           focusColor: focusColor,
@@ -71,13 +71,13 @@ class CustomRadioButton<T> extends FormField<T> {
                 ),
                 (state.hasError)
                     ? Container(
-                        padding: EdgeInsets.symmetric(vertical: 3),
+                        padding: const EdgeInsets.symmetric(vertical: 3),
                         child: Text(
                           (state.errorText ?? ""),
                           style: TextStyle(fontSize: (labelStyle != null) ? labelStyle.fontSize! * 0.8 : 12, color: Colors.red),
                         ),
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               ],
             );
           },

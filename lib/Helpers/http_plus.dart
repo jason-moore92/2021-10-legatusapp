@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 
 import 'package:http/http.dart';
@@ -28,11 +30,11 @@ Future<Map<String, String>> commonHeaders() async {
 }
 
 Future<String> getAuthToken() async {
-  SharedPreferences _prefs;
-  String _rememberUserKey = "remember_me";
+  SharedPreferences prefs;
+  String rememberUserKey = "remember_me";
 
-  _prefs = await SharedPreferences.getInstance();
-  var rememberUserData = _prefs.getString(_rememberUserKey) == null ? null : json.decode(_prefs.getString(_rememberUserKey)!);
+  prefs = await SharedPreferences.getInstance();
+  var rememberUserData = prefs.getString(rememberUserKey) == null ? null : json.decode(prefs.getString(rememberUserKey)!);
 
   if (rememberUserData != null) {
     return rememberUserData['token'];

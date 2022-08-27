@@ -3,7 +3,7 @@
 import "package:equatable/equatable.dart";
 import 'package:hive/hive.dart';
 
-part 'MediaModel.g.dart';
+part 'media_model.g.dart';
 
 class MediaType {
   static const String picture = "picture";
@@ -78,7 +78,7 @@ class MediaModel extends Equatable {
       type: map["type"] ?? "",
       state: map["state"] ?? "",
       uuid: map["uuid"] ?? "",
-      deviceInfo: map["device_info"] ?? Map<String, dynamic>(),
+      deviceInfo: map["device_info"] ?? <String, dynamic>{},
       createdAt: map["created_at"] ?? "",
       rank: map["rank"] ?? -1,
       filename: map["filename"] ?? "",
@@ -101,7 +101,7 @@ class MediaModel extends Equatable {
       "type": type ?? "",
       "state": state ?? "",
       "uuid": uuid ?? "",
-      "device_info": deviceInfo ?? Map<String, dynamic>(),
+      "device_info": deviceInfo ?? <String, dynamic>{},
       "created_at": createdAt ?? "",
       "rank": rank ?? -1,
       "filename": filename ?? "",
@@ -147,7 +147,7 @@ class MediaModel extends Equatable {
         type!,
         state!,
         uuid!,
-        deviceInfo ?? Map<String, dynamic>(),
+        deviceInfo ?? <String, dynamic>{},
         createdAt!,
         rank!,
         filename!,

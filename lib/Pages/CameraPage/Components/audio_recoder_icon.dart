@@ -60,7 +60,7 @@ class AudioRecorderIcon extends StatelessWidget {
         child: Stack(
           children: [
             IconButton(
-              icon: Icon(Icons.mic),
+              icon: const Icon(Icons.mic),
               color: enable ? Colors.white : Colors.white.withOpacity(0.6),
               iconSize: heightDp * 30,
               disabledColor: Colors.white.withOpacity(0.6),

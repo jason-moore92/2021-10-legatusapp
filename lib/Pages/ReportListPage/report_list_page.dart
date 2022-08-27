@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'index.dart';
 
 class ReportListPage extends StatelessWidget {
+  const ReportListPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ReportListView();
+    return const ReportListView();
   }
 }

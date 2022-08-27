@@ -130,7 +130,7 @@
 //         }
 //       });
 
-//     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
 //       await _initSettings();
 //     });
 //   }

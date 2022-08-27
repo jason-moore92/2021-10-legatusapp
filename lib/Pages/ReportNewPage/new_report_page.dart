@@ -8,7 +8,7 @@ class NewReportPage extends StatelessWidget {
   final bool? isNew;
   final LocalReportModel? localReportModel;
 
-  NewReportPage({this.isNew = true, this.localReportModel});
+  const NewReportPage({Key? key, this.isNew = true, this.localReportModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

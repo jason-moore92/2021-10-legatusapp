@@ -3,6 +3,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/ApiDataProviders/index.dart';
@@ -31,17 +32,17 @@ class PlanningProvider extends ChangeNotifier {
 
   Future<void> initHiveObject() async {
     try {
-      if (_planningDataBox == null) {
-        _planningDataBox = await Hive.openBox<dynamic>("planningData");
-      }
+      _planningDataBox ??= await Hive.openBox<dynamic>("planningData");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
   Future<void> getPlanningList() async {
     try {
-      var result;
+      Map<String, dynamic> result;
       await initHiveObject();
 
       result = await PlanningApiProvider.getPlanning(startDate: _planningState.currentDate);
@@ -59,7 +60,9 @@ class PlanningProvider extends ChangeNotifier {
         _planningDataBox!.put("planningData", _planningState.planningData);
         var test = _planningDataBox!.get("planningData");
 
-        print(test);
+        if (kDebugMode) {
+          print(test);
+        }
       } else {
         _planningState = _planningState.update(
           progressState: -1,

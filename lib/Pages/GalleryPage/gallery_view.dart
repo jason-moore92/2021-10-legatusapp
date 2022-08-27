@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,7 +26,7 @@ class GalleryView extends StatefulWidget {
   final LocalMediaListProvider localMediaListProvider;
   final int index;
 
-  GalleryView({
+  const GalleryView({
     Key? key,
     required this.localReportModel,
     required this.index,
@@ -31,11 +34,10 @@ class GalleryView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _GalleryViewState createState() => _GalleryViewState();
+  GalleryViewState createState() => GalleryViewState();
 }
 
-class _GalleryViewState extends State<GalleryView>
-    with SingleTickerProviderStateMixin {
+class GalleryViewState extends State<GalleryView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -63,7 +65,7 @@ class _GalleryViewState extends State<GalleryView>
 
   Position? _currentPosition;
   StreamSubscription? _locationSubscription;
-  Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
+  Map<String, dynamic> _updatedStatus = <String, dynamic>{};
   // late PageController _pageController;
 
   @override
@@ -85,7 +87,7 @@ class _GalleryViewState extends State<GalleryView>
     //   context,
     //   backgroundColor: Colors.transparent,
     //   elevation: 0,
-    //   layout: Layout.Column,
+    //   layout: Layout.column,
     //   padding: EdgeInsets.zero,
     //   width: heightDp! * 120,
     //   height: heightDp! * 120,
@@ -110,7 +112,7 @@ class _GalleryViewState extends State<GalleryView>
 
     // _pageController = PageController(initialPage: selectedIndex);
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _permissionHander();
     });
   }
@@ -118,8 +120,7 @@ class _GalleryViewState extends State<GalleryView>
   void _permissionHander() async {
     LocationPermission permission = await Geolocator.requestPermission();
 
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
+    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
       _currentPosition = await Geolocator.getCurrentPosition();
     }
 
@@ -136,16 +137,12 @@ class _GalleryViewState extends State<GalleryView>
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.of(context).size.width >=
-        ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >=
-            ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width <
-            ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width <
-        ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
@@ -192,7 +189,7 @@ class _GalleryViewState extends State<GalleryView>
       default:
     }
 
-    Widget panel = SizedBox();
+    Widget panel = const SizedBox();
     switch (_localReportModel!.medias![selectedIndex].type) {
       case MediaType.audio:
         mediaType = LocaleKeys.GalleryPageString_audio.tr();
@@ -221,15 +218,12 @@ class _GalleryViewState extends State<GalleryView>
       child: Scaffold(
         body: Stack(
           children: [
-            Container(
+            SizedBox(
               width: deviceWidth,
               height: deviceHeight,
               child: Column(
                 children: [
-                  Container(
-                      width: deviceWidth,
-                      height: statusbarHeight!,
-                      color: AppColors.primayColor),
+                  Container(width: deviceWidth, height: statusbarHeight!, color: AppColors.primayColor),
                   _appBarWidget(),
                   _mediaCountPanel(),
                   Expanded(child: panel),
@@ -272,10 +266,7 @@ class _GalleryViewState extends State<GalleryView>
             ),
             Column(
               children: [
-                Container(
-                    width: deviceWidth,
-                    height: statusbarHeight!,
-                    color: AppColors.primayColor),
+                Container(width: deviceWidth, height: statusbarHeight!, color: AppColors.primayColor),
                 _appBarWidget(),
                 _mediaCountPanel(),
               ],
@@ -307,8 +298,7 @@ class _GalleryViewState extends State<GalleryView>
               child: Row(
                 children: [
                   SizedBox(width: iconPadding),
-                  Icon(Icons.arrow_back_ios_outlined,
-                      size: iconSize * 0.8, color: Colors.white),
+                  Icon(Icons.arrow_back_ios_outlined, size: iconSize * 0.8, color: Colors.white),
                   SizedBox(width: iconPadding),
                 ],
               ),
@@ -329,8 +319,7 @@ class _GalleryViewState extends State<GalleryView>
             children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: iconPadding),
-                child: Icon(Icons.perm_media_outlined,
-                    size: iconSize, color: Colors.white),
+                child: Icon(Icons.perm_media_outlined, size: iconSize, color: Colors.white),
               ),
               SizedBox(width: widthDp! * 5),
             ],
@@ -348,21 +337,18 @@ class _GalleryViewState extends State<GalleryView>
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 35;
       iconPadding = widthDp! * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: widthDp! * 10, vertical: heightDp! * 10),
-      color: Color(0xFFE7E7E7),
+      padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+      color: const Color(0xFFE7E7E7),
       child: Row(
         children: [
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.collections_outlined,
-                    size: iconSize, color: Colors.black),
+                Icon(Icons.collections_outlined, size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_photos.tr(),
@@ -370,8 +356,7 @@ class _GalleryViewState extends State<GalleryView>
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -398,8 +383,7 @@ class _GalleryViewState extends State<GalleryView>
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -418,8 +402,7 @@ class _GalleryViewState extends State<GalleryView>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.sticky_note_2_outlined,
-                    size: iconSize, color: Colors.black),
+                Icon(Icons.sticky_note_2_outlined, size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_notes.tr(),
@@ -427,8 +410,7 @@ class _GalleryViewState extends State<GalleryView>
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -447,8 +429,7 @@ class _GalleryViewState extends State<GalleryView>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.video_library_outlined,
-                    size: iconSize, color: Colors.black),
+                Icon(Icons.video_library_outlined, size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_videos.tr(),
@@ -456,8 +437,7 @@ class _GalleryViewState extends State<GalleryView>
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -486,11 +466,9 @@ class _GalleryViewState extends State<GalleryView>
       alignment: Alignment.center,
       child: GestureDetector(
         onTap: () async {
-          var note = await NotePanelDialog.show(context,
-              isNew: false, mediaModel: _selectedMediaModel);
+          var note = await NotePanelDialog.show(context, isNew: false, mediaModel: _selectedMediaModel);
           if (note != null) {
-            _noteHandler(
-                note: note, isNew: false, mediaModel: _selectedMediaModel);
+            _noteHandler(note: note, isNew: false, mediaModel: _selectedMediaModel);
           }
         },
         child: Container(
@@ -502,10 +480,7 @@ class _GalleryViewState extends State<GalleryView>
           color: Colors.grey.withOpacity(0.3),
           child: Text(
             "${_selectedMediaModel!.content}",
-            style: Theme.of(context)
-                .textTheme
-                .bodyText1!
-                .copyWith(color: Colors.black),
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.black),
             textAlign: TextAlign.center,
           ),
         ),
@@ -605,18 +580,17 @@ class _GalleryViewState extends State<GalleryView>
                   ),
                   SizedBox(height: heightDp! * 2),
                   Text(
-                    "$mediaType",
+                    mediaType,
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   SizedBox(height: heightDp! * 2),
                   Text(
-                    "${KeicyDateTime.convertDateTimeToDateString(
-                      dateTime:
-                          DateTime.tryParse(_selectedMediaModel!.createdAt!),
+                    KeicyDateTime.convertDateTimeToDateString(
+                      dateTime: DateTime.tryParse(_selectedMediaModel!.createdAt!),
                       formats: 'd/m/Y H:i:s',
-                    )}",
+                    ),
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -627,8 +601,7 @@ class _GalleryViewState extends State<GalleryView>
           ),
           GestureDetector(
             onTap: () {
-              if (selectedIndex == _localReportModel!.medias!.length - 1)
-                return;
+              if (selectedIndex == _localReportModel!.medias!.length - 1) return;
               selectedIndex++;
               // _pageController.jumpToPage(selectedIndex);
               setState(() {});
@@ -640,9 +613,7 @@ class _GalleryViewState extends State<GalleryView>
               child: Icon(
                 Icons.arrow_forward_ios_outlined,
                 size: heightDp! * 25,
-                color: selectedIndex == _localReportModel!.medias!.length - 1
-                    ? Colors.grey
-                    : Colors.black,
+                color: selectedIndex == _localReportModel!.medias!.length - 1 ? Colors.grey : Colors.black,
               ),
             ),
           ),
@@ -651,10 +622,8 @@ class _GalleryViewState extends State<GalleryView>
     );
   }
 
-  Future<void> _noteHandler(
-      {String? note, bool? isNew = true, MediaModel? mediaModel}) async {
-    LocalReportModel localReportModel =
-        LocalReportModel.copy(_localReportModel!);
+  Future<void> _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
+    LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
     try {
       if (isNew!) {
         String? path = await FileHelpers.getFilePath(
@@ -665,31 +634,25 @@ class _GalleryViewState extends State<GalleryView>
 
         if (path == null) {
           // await _keicyProgressDialog!.hide();
-          FailedDialog.show(context,
-              text: "Creating new note file path occur error");
+          FailedDialog.show(context, text: "Creating new note file path occur error");
           return;
         }
 
-        File? textFile =
-            await FileHelpers.writeTextFile(text: note, path: path);
+        File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
 
         if (textFile == null) {
           // await _keicyProgressDialog!.hide();
-          FailedDialog.show(context,
-              text: "Creating new note file occur error");
+          FailedDialog.show(context, text: "Creating new note file occur error");
           return;
         }
 
         mediaModel = MediaModel();
         mediaModel.content = note;
-        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(
-            dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
         if (Platform.isAndroid) {
-          mediaModel.deviceInfo =
-              AppDataProvider.of(context).appDataState.androidInfo;
+          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
         } else if (Platform.isIOS) {
-          mediaModel.deviceInfo =
-              AppDataProvider.of(context).appDataState.iosInfo;
+          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
         }
         mediaModel.duration = -1;
         mediaModel.ext = textFile.path.split('.').last;
@@ -704,7 +667,7 @@ class _GalleryViewState extends State<GalleryView>
         mediaModel.size = textFile.readAsBytesSync().lengthInBytes;
         mediaModel.state = "captured";
         mediaModel.type = MediaType.note;
-        mediaModel.uuid = Uuid().v4();
+        mediaModel.uuid = const Uuid().v4();
 
         if (_localReportModel!.medias == null) _localReportModel!.medias = [];
         localReportModel.medias!.add(mediaModel);
@@ -715,20 +678,19 @@ class _GalleryViewState extends State<GalleryView>
             try {
               await oldTextFile.delete();
             } catch (e) {
-              print(e);
+              if (kDebugMode) {
+                print(e);
+              }
               // await _keicyProgressDialog!.hide();
-              FailedDialog.show(context,
-                  text: "Deleting old note file occur error");
+              FailedDialog.show(context, text: "Deleting old note file occur error");
               return;
             }
 
-            File? textFile = await FileHelpers.writeTextFile(
-                text: note, path: mediaModel.path!);
+            File? textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
 
             if (textFile == null) {
               // await _keicyProgressDialog!.hide();
-              FailedDialog.show(context,
-                  text: "Creating update note file occur error");
+              FailedDialog.show(context, text: "Creating update note file occur error");
               return;
             }
 
@@ -754,8 +716,7 @@ class _GalleryViewState extends State<GalleryView>
       // await _keicyProgressDialog!.hide();
 
       if (success) {
-        var result = await LocalReportApiProvider.getLocalReportModel(
-            localReportModel: localReportModel);
+        var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
         if (result["success"]) {
           _localReportModel = result["data"];
         } else {
@@ -773,9 +734,7 @@ class _GalleryViewState extends State<GalleryView>
           isNotifiable: true,
         );
 
-        String message = isNew
-            ? "Note enregistrée avec succès"
-            : "Note mise à jour avec succès";
+        String message = isNew ? "Note enregistrée avec succès" : "Note mise à jour avec succès";
         // SuccessDialog.show(context, text: message);
         Fluttertoast.showToast(
           msg: message,
@@ -789,14 +748,14 @@ class _GalleryViewState extends State<GalleryView>
 
         setState(() {});
       } else {
-        FailedDialog.show(context,
-            text: isNew ? "New note error" : "Update note error");
+        FailedDialog.show(context, text: isNew ? "New note error" : "Update note error");
         return;
       }
     } catch (e) {
-      print(e);
-      FailedDialog.show(context,
-          text: isNew! ? "New note error" : "Update note error");
+      if (kDebugMode) {
+        print(e);
+      }
+      FailedDialog.show(context, text: isNew! ? "New note error" : "Update note error");
       return;
     }
   }
@@ -804,8 +763,7 @@ class _GalleryViewState extends State<GalleryView>
   Future<bool> _updateLocalReport(LocalReportModel localReportModel) async {
     var result = await LocalReportApiProvider.update(
       localReportModel: localReportModel,
-      oldReportIdStr:
-          "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}",
+      oldReportIdStr: "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}",
     );
     LocalReportListProvider.of(context).setLocalReportListState(
       LocalReportListProvider.of(context).localReportListState.update(

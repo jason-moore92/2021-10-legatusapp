@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'index.dart';
 
 class LocalReportListProvider extends ChangeNotifier {
-  static LocalReportListProvider of(BuildContext context, {bool listen = false}) => Provider.of<LocalReportListProvider>(context, listen: listen);
+  static LocalReportListProvider of(BuildContext context, {bool listen = false}) =>
+      Provider.of<LocalReportListProvider>(context, listen: listen);
 
   LocalReportListState _localReportListState = LocalReportListState.init();
   LocalReportListState get localReportListState => _localReportListState;
@@ -24,7 +25,7 @@ class LocalReportListProvider extends ChangeNotifier {
     List<dynamic> localReportListData = _localReportListState.localReportListData!;
     Map<String, dynamic> localReportMetaData = _localReportListState.localReportMetaData!;
     try {
-      var result;
+      Map<String, dynamic> result;
 
       result = await LocalReportApiProvider.getLocalReportList(
         page: localReportMetaData.isEmpty ? 0 : (localReportMetaData["nextPage"] ?? 0),
@@ -35,7 +36,7 @@ class LocalReportListProvider extends ChangeNotifier {
         String ids = "";
         for (var i = 0; i < localReportListData.length; i++) {
           LocalReportModel localReportsModel = localReportListData[i];
-          ids += "," + localReportsModel.uuid!;
+          ids += ",${localReportsModel.uuid!}";
         }
         for (var i = 0; i < result["data"]["docs"].length; i++) {
           LocalReportModel localReportsModel = result["data"]["docs"][i];

@@ -76,16 +76,16 @@ class CustomTextFormField extends StatelessWidget {
     InputBorder? focusedBorder;
     InputBorder? errorBorder;
     InputBorder? focusedErrorBorder;
-    focusedBorder = this.focusedBorder ?? this.border;
+    focusedBorder = this.focusedBorder ?? border;
     focusedBorder = focusedBorder.copyWith(
       borderSide: focusedBorder.borderSide.copyWith(width: 1.5),
     );
-    errorBorder = this.errorBorder ?? this.border;
+    errorBorder = this.errorBorder ?? border;
     errorBorder = errorBorder.copyWith(borderSide: errorBorder.borderSide.copyWith(color: Colors.red));
     focusedErrorBorder = this.focusedErrorBorder ?? errorBorder;
     focusedErrorBorder = focusedErrorBorder.copyWith(borderSide: focusedErrorBorder.borderSide.copyWith(width: 1.5));
 
-    return Container(
+    return SizedBox(
       width: width,
       child: TextFormField(
         controller: controller,

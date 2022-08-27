@@ -1,5 +1,6 @@
 library keicy_checkbox;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CustomCheckBox extends FormField<Map<String, dynamic>> {
@@ -39,7 +40,7 @@ class CustomCheckBox extends FormField<Map<String, dynamic>> {
           builder: (FormFieldState<Map<String, dynamic>> state) {
             trueIconColor = trueIconColor ?? iconColor;
             falseIconColor = falseIconColor ?? iconColor;
-            WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               if (value != state.value!["oldValue"]) {
                 state.didChange({"value": value, "oldValue": value});
               }
@@ -119,9 +120,9 @@ class CustomCheckBox extends FormField<Map<String, dynamic>> {
               crossAxisAlignment: crossAxisAlignment!,
               children: <Widget>[
                 Icon(icon, color: enabled ? iconColor : disabledColor, size: iconSize),
-                (label == "") ? SizedBox() : SizedBox(width: labelSpacing),
+                (label == "") ? const SizedBox() : SizedBox(width: labelSpacing),
                 (label == "")
-                    ? SizedBox()
+                    ? const SizedBox()
                     : (width == null)
                         ? Text(label!, style: labelStyle)
                         : Expanded(
@@ -133,13 +134,13 @@ class CustomCheckBox extends FormField<Map<String, dynamic>> {
         ),
         (state!.hasError)
             ? Container(
-                padding: EdgeInsets.symmetric(vertical: 3),
+                padding: const EdgeInsets.symmetric(vertical: 3),
                 child: Text(
                   (state.errorText ?? ""),
                   style: TextStyle(fontSize: (labelStyle != null) ? labelStyle.fontSize! * 0.8 : 12, color: Colors.red),
                 ),
               )
-            : SizedBox(),
+            : const SizedBox(),
       ],
     );
   }
@@ -151,6 +152,8 @@ void tapHandler(FormFieldState<Map<String, dynamic>>? state, bool? stateChangePo
     state.didChange({"value": newState, "oldValue": state.value!["oldValue"]});
     if (onChangeHandler != null) onChangeHandler(newState);
   } catch (e) {
-    print(e);
+    if (kDebugMode) {
+      print(e);
+    }
   }
 }

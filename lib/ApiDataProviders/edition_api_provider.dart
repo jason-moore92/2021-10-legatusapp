@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
@@ -13,11 +13,11 @@ class EditionApiProvider {
 
   static Future<void> initHiveObject() async {
     try {
-      if (appSettingsBox == null) {
-        appSettingsBox = await Hive.openBox<dynamic>("app_settings");
-      }
+      appSettingsBox ??= await Hive.openBox<dynamic>("app_settings");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -70,7 +70,9 @@ class EditionApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",
@@ -134,7 +136,9 @@ class EditionApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",

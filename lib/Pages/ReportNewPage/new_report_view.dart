@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -24,13 +26,13 @@ class NewReportView extends StatefulWidget {
   final bool? isNew;
   final LocalReportModel? localReportModel;
 
-  NewReportView({Key? key, this.isNew, this.localReportModel}) : super(key: key);
+  const NewReportView({Key? key, this.isNew, this.localReportModel}) : super(key: key);
 
   @override
-  _NewReportViewState createState() => _NewReportViewState();
+  NewReportViewState createState() => NewReportViewState();
 }
 
-class _NewReportViewState extends State<NewReportView> with SingleTickerProviderStateMixin {
+class NewReportViewState extends State<NewReportView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -42,68 +44,68 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
   double? fontSp;
   ///////////////////////////////
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
-  FocusNode _nameFocusNode = FocusNode();
-  FocusNode _dateFocusNode = FocusNode();
-  FocusNode _timeFocusNode = FocusNode();
-  FocusNode _descriptionFocusNode = FocusNode();
+  final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _dateFocusNode = FocusNode();
+  final FocusNode _timeFocusNode = FocusNode();
+  final FocusNode _descriptionFocusNode = FocusNode();
 
-  TextEditingController _streetController = TextEditingController();
-  TextEditingController _addressComplementController = TextEditingController();
-  TextEditingController _zipController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _latitudeController = TextEditingController();
-  TextEditingController _longitudeController = TextEditingController();
+  final TextEditingController _streetController = TextEditingController();
+  final TextEditingController _addressComplementController = TextEditingController();
+  final TextEditingController _zipController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
 
-  FocusNode _streetFocusNode = FocusNode();
-  FocusNode _addressComplementFocusNode = FocusNode();
-  FocusNode _zipFocusNode = FocusNode();
-  FocusNode _cityFocusNode = FocusNode();
-  FocusNode _latitudeFocusNode = FocusNode();
-  FocusNode _longitudeFocusNode = FocusNode();
+  final FocusNode _streetFocusNode = FocusNode();
+  final FocusNode _addressComplementFocusNode = FocusNode();
+  final FocusNode _zipFocusNode = FocusNode();
+  final FocusNode _cityFocusNode = FocusNode();
+  final FocusNode _latitudeFocusNode = FocusNode();
+  final FocusNode _longitudeFocusNode = FocusNode();
 
-  TextEditingController _customerNameController = TextEditingController();
-  TextEditingController _customerStreetController = TextEditingController();
-  TextEditingController _customerComplementController = TextEditingController();
-  TextEditingController _customerZipController = TextEditingController();
-  TextEditingController _customerCityController = TextEditingController();
-  TextEditingController _cropFormController = TextEditingController();
-  TextEditingController _cropSirenController = TextEditingController();
-  TextEditingController _cropRCSController = TextEditingController();
+  final TextEditingController _customerNameController = TextEditingController();
+  final TextEditingController _customerStreetController = TextEditingController();
+  final TextEditingController _customerComplementController = TextEditingController();
+  final TextEditingController _customerZipController = TextEditingController();
+  final TextEditingController _customerCityController = TextEditingController();
+  final TextEditingController _cropFormController = TextEditingController();
+  final TextEditingController _cropSirenController = TextEditingController();
+  final TextEditingController _cropRCSController = TextEditingController();
 
-  FocusNode _customerNameFocusNode = FocusNode();
-  FocusNode _customerStreetFocusNode = FocusNode();
-  FocusNode _customerComplementFocusNode = FocusNode();
-  FocusNode _customerZipFocusNode = FocusNode();
-  FocusNode _customerCityFocusNode = FocusNode();
-  FocusNode _cropFromFocusNode = FocusNode();
-  FocusNode _cropSirenFocusNode = FocusNode();
-  FocusNode _cropRCSFocusNode = FocusNode();
+  final FocusNode _customerNameFocusNode = FocusNode();
+  final FocusNode _customerStreetFocusNode = FocusNode();
+  final FocusNode _customerComplementFocusNode = FocusNode();
+  final FocusNode _customerZipFocusNode = FocusNode();
+  final FocusNode _customerCityFocusNode = FocusNode();
+  final FocusNode _cropFromFocusNode = FocusNode();
+  final FocusNode _cropSirenFocusNode = FocusNode();
+  final FocusNode _cropRCSFocusNode = FocusNode();
 
-  TextEditingController _recipientNameController = TextEditingController();
-  TextEditingController _recipientPositionController = TextEditingController();
-  TextEditingController _recipientBirthDayController = TextEditingController();
-  TextEditingController _recipientBirthCityController = TextEditingController();
-  TextEditingController _recipientEmailController = TextEditingController();
-  TextEditingController _recipientPhoneNumberController = TextEditingController();
+  final TextEditingController _recipientNameController = TextEditingController();
+  final TextEditingController _recipientPositionController = TextEditingController();
+  final TextEditingController _recipientBirthDayController = TextEditingController();
+  final TextEditingController _recipientBirthCityController = TextEditingController();
+  final TextEditingController _recipientEmailController = TextEditingController();
+  final TextEditingController _recipientPhoneNumberController = TextEditingController();
 
-  FocusNode _recipientNameFocusNode = FocusNode();
-  FocusNode _recipientPositionFocusNode = FocusNode();
-  FocusNode _recipientBirthDayFocusNode = FocusNode();
-  FocusNode _recipientBirthCityFocusNode = FocusNode();
-  FocusNode _recipientEmailFocusNode = FocusNode();
-  FocusNode _recipientPhoneNumberFocusNode = FocusNode();
+  final FocusNode _recipientNameFocusNode = FocusNode();
+  final FocusNode _recipientPositionFocusNode = FocusNode();
+  final FocusNode _recipientBirthDayFocusNode = FocusNode();
+  final FocusNode _recipientBirthCityFocusNode = FocusNode();
+  final FocusNode _recipientEmailFocusNode = FocusNode();
+  final FocusNode _recipientPhoneNumberFocusNode = FocusNode();
 
   MaskTextInputFormatter phoneFormatter = MaskTextInputFormatter(mask: '# ## ## ## ##', filter: {"#": RegExp(r'[0-9]')});
   MaskTextInputFormatter dateFormatter = MaskTextInputFormatter(mask: '##/##/####', filter: {"#": RegExp(r'[0-9]')});
 
   LocalReportModel? _localReportModel;
 
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   // bool _init = false;
   bool? _isNew;
@@ -114,7 +116,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
   DateTime? _reportDateTime;
   DateTime? _recipientBirthDateTime;
 
-  Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
+  Map<String, dynamic> _updatedStatus = <String, dynamic>{};
 
   // Position? _currentPosition;
   // ignore: cancel_subscriptions
@@ -140,7 +142,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       context,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      layout: Layout.Column,
+      layout: Layout.column,
       padding: EdgeInsets.zero,
       width: heightDp! * 120,
       height: heightDp! * 120,
@@ -213,7 +215,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
       _recipientPhoneNumberController.text = _localReportModel!.recipientPhone!;
     }
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _localReportProvider!.addListener(_localReportProviderListener);
 
       _permissionHander();
@@ -300,7 +302,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
     await _keicyProgressDialog!.show();
 
     if (_isNew!) {
-      _localReportModel!.uuid = Uuid().v4();
+      _localReportModel!.uuid = const Uuid().v4();
       _localReportModel!.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
 
       if (Platform.isAndroid) {
@@ -536,7 +538,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(Duration(days: 365)),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
                       );
 
                       if (dateTime != null) {
@@ -545,9 +547,11 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       }
                     },
                     validator: (input) => input.isEmpty
-                        ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(args: [LocaleKeys.NewReportPageString_date.tr().toLowerCase()])
+                        ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(
+                            args: [LocaleKeys.NewReportPageString_date.tr().toLowerCase()])
                         : input.length != 10
-                            ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(args: [LocaleKeys.NewReportPageString_date.tr().toLowerCase()])
+                            ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(
+                                args: [LocaleKeys.NewReportPageString_date.tr().toLowerCase()])
                             : null,
                     onChanged: (input) => (input.length == 10) ? FocusScope.of(context).requestFocus(_timeFocusNode) : null,
                     onSaved: (input) => _localReportModel!.date = KeicyDateTime.convertDateTimeToDateString(dateTime: _reportDateTime),
@@ -609,7 +613,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
 
                       return;
                     },
-                    onSaved: (input) => _localReportModel!.time = input + ":00",
+                    onSaved: (input) => _localReportModel!.time = "$input:00",
                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_descriptionFocusNode),
                     onEditingComplete: () => FocusScope.of(context).requestFocus(_descriptionFocusNode),
                   ),
@@ -1350,7 +1354,7 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                         context: context,
                         initialDate: DateTime(DateTime.now().year - 40),
                         firstDate: DateTime(DateTime.now().year - 100),
-                        lastDate: DateTime.now().add(Duration(days: 365)),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
                       );
 
                       if (dateTime != null) {
@@ -1362,7 +1366,8 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
                       }
                     },
                     validator: (input) => input.isNotEmpty && input.length != 10
-                        ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(args: [LocaleKeys.NewReportPageString_date.tr().toLowerCase()])
+                        ? LocaleKeys.ValidateErrorString_inCorrectErrorText.tr(
+                            args: [LocaleKeys.NewReportPageString_date.tr().toLowerCase()])
                         : null,
                     onChanged: (input) => (input.length == 10) ? FocusScope.of(context).requestFocus(_recipientBirthCityFocusNode) : null,
                     onSaved: (input) => _localReportModel!.recipientBirthDate = KeicyDateTime.convertDateTimeToDateString(
@@ -1440,7 +1445,8 @@ class _NewReportViewState extends State<NewReportView> with SingleTickerProvider
           ),
           keyboardType: TextInputType.emailAddress,
           readOnly: (widget.localReportModel != null && widget.localReportModel!.reportId != 0),
-          validator: (input) => input.isNotEmpty && !KeicyValidators.isValidEmail(input) ? LocaleKeys.ValidateErrorString_emailErrorText.tr() : null,
+          validator: (input) =>
+              input.isNotEmpty && !KeicyValidators.isValidEmail(input) ? LocaleKeys.ValidateErrorString_emailErrorText.tr() : null,
           onSaved: (input) => _localReportModel!.recipientEmail = input,
           onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(_recipientPhoneNumberFocusNode),
           onEditingComplete: () => FocusScope.of(context).requestFocus(_recipientPhoneNumberFocusNode),

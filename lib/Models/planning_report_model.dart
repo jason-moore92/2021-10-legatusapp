@@ -23,31 +23,31 @@ class PlanningReportModel extends Equatable {
   List<CustomerModel>? customers;
 
   PlanningReportModel({
-    reportId = 0,
-    date = "",
-    time = "",
-    name = "",
-    folderName = "",
-    zipCity = "",
-    state = "",
-    type = "",
-    price = "",
-    description = "",
+    reportId,
+    date,
+    time,
+    name,
+    folderName,
+    zipCity,
+    state,
+    type,
+    price,
+    description,
     references,
     addressModel,
     accounts,
     customers,
   }) {
-    this.reportId = reportId;
-    this.date = date;
-    this.time = time;
-    this.name = name;
-    this.folderName = folderName;
-    this.zipCity = zipCity;
-    this.state = state;
-    this.type = type;
-    this.price = price;
-    this.description = description;
+    this.reportId = reportId ?? 0;
+    this.date = date ?? "";
+    this.time = time ?? "";
+    this.name = name ?? "";
+    this.folderName = folderName ?? "";
+    this.zipCity = zipCity ?? "";
+    this.state = state ?? "";
+    this.type = type ?? "";
+    this.price = price ?? "";
+    this.description = description ?? "";
     this.references = references ?? [];
     this.addressModel = addressModel ?? AddressModel();
     this.accounts = accounts ?? [];

@@ -2,30 +2,29 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/http_plus.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:http/http.dart' as httpOld;
-// import 'package:shared_preferences/shared_preferences.dart';
+// ignore: depend_on_referenced_packages
+import 'package:http/http.dart' as httpold;
 
 class LocalMediaApiProvider {
   static Box<dynamic>? appSettingsBox;
 
   static Future<void> initHiveObject() async {
     try {
-      if (appSettingsBox == null) {
-        appSettingsBox = await Hive.openBox<dynamic>("app_settings");
-      }
+      appSettingsBox ??= await Hive.openBox<dynamic>("app_settings");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
-  static Future<Map<String, dynamic>> uploadMedia(
-      {@required MediaModel? mediaModel}) async {
+  static Future<Map<String, dynamic>> uploadMedia({@required MediaModel? mediaModel}) async {
     String apiUrl = '/upload-media';
 
     try {
@@ -76,7 +75,9 @@ class LocalMediaApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",
@@ -85,11 +86,10 @@ class LocalMediaApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> uploadPresignedUrl(
-      {@required File? file, @required String? presignedUrl}) async {
+  static Future<Map<String, dynamic>> uploadPresignedUrl({@required File? file, @required String? presignedUrl}) async {
     try {
       Uint8List imageByteData = await file!.readAsBytes();
-      var response = await httpOld.put(
+      var response = await httpold.put(
         Uri.parse(presignedUrl!),
         headers: {
           "Connection": "Keep-Alive",
@@ -120,7 +120,9 @@ class LocalMediaApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",

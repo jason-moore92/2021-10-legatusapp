@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Models/index.dart';
@@ -26,11 +27,11 @@ class AppDataProvider extends ChangeNotifier {
 
   Future<void> initHiveObject() async {
     try {
-      if (_appSettingsBox == null) {
-        _appSettingsBox = await Hive.openBox<dynamic>("app_settings");
-      }
+      _appSettingsBox ??= await Hive.openBox<dynamic>("app_settings");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -60,7 +61,7 @@ class AppDataProvider extends ChangeNotifier {
         AndroidDeviceInfo? androidInfo;
         androidInfo = await deviceInfo.androidInfo;
         androidInfoJoson = {
-          "androidId": androidInfo.androidId,
+          // "androidId": androidInfo.androidId, // android_id: ^0.0.7
           "board": androidInfo.board,
           "bootloader": androidInfo.bootloader,
           "brand": androidInfo.brand,
@@ -69,7 +70,6 @@ class AppDataProvider extends ChangeNotifier {
           "fingerprint": androidInfo.fingerprint,
           "hardware": androidInfo.hardware,
           "host": androidInfo.host,
-          "id": androidInfo.id,
           "isPhysicalDevice": androidInfo.isPhysicalDevice,
           "manufacturer": androidInfo.manufacturer,
           "model": androidInfo.model,
@@ -106,7 +106,9 @@ class AppDataProvider extends ChangeNotifier {
         iosInfo: iosInfoJoson,
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -134,7 +136,9 @@ class AppDataProvider extends ChangeNotifier {
 
     var result = _appSettingsBox!.get("settings");
 
-    print(result);
+    if (kDebugMode) {
+      print(result);
+    }
 
     _appDataState = _appDataState.update(
       settingsModel: settingsModel,

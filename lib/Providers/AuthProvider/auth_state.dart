@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:legatus/Models/user_model.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 enum LoginState {
-  IsLogin,
-  IsNotLogin,
+  isLogin,
+  isNotLogin,
 }
 
 class AuthState extends Equatable {
@@ -18,7 +17,7 @@ class AuthState extends Equatable {
   final bool? smsCode;
   final UserModel? userModel;
 
-  AuthState({
+  const AuthState({
     @required this.progressState,
     @required this.message,
     @required this.contextName,
@@ -36,7 +35,7 @@ class AuthState extends Equatable {
       contextName: "",
       description: "",
       statusCode: 0,
-      loginState: LoginState.IsNotLogin,
+      loginState: LoginState.isNotLogin,
       smsCode: false,
       userModel: UserModel(),
     );

@@ -22,7 +22,7 @@ class AudioRecoderPanel extends StatefulWidget {
   final Function(bool)? recordingStatusCallback;
   final Function(String, int)? audioSaveHandler;
 
-  AudioRecoderPanel({
+  const AudioRecoderPanel({
     Key? key,
     @required this.scaffoldKey,
     // @required this.keicyProgressDialog,
@@ -33,11 +33,10 @@ class AudioRecoderPanel extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AudioRecoderPanelState createState() => _AudioRecoderPanelState();
+  AudioRecoderPanelState createState() => AudioRecoderPanelState();
 }
 
-class _AudioRecoderPanelState extends State<AudioRecoderPanel>
-    with SingleTickerProviderStateMixin {
+class AudioRecoderPanelState extends State<AudioRecoderPanel> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -47,14 +46,14 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
   ///////////////////////////////
 
   // bool _isInitialized = false;
-  FlutterSoundRecorder _recorderModule = FlutterSoundRecorder();
+  final FlutterSoundRecorder _recorderModule = FlutterSoundRecorder();
   // ignore: cancel_subscriptions
   StreamSubscription? _recorderSubscription;
 
   CameraProvider? _cameraProvider;
 
   /// The usual file extensions used for each codecs
-  List<String> _ext = [
+  final List<String> _ext = [
     '.aac', // defaultCodec
     '.aac', // aacADTS
     '.opus', // opusOGG
@@ -121,8 +120,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
     _cameraProvider = CameraProvider.of(context);
     _cameraProvider!.addListener(_cameraProviderListener);
 
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+    controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
     animation = Tween<double>(begin: 0, end: 1).animate(controller!)
       ..addListener(() {
         if (controller!.status == AnimationStatus.completed) {
@@ -132,7 +130,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
         }
       });
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await _initSettings();
     });
   }
@@ -159,12 +157,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
       final session = await AudioSession.instance;
       await session.configure(AudioSessionConfiguration(
         avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
-        avAudioSessionCategoryOptions:
-            AVAudioSessionCategoryOptions.allowBluetooth |
-                AVAudioSessionCategoryOptions.defaultToSpeaker,
+        avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.allowBluetooth | AVAudioSessionCategoryOptions.defaultToSpeaker,
         avAudioSessionMode: AVAudioSessionMode.spokenAudio,
-        avAudioSessionRouteSharingPolicy:
-            AVAudioSessionRouteSharingPolicy.defaultPolicy,
+        avAudioSessionRouteSharingPolicy: AVAudioSessionRouteSharingPolicy.defaultPolicy,
         avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
         androidAudioAttributes: const AndroidAudioAttributes(
           contentType: AndroidAudioContentType.speech,
@@ -180,9 +175,11 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
         _codec = Codec.opusWebM;
         _encoderSupported = await _recorderModule.isEncoderSupported(_codec);
       }
-      await _recorderModule.setSubscriptionDuration(Duration(milliseconds: 10));
+      await _recorderModule.setSubscriptionDuration(const Duration(milliseconds: 10));
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
     // await _recorderModule.openAudioSession(
     //   focus: AudioFocus.requestFocusAndStopOthers,
@@ -208,11 +205,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
 
   void _cameraProviderListener() async {
     if (_cameraProvider!.cameraState.isShowAudioRecoderPanel!) {
-      if (_cameraProvider!.cameraState.isAudioRecord! &&
-          _cameraProvider!.cameraState.audioRecordStatus == "recording") {
+      if (_cameraProvider!.cameraState.isAudioRecord! && _cameraProvider!.cameraState.audioRecordStatus == "recording") {
         startRecorder();
-      } else if (!_cameraProvider!.cameraState.isAudioRecord! &&
-          _cameraProvider!.cameraState.audioRecordStatus == "stopped") {
+      } else if (!_cameraProvider!.cameraState.isAudioRecord! && _cameraProvider!.cameraState.audioRecordStatus == "stopped") {
         stopRecorder();
       }
     }
@@ -230,7 +225,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
     try {
       await _recorderModule.closeRecorder();
     } on Exception {
-      print('Released unsuccessful');
+      if (kDebugMode) {
+        print('Released unsuccessful');
+      }
     }
   }
 
@@ -242,8 +239,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
       if (!kIsWeb) {
         var status = await Permission.microphone.request();
         if (status != PermissionStatus.granted) {
-          throw RecordingPermissionException(
-              'Microphone permission not granted');
+          throw RecordingPermissionException('Microphone permission not granted');
         }
       }
       var path = '';
@@ -264,13 +260,14 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
 
       _inMilliseconds = 0;
 
-      print('--------- startRecorder -----------------');
+      if (kDebugMode) {
+        print('--------- startRecorder -----------------');
+      }
       controller!.forward();
 
       _recorderSubscription = _recorderModule.onProgress!.listen((e) {
         _inMilliseconds = e.duration.inMilliseconds;
-        var date =
-            DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
+        var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
         var txt = DateFormat('mm:ss').format(date);
 
         setState(() {
@@ -297,7 +294,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
         _cancelRecorderSubscriptions();
       });
     } on Exception catch (err) {
-      print('startRecorder error: $err');
+      if (kDebugMode) {
+        print('startRecorder error: $err');
+      }
 
       setState(() {
         FailedDialog.show(context, text: err.toString());
@@ -316,17 +315,19 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
         await _recorderModule.resumeRecorder();
         controller!.forward();
         _recorderSubscription = _recorderModule.onProgress!.listen((e) {
-          print("--------inMilliseconds-------------");
+          if (kDebugMode) {
+            print("--------inMilliseconds-------------");
+          }
           if (_resumeMillseconds == 0) {
             _resumeMillseconds = e.duration.inMilliseconds;
           }
-          _inMilliseconds = _inMilliseconds! +
-              (e.duration.inMilliseconds - _resumeMillseconds!);
+          _inMilliseconds = _inMilliseconds! + (e.duration.inMilliseconds - _resumeMillseconds!);
           _resumeMillseconds = e.duration.inMilliseconds;
-          print("--------resume-------------");
-          print(_inMilliseconds);
-          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!,
-              isUtc: true);
+          if (kDebugMode) {
+            print("--------resume-------------");
+            print(_inMilliseconds);
+          }
+          var date = DateTime.fromMillisecondsSinceEpoch(_inMilliseconds!, isUtc: true);
           var txt = DateFormat('mm:ss').format(date);
 
           setState(() {
@@ -344,7 +345,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
         assert(_recorderModule.isPaused);
       }
     } on Exception catch (err) {
-      print('error: $err');
+      if (kDebugMode) {
+        print('error: $err');
+      }
     }
     setState(() {});
   }
@@ -372,7 +375,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
       // _showInSnackBar("Audio saved in '$_path'");
     } on Exception catch (err) {
       // await widget.keicyProgressDialog!.hide();
-      print('stopRecorder error: $err');
+      if (kDebugMode) {
+        print('stopRecorder error: $err');
+      }
     }
   }
 
@@ -457,13 +462,9 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
                         animation: animation!,
                         builder: (context, child) {
                           return Opacity(
-                            opacity: _recorderModule.isRecording
-                                ? 1 - animation!.value
-                                : 0,
+                            opacity: _recorderModule.isRecording ? 1 - animation!.value : 0,
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: widthDp! * 10,
-                                  vertical: heightDp! * 5),
+                              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 5),
                               child: Icon(
                                 Icons.fiber_manual_record,
                                 size: heightDp! * 20,
@@ -473,9 +474,7 @@ class _AudioRecoderPanelState extends State<AudioRecoderPanel>
                           );
                         },
                       ),
-                      Text(_audioRecorderTxt!,
-                          style: TextStyle(
-                              fontSize: fontSp! * 14, color: Colors.white)),
+                      Text(_audioRecorderTxt!, style: TextStyle(fontSize: fontSp! * 14, color: Colors.white)),
                       SizedBox(width: widthDp! * 5),
                     ],
                   ),

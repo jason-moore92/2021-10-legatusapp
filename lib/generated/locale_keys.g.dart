@@ -1,6 +1,8 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+// ignore_for_file: constant_identifier_names
+
+abstract class LocaleKeys {
   static const ValidateErrorString_shouldBeErrorText = 'ValidateErrorString.shouldBeErrorText';
   static const ValidateErrorString_inCorrectErrorText = 'ValidateErrorString.inCorrectErrorText';
   static const ValidateErrorString_emailErrorText = 'ValidateErrorString.emailErrorText';
@@ -190,5 +192,4 @@ abstract class  LocaleKeys {
   static const UploadDialogString_login = 'UploadDialogString.login';
   static const UploadDialogString_cancel = 'UploadDialogString.cancel';
   static const UploadDialogString = 'UploadDialogString';
-
 }

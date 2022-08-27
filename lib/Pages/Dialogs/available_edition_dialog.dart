@@ -19,8 +19,8 @@ class AvailableEditionDialog {
     double deviceHeight = 1.sh;
     // double fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
 
-    TextEditingController _noteController = TextEditingController();
-    FocusNode _noteFocusNode = FocusNode();
+    TextEditingController noteController = TextEditingController();
+    FocusNode noteFocusNode = FocusNode();
 
     showDialog(
       context: context,
@@ -39,7 +39,7 @@ class AvailableEditionDialog {
             bottom: heightDp * 20,
           ),
           children: [
-            Container(
+            SizedBox(
               height: deviceHeight * 0.7,
               child: Column(
                 children: [
@@ -69,8 +69,8 @@ class AvailableEditionDialog {
 
                   ///
                   CustomTextFormField(
-                    controller: _noteController,
-                    focusNode: _noteFocusNode,
+                    controller: noteController,
+                    focusNode: noteFocusNode,
                     hintText: LocaleKeys.NewReportPageString_description.tr(),
                     hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
                     errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),

@@ -4,8 +4,8 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:card_swiper/card_swiper.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Models/index.dart';
@@ -25,7 +25,7 @@ class PictureMediaWidget extends StatefulWidget {
   final Function? tapHandler;
   final Function? longPressHandler;
 
-  PictureMediaWidget({
+  const PictureMediaWidget({
     Key? key,
     @required this.localReportModel,
     @required this.mediaModel,
@@ -38,10 +38,10 @@ class PictureMediaWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PictureMediaWidgetState createState() => _PictureMediaWidgetState();
+  PictureMediaWidgetState createState() => PictureMediaWidgetState();
 }
 
-class _PictureMediaWidgetState extends State<PictureMediaWidget> {
+class PictureMediaWidgetState extends State<PictureMediaWidget> {
   double? deviceWidth;
   double? statusbarHeight;
   double? widthDp;
@@ -72,18 +72,16 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
     picWidth = ((deviceWidth! - widthDp! * 40) / 3).floorToDouble();
     picHeight = ((deviceWidth! - widthDp! * 40) / 3).floorToDouble();
 
-    print(picWidth);
+    if (kDebugMode) {
+      print(picWidth);
+    }
 
-    if (MediaQuery.of(context).size.width >=
-        ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >=
-            ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width <
-            ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width <
-        ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
@@ -99,7 +97,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
 
     if (widget.isUploading!) {
       if (uploadTimer != null) uploadTimer!.cancel();
-      uploadTimer = Timer.periodic(Duration(milliseconds: 10), (uploadTimer) {
+      uploadTimer = Timer.periodic(const Duration(milliseconds: 10), (uploadTimer) {
         angle += 10;
         setState(() {});
       });
@@ -107,8 +105,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
       angle = 0;
     }
 
-    return Consumer<MediaPlayProvider>(
-        builder: (context, mediaPlayProvider, _) {
+    return Consumer<MediaPlayProvider>(builder: (context, mediaPlayProvider, _) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: heightDp! * 5),
         child: Stack(
@@ -124,32 +121,27 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                 width: picWidth,
                 height: picHeight,
                 decoration: BoxDecoration(
-                  color: Color(0xFFE7E7E7),
+                  color: const Color(0xFFE7E7E7),
                   borderRadius: BorderRadius.circular(heightDp! * 0),
                   border: Border.all(
-                    color: widget.isSelected!
-                        ? AppColors.yello
-                        : Colors.transparent,
+                    color: widget.isSelected! ? AppColors.yello : Colors.transparent,
                     width: widget.isSelected! ? 3 : 0,
                   ),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(heightDp! * 0),
                   child: Image.file(
-                    widget.mediaModel!.thumPath != ""
-                        ? File(widget.mediaModel!.thumPath!)
-                        : File(widget.mediaModel!.path!),
+                    widget.mediaModel!.thumPath != "" ? File(widget.mediaModel!.thumPath!) : File(widget.mediaModel!.path!),
                     width: picWidth,
                     height: picHeight,
                     fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
+                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                       return Container(
                         width: picWidth,
                         height: picHeight,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(heightDp! * 0),
-                          color: Color(0xFFE7E7E7),
+                          color: const Color(0xFFE7E7E7),
                         ),
                         alignment: Alignment.center,
                         child: Icon(
@@ -175,10 +167,8 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                             ? Icons.cloud_done_outlined
                             : Icons.cloud_off_outlined,
                     size: iconSize,
-                    color: widget.mediaModel!.state == "error" ||
-                            widget.mediaModel!.state == "uploaded"
-                        ? Colors.white
-                        : Colors.transparent,
+                    color:
+                        widget.mediaModel!.state == "error" || widget.mediaModel!.state == "uploaded" ? Colors.white : Colors.transparent,
                   ),
                   Icon(
                     widget.mediaModel!.state == "error"
@@ -238,8 +228,7 @@ class _PictureMediaWidgetState extends State<PictureMediaWidget> {
                 child: Center(
                   child: Transform.rotate(
                     angle: angle / 180 * pi,
-                    child: Icon(Icons.autorenew,
-                        size: picHeight! / 2, color: Colors.white),
+                    child: Icon(Icons.autorenew, size: picHeight! / 2, color: Colors.white),
                   ),
                 ),
               ),
@@ -297,15 +286,13 @@ class GallaryPage extends StatefulWidget {
   final LocalReportModel? localReportModel;
   final MediaModel? mediaModel;
 
-  const GallaryPage(
-      {Key? key, @required this.localReportModel, @required this.mediaModel})
-      : super(key: key);
+  const GallaryPage({Key? key, @required this.localReportModel, @required this.mediaModel}) : super(key: key);
 
   @override
-  _GallaryPageState createState() => _GallaryPageState();
+  GallaryPageState createState() => GallaryPageState();
 }
 
-class _GallaryPageState extends State<GallaryPage> {
+class GallaryPageState extends State<GallaryPage> {
   @override
   Widget build(BuildContext context) {
     double heightDp = ScreenUtil().setWidth(1);
@@ -315,10 +302,8 @@ class _GallaryPageState extends State<GallaryPage> {
     for (var i = 0; i < widget.localReportModel!.medias!.length; i++) {
       if (widget.localReportModel!.medias![i].type == MediaType.picture) {
         medias.add(widget.localReportModel!.medias![i]);
-        if (widget.mediaModel!.rank ==
-                widget.localReportModel!.medias![i].rank &&
-            widget.mediaModel!.uuid ==
-                widget.localReportModel!.medias![i].uuid) {
+        if (widget.mediaModel!.rank == widget.localReportModel!.medias![i].rank &&
+            widget.mediaModel!.uuid == widget.localReportModel!.medias![i].uuid) {
           index = medias.length - 1;
         }
       }
@@ -340,18 +325,17 @@ class _GallaryPageState extends State<GallaryPage> {
       ),
       body: Swiper(
         itemCount: medias.length,
-        pagination: SwiperPagination(builder: SwiperPagination.rect),
+        pagination: const SwiperPagination(builder: SwiperPagination.rect),
         loop: false,
         index: index,
-        control: SwiperControl(color: Colors.white),
+        control: const SwiperControl(color: Colors.white),
         itemBuilder: (BuildContext context, int index) {
           File file = File(medias[index].path!);
 
-          Image image = new Image.file(file);
-          Completer<ui.Image> completer = new Completer<ui.Image>();
-          image.image.resolve(new ImageConfiguration()).addListener(
-                ImageStreamListener(
-                    (ImageInfo info, bool _) => completer.complete(info.image)),
+          Image image = Image.file(file);
+          Completer<ui.Image> completer = Completer<ui.Image>();
+          image.image.resolve(const ImageConfiguration()).addListener(
+                ImageStreamListener((ImageInfo info, bool _) => completer.complete(info.image)),
               );
 
           return FutureBuilder<ui.Image>(
@@ -377,12 +361,9 @@ class _GallaryPageState extends State<GallaryPage> {
                   return imageWidget;
                 }
               } else {
-                return Container(
-                  child: Theme(
-                    data:
-                        Theme.of(context).copyWith(brightness: Brightness.dark),
-                    child: Center(child: CupertinoActivityIndicator()),
-                  ),
+                return Theme(
+                  data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                  child: const Center(child: CupertinoActivityIndicator()),
                 );
               }
             },

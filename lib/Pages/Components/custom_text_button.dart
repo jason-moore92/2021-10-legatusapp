@@ -57,14 +57,6 @@ class CustomTextButton extends StatelessWidget {
         shape: borderRadius != null ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius!)) : null,
         elevation: elevation,
       ),
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          leftWidget ?? SizedBox(),
-          Text(text!, style: textStyle),
-          rightWidget ?? SizedBox(),
-        ],
-      ),
       focusNode: focusNode,
       autofocus: autofocus,
       onPressed: () {
@@ -77,6 +69,14 @@ class CustomTextButton extends StatelessWidget {
           onLongPress!();
         }
       },
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          leftWidget ?? const SizedBox(),
+          Text(text!, style: textStyle),
+          rightWidget ?? const SizedBox(),
+        ],
+      ),
     );
   }
 }

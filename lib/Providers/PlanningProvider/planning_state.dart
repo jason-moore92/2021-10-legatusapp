@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 class PlanningState extends Equatable {
@@ -9,7 +8,7 @@ class PlanningState extends Equatable {
   final String? currentDate;
   final Map<String, dynamic>? planningData;
 
-  PlanningState({
+  const PlanningState({
     @required this.progressState,
     @required this.message,
     @required this.contextName,
@@ -18,12 +17,12 @@ class PlanningState extends Equatable {
   });
 
   factory PlanningState.init() {
-    return PlanningState(
+    return const PlanningState(
       progressState: 0,
       message: "",
       contextName: "",
       currentDate: "",
-      planningData: Map<String, dynamic>(),
+      planningData: <String, dynamic>{},
     );
   }
 

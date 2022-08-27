@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
@@ -9,7 +9,6 @@ import 'package:legatus/Helpers/file_helpers.dart';
 import 'package:legatus/Helpers/index.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Helpers/http_plus.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalReportApiProvider {
   static Box<LocalReportModel>? localReportsBox;
@@ -19,46 +18,54 @@ class LocalReportApiProvider {
   static Future<void> initHiveObject() async {
     try {
       /// init local reports data
-      if (localReportsBox == null) {
-        localReportsBox = await Hive.openBox<LocalReportModel>("local_reports");
-      }
-      if (localReportIdsBox == null) {
-        localReportIdsBox = await Hive.openBox<List<dynamic>>("local_report_ids");
-      }
-      if (appSettingsBox == null) {
-        appSettingsBox = await Hive.openBox<dynamic>("app_settings");
-      }
+      localReportsBox ??= await Hive.openBox<LocalReportModel>("local_reports");
+      localReportIdsBox ??= await Hive.openBox<List<dynamic>>("local_report_ids");
+      appSettingsBox ??= await Hive.openBox<dynamic>("app_settings");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
   static void viewLocalReportData() {
     try {
-      print("=======================================================");
-      print("================ Local Report Data ====================");
-      print("=======================================================");
-      List<dynamic>? localReportIds = localReportIdsBox!.get("ids", defaultValue: []);
-
-      print("==== Local Report Ids === ${localReportIds!.length} ====");
-      print(localReportIds);
-      print("=======================================================");
-
-      List<LocalReportModel> localReportList = localReportsBox!.values.toList();
-      print("==== Local Report Ids === ${localReportsBox!.keys.toList().length} ====");
-      print(localReportsBox!.keys.toList());
-      print("=======================================================");
-
-      for (var i = 0; i < localReportList.length; i++) {
-        print("================== local report data ===========================");
-        print(localReportList[i].toJson());
+      if (kDebugMode) {
+        print("=======================================================");
+        print("================ Local Report Data ====================");
         print("=======================================================");
       }
-      print("=======================================================");
-      print("=======================================================");
-      print("=======================================================");
+      List<dynamic>? localReportIds = localReportIdsBox!.get("ids", defaultValue: []);
+
+      if (kDebugMode) {
+        print("==== Local Report Ids === ${localReportIds!.length} ====");
+        print(localReportIds);
+        print("=======================================================");
+      }
+
+      List<LocalReportModel> localReportList = localReportsBox!.values.toList();
+      if (kDebugMode) {
+        print("==== Local Report Ids === ${localReportsBox!.keys.toList().length} ====");
+        print(localReportsBox!.keys.toList());
+        print("=======================================================");
+      }
+
+      for (var i = 0; i < localReportList.length; i++) {
+        if (kDebugMode) {
+          print("================== local report data ===========================");
+          print(localReportList[i].toJson());
+          print("=======================================================");
+        }
+      }
+      if (kDebugMode) {
+        print("=======================================================");
+        print("=======================================================");
+        print("=======================================================");
+      }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -156,11 +163,12 @@ class LocalReportApiProvider {
               rank: mediaModel.rank,
               fileType: mediaModel.path!.split('.').last,
             );
-            if (newPath == null)
+            if (newPath == null) {
               return {
                 "success": false,
                 "message": "updated media file path is error",
               };
+            }
 
             await oldFile.copy(newPath);
             mediaModel.filename = newPath.split('/').last;
@@ -168,7 +176,9 @@ class LocalReportApiProvider {
             try {
               await oldFile.delete();
             } catch (e) {
-              print(e);
+              if (kDebugMode) {
+                print(e);
+              }
               return {
                 "success": false,
                 "message": "when update local media, deleting old media file is failed.",
@@ -244,7 +254,9 @@ class LocalReportApiProvider {
 
       return null;
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return null;
     }
   }
@@ -280,7 +292,9 @@ class LocalReportApiProvider {
 
             reportModelList.add(localReportModel!);
           } else {
-            print(localReportModel);
+            if (kDebugMode) {
+              print(localReportModel);
+            }
           }
         } else {
           break;
@@ -332,7 +346,9 @@ class LocalReportApiProvider {
 
           reportModelList.add(localReportModel!);
         } else {
-          print(reportIdStr);
+          if (kDebugMode) {
+            print(reportIdStr);
+          }
         }
       }
 
@@ -421,7 +437,9 @@ class LocalReportApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",

@@ -31,7 +31,7 @@ class SuccessDialog {
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? heightDp * 10)),
           title: Icon(Icons.check_circle_outline, size: heightDp * 60, color: Colors.green),
-          insetPadding: insetPadding ?? EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+          insetPadding: insetPadding ?? const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
           titlePadding: titlePadding ??
               EdgeInsets.only(
                 left: heightDp * 10,

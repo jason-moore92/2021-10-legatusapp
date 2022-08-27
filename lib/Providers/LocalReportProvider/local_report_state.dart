@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 class LocalReportState extends Equatable {
@@ -11,7 +10,7 @@ class LocalReportState extends Equatable {
   final bool? isUploading;
   final MediaModel? uploadingMediaModel;
 
-  LocalReportState({
+  const LocalReportState({
     @required this.progressState,
     @required this.message,
     @required this.contextName,

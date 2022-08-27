@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/http_plus.dart';
-import 'package:legatus/Models/LocalReportModel.dart';
+import 'package:legatus/Models/local_report_model.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class JournalApiProvider {
@@ -14,17 +14,15 @@ class JournalApiProvider {
 
   static Future<void> initHiveObject() async {
     try {
-      if (appSettingsBox == null) {
-        appSettingsBox = await Hive.openBox<dynamic>("app_settings");
-      }
+      appSettingsBox ??= await Hive.openBox<dynamic>("app_settings");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
-  static Future<Map<String, dynamic>> sendJournal(
-      {@required String? email,
-      @required LocalReportModel? localMediaModel}) async {
+  static Future<Map<String, dynamic>> sendJournal({@required String? email, @required LocalReportModel? localMediaModel}) async {
     String apiUrl = '/send-journal';
 
     try {
@@ -40,15 +38,16 @@ class JournalApiProvider {
       }
 
       var data = localMediaModel!.toJson();
-      print(data);
+      if (kDebugMode) {
+        print(data);
+      }
 
       var response = await http.post(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: json
-            .encode({"email": email, "local_report": localMediaModel.toJson()}),
+        body: json.encode({"email": email, "local_report": localMediaModel.toJson()}),
       );
       if (response.statusCode == 200) {
         return {
@@ -76,7 +75,9 @@ class JournalApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",

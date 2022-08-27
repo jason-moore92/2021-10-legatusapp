@@ -6,7 +6,7 @@ import 'index.dart';
 class PlanningPage extends StatelessWidget {
   final PlanningReportModel? planningReportModel;
 
-  PlanningPage({@required this.planningReportModel});
+  const PlanningPage({Key? key, @required this.planningReportModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

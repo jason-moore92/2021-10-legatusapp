@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 class BridgeState extends Equatable {
   final String? event;
   final Map<String, dynamic>? data;
 
-  BridgeState({@required this.event, @required this.data});
+  const BridgeState({@required this.event, @required this.data});
 
   factory BridgeState.init() {
-    return BridgeState(event: "", data: {});
+    return const BridgeState(event: "", data: {});
   }
 
   BridgeState copyWith({String? event, Map<String, dynamic>? data}) {

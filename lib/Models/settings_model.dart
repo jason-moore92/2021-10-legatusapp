@@ -3,7 +3,7 @@
 import "package:equatable/equatable.dart";
 import 'package:hive/hive.dart';
 
-part 'SettingsModel.g.dart';
+part 'settings_model.g.dart';
 
 @HiveType(typeId: 1)
 class SettingsModel extends Equatable {

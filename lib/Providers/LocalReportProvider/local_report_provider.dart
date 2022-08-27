@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:legatus/ApiDataProviders/index.dart';
 import 'package:legatus/Models/index.dart';
@@ -236,7 +237,9 @@ class LocalReportProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       _localReportState = _localReportState.update(
         progressState: -1,
         isUploading: false,

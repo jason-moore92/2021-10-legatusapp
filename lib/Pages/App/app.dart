@@ -5,6 +5,7 @@ import 'package:legatus/Pages/SplashPage/splash_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:provider/provider.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -12,16 +13,18 @@ import './index.dart';
 import 'fallback_cupertino.dart';
 
 class App extends StatelessWidget {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+    final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
     return ScreenUtilInit(
         designSize: Size(ResponsiveDesignSettings.mobileDesignWidth, ResponsiveDesignSettings.mobileDesignHeight),
         minTextAdapt: false,
         splitScreenMode: false,
-        builder: () {
+        builder: (context, child) {
           return MultiProvider(
             providers: [
               ChangeNotifierProvider(create: (_) => AuthProvider()),
@@ -48,14 +51,14 @@ class App extends StatelessWidget {
               // locale: context.locale,
               theme: buildLightTheme(context),
               // themeMode: ThemeMode.dark,
-              home: SplashPage(),
+              home: const SplashPage(),
               builder: (context, child) {
                 return StreamBuilder<BridgeState>(
                   stream: BridgeProvider().getStream(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData && snapshot.data != null && snapshot.data!.event == "log_out") {
                       BridgeProvider().update(
-                        BridgeState(
+                        const BridgeState(
                           event: "init",
                           data: {
                             "message": "init",
@@ -63,33 +66,34 @@ class App extends StatelessWidget {
                         ),
                       );
 
-                      WidgetsBinding.instance!.addPostFrameCallback(
-                        (timeStamp) async {
-                          await AuthProvider.of(navigatorKey.currentContext!).logout(context);
-                          // try {
-                          //   FailedDialog.show(
-                          //     navigatorKey.currentContext!,
-                          //     text: snapshot.data!.data!["message"] ?? "Your account logout",
-                          //   );
-                          // } catch (e) {
-                          //   print(e);
-                          // }
-                          // AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(2);
-                          AppDataProvider.of(context).setAppDataState(
-                            AppDataProvider.of(context).appDataState.update(bottomIndex: 2),
-                            isNotifiable: false,
-                          );
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (BuildContext context) => BottomNavbar(),
-                              ),
-                              (route) => false);
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (timeStamp) {
+                          AuthProvider.of(navigatorKey.currentContext!).logout(context).then((value) {
+                            // try {
+                            //   FailedDialog.show(
+                            //     navigatorKey.currentContext!,
+                            //     text: snapshot.data!.data!["message"] ?? "Your account logout",
+                            //   );
+                            // } catch (e) {
+                            //   print(e);
+                            // }
+                            // AppDataProvider.of(context).appDataState.bottomTabController!.jumpToTab(2);
+                            AppDataProvider.of(context).setAppDataState(
+                              AppDataProvider.of(context).appDataState.update(bottomIndex: 2),
+                              isNotifiable: false,
+                            );
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (BuildContext context) => const BottomNavbar(),
+                                ),
+                                (route) => false);
+                          });
                         },
                       );
                     }
 
-                    ScreenUtil.setContext(context);
+                    // ScreenUtil.setContext(context);
 
                     return child!;
                   },

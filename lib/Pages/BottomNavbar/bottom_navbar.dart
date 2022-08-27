@@ -1,31 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:geolocator/geolocator.dart';
-// import 'package:hive/hive.dart';
 import 'package:legatus/Pages/App/index.dart';
 import 'package:legatus/Pages/ConfigurationPage/index.dart';
 import 'package:legatus/Pages/Dialogs/index.dart';
 import 'package:legatus/Pages/PlanningListPage/index.dart';
 import 'package:legatus/Pages/ReportListPage/report_list_page.dart';
-// import 'package:legatus/Pages/ReportPage/index.dart';
 import 'package:legatus/Providers/index.dart';
-// import 'package:permission_handler/permission_handler.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-// import 'package:provider/provider.dart';
 
 class BottomNavbar extends StatefulWidget {
   final int? currentTab;
 
-  BottomNavbar({Key? key, this.currentTab}) : super(key: key);
+  const BottomNavbar({Key? key, this.currentTab}) : super(key: key);
 
   @override
-  _BottomNavbarState createState() => _BottomNavbarState();
+  BottomNavbarState createState() => BottomNavbarState();
 }
 
-class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderStateMixin {
+class BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double deviceWidth = 0;
   double deviceHeight = 0;
@@ -56,12 +51,6 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
     heightDp = ScreenUtil().setWidth(1);
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
-
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      try {} catch (e) {
-        print(e);
-      }
-    });
   }
 
   @override
@@ -82,11 +71,16 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
     }
 
     ScreenUtil.init(
-      BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
+      context,
       designSize: designSize!,
-      orientation: Orientation.portrait,
-      context: context,
     );
+    // in flutter_screenutil: ^5.3.1
+    // ScreenUtil.init(
+    //   BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
+    //   designSize: designSize!,
+    //   orientation: Orientation.portrait,
+    //   context: context,
+    // );
 
     /// Responsive design variables
     deviceWidth = 1.sw;
@@ -136,17 +130,17 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
     }
 
     return Consumer<AppDataProvider>(builder: (context, appDataProvider, _) {
-      Widget _body = SizedBox();
+      Widget body = const SizedBox();
 
       switch (appDataProvider.appDataState.bottomIndex) {
         case 0:
-          _body = PlanningListPage();
+          body = const PlanningListPage();
           break;
         case 1:
-          _body = ReportListPage();
+          body = const ReportListPage();
           break;
         case 2:
-          _body = ConfigurationPage();
+          body = const ConfigurationPage();
           break;
         default:
       }
@@ -164,7 +158,7 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
           return false;
         },
         child: Scaffold(
-          body: _body,
+          body: body,
           bottomNavigationBar: BottomNavigationBar(
             elevation: 1,
             onTap: (value) {
@@ -174,8 +168,8 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
                 );
                 if (value == 0) {
                   // if (PlanningProvider.of(context).planningState.progressState == 0 &&
-                  //     AuthProvider.of(context).authState.loginState == LoginState.IsLogin) {
-                  // if (AuthProvider.of(context).authState.loginState == LoginState.IsLogin) {
+                  //     AuthProvider.of(context).authState.loginState == LoginState.isLogin) {
+                  // if (AuthProvider.of(context).authState.loginState == LoginState.isLogin) {
                   //   PlanningProvider.of(context).setPlanningState(
                   //     PlanningProvider.of(context).planningState.update(
                   //           progressState: 1,
@@ -201,33 +195,33 @@ class _BottomNavbarState extends State<BottomNavbar> with SingleTickerProviderSt
                 label: LocaleKeys.BottomNavBarString_planning.tr(),
                 icon: Padding(
                   padding: EdgeInsets.all(heightDp * 5.0),
-                  child: Icon(Icons.event_outlined),
+                  child: const Icon(Icons.event_outlined),
                 ),
                 activeIcon: Padding(
                   padding: EdgeInsets.all(heightDp * 5.0),
-                  child: Icon(Icons.event),
+                  child: const Icon(Icons.event),
                 ),
               ),
               BottomNavigationBarItem(
                 label: LocaleKeys.BottomNavBarString_reports.tr(),
                 icon: Padding(
                   padding: EdgeInsets.all(heightDp * 5.0),
-                  child: Icon(Icons.perm_media_outlined),
+                  child: const Icon(Icons.perm_media_outlined),
                 ),
                 activeIcon: Padding(
                   padding: EdgeInsets.all(heightDp * 5.0),
-                  child: Icon(Icons.perm_media),
+                  child: const Icon(Icons.perm_media),
                 ),
               ),
               BottomNavigationBarItem(
                 label: LocaleKeys.BottomNavBarString_configration.tr(),
                 icon: Padding(
                   padding: EdgeInsets.all(heightDp * 5.0),
-                  child: Icon(Icons.app_settings_alt_outlined),
+                  child: const Icon(Icons.app_settings_alt_outlined),
                 ),
                 activeIcon: Padding(
                   padding: EdgeInsets.all(heightDp * 5.0),
-                  child: Icon(Icons.app_settings_alt),
+                  child: const Icon(Icons.app_settings_alt),
                 ),
               ),
             ],

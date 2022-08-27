@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
@@ -5,13 +7,13 @@ import 'package:legatus/Pages/BottomNavbar/index.dart';
 import 'package:legatus/Providers/index.dart';
 
 class SplashView extends StatefulWidget {
-  SplashView({Key? key}) : super(key: key);
+  const SplashView({Key? key}) : super(key: key);
 
   @override
-  _SplashViewState createState() => _SplashViewState();
+  SplashViewState createState() => SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> with SingleTickerProviderStateMixin {
+class SplashViewState extends State<SplashView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -38,12 +40,12 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await AuthProvider.of(context).init();
       await AppDataProvider.of(context).init();
-      Future.delayed(Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 3), () {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute<void>(builder: (BuildContext context) => BottomNavbar()),
+          MaterialPageRoute<void>(builder: (BuildContext context) => const BottomNavbar()),
         );
       });
     });

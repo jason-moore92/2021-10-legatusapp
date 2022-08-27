@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Helpers/index.dart';
-import 'package:legatus/Models/MediaModel.dart';
+import 'package:legatus/Models/media_model.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
 import 'package:legatus/Pages/Components/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
@@ -35,8 +35,8 @@ class MediaInfoDialog {
         break;
       default:
     }
-    var date;
-    var durationString;
+    DateTime date;
+    String durationString = "";
     if (mediaModel.duration! != -1) {
       date = DateTime.fromMillisecondsSinceEpoch(mediaModel.duration!, isUtc: true);
       durationString = DateFormat('mm:ss').format(date);
@@ -99,7 +99,7 @@ class MediaInfoDialog {
                 SizedBox(width: heightDp * 8),
                 Expanded(
                   child: Text(
-                    "$mediaType",
+                    mediaType,
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ),
@@ -117,10 +117,10 @@ class MediaInfoDialog {
                 SizedBox(width: heightDp * 8),
                 Expanded(
                   child: Text(
-                    "${KeicyDateTime.convertDateTimeToDateString(
+                    KeicyDateTime.convertDateTimeToDateString(
                       dateTime: DateTime.tryParse(mediaModel.createdAt!),
                       formats: 'd/m/Y H:i:s',
-                    )}",
+                    ),
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ),

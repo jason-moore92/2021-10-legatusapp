@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 class CameraState extends Equatable {
@@ -16,7 +15,7 @@ class CameraState extends Equatable {
   final CameraController? cameraController;
   final bool? isPhotoResolution;
 
-  CameraState({
+  const CameraState({
     @required this.progressState,
     @required this.message,
     @required this.videoRecordStatus,
@@ -31,7 +30,7 @@ class CameraState extends Equatable {
   });
 
   factory CameraState.init() {
-    return CameraState(
+    return const CameraState(
       progressState: 0,
       message: "",
       videoRecordStatus: "stopped",

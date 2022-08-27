@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'SettingsModel.dart';
+part of 'settings_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -37,8 +37,5 @@ class SettingsModelAdapter extends TypeAdapter<SettingsModel> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SettingsModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is SettingsModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

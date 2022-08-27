@@ -11,13 +11,13 @@ import 'package:legatus/Pages/Dialogs/index.dart';
 class AddEditionView extends StatefulWidget {
   final List<dynamic>? editions;
 
-  AddEditionView({Key? key, this.editions}) : super(key: key);
+  const AddEditionView({Key? key, this.editions}) : super(key: key);
 
   @override
-  _AddEditionViewState createState() => _AddEditionViewState();
+  AddEditionViewState createState() => AddEditionViewState();
 }
 
-class _AddEditionViewState extends State<AddEditionView> with SingleTickerProviderStateMixin {
+class AddEditionViewState extends State<AddEditionView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double deviceWidth = 0;
   double deviceHeight = 0;
@@ -30,10 +30,10 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
 
   KeicyProgressDialog? _keicyProgressDialog;
 
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  TextEditingController _noteController = TextEditingController();
-  FocusNode _noteFocusNode = FocusNode();
+  final TextEditingController _noteController = TextEditingController();
+  final FocusNode _noteFocusNode = FocusNode();
 
   String? jobId;
 
@@ -55,7 +55,7 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
       context,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      layout: Layout.Column,
+      layout: Layout.column,
       padding: EdgeInsets.zero,
       width: heightDp * 120,
       height: heightDp * 120,
@@ -75,7 +75,7 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
       message: "",
     );
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {});
   }
 
   @override
@@ -90,7 +90,7 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
       context,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      layout: Layout.Column,
+      layout: Layout.column,
       padding: EdgeInsets.zero,
       width: heightDp * 120,
       height: heightDp * 120,
@@ -120,6 +120,7 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
 
     /// if timeout is more than 60s
     if (DateTime.now().difference(startDate).inSeconds > 60) {
+      // ignore: use_build_context_synchronously
       FailedDialog.show(
         context,
         text: "La requête a dépassé la limite de 60 secondes. Vérifiez votre connexion ou réessayez plus tard",
@@ -129,6 +130,7 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
 
     ///
     if (result["success"]) {
+      // ignore: use_build_context_synchronously
       SuccessDialog.show(
         context,
         text: result["message"],
@@ -137,6 +139,7 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
         },
       );
     } else {
+      // ignore: use_build_context_synchronously
       FailedDialog.show(
         context,
         text: result["message"],
@@ -164,7 +167,7 @@ class _AddEditionViewState extends State<AddEditionView> with SingleTickerProvid
             ),
           ],
         ),
-        actions: [
+        actions: const [
           BackButton(color: Colors.transparent),
         ],
       ),

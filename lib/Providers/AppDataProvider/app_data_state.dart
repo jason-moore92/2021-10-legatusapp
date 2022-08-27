@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 class AppDataState extends Equatable {
@@ -13,7 +12,7 @@ class AppDataState extends Equatable {
   final Map<String, dynamic>? androidInfo;
   final Map<String, dynamic>? iosInfo;
 
-  AppDataState({
+  const AppDataState({
     @required this.progressState,
     @required this.message,
     @required this.contextName,

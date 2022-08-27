@@ -16,21 +16,21 @@ class CustomerModel extends Equatable {
   List<RecipientModel>? recipients;
 
   CustomerModel({
-    name = "",
-    type = "",
-    email = "",
-    phone = "",
-    corpNumber = "",
+    name,
+    type,
+    email,
+    phone,
+    corpNumber,
     representation,
     addressModel,
     accounts,
     recipients,
   }) {
-    this.name = name;
-    this.type = type;
-    this.email = email;
-    this.phone = phone;
-    this.corpNumber = corpNumber;
+    this.name = name ?? "";
+    this.type = type ?? "";
+    this.email = email ?? "";
+    this.phone = phone ?? "";
+    this.corpNumber = corpNumber ?? "";
     this.representation = representation ?? [];
     this.addressModel = addressModel ?? AddressModel();
     this.recipients = recipients ?? [];

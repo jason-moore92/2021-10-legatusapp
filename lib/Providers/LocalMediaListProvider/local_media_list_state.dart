@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:geolocator/geolocator.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 class LocalMediaListState extends Equatable {
@@ -13,7 +11,7 @@ class LocalMediaListState extends Equatable {
   final Map<String, dynamic>? localMediaMetaData;
   final bool? isRefresh;
 
-  LocalMediaListState({
+  const LocalMediaListState({
     @required this.progressState,
     @required this.message,
     @required this.contextName,
@@ -29,8 +27,8 @@ class LocalMediaListState extends Equatable {
       message: "",
       contextName: "",
       localLocalReportModel: LocalReportModel(),
-      localMediaListData: [],
-      localMediaMetaData: Map<String, dynamic>(),
+      localMediaListData: const [],
+      localMediaMetaData: const <String, dynamic>{},
       isRefresh: false,
     );
   }
@@ -48,8 +46,7 @@ class LocalMediaListState extends Equatable {
       progressState: progressState ?? this.progressState,
       message: message ?? this.message,
       contextName: contextName ?? this.contextName,
-      localLocalReportModel:
-          localLocalReportModel ?? this.localLocalReportModel,
+      localLocalReportModel: localLocalReportModel ?? this.localLocalReportModel,
       localMediaListData: localMediaListData ?? this.localMediaListData,
       localMediaMetaData: localMediaMetaData ?? this.localMediaMetaData,
       isRefresh: isRefresh ?? this.isRefresh,

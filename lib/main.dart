@@ -1,14 +1,11 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:legatus/Models/LocalReportModel.dart';
-import 'package:legatus/Models/MediaModel.dart';
-import 'package:legatus/Models/SettingsModel.dart';
-import 'Config/config.dart';
+import 'package:legatus/Models/local_report_model.dart';
+import 'package:legatus/Models/media_model.dart';
+import 'package:legatus/Models/settings_model.dart';
 import 'Pages/App/Styles/index.dart';
 import 'Pages/App/app.dart';
 
@@ -36,14 +33,14 @@ void main() async {
     EasyLocalization(
       useOnlyLangCode: true,
       useFallbackTranslations: true,
-      supportedLocales: [
+      supportedLocales: const [
         Locale('en', 'US'),
         Locale('fr', 'FR'),
       ],
       path: 'lib/Assets/Langs',
-      startLocale: Locale('fr', 'FR'),
-      fallbackLocale: Locale('en', 'US'),
-      child: App(),
+      startLocale: const Locale('fr', 'FR'),
+      fallbackLocale: const Locale('en', 'US'),
+      child: const App(),
     ),
   );
 }

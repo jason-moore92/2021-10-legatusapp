@@ -22,19 +22,19 @@ class NotePanelDialog {
     double widthDp = ScreenUtil().setWidth(1);
     double heightDp = ScreenUtil().setWidth(1);
 
-    TextEditingController _controller = TextEditingController();
-    FocusNode _focusNode = FocusNode();
+    TextEditingController controller = TextEditingController();
+    FocusNode focusNode = FocusNode();
 
-    GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+    GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
     if (!isNew!) {
-      _controller.text = mediaModel!.content!;
+      controller.text = mediaModel!.content!;
     }
 
     void _saveHandler(BuildContext context) async {
-      if (!_formkey.currentState!.validate()) return;
+      if (!formkey.currentState!.validate()) return;
 
-      Navigator.of(context).pop(_controller.text);
+      Navigator.of(context).pop(controller.text);
     }
 
     return await showDialog(
@@ -46,11 +46,11 @@ class NotePanelDialog {
           color: Colors.transparent,
           child: Wrap(
             children: [
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: Form(
-                  key: _formkey,
+                  key: formkey,
                   child: Column(
                     children: [
                       SizedBox(height: topMargin ?? appbarHeight),
@@ -97,8 +97,8 @@ class NotePanelDialog {
                               ///
                               SizedBox(height: heightDp * 20),
                               CustomTextFormField(
-                                controller: _controller,
-                                focusNode: _focusNode,
+                                controller: controller,
+                                focusNode: focusNode,
                                 hintText: "Le contenu de votre note.",
                                 hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
                                 errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),
@@ -110,7 +110,8 @@ class NotePanelDialog {
                                 keyboardType: TextInputType.multiline,
                                 textInputAction: TextInputAction.newline,
                                 readOnly: mediaModel != null && mediaModel.state == "uploaded",
-                                validator: (input) => input.isEmpty ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(args: ["note"]) : null,
+                                validator: (input) =>
+                                    input.isEmpty ? LocaleKeys.ValidateErrorString_shouldBeErrorText.tr(args: ["note"]) : null,
                                 onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
                                 onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
                               ),
@@ -145,7 +146,9 @@ class NotePanelDialog {
                                   CustomTextButton(
                                     text: LocaleKeys.NoteDialogString_save.tr().toUpperCase(),
                                     textStyle: Theme.of(context).textTheme.button!.copyWith(
-                                        color: mediaModel != null && mediaModel.state == "uploaded" ? Colors.grey.withOpacity(0.7) : AppColors.yello),
+                                        color: mediaModel != null && mediaModel.state == "uploaded"
+                                            ? Colors.grey.withOpacity(0.7)
+                                            : AppColors.yello),
                                     // width: widthDp * 120,
                                     // bordercolor: AppColors.yello,
                                     // borderRadius: heightDp * 6,

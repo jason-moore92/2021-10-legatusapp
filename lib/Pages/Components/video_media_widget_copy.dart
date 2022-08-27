@@ -72,7 +72,7 @@
 
 //     _init();
 
-//     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 //       _mediaPlayProvider!.addListener(_mediaPlayProviderListener);
 //     });
 //   }
@@ -101,7 +101,7 @@
 //         VideoPlayerController.file(File(widget.mediaModel!.path!))
 //           ..initialize().then(
 //             (_) {
-//               WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+//               WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 //                 _maxDuration = _videoPlayerController!
 //                     .value.duration.inMilliseconds
 //                     .toDouble();
@@ -469,7 +469,7 @@
 //     super.initState();
 //     _init();
 
-//     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 //       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 //         statusBarColor: Colors.black,
 //         statusBarIconBrightness: Brightness.light,
@@ -485,7 +485,7 @@
 //         VideoPlayerController.file(File(widget.mediaModel!.path!))
 //           ..initialize().then(
 //             (_) {
-//               WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+//               WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 //                 _maxDuration = _videoPlayerController!
 //                     .value.duration.inMilliseconds
 //                     .toDouble();

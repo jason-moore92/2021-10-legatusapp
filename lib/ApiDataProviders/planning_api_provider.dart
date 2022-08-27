@@ -1,24 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:legatus/Helpers/date_time_convert.dart';
 import 'package:legatus/Helpers/http_plus.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 class PlanningApiProvider {
   static Box<dynamic>? appSettingsBox;
 
   static Future<void> initHiveObject() async {
     try {
-      if (appSettingsBox == null) {
-        appSettingsBox = await Hive.openBox<dynamic>("app_settings");
-      }
+      appSettingsBox ??= await Hive.openBox<dynamic>("app_settings");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -72,7 +71,9 @@ class PlanningApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",

@@ -48,26 +48,26 @@ ThemeData buildLightTheme(BuildContext context) {
       // main body string
       bodyText1: TextStyle(
         fontSize: fontSp * 14,
-        color: Color(0xFF222222),
+        color: const Color(0xFF222222),
         fontWeight: FontWeight.w400,
         height: 1.3,
       ),
       bodyText2: TextStyle(
         fontSize: fontSp * 12,
-        color: Color(0xFF222222).withOpacity(0.6),
+        color: const Color(0xFF222222).withOpacity(0.6),
         fontWeight: FontWeight.w400,
         height: 1.3,
       ),
       // label/caption style
       caption: TextStyle(
         fontSize: fontSp * 14,
-        color: Color(0xFF222222),
+        color: const Color(0xFF222222),
         fontWeight: FontWeight.w500,
         height: 1.3,
       ),
       overline: TextStyle(
         fontSize: fontSp * 10,
-        color: Color(0xFF222222),
+        color: const Color(0xFF222222),
         fontWeight: FontWeight.w400,
         height: 1,
         letterSpacing: 0.5,

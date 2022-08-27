@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:legatus/Models/MediaModel.dart';
-import 'package:meta/meta.dart';
+import 'package:legatus/Models/media_model.dart';
 import 'package:equatable/equatable.dart';
 
 class MediaPlayState extends Equatable {
@@ -9,7 +8,7 @@ class MediaPlayState extends Equatable {
   final bool? isNew;
   final MediaModel? selectedMediaModel;
 
-  MediaPlayState({
+  const MediaPlayState({
     @required this.progressState,
     @required this.message,
     @required this.isNew,

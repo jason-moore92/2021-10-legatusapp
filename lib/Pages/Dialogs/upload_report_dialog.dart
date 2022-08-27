@@ -52,7 +52,7 @@ class UploadReportDialog {
                 ///
                 SizedBox(height: heightDp * 10),
                 Text(
-                  "${LocaleKeys.UploadDialogString_content1.tr()}",
+                  LocaleKeys.UploadDialogString_content1.tr(),
                   style: Theme.of(context).textTheme.caption,
                 ),
 
@@ -70,7 +70,7 @@ class UploadReportDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content2.tr()}",
+                        LocaleKeys.UploadDialogString_content2.tr(),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -91,7 +91,7 @@ class UploadReportDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content3.tr()}",
+                        LocaleKeys.UploadDialogString_content3.tr(),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -112,7 +112,7 @@ class UploadReportDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content4.tr()}",
+                        LocaleKeys.UploadDialogString_content4.tr(),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -133,7 +133,7 @@ class UploadReportDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content5.tr()}",
+                        LocaleKeys.UploadDialogString_content5.tr(),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
@@ -154,7 +154,7 @@ class UploadReportDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content6.tr()}",
+                        LocaleKeys.UploadDialogString_content6.tr(),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),

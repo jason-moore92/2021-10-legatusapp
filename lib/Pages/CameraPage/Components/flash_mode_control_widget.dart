@@ -7,7 +7,7 @@ class FlashModeControllWidget extends StatelessWidget {
   final double? iconSize;
   final Function(FlashMode)? onPressHandler;
 
-  FlashModeControllWidget({
+  const FlashModeControllWidget({
     Key? key,
     this.scaffoldKey,
     @required this.cameraController,
@@ -26,33 +26,34 @@ class FlashModeControllWidget extends StatelessWidget {
       enable = false;
     }
 
-    if (cameraController == null)
+    if (cameraController == null) {
       return IconButton(
-        icon: Icon(Icons.flash_off),
+        icon: const Icon(Icons.flash_off),
         color: Colors.transparent,
         iconSize: iconSize!,
         onPressed: null,
       );
+    }
 
     switch (cameraController!.value.flashMode) {
       case FlashMode.off:
-        icon = Icon(Icons.flash_off);
+        icon = const Icon(Icons.flash_off);
         nextMode = FlashMode.always;
         break;
       case FlashMode.always:
-        icon = Icon(Icons.flash_on);
+        icon = const Icon(Icons.flash_on);
         nextMode = FlashMode.auto;
         break;
       case FlashMode.auto:
-        icon = Icon(Icons.flash_auto);
+        icon = const Icon(Icons.flash_auto);
         nextMode = FlashMode.torch;
         break;
       case FlashMode.torch:
-        icon = Icon(Icons.highlight);
+        icon = const Icon(Icons.highlight);
         nextMode = FlashMode.off;
         break;
       default:
-        icon = Icon(Icons.flash_off);
+        icon = const Icon(Icons.flash_off);
         nextMode = FlashMode.off;
     }
 

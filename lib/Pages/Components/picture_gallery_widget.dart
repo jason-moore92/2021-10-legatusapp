@@ -1,35 +1,30 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:legatus/Models/index.dart';
 
 class PictureGalleryWidget extends StatefulWidget {
   final MediaModel? mediaModel;
 
-  const PictureGalleryWidget({Key? key, @required this.mediaModel})
-      : super(key: key);
+  const PictureGalleryWidget({Key? key, @required this.mediaModel}) : super(key: key);
 
   @override
-  _PictureGalleryWidgetState createState() => _PictureGalleryWidgetState();
+  PictureGalleryWidgetState createState() => PictureGalleryWidgetState();
 }
 
-class _PictureGalleryWidgetState extends State<PictureGalleryWidget> {
+class PictureGalleryWidgetState extends State<PictureGalleryWidget> {
   @override
   Widget build(BuildContext context) {
-    // double heightDp = ScreenUtil().setWidth(1);
-    // double statusbarHeight = ScreenUtil().statusBarHeight;
-
     File file = File(widget.mediaModel!.path!);
 
-    Image image = new Image.file(file);
-    Completer<ui.Image> completer = new Completer<ui.Image>();
-    image.image.resolve(new ImageConfiguration()).addListener(
-          ImageStreamListener(
-              (ImageInfo info, bool _) => completer.complete(info.image)),
+    Image image = Image.file(file);
+    Completer<ui.Image> completer = Completer<ui.Image>();
+    image.image.resolve(const ImageConfiguration()).addListener(
+          ImageStreamListener((ImageInfo info, bool _) => completer.complete(info.image)),
         );
 
     return FutureBuilder<ui.Image>(
@@ -47,9 +42,8 @@ class _PictureGalleryWidgetState extends State<PictureGalleryWidget> {
                 if (state.extendedImageLoadState == LoadState.loading) {
                   return Center(
                       child: Theme(
-                    data:
-                        Theme.of(context).copyWith(brightness: Brightness.dark),
-                    child: Center(child: CupertinoActivityIndicator()),
+                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                    child: const Center(child: CupertinoActivityIndicator()),
                   ));
                 }
 
@@ -106,13 +100,12 @@ class _PictureGalleryWidgetState extends State<PictureGalleryWidget> {
             color: Colors.transparent,
             child: Wrap(
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   child: Theme(
-                    data:
-                        Theme.of(context).copyWith(brightness: Brightness.dark),
-                    child: Center(child: CupertinoActivityIndicator()),
+                    data: Theme.of(context).copyWith(brightness: Brightness.dark),
+                    child: const Center(child: CupertinoActivityIndicator()),
                   ),
                 ),
               ],

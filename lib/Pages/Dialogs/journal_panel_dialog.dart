@@ -19,20 +19,20 @@ class JournalPanelDialog {
     double widthDp = ScreenUtil().setWidth(1);
     double heightDp = ScreenUtil().setWidth(1);
 
-    TextEditingController _controller = TextEditingController();
-    FocusNode _focusNode = FocusNode();
+    TextEditingController controller = TextEditingController();
+    FocusNode focusNode = FocusNode();
 
-    GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+    GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
     if (email != "") {
-      _controller.text = email;
+      controller.text = email;
     }
 
     void _saveHandler(BuildContext context) async {
-      if (!_formkey.currentState!.validate()) return;
+      if (!formkey.currentState!.validate()) return;
       Navigator.of(context).pop();
       if (callBack != null) {
-        callBack(_controller.text.trim());
+        callBack(controller.text.trim());
       }
     }
 
@@ -45,11 +45,11 @@ class JournalPanelDialog {
           color: Colors.transparent,
           child: Wrap(
             children: [
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: Form(
-                  key: _formkey,
+                  key: formkey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -100,8 +100,8 @@ class JournalPanelDialog {
                                   ),
                                   SizedBox(height: heightDp * 5),
                                   CustomTextFormField(
-                                    controller: _controller,
-                                    focusNode: _focusNode,
+                                    controller: controller,
+                                    focusNode: focusNode,
                                     hintText: "vladimir@legatus.fr",
                                     hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.withOpacity(0.8)),
                                     errorStyle: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),
@@ -110,8 +110,9 @@ class JournalPanelDialog {
                                       borderRadius: BorderRadius.circular(heightDp * 6),
                                     ),
                                     readOnly: email != "",
-                                    validator: (input) =>
-                                        !KeicyValidators.isValidEmail(input.trim()) ? LocaleKeys.ValidateErrorString_emailErrorText.tr() : null,
+                                    validator: (input) => !KeicyValidators.isValidEmail(input.trim())
+                                        ? LocaleKeys.ValidateErrorString_emailErrorText.tr()
+                                        : null,
                                     onFieldSubmitted: (input) => FocusScope.of(context).requestFocus(FocusNode()),
                                     onEditingComplete: () => FocusScope.of(context).requestFocus(FocusNode()),
                                   ),

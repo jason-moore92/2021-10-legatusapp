@@ -25,7 +25,7 @@ dependencies:
 
   provider: ^6.0.3
   equatable: ^2.0.5
-  flutter_screenutil: ^5.3.1
+  flutter_screenutil: ^5.5.3+2
   persistent_bottom_nav_bar_v2: ^4.2.5
   mask_text_input_formatter: ^2.4.0
   date_time_format: ^2.0.1

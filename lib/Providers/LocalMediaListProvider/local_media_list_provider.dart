@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 import 'index.dart';
 
 class LocalMediaListProvider extends ChangeNotifier {
-  static LocalMediaListProvider of(BuildContext context, {bool listen = false}) => Provider.of<LocalMediaListProvider>(context, listen: listen);
+  static LocalMediaListProvider of(BuildContext context, {bool listen = false}) =>
+      Provider.of<LocalMediaListProvider>(context, listen: listen);
 
   LocalMediaListState _localMediaListState = LocalMediaListState.init();
   LocalMediaListState get localMediaListState => _localMediaListState;
@@ -34,7 +35,7 @@ class LocalMediaListProvider extends ChangeNotifier {
       _localMediaListState = _localMediaListState.update(localLocalReportModel: result["data"]);
     }
 
-    List<dynamic> localMediaListData = _localMediaListState.localMediaListData!;
+    List<dynamic> localMediaListData = List.from(_localMediaListState.localMediaListData!);
     Map<String, dynamic> localMediaMetaData = _localMediaListState.localMediaMetaData!;
 
     try {

@@ -9,9 +9,10 @@ class ErrorPage extends StatelessWidget {
   final Function? callback;
 
   ErrorPage({
+    Key? key,
     @required this.message,
     this.callback,
-  });
+  }) : super(key: key);
 
   /// Responsive design variables
   double? deviceWidth;

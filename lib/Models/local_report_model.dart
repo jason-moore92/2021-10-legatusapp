@@ -2,9 +2,9 @@
 
 import "package:equatable/equatable.dart";
 import 'package:hive/hive.dart';
-import 'package:legatus/Models/MediaModel.dart';
+import 'package:legatus/Models/media_model.dart';
 
-part 'LocalReportModel.g.dart';
+part 'local_report_model.g.dart';
 
 @HiveType(typeId: 2)
 class LocalReportModel extends Equatable {
@@ -120,7 +120,7 @@ class LocalReportModel extends Equatable {
     return LocalReportModel(
       reportId: map["report_id"] ?? 0,
       uuid: map["uuid"] ?? "",
-      deviceInfo: map["device_info"] ?? Map<String, dynamic>(),
+      deviceInfo: map["device_info"] ?? <String, dynamic>{},
       date: map["date"] ?? "",
       time: map["time"] ?? "",
       createdAt: map["created_at"] ?? "",
@@ -155,7 +155,7 @@ class LocalReportModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     List<dynamic> mediasJson = [];
-    if (medias == null) medias = [];
+    medias ??= [];
     for (var i = 0; i < medias!.length; i++) {
       mediasJson.add(medias![i].toJson());
     }
@@ -163,7 +163,7 @@ class LocalReportModel extends Equatable {
     return {
       "report_id": reportId ?? 0,
       "uuid": uuid ?? "",
-      "device_info": deviceInfo ?? Map<String, dynamic>(),
+      "device_info": deviceInfo ?? <String, dynamic>{},
       "date": date ?? "",
       "time": time ?? "",
       "created_at": createdAt ?? "",

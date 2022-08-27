@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'LocalReportModel.dart';
+part of 'local_report_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -127,8 +127,5 @@ class LocalReportModelAdapter extends TypeAdapter<LocalReportModel> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is LocalReportModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is LocalReportModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

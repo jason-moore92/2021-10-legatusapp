@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:legatus/Models/index.dart';
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 class LocalReportListState extends Equatable {
@@ -15,7 +14,7 @@ class LocalReportListState extends Equatable {
   final LocalReportModel? localReportModel;
   final bool? isNew;
 
-  LocalReportListState({
+  const LocalReportListState({
     @required this.progressState,
     @required this.message,
     @required this.contextName,
@@ -32,8 +31,8 @@ class LocalReportListState extends Equatable {
       progressState: 0,
       message: "",
       contextName: "",
-      localReportListData: [],
-      localReportMetaData: Map<String, dynamic>(),
+      localReportListData: const [],
+      localReportMetaData: const <String, dynamic>{},
       isRefresh: false,
       refreshList: false,
       localReportModel: LocalReportModel(),

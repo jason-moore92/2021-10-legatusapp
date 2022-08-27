@@ -10,7 +10,7 @@ class CameraToggleWidget extends StatelessWidget {
   final List<CameraDescription>? cameras;
   final Function(CameraDescription)? onPressHandler;
 
-  CameraToggleWidget({
+  const CameraToggleWidget({
     Key? key,
     @required this.cameraController,
     @required this.cameras,
@@ -80,7 +80,7 @@ class CameraToggleWidget extends StatelessWidget {
       }
     }
 
-    if (cameraController == null)
+    if (cameraController == null) {
       return IconButton(
         icon: Icon(
           Icons.camera_rear_outlined,
@@ -89,6 +89,7 @@ class CameraToggleWidget extends StatelessWidget {
         ),
         onPressed: null,
       );
+    }
 
     switch (cameraController!.description.lensDirection) {
       case CameraLensDirection.back:
@@ -98,7 +99,7 @@ class CameraToggleWidget extends StatelessWidget {
       case CameraLensDirection.external:
         return externalWidgdet!;
       default:
-        return SizedBox();
+        return const SizedBox();
     }
   }
 }

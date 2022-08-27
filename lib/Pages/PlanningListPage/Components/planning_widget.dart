@@ -22,12 +22,12 @@ class PlanningWidget extends StatelessWidget {
     heightDp = ScreenUtil().setWidth(1);
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
 
-    return Container(
+    return SizedBox(
       width: deviceWidth,
       child: Column(
         children: [
           Container(
-            color: Color(0xFFF4F4F4),
+            color: const Color(0xFFF4F4F4),
             padding: EdgeInsets.symmetric(horizontal: widthDp! * 15, vertical: heightDp! * 10),
             child: Row(
               children: [
@@ -45,7 +45,7 @@ class PlanningWidget extends StatelessWidget {
               return Column(
                 children: [
                   _reportPanel(context, planningReportModel),
-                  Divider(height: 1, thickness: 1, color: Color(0xFFE4E4E4)),
+                  const Divider(height: 1, thickness: 1, color: Color(0xFFE4E4E4)),
                 ],
               );
             }),
@@ -137,11 +137,9 @@ class PlanningWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: List.generate(planningReportModel.customers!.length, (index) {
-                            return Container(
-                              child: Text(
-                                planningReportModel.customers![index].name!,
-                                style: Theme.of(context).textTheme.bodyText1!,
-                              ),
+                            return Text(
+                              planningReportModel.customers![index].name!,
+                              style: Theme.of(context).textTheme.bodyText1!,
                             );
                           }),
                         ),
@@ -174,11 +172,9 @@ class PlanningWidget extends StatelessWidget {
                             : Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: List.generate(planningReportModel.accounts!.length, (index) {
-                                  return Container(
-                                    child: Text(
-                                      planningReportModel.accounts![index]["name"],
-                                      style: Theme.of(context).textTheme.bodyText1!,
-                                    ),
+                                  return Text(
+                                    planningReportModel.accounts![index]["name"],
+                                    style: Theme.of(context).textTheme.bodyText1!,
                                   );
                                 }),
                               ),

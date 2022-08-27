@@ -63,7 +63,7 @@ class LocalReportWidget extends StatelessWidget {
       highlightColor: Colors.grey[100]!,
       direction: ShimmerDirection.ltr,
       enabled: isLoading!,
-      period: Duration(milliseconds: 1000),
+      period: const Duration(milliseconds: 1000),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

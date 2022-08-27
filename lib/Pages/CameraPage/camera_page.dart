@@ -10,10 +10,12 @@ class CameraPage extends StatelessWidget {
   final bool? isPicture;
   final bool? isAudio;
 
-  CameraPage(
-      {@required this.localReportModel,
-      this.isAudio = false,
-      this.isPicture = false});
+  const CameraPage({
+    Key? key,
+    @required this.localReportModel,
+    this.isAudio = false,
+    this.isPicture = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

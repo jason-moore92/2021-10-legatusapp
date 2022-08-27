@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:legatus/Models/LocalReportModel.dart';
+import 'package:legatus/Models/local_report_model.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:provider/provider.dart';
 
@@ -10,11 +10,12 @@ class GalleryPage extends StatelessWidget {
   final LocalMediaListProvider localMediaListProvider;
   final int index;
 
-  GalleryPage({
+  const GalleryPage({
+    Key? key,
     required this.localReportModel,
     required this.index,
     required this.localMediaListProvider,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

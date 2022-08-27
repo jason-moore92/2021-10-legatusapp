@@ -1,9 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
 // import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -26,7 +29,7 @@ import 'package:legatus/Pages/ReportNewPage/new_report_page.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_plus/share_plus.dart';
@@ -36,14 +39,13 @@ import 'package:wakelock/wakelock.dart';
 class ReportView extends StatefulWidget {
   final LocalReportModel? localReportModel;
 
-  ReportView({Key? key, this.localReportModel}) : super(key: key);
+  const ReportView({Key? key, this.localReportModel}) : super(key: key);
 
   @override
-  _ReportViewState createState() => _ReportViewState();
+  ReportViewState createState() => ReportViewState();
 }
 
-class _ReportViewState extends State<ReportView>
-    with SingleTickerProviderStateMixin {
+class ReportViewState extends State<ReportView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -57,17 +59,16 @@ class _ReportViewState extends State<ReportView>
 
   LocalReportModel? _localReportModel;
 
-  Map<String, dynamic> _updatedStatus = Map<String, dynamic>();
+  Map<String, dynamic> _updatedStatus = <String, dynamic>{};
 
   KeicyProgressDialog? _keicyProgressDialog;
 
   LocalMediaListProvider? _localMediaListProvider;
   LocalReportProvider? _localReportProvider;
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-  ScrollController? _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   List<int>? _selectedMediaRanks;
   bool _selectStatus = false;
@@ -103,7 +104,7 @@ class _ReportViewState extends State<ReportView>
       context,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      layout: Layout.Column,
+      layout: Layout.column,
       padding: EdgeInsets.zero,
       width: heightDp! * 120,
       height: heightDp! * 120,
@@ -141,7 +142,7 @@ class _ReportViewState extends State<ReportView>
       isNotifiable: false,
     );
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       _permissionHander();
 
       _localMediaListProvider!.addListener(_localMediaListProviderListener);
@@ -160,8 +161,7 @@ class _ReportViewState extends State<ReportView>
   void _permissionHander() async {
     LocationPermission permission = await Geolocator.requestPermission();
 
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
+    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
       _currentPosition = await Geolocator.getCurrentPosition();
     }
 
@@ -192,8 +192,7 @@ class _ReportViewState extends State<ReportView>
       } else {
         _refreshController.loadFailed();
       }
-    } else if (_localMediaListProvider!.localMediaListState.progressState ==
-        2) {
+    } else if (_localMediaListProvider!.localMediaListState.progressState == 2) {
       if (_localMediaListProvider!.localMediaListState.isRefresh!) {
         _localMediaListProvider!.setLocalMediaListState(
           _localMediaListProvider!.localMediaListState.update(isRefresh: false),
@@ -204,26 +203,21 @@ class _ReportViewState extends State<ReportView>
         _refreshController.loadComplete();
       }
 
-      if (_localMediaListProvider!
-              .localMediaListState.localMediaMetaData!["nextPage"] ==
-          1) {
+      if (_localMediaListProvider!.localMediaListState.localMediaMetaData!["nextPage"] == 1) {
         // _controller!.jumpTo(0);
       }
     }
   }
 
   void _localReportProviderListener() async {
-    if (_localReportProvider!.localReportState.contextName != "ReportPage")
-      return;
+    if (_localReportProvider!.localReportState.contextName != "ReportPage") return;
 
-    if (_localReportProvider!.localReportState.progressState != 1 &&
-        _keicyProgressDialog!.isShowing()) {
+    if (_localReportProvider!.localReportState.progressState != 1 && _keicyProgressDialog!.isShowing()) {
       await _keicyProgressDialog!.hide();
     }
 
     if (_localReportProvider!.localReportState.progressState == 2) {
-      _localReportModel!.reportId =
-          _localReportProvider!.localReportState.reportId;
+      _localReportModel!.reportId = _localReportProvider!.localReportState.reportId;
       _updatedStatus = _updatedStatus = {
         "isUpdated": true,
         "localReportModel": _localReportModel,
@@ -235,28 +229,21 @@ class _ReportViewState extends State<ReportView>
         text: _localReportProvider!.localReportState.message!,
       );
     } else if (_localReportProvider!.localReportState.progressState == 3) {
-      _localReportModel!.reportId =
-          _localReportProvider!.localReportState.reportId;
+      _localReportModel!.reportId = _localReportProvider!.localReportState.reportId;
       for (var i = 0; i < _localReportModel!.medias!.length; i++) {
-        if (_localReportModel!.medias![i].rank! ==
-            _localReportProvider!.localReportState.uploadingMediaModel!.rank!) {
-          _localReportModel!.medias![i] =
-              _localReportProvider!.localReportState.uploadingMediaModel!;
+        if (_localReportModel!.medias![i].rank! == _localReportProvider!.localReportState.uploadingMediaModel!.rank!) {
+          _localReportModel!.medias![i] = _localReportProvider!.localReportState.uploadingMediaModel!;
           _updateLocalReport(_localReportModel!);
           break;
         }
       }
-      List<dynamic> localMediaListData =
-          _localMediaListProvider!.localMediaListState.localMediaListData!;
+      List<dynamic> localMediaListData = _localMediaListProvider!.localMediaListState.localMediaListData!;
       for (var i = 0; i < localMediaListData.length; i++) {
         List<MediaModel> mediaModelList = localMediaListData[i];
         bool isFind = false;
         for (var k = 0; k < mediaModelList.length; k++) {
-          if (mediaModelList[k].rank! ==
-              _localReportProvider!
-                  .localReportState.uploadingMediaModel!.rank!) {
-            mediaModelList[k] =
-                _localReportProvider!.localReportState.uploadingMediaModel!;
+          if (mediaModelList[k].rank! == _localReportProvider!.localReportState.uploadingMediaModel!.rank!) {
+            mediaModelList[k] = _localReportProvider!.localReportState.uploadingMediaModel!;
             isFind = true;
             break;
           }
@@ -285,13 +272,11 @@ class _ReportViewState extends State<ReportView>
   void _onRefresh() async {
     _selectStatus = false;
     _selectedMediaRanks = [];
-    List<dynamic> localMediaListData =
-        _localMediaListProvider!.localMediaListState.localMediaListData!;
-    Map<String, dynamic> localMediaMetaData =
-        _localMediaListProvider!.localMediaListState.localMediaMetaData!;
+    List<dynamic> localMediaListData = _localMediaListProvider!.localMediaListState.localMediaListData!;
+    Map<String, dynamic> localMediaMetaData = _localMediaListProvider!.localMediaListState.localMediaMetaData!;
 
     localMediaListData = [];
-    localMediaMetaData = Map<String, dynamic>();
+    localMediaMetaData = <String, dynamic>{};
     _localMediaListProvider!.setLocalMediaListState(
       _localMediaListProvider!.localMediaListState.update(
         progressState: 1,
@@ -314,8 +299,7 @@ class _ReportViewState extends State<ReportView>
   void _editHandler() async {
     var result = await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) =>
-            NewReportPage(isNew: false, localReportModel: _localReportModel!),
+        builder: (BuildContext context) => NewReportPage(isNew: false, localReportModel: _localReportModel!),
       ),
     );
     if (result != null && result.isNotEmpty) {
@@ -327,10 +311,8 @@ class _ReportViewState extends State<ReportView>
     }
   }
 
-  Future<void> _noteHandler(
-      {String? note, bool? isNew = true, MediaModel? mediaModel}) async {
-    LocalReportModel localReportModel =
-        LocalReportModel.copy(_localReportModel!);
+  Future<void> _noteHandler({String? note, bool? isNew = true, MediaModel? mediaModel}) async {
+    LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
     // await _keicyProgressDialog!.show();
     try {
       // if (AppDataProvider.of(context).appDataState.settingsModel!.withRestriction!) {
@@ -351,31 +333,25 @@ class _ReportViewState extends State<ReportView>
 
         if (path == null) {
           // await _keicyProgressDialog!.hide();
-          FailedDialog.show(context,
-              text: "Creating new note file path occur error");
+          FailedDialog.show(context, text: "Creating new note file path occur error");
           return;
         }
 
-        File? textFile =
-            await FileHelpers.writeTextFile(text: note, path: path);
+        File? textFile = await FileHelpers.writeTextFile(text: note, path: path);
 
         if (textFile == null) {
           // await _keicyProgressDialog!.hide();
-          FailedDialog.show(context,
-              text: "Creating new note file occur error");
+          FailedDialog.show(context, text: "Creating new note file occur error");
           return;
         }
 
         mediaModel = MediaModel();
         mediaModel.content = note;
-        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(
-            dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
+        mediaModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
         if (Platform.isAndroid) {
-          mediaModel.deviceInfo =
-              AppDataProvider.of(context).appDataState.androidInfo;
+          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.androidInfo;
         } else if (Platform.isIOS) {
-          mediaModel.deviceInfo =
-              AppDataProvider.of(context).appDataState.iosInfo;
+          mediaModel.deviceInfo = AppDataProvider.of(context).appDataState.iosInfo;
         }
         mediaModel.duration = -1;
         mediaModel.ext = textFile.path.split('.').last;
@@ -390,7 +366,7 @@ class _ReportViewState extends State<ReportView>
         mediaModel.size = textFile.readAsBytesSync().lengthInBytes;
         mediaModel.state = "captured";
         mediaModel.type = MediaType.note;
-        mediaModel.uuid = Uuid().v4();
+        mediaModel.uuid = const Uuid().v4();
 
         if (_localReportModel!.medias == null) _localReportModel!.medias = [];
         localReportModel.medias!.add(mediaModel);
@@ -401,20 +377,19 @@ class _ReportViewState extends State<ReportView>
             try {
               await oldTextFile.delete();
             } catch (e) {
-              print(e);
+              if (kDebugMode) {
+                print(e);
+              }
               // await _keicyProgressDialog!.hide();
-              FailedDialog.show(context,
-                  text: "Deleting old note file occur error");
+              FailedDialog.show(context, text: "Deleting old note file occur error");
               return;
             }
 
-            File? textFile = await FileHelpers.writeTextFile(
-                text: note, path: mediaModel.path!);
+            File? textFile = await FileHelpers.writeTextFile(text: note, path: mediaModel.path!);
 
             if (textFile == null) {
               // await _keicyProgressDialog!.hide();
-              FailedDialog.show(context,
-                  text: "Creating update note file occur error");
+              FailedDialog.show(context, text: "Creating update note file occur error");
               return;
             }
 
@@ -440,8 +415,7 @@ class _ReportViewState extends State<ReportView>
       // await _keicyProgressDialog!.hide();
 
       if (success) {
-        var result = await LocalReportApiProvider.getLocalReportModel(
-            localReportModel: localReportModel);
+        var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
         if (result["success"]) {
           _localReportModel = result["data"];
         } else {
@@ -459,9 +433,7 @@ class _ReportViewState extends State<ReportView>
           isNotifiable: true,
         );
 
-        String message = isNew
-            ? "Note enregistrée avec succès"
-            : "Note mise à jour avec succès";
+        String message = isNew ? "Note enregistrée avec succès" : "Note mise à jour avec succès";
         // SuccessDialog.show(context, text: message);
         Fluttertoast.showToast(
           msg: message,
@@ -479,14 +451,14 @@ class _ReportViewState extends State<ReportView>
           setState(() {});
         }
       } else {
-        FailedDialog.show(context,
-            text: isNew ? "New note error" : "Update note error");
+        FailedDialog.show(context, text: isNew ? "New note error" : "Update note error");
         return;
       }
     } catch (e) {
-      print(e);
-      FailedDialog.show(context,
-          text: isNew! ? "New note error" : "Update note error");
+      if (kDebugMode) {
+        print(e);
+      }
+      FailedDialog.show(context, text: isNew! ? "New note error" : "Update note error");
       return;
     }
   }
@@ -494,8 +466,7 @@ class _ReportViewState extends State<ReportView>
   Future<bool> _updateLocalReport(LocalReportModel localReportModel) async {
     var result = await LocalReportApiProvider.update(
       localReportModel: localReportModel,
-      oldReportIdStr:
-          "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}",
+      oldReportIdStr: "${localReportModel.date} ${localReportModel.time}_${localReportModel.createdAt}",
     );
     LocalReportListProvider.of(context).setLocalReportListState(
       LocalReportListProvider.of(context).localReportListState.update(
@@ -506,18 +477,18 @@ class _ReportViewState extends State<ReportView>
   }
 
   void _deleteLocalMedias() async {
-    LocalReportModel localReportModel =
-        LocalReportModel.copy(_localReportModel!);
+    LocalReportModel localReportModel = LocalReportModel.copy(_localReportModel!);
     List<MediaModel> newMedias = [];
     for (var i = 0; i < localReportModel.medias!.length; i++) {
       MediaModel mediaModel = localReportModel.medias![i];
-      if (_selectedMediaRanks!.contains(mediaModel.rank) &&
-          mediaModel.path! != "") {
+      if (_selectedMediaRanks!.contains(mediaModel.rank) && mediaModel.path! != "") {
         File oldFile = File(mediaModel.path!);
         try {
           await oldFile.delete();
         } catch (e) {
-          print(e);
+          if (kDebugMode) {
+            print(e);
+          }
           newMedias.add(mediaModel);
         }
         if (mediaModel.thumPath != "") {
@@ -525,7 +496,9 @@ class _ReportViewState extends State<ReportView>
           try {
             await oldFile.delete();
           } catch (e) {
-            print(e);
+            if (kDebugMode) {
+              print(e);
+            }
             newMedias.add(mediaModel);
           }
         }
@@ -549,8 +522,7 @@ class _ReportViewState extends State<ReportView>
         textColor: Colors.greenAccent,
         fontSize: 16.0,
       );
-      var result = await LocalReportApiProvider.getLocalReportModel(
-          localReportModel: localReportModel);
+      var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
       if (result["success"]) {
         _localReportModel = result["data"];
       } else {
@@ -584,7 +556,9 @@ class _ReportViewState extends State<ReportView>
     );
     await _keicyProgressDialog!.hide();
 
-    print(result);
+    if (kDebugMode) {
+      print(result);
+    }
     if (result["success"]) {
       SuccessDialog.show(
         context,
@@ -601,8 +575,7 @@ class _ReportViewState extends State<ReportView>
   void _uploadHandler() async {
     if (_localReportProvider!.localReportState.isUploading!) return;
 
-    if (AuthProvider.of(context).authState.loginState ==
-        LoginState.IsNotLogin) {
+    if (AuthProvider.of(context).authState.loginState == LoginState.isNotLogin) {
       UploadReportDialog.show(
         context,
         callback: () {
@@ -615,7 +588,7 @@ class _ReportViewState extends State<ReportView>
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute<void>(
-                builder: (BuildContext context) => BottomNavbar(),
+                builder: (BuildContext context) => const BottomNavbar(),
               ),
               (route) => false);
         },
@@ -629,8 +602,7 @@ class _ReportViewState extends State<ReportView>
         ),
       );
       Wakelock.enable();
-      _localReportProvider!.uploadMedials(
-          localReportModel: LocalReportModel.copy(_localReportModel!));
+      _localReportProvider!.uploadMedials(localReportModel: LocalReportModel.copy(_localReportModel!));
     }
   }
 
@@ -639,15 +611,13 @@ class _ReportViewState extends State<ReportView>
     if (nonUploadedCount != 0) {
       FailedDialog.show(
         context,
-        text:
-            "Vous devez uploader tous les médias du constat pour externaliser la frappe.",
+        text: "Vous devez uploader tous les médias du constat pour externaliser la frappe.",
       );
       return;
     }
 
     /// if the user is not login
-    if (AuthProvider.of(context).authState.loginState ==
-        LoginState.IsNotLogin) {
+    if (AuthProvider.of(context).authState.loginState == LoginState.isNotLogin) {
       EditionConnectionDialog.show(
         context,
         callback: () {
@@ -661,7 +631,7 @@ class _ReportViewState extends State<ReportView>
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute<void>(
-                builder: (BuildContext context) => BottomNavbar(),
+                builder: (BuildContext context) => const BottomNavbar(),
               ),
               (route) => false);
         },
@@ -674,7 +644,7 @@ class _ReportViewState extends State<ReportView>
       context,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      layout: Layout.Column,
+      layout: Layout.column,
       padding: EdgeInsets.zero,
       width: heightDp! * 120,
       height: heightDp! * 120,
@@ -713,32 +683,26 @@ class _ReportViewState extends State<ReportView>
     if (DateTime.now().difference(startDate).inSeconds > 60) {
       FailedDialog.show(
         context,
-        text:
-            "La requête a dépassé la limite de 60 secondes. Vérifiez votre connexion ou réessayez plus tard",
+        text: "La requête a dépassé la limite de 60 secondes. Vérifiez votre connexion ou réessayez plus tard",
       );
       return;
     }
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) =>
-            AddEditionPage(editions: result["data"]),
+        builder: (BuildContext context) => AddEditionPage(editions: result["data"]),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.of(context).size.width >=
-        ResponsiveDesignSettings.tableteMaxWidth) {
+    if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "desktop";
-    } else if (MediaQuery.of(context).size.width >=
-            ResponsiveDesignSettings.mobileMaxWidth &&
-        MediaQuery.of(context).size.width <
-            ResponsiveDesignSettings.tableteMaxWidth) {
+    } else if (MediaQuery.of(context).size.width >= ResponsiveDesignSettings.mobileMaxWidth &&
+        MediaQuery.of(context).size.width < ResponsiveDesignSettings.tableteMaxWidth) {
       responsiveStyle = "tablet";
-    } else if (MediaQuery.of(context).size.width <
-        ResponsiveDesignSettings.mobileMaxWidth) {
+    } else if (MediaQuery.of(context).size.width < ResponsiveDesignSettings.mobileMaxWidth) {
       responsiveStyle = "mobile";
     }
 
@@ -747,8 +711,7 @@ class _ReportViewState extends State<ReportView>
         Navigator.of(context).pop(_updatedStatus);
         return false;
       },
-      child: Consumer2<LocalMediaListProvider, LocalReportProvider>(
-          builder: (context, localMediaListProvider, localReportProvider, _) {
+      child: Consumer2<LocalMediaListProvider, LocalReportProvider>(builder: (context, localMediaListProvider, localReportProvider, _) {
         photosCount = 0;
         audiosCount = 0;
         notesCount = 0;
@@ -785,15 +748,12 @@ class _ReportViewState extends State<ReportView>
 
           //   title: ,
           // ),
-          body: Container(
+          body: SizedBox(
             width: deviceWidth,
             height: deviceHeight,
             child: Column(
               children: [
-                Container(
-                    width: deviceWidth,
-                    height: statusbarHeight!,
-                    color: AppColors.primayColor),
+                Container(width: deviceWidth, height: statusbarHeight!, color: AppColors.primayColor),
                 _appBarWidget(),
                 localReportProvider.localReportState.isUploading!
                     ? _uploadingPanel()
@@ -802,15 +762,12 @@ class _ReportViewState extends State<ReportView>
                         : _mediaCountPanel(),
                 SizedBox(height: heightDp! * 5),
                 Expanded(
-                  child: _localReportModel!.medias!.isEmpty
-                      ? _noMediaPanel()
-                      : _mediaPanel1(),
+                  child: _localReportModel!.medias!.isEmpty ? _noMediaPanel() : _mediaPanel1(),
                 ),
               ],
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: _floatingButtonPanel(),
         );
       }),
@@ -838,8 +795,7 @@ class _ReportViewState extends State<ReportView>
               child: Row(
                 children: [
                   SizedBox(width: iconPadding),
-                  Icon(Icons.arrow_back_ios_outlined,
-                      size: iconSize * 0.8, color: Colors.white),
+                  Icon(Icons.arrow_back_ios_outlined, size: iconSize * 0.8, color: Colors.white),
                   SizedBox(width: iconPadding),
                 ],
               ),
@@ -861,23 +817,20 @@ class _ReportViewState extends State<ReportView>
                   _selectedMediaRanks = [];
                   _selectStatus = true;
                   for (var i = 0; i < _localReportModel!.medias!.length; i++) {
-                    _selectedMediaRanks!
-                        .add(_localReportModel!.medias![i].rank!);
+                    _selectedMediaRanks!.add(_localReportModel!.medias![i].rank!);
                   }
                   setState(() {});
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: iconPadding),
-                  child: Icon(Icons.select_all_outlined,
-                      size: iconSize, color: Colors.white),
+                  child: Icon(Icons.select_all_outlined, size: iconSize, color: Colors.white),
                 ),
               ),
               GestureDetector(
                 onTap: () {
                   JournalPanelDialog.show(
                     context,
-                    email: AuthProvider.of(context).authState.loginState ==
-                            LoginState.IsLogin
+                    email: AuthProvider.of(context).authState.loginState == LoginState.isLogin
                         ? AuthProvider.of(context).authState.userModel!.email!
                         : "",
                     callBack: (String email) => _journalHandler(email),
@@ -895,24 +848,19 @@ class _ReportViewState extends State<ReportView>
                 ),
               ),
               GestureDetector(
-                onTap: _localReportProvider!.localReportState.isUploading!
-                    ? null
-                    : _uploadHandler,
+                onTap: _localReportProvider!.localReportState.isUploading! ? null : _uploadHandler,
                 child: Stack(
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: iconPadding),
-                      child: Icon(Icons.cloud_upload_outlined,
-                          size: iconSize, color: Colors.white),
+                      child: Icon(Icons.cloud_upload_outlined, size: iconSize, color: Colors.white),
                     ),
                     if (nonUploadedCount != 0)
                       Positioned(
                         right: iconPadding / 2,
                         // bottom: 0,
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: widthDp! * 3,
-                              vertical: heightDp! * 2),
+                          padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 2),
                           decoration: BoxDecoration(
                             color: AppColors.red,
                             borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -920,10 +868,7 @@ class _ReportViewState extends State<ReportView>
                           alignment: Alignment.center,
                           child: Text(
                             "$nonUploadedCount",
-                            style: Theme.of(context)
-                                .textTheme
-                                .overline!
-                                .copyWith(color: Colors.white),
+                            style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                           ),
                         ),
                       ),
@@ -945,8 +890,7 @@ class _ReportViewState extends State<ReportView>
                 onTap: _editHandler,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: iconPadding),
-                  child: Icon(Icons.info_outline_rounded,
-                      size: iconSize, color: Colors.white),
+                  child: Icon(Icons.info_outline_rounded, size: iconSize, color: Colors.white),
                 ),
               ),
               SizedBox(width: widthDp! * 5),
@@ -958,7 +902,7 @@ class _ReportViewState extends State<ReportView>
   }
 
   Widget _floatingButtonPanel() {
-    return Container(
+    return SizedBox(
       width: deviceWidth,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -995,8 +939,7 @@ class _ReportViewState extends State<ReportView>
             onTap: () async {
               var result = await pushNewScreen(
                 context,
-                screen: CameraPage(
-                    localReportModel: _localReportModel, isPicture: true),
+                screen: CameraPage(localReportModel: _localReportModel, isPicture: true),
                 withNavBar: false, // OPTIONAL VALUE. True by default.
                 pageTransitionAnimation: PageTransitionAnimation.fade,
               );
@@ -1033,16 +976,14 @@ class _ReportViewState extends State<ReportView>
                 // ],
               ),
               alignment: Alignment.center,
-              child: Icon(Icons.photo_camera_outlined,
-                  size: heightDp! * 35, color: Colors.white),
+              child: Icon(Icons.photo_camera_outlined, size: heightDp! * 35, color: Colors.white),
             ),
           ),
           GestureDetector(
             onTap: () async {
               var result = await pushNewScreen(
                 context,
-                screen: CameraPage(
-                    localReportModel: _localReportModel, isAudio: true),
+                screen: CameraPage(localReportModel: _localReportModel, isAudio: true),
                 withNavBar: false, // OPTIONAL VALUE. True by default.
                 pageTransitionAnimation: PageTransitionAnimation.cupertino,
               );
@@ -1080,8 +1021,7 @@ class _ReportViewState extends State<ReportView>
                 // ],
               ),
               alignment: Alignment.center,
-              child: Icon(Icons.mic_none_outlined,
-                  size: heightDp! * 25, color: Colors.white),
+              child: Icon(Icons.mic_none_outlined, size: heightDp! * 25, color: Colors.white),
             ),
           ),
         ],
@@ -1097,21 +1037,18 @@ class _ReportViewState extends State<ReportView>
     if (responsiveStyle != "mobile") {
       iconSize = heightDp! * 35;
       iconPadding = widthDp! * 20;
-      textStyle =
-          Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
+      textStyle = Theme.of(context).textTheme.bodyText2!.copyWith(color: Colors.black);
     }
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: widthDp! * 10, vertical: heightDp! * 10),
-      color: Color(0xFFE7E7E7),
+      padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
+      color: const Color(0xFFE7E7E7),
       child: Row(
         children: [
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.collections_outlined,
-                    size: iconSize, color: Colors.black),
+                Icon(Icons.collections_outlined, size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_photos.tr(),
@@ -1119,8 +1056,7 @@ class _ReportViewState extends State<ReportView>
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -1147,8 +1083,7 @@ class _ReportViewState extends State<ReportView>
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -1167,8 +1102,7 @@ class _ReportViewState extends State<ReportView>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.sticky_note_2_outlined,
-                    size: iconSize, color: Colors.black),
+                Icon(Icons.sticky_note_2_outlined, size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_notes.tr(),
@@ -1176,8 +1110,7 @@ class _ReportViewState extends State<ReportView>
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -1196,8 +1129,7 @@ class _ReportViewState extends State<ReportView>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.video_library_outlined,
-                    size: iconSize, color: Colors.black),
+                Icon(Icons.video_library_outlined, size: iconSize, color: Colors.black),
                 SizedBox(width: iconPadding / 2),
                 Text(
                   LocaleKeys.LocalReportWidgetString_videos.tr(),
@@ -1205,8 +1137,7 @@ class _ReportViewState extends State<ReportView>
                 ),
                 SizedBox(width: iconPadding),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 3, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 3, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
                     borderRadius: BorderRadius.circular(heightDp! * 3),
@@ -1237,7 +1168,7 @@ class _ReportViewState extends State<ReportView>
     }
 
     return Container(
-      color: Color(0xFFE7E7E7),
+      color: const Color(0xFFE7E7E7),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -1248,12 +1179,10 @@ class _ReportViewState extends State<ReportView>
               setState(() {});
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: widthDp! * 10, vertical: heightDp! * 10),
+              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
               child: Transform.rotate(
                 angle: pi / 4,
-                child: Icon(Icons.add_circle_outline_outlined,
-                    size: iconSize, color: Colors.black),
+                child: Icon(Icons.add_circle_outline_outlined, size: iconSize, color: Colors.black),
               ),
             ),
           ),
@@ -1271,11 +1200,8 @@ class _ReportViewState extends State<ReportView>
                   onChangeHandler: (value) {
                     if (value) {
                       _selectedMediaRanks = [];
-                      for (var i = 0;
-                          i < _localReportModel!.medias!.length;
-                          i++) {
-                        _selectedMediaRanks!
-                            .add(_localReportModel!.medias![i].rank!);
+                      for (var i = 0; i < _localReportModel!.medias!.length; i++) {
+                        _selectedMediaRanks!.add(_localReportModel!.medias![i].rank!);
                       }
                     } else {
                       _selectedMediaRanks = [];
@@ -1286,19 +1212,14 @@ class _ReportViewState extends State<ReportView>
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: widthDp! * 5),
-                  padding: EdgeInsets.symmetric(
-                      horizontal: widthDp! * 5, vertical: heightDp! * 3),
+                  padding: EdgeInsets.symmetric(horizontal: widthDp! * 5, vertical: heightDp! * 3),
                   decoration: BoxDecoration(
                     color: AppColors.yello,
-                    borderRadius:
-                        BorderRadiusDirectional.circular(heightDp! * 4),
+                    borderRadius: BorderRadiusDirectional.circular(heightDp! * 4),
                   ),
                   child: Text(
                     "${_selectedMediaRanks!.length}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .overline!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -1307,16 +1228,9 @@ class _ReportViewState extends State<ReportView>
           GestureDetector(
             onTap: () {
               List<String> shareFiles = [];
-              if (_selectedMediaRanks!.isNotEmpty &&
-                  _localMediaListProvider!.localMediaListState.progressState ==
-                      2) {
-                for (var i = 0;
-                    i <
-                        _localMediaListProvider!.localMediaListState
-                            .localLocalReportModel!.medias!.length;
-                    i++) {
-                  MediaModel mediaModel = _localMediaListProvider!
-                      .localMediaListState.localLocalReportModel!.medias![i];
+              if (_selectedMediaRanks!.isNotEmpty && _localMediaListProvider!.localMediaListState.progressState == 2) {
+                for (var i = 0; i < _localMediaListProvider!.localMediaListState.localLocalReportModel!.medias!.length; i++) {
+                  MediaModel mediaModel = _localMediaListProvider!.localMediaListState.localLocalReportModel!.medias![i];
                   if (_selectedMediaRanks!.contains(mediaModel.rank)) {
                     shareFiles.add(mediaModel.path!);
                   }
@@ -1327,12 +1241,10 @@ class _ReportViewState extends State<ReportView>
             child: Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: iconPadding / 2, vertical: heightDp! * 10),
+                  padding: EdgeInsets.symmetric(horizontal: iconPadding / 2, vertical: heightDp! * 10),
                   child: Transform.rotate(
                     angle: -pi / 2,
-                    child:
-                        Icon(Icons.logout, size: iconSize, color: Colors.black),
+                    child: Icon(Icons.logout, size: iconSize, color: Colors.black),
                   ),
                 ),
                 Text(
@@ -1358,10 +1270,8 @@ class _ReportViewState extends State<ReportView>
               );
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: iconPadding, vertical: heightDp! * 10),
-              child: Icon(Icons.delete_outline_outlined,
-                  size: iconSize, color: Colors.red),
+              padding: EdgeInsets.symmetric(horizontal: iconPadding, vertical: heightDp! * 10),
+              child: Icon(Icons.delete_outline_outlined, size: iconSize, color: Colors.red),
             ),
           ),
         ],
@@ -1389,15 +1299,11 @@ class _ReportViewState extends State<ReportView>
           Expanded(
             child: Row(
               children: [
-                Icon(Icons.cloud_upload_outlined,
-                    size: iconSize, color: Colors.white),
+                Icon(Icons.cloud_upload_outlined, size: iconSize, color: Colors.white),
                 SizedBox(width: widthDp! * 5),
                 Text(
                   LocaleKeys.NewReportPageString_uploading.tr(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white),
                 )
               ],
             ),
@@ -1411,12 +1317,10 @@ class _ReportViewState extends State<ReportView>
               );
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: widthDp! * 10, vertical: heightDp! * 10),
+              padding: EdgeInsets.symmetric(horizontal: widthDp! * 10, vertical: heightDp! * 10),
               child: Transform.rotate(
                 angle: pi / 4,
-                child: Icon(Icons.add_circle_outline_outlined,
-                    size: iconSize, color: Colors.white),
+                child: Icon(Icons.add_circle_outline_outlined, size: iconSize, color: Colors.white),
               ),
             ),
           ),
@@ -1440,25 +1344,19 @@ class _ReportViewState extends State<ReportView>
 
   Widget _mediaPanel1() {
     List<dynamic> localMediaListData = [];
-    Map<String, dynamic> localMediaMetaData = Map<String, dynamic>();
+    Map<String, dynamic> localMediaMetaData = <String, dynamic>{};
 
-    if (_localMediaListProvider!.localMediaListState.localMediaListData !=
-        null) {
-      localMediaListData =
-          _localMediaListProvider!.localMediaListState.localMediaListData!;
+    if (_localMediaListProvider!.localMediaListState.localMediaListData != null) {
+      localMediaListData = _localMediaListProvider!.localMediaListState.localMediaListData!;
     }
-    if (_localMediaListProvider!.localMediaListState.localMediaMetaData !=
-        null) {
-      localMediaMetaData =
-          _localMediaListProvider!.localMediaListState.localMediaMetaData!;
+    if (_localMediaListProvider!.localMediaListState.localMediaMetaData != null) {
+      localMediaMetaData = _localMediaListProvider!.localMediaListState.localMediaMetaData!;
     }
 
     int itemCount = 0;
 
-    if (_localMediaListProvider!.localMediaListState.localMediaListData !=
-        null) {
-      itemCount += _localMediaListProvider!
-          .localMediaListState.localMediaListData!.length;
+    if (_localMediaListProvider!.localMediaListState.localMediaListData != null) {
+      itemCount += _localMediaListProvider!.localMediaListState.localMediaListData!.length;
     }
 
     if (_localMediaListProvider!.localMediaListState.progressState == 1) {
@@ -1480,8 +1378,8 @@ class _ReportViewState extends State<ReportView>
           enablePullUp: (localMediaMetaData["isEnd"] != null &&
               !localMediaMetaData["isEnd"] &&
               _localMediaListProvider!.localMediaListState.progressState != 1),
-          header: WaterDropHeader(),
-          footer: ClassicFooter(),
+          header: const WaterDropHeader(),
+          footer: const ClassicFooter(),
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
@@ -1489,12 +1387,8 @@ class _ReportViewState extends State<ReportView>
             controller: _controller,
             itemCount: itemCount,
             itemBuilder: (context, index) {
-              List<MediaModel>? mediaModelList =
-                  (index >= localMediaListData.length)
-                      ? null
-                      : localMediaListData[index];
-              if (_localMediaListProvider!.localMediaListState.progressState ==
-                      2 &&
+              List<MediaModel>? mediaModelList = (index >= localMediaListData.length) ? null : localMediaListData[index];
+              if (_localMediaListProvider!.localMediaListState.progressState == 2 &&
                   mediaModelList == null &&
                   index == localMediaListData.length) {
                 return SizedBox(height: heightDp! * 85);
@@ -1505,11 +1399,11 @@ class _ReportViewState extends State<ReportView>
                   height: heightDp! * 50,
                   margin: EdgeInsets.symmetric(vertical: heightDp! * 5),
                   decoration: BoxDecoration(
-                    color: Color(0xFFE7E7E7),
+                    color: const Color(0xFFE7E7E7),
                     borderRadius: BorderRadius.circular(heightDp! * 6),
                   ),
                   alignment: Alignment.center,
-                  child: CupertinoActivityIndicator(),
+                  child: const CupertinoActivityIndicator(),
                 );
               } else {
                 return Wrap(
@@ -1517,26 +1411,19 @@ class _ReportViewState extends State<ReportView>
                   children: List.generate(mediaModelList.length, (index) {
                     MediaModel mediaModel = mediaModelList[index];
 
-                    bool isUploading =
-                        _localReportProvider!.localReportState.isUploading! &&
-                            _localReportProvider!.localReportState
-                                    .uploadingMediaModel!.rank !=
-                                -1 &&
-                            mediaModel.rank ==
-                                _localReportProvider!
-                                    .localReportState.uploadingMediaModel!.rank;
+                    bool isUploading = _localReportProvider!.localReportState.isUploading! &&
+                        _localReportProvider!.localReportState.uploadingMediaModel!.rank != -1 &&
+                        mediaModel.rank == _localReportProvider!.localReportState.uploadingMediaModel!.rank;
 
                     switch (mediaModel.type) {
                       case MediaType.note:
                         return NoteMediaWidget(
                           mediaModel: mediaModel,
                           totalMediaCount: _localReportModel!.medias!.length,
-                          isSelected:
-                              _selectedMediaRanks!.contains(mediaModel.rank),
+                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
                           isUploading: isUploading,
                           tapHandler: () async {
-                            if (!_selectStatus &&
-                                _selectedMediaRanks!.isEmpty) {
+                            if (!_selectStatus && _selectedMediaRanks!.isEmpty) {
                               // var note = await NotePanelDialog.show(context,
                               //     isNew: false, mediaModel: mediaModel);
                               // if (note != null) {
@@ -1547,11 +1434,9 @@ class _ReportViewState extends State<ReportView>
                               // }
                               var result = await Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      GalleryPage(
+                                  builder: (BuildContext context) => GalleryPage(
                                     localReportModel: _localReportModel!,
-                                    localMediaListProvider:
-                                        _localMediaListProvider!,
+                                    localMediaListProvider: _localMediaListProvider!,
                                     index: mediaModel.rank! - 1,
                                   ),
                                 ),
@@ -1573,19 +1458,16 @@ class _ReportViewState extends State<ReportView>
                           localReportModel: _localReportModel,
                           mediaModel: mediaModel,
                           totalMediaCount: _localReportModel!.medias!.length,
-                          isSelected:
-                              _selectedMediaRanks!.contains(mediaModel.rank),
+                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
                           selectStatus: _selectStatus,
                           isUploading: isUploading,
                           tapHandler: () async {
                             if (!_selectStatus) {
                               var result = await Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      GalleryPage(
+                                  builder: (BuildContext context) => GalleryPage(
                                     localReportModel: _localReportModel!,
-                                    localMediaListProvider:
-                                        _localMediaListProvider!,
+                                    localMediaListProvider: _localMediaListProvider!,
                                     index: mediaModel.rank! - 1,
                                   ),
                                 ),
@@ -1606,18 +1488,15 @@ class _ReportViewState extends State<ReportView>
                         return AudioMediaWidget(
                           mediaModel: mediaModel,
                           totalMediaCount: _localReportModel!.medias!.length,
-                          isSelected:
-                              _selectedMediaRanks!.contains(mediaModel.rank),
+                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
                           isUploading: isUploading,
                           tapHandler: () async {
                             if (!_selectStatus) {
                               var result = await Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      GalleryPage(
+                                  builder: (BuildContext context) => GalleryPage(
                                     localReportModel: _localReportModel!,
-                                    localMediaListProvider:
-                                        _localMediaListProvider!,
+                                    localMediaListProvider: _localMediaListProvider!,
                                     index: mediaModel.rank! - 1,
                                   ),
                                 ),
@@ -1638,18 +1517,15 @@ class _ReportViewState extends State<ReportView>
                         return VideoMediaWidget(
                           mediaModel: mediaModel,
                           totalMediaCount: _localReportModel!.medias!.length,
-                          isSelected:
-                              _selectedMediaRanks!.contains(mediaModel.rank),
+                          isSelected: _selectedMediaRanks!.contains(mediaModel.rank),
                           isUploading: isUploading,
                           tapHandler: () async {
                             if (!_selectStatus) {
                               var result = await Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      GalleryPage(
+                                  builder: (BuildContext context) => GalleryPage(
                                     localReportModel: _localReportModel!,
-                                    localMediaListProvider:
-                                        _localMediaListProvider!,
+                                    localMediaListProvider: _localMediaListProvider!,
                                     index: mediaModel.rank! - 1,
                                   ),
                                 ),

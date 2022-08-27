@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/ApiDataProviders/login_api_provider.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Providers/PlanningProvider/index.dart';
 import 'package:provider/provider.dart';
+// ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'index.dart';
@@ -16,7 +18,7 @@ class AuthProvider extends ChangeNotifier {
   AuthState _authState = AuthState.init();
   AuthState get authState => _authState;
 
-  String _rememberUserKey = "remember_me";
+  final String _rememberUserKey = "remember_me";
 
   void setAuthState(AuthState authState, {bool isNotifiable = true}) {
     if (_authState != authState) {
@@ -33,11 +35,11 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> initHiveObject() async {
     try {
-      if (_appSettingsBox == null) {
-        _appSettingsBox = await Hive.openBox<dynamic>("app_settings");
-      }
+      _appSettingsBox ??= await Hive.openBox<dynamic>("app_settings");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -52,7 +54,7 @@ class AuthProvider extends ChangeNotifier {
           message: "",
           description: "",
           statusCode: 200,
-          loginState: LoginState.IsLogin,
+          loginState: LoginState.isLogin,
           userModel: UserModel.fromJson(json.decode(result)),
         );
       } else {
@@ -61,11 +63,13 @@ class AuthProvider extends ChangeNotifier {
           message: "",
           description: "",
           statusCode: 200,
-          loginState: LoginState.IsNotLogin,
+          loginState: LoginState.isNotLogin,
         );
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -78,7 +82,7 @@ class AuthProvider extends ChangeNotifier {
           message: result["message"],
           description: result["description"],
           statusCode: result["statusCode"],
-          loginState: LoginState.IsNotLogin,
+          loginState: LoginState.isNotLogin,
           smsCode: true,
         );
       } else {
@@ -87,7 +91,7 @@ class AuthProvider extends ChangeNotifier {
           message: result["message"],
           description: result["description"],
           statusCode: result["statusCode"],
-          loginState: LoginState.IsNotLogin,
+          loginState: LoginState.isNotLogin,
           smsCode: false,
         );
       }
@@ -97,7 +101,7 @@ class AuthProvider extends ChangeNotifier {
         message: "Something was wrong",
         description: e.toString(),
         statusCode: 500,
-        loginState: LoginState.IsNotLogin,
+        loginState: LoginState.isNotLogin,
         smsCode: false,
       );
     }
@@ -109,7 +113,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       var result = await LoginApiProvider.login(email: email, password: password);
       if (result["success"]) {
-        if (_prefs == null) _prefs = await SharedPreferences.getInstance();
+        _prefs ??= await SharedPreferences.getInstance();
 
         _prefs!.setString(_rememberUserKey, json.encode(result["user"]));
 
@@ -118,7 +122,7 @@ class AuthProvider extends ChangeNotifier {
           message: result["message"],
           description: result["description"],
           statusCode: result["statusCode"],
-          loginState: LoginState.IsLogin,
+          loginState: LoginState.isLogin,
           userModel: UserModel.fromJson(result["user"]),
         );
       } else {
@@ -127,7 +131,7 @@ class AuthProvider extends ChangeNotifier {
           message: result["message"],
           description: result["description"],
           statusCode: result["statusCode"],
-          loginState: LoginState.IsNotLogin,
+          loginState: LoginState.isNotLogin,
         );
       }
     } catch (e) {
@@ -136,7 +140,7 @@ class AuthProvider extends ChangeNotifier {
         message: "Something was wrong",
         description: e.toString(),
         statusCode: 500,
-        loginState: LoginState.IsNotLogin,
+        loginState: LoginState.isNotLogin,
       );
     }
 
@@ -144,7 +148,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logout(context, {bool isNotifiable = true}) async {
-    if (_prefs == null) _prefs = await SharedPreferences.getInstance();
+    _prefs ??= await SharedPreferences.getInstance();
     _prefs!.setString(_rememberUserKey, "null");
 
     _authState = _authState.update(
@@ -152,7 +156,7 @@ class AuthProvider extends ChangeNotifier {
       message: "Vous avez été déconnecté avec succès",
       description: "",
       statusCode: 200,
-      loginState: LoginState.IsNotLogin,
+      loginState: LoginState.isNotLogin,
       smsCode: false,
       userModel: UserModel(),
     );

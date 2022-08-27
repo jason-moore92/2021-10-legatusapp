@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'MediaModel.dart';
+part of 'media_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -79,8 +79,5 @@ class MediaModelAdapter extends TypeAdapter<MediaModel> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MediaModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is MediaModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

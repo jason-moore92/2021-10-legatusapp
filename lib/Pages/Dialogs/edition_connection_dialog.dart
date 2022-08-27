@@ -112,7 +112,7 @@ class EditionConnectionDialog {
                     ),
                     Expanded(
                       child: Text(
-                        "${LocaleKeys.UploadDialogString_content4.tr()}",
+                        LocaleKeys.UploadDialogString_content4.tr(),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),

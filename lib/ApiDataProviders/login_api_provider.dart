@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:legatus/Config/config.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 // import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,16 +14,15 @@ class LoginApiProvider {
 
   static Future<void> initHiveObject() async {
     try {
-      if (appSettingsBox == null) {
-        appSettingsBox = await Hive.openBox<dynamic>("app_settings");
-      }
+      appSettingsBox ??= await Hive.openBox<dynamic>("app_settings");
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
-  static Future<Map<String, dynamic>> getSMSCode(
-      {@required String? email, @required String? phoneNumber}) async {
+  static Future<Map<String, dynamic>> getSMSCode({@required String? email, @required String? phoneNumber}) async {
     String apiUrl = '/get-sms-code';
 
     try {
@@ -38,8 +38,7 @@ class LoginApiProvider {
       }
 
       var request = http.MultipartRequest("POST", Uri.parse(url));
-      request.fields.addAll(
-          {"email": email ?? "", "mobile_phone_number": phoneNumber ?? ""});
+      request.fields.addAll({"email": email ?? "", "mobile_phone_number": phoneNumber ?? ""});
 
       var response = await request.send();
       var result = await response.stream.bytesToString();
@@ -62,7 +61,9 @@ class LoginApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",
@@ -71,8 +72,7 @@ class LoginApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> login(
-      {@required String? email, @required String? password}) async {
+  static Future<Map<String, dynamic>> login({@required String? email, @required String? password}) async {
     String apiUrl = '/login-with-password';
 
     try {
@@ -111,7 +111,9 @@ class LoginApiProvider {
         "statusCode": 500,
       };
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return {
         "success": false,
         "message": "Something went wrong",

@@ -60,7 +60,7 @@ class LocalReportWidget extends StatelessWidget {
       highlightColor: Colors.grey[100]!,
       direction: ShimmerDirection.ltr,
       enabled: isLoading!,
-      period: Duration(milliseconds: 1000),
+      period: const Duration(milliseconds: 1000),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -282,7 +282,7 @@ class LocalReportWidget extends StatelessWidget {
                         LocaleKeys.LocalReportWidgetString_photos.tr(),
                         style: TextStyle(
                           fontSize: fontSp! * 10,
-                          color: Color(0xFF222222),
+                          color: const Color(0xFF222222),
                           fontWeight: FontWeight.w400,
                           height: 1,
                           letterSpacing: 0.5,
@@ -342,7 +342,7 @@ class LocalReportWidget extends StatelessWidget {
                         LocaleKeys.LocalReportWidgetString_audios.tr(),
                         style: TextStyle(
                           fontSize: fontSp! * 10,
-                          color: Color(0xFF222222),
+                          color: const Color(0xFF222222),
                           fontWeight: FontWeight.w400,
                           height: 1,
                           letterSpacing: 0.5,
@@ -383,7 +383,7 @@ class LocalReportWidget extends StatelessWidget {
                         LocaleKeys.LocalReportWidgetString_notes.tr(),
                         style: TextStyle(
                           fontSize: fontSp! * 10,
-                          color: Color(0xFF222222),
+                          color: const Color(0xFF222222),
                           fontWeight: FontWeight.w400,
                           height: 1,
                           letterSpacing: 0.5,
@@ -424,7 +424,7 @@ class LocalReportWidget extends StatelessWidget {
                         LocaleKeys.LocalReportWidgetString_videos.tr(),
                         style: TextStyle(
                           fontSize: fontSp! * 10,
-                          color: Color(0xFF222222),
+                          color: const Color(0xFF222222),
                           fontWeight: FontWeight.w400,
                           height: 1,
                           letterSpacing: 0.5,
@@ -474,7 +474,7 @@ class LocalReportWidget extends StatelessWidget {
                       : LocaleKeys.LocalReportWidgetString_allMediaUpload.tr(),
               style: TextStyle(
                 fontSize: fontSp! * 10,
-                color: Color(0xFF222222),
+                color: const Color(0xFF222222),
                 fontWeight: FontWeight.w400,
                 height: 1,
                 letterSpacing: 0.5,

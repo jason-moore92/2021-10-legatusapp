@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -18,13 +20,13 @@ import 'package:uuid/uuid.dart';
 class PlanningView extends StatefulWidget {
   final PlanningReportModel? planningReportModel;
 
-  PlanningView({Key? key, this.planningReportModel}) : super(key: key);
+  const PlanningView({Key? key, this.planningReportModel}) : super(key: key);
 
   @override
-  _PlanningViewState createState() => _PlanningViewState();
+  PlanningViewState createState() => PlanningViewState();
 }
 
-class _PlanningViewState extends State<PlanningView> with SingleTickerProviderStateMixin {
+class PlanningViewState extends State<PlanningView> with SingleTickerProviderStateMixin {
   /// Responsive design variables
   double? deviceWidth;
   double? deviceHeight;
@@ -51,7 +53,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
     fontSp = ScreenUtil().setSp(1) / ScreenUtil().textScaleFactor;
     ///////////////////////////////
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {});
   }
 
   @override
@@ -67,7 +69,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
     if (localReportModel == null) {
       LocalReportModel localReportModel = LocalReportModel();
       localReportModel.reportId = widget.planningReportModel!.reportId;
-      localReportModel.uuid = Uuid().v4();
+      localReportModel.uuid = const Uuid().v4();
       Map<String, dynamic> typeData = json.decode(LocaleKeys.NewReportPageString_types.tr());
       String type = typeData.keys.toList()[0];
       localReportModel.type = type;
@@ -78,7 +80,8 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
       localReportModel.date = widget.planningReportModel!.date;
       localReportModel.time = widget.planningReportModel!.time;
       localReportModel.zip = widget.planningReportModel!.zipCity!.split(" ").first;
-      localReportModel.city = widget.planningReportModel!.zipCity!.split(" ").length == 2 ? widget.planningReportModel!.zipCity!.split(" ").last : "";
+      localReportModel.city =
+          widget.planningReportModel!.zipCity!.split(" ").length == 2 ? widget.planningReportModel!.zipCity!.split(" ").last : "";
       localReportModel.createdAt = KeicyDateTime.convertDateTimeToDateString(dateTime: DateTime.now(), formats: "Y-m-d H:i:s");
 
       var progressState = await LocalReportProvider.of(context).createLocalReport(localReportModel: localReportModel);
@@ -137,8 +140,8 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.yello,
-        child: Icon(Icons.add_a_photo_outlined, size: heightDp! * 25, color: Colors.white),
         onPressed: _goToLocalReportPage,
+        child: Icon(Icons.add_a_photo_outlined, size: heightDp! * 25, color: Colors.white),
       ),
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (notification) {
@@ -165,7 +168,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                     Expanded(
                       flex: 3,
                       child: Text(
-                        "${widget.planningReportModel!.name!}",
+                        widget.planningReportModel!.name!,
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
@@ -221,7 +224,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                           Expanded(
                             flex: 3,
                             child: Text(
-                              "${widget.planningReportModel!.state!}",
+                              widget.planningReportModel!.state!,
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
@@ -248,7 +251,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                           Expanded(
                             flex: 3,
                             child: Text(
-                              "${widget.planningReportModel!.type!}",
+                              widget.planningReportModel!.type!,
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
@@ -283,7 +286,9 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                       "${widget.planningReportModel!.accounts![index]["name"]}",
                                       style: Theme.of(context).textTheme.subtitle1,
                                     ),
-                                    index < widget.planningReportModel!.accounts!.length - 1 ? SizedBox(height: heightDp! * 3) : SizedBox(),
+                                    index < widget.planningReportModel!.accounts!.length - 1
+                                        ? SizedBox(height: heightDp! * 3)
+                                        : const SizedBox(),
                                   ],
                                 );
                               }),
@@ -312,7 +317,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                           Expanded(
                             flex: 3,
                             child: Text(
-                              "${widget.planningReportModel!.price!}",
+                              widget.planningReportModel!.price!,
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
@@ -344,10 +349,12 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                 return Column(
                                   children: [
                                     Text(
-                                      "${widget.planningReportModel!.references![index].toString().split(":").last.trim()}",
+                                      widget.planningReportModel!.references![index].toString().split(":").last.trim(),
                                       style: Theme.of(context).textTheme.subtitle1,
                                     ),
-                                    index < widget.planningReportModel!.references!.length - 1 ? SizedBox(height: heightDp! * 3) : SizedBox(),
+                                    index < widget.planningReportModel!.references!.length - 1
+                                        ? SizedBox(height: heightDp! * 3)
+                                        : const SizedBox(),
                                   ],
                                 );
                               }),
@@ -359,7 +366,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                   ),
 
                 /// Address
-                if (!JsonPatch.diff(widget.planningReportModel!.addressModel!.toJson(), AddressModel().toJson()).isEmpty)
+                if (JsonPatch.diff(widget.planningReportModel!.addressModel!.toJson(), AddressModel().toJson()).isNotEmpty)
                   // if (!JsonDiffer.fromJson(widget.planningReportModel!.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
                   Column(
                     children: [
@@ -384,7 +391,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                     children: [
                                       if (widget.planningReportModel!.addressModel!.street! != "")
                                         Text(
-                                          "${widget.planningReportModel!.addressModel!.street!}",
+                                          widget.planningReportModel!.addressModel!.street!,
                                           style: Theme.of(context).textTheme.subtitle1,
                                         ),
                                       if (widget.planningReportModel!.addressModel!.complement! != "")
@@ -392,7 +399,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                           children: [
                                             SizedBox(height: heightDp! * 2),
                                             Text(
-                                              "${widget.planningReportModel!.addressModel!.complement!}",
+                                              widget.planningReportModel!.addressModel!.complement!,
                                               style: Theme.of(context).textTheme.subtitle1,
                                             ),
                                           ],
@@ -404,13 +411,13 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                             children: [
                                               if (widget.planningReportModel!.addressModel!.zip! != "")
                                                 Text(
-                                                  "${widget.planningReportModel!.addressModel!.zip!}",
+                                                  widget.planningReportModel!.addressModel!.zip!,
                                                   style: Theme.of(context).textTheme.subtitle1,
                                                 ),
                                               SizedBox(width: widthDp! * 10),
                                               if (widget.planningReportModel!.addressModel!.city! != "")
                                                 Text(
-                                                  "${widget.planningReportModel!.addressModel!.city!}",
+                                                  widget.planningReportModel!.addressModel!.city!,
                                                   style: Theme.of(context).textTheme.subtitle1,
                                                 ),
                                             ],
@@ -456,7 +463,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                           Expanded(
                             flex: 3,
                             child: Text(
-                              "${widget.planningReportModel!.folderName!}",
+                              widget.planningReportModel!.folderName!,
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
@@ -483,7 +490,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                           Expanded(
                             flex: 3,
                             child: Text(
-                              "${widget.planningReportModel!.description!}",
+                              widget.planningReportModel!.description!,
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
                           ),
@@ -497,7 +504,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                   Column(
                     children: List.generate(widget.planningReportModel!.customers!.length, (index) {
                       CustomerModel customerModel = widget.planningReportModel!.customers![index];
-                      if (JsonPatch.diff(customerModel.toJson(), CustomerModel().toJson()).isEmpty) return SizedBox();
+                      if (JsonPatch.diff(customerModel.toJson(), CustomerModel().toJson()).isEmpty) return const SizedBox();
                       // if (JsonDiffer.fromJson(customerModel.toJson(), CustomerModel().toJson()).diff().hasNothing) return SizedBox();
 
                       return Column(
@@ -536,7 +543,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                           ),
 
                           /// Address
-                          if (!JsonPatch.diff(customerModel.addressModel!.toJson(), AddressModel().toJson()).isEmpty)
+                          if (JsonPatch.diff(customerModel.addressModel!.toJson(), AddressModel().toJson()).isNotEmpty)
                             // if (!JsonDiffer.fromJson(customerModel.addressModel!.toJson(), AddressModel().toJson()).diff().hasNothing)
                             Column(
                               children: [
@@ -561,7 +568,7 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                               children: [
                                                 if (customerModel.addressModel!.street != "")
                                                   Text(
-                                                    "${customerModel.addressModel!.street!}",
+                                                    customerModel.addressModel!.street!,
                                                     style: Theme.of(context).textTheme.subtitle1,
                                                   ),
                                                 if (customerModel.addressModel!.zip != "" || customerModel.addressModel!.city != "")
@@ -721,7 +728,9 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                                 "${customerModel.representation![index]}",
                                                 style: Theme.of(context).textTheme.subtitle1,
                                               ),
-                                              index < customerModel.representation!.length - 1 ? SizedBox(height: heightDp! * 3) : SizedBox(),
+                                              index < customerModel.representation!.length - 1
+                                                  ? SizedBox(height: heightDp! * 3)
+                                                  : const SizedBox(),
                                             ],
                                           );
                                         }),
@@ -752,8 +761,10 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: List.generate(customerModel.recipients!.length, (index) {
-                                          if (JsonPatch.diff(customerModel.recipients![index].toJson(), RecipientModel().toJson()).isEmpty)
-                                            return SizedBox();
+                                          if (JsonPatch.diff(customerModel.recipients![index].toJson(), RecipientModel().toJson())
+                                              .isEmpty) {
+                                            return const SizedBox();
+                                          }
                                           // if (JsonDiffer.fromJson(customerModel.recipients![index].toJson(), RecipientModel().toJson())
                                           //     .diff()
                                           //     .hasNothing) return SizedBox();
@@ -764,7 +775,8 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  if (customerModel.recipients![index].name != "" || customerModel.recipients![index].position != "")
+                                                  if (customerModel.recipients![index].name != "" ||
+                                                      customerModel.recipients![index].position != "")
                                                     Text(
                                                       "${customerModel.recipients![index].name} - ${customerModel.recipients![index].position}",
                                                       style: Theme.of(context).textTheme.subtitle1,
@@ -811,7 +823,9 @@ class _PlanningViewState extends State<PlanningView> with SingleTickerProviderSt
                                                     ),
                                                 ],
                                               ),
-                                              index < customerModel.recipients!.length - 1 ? SizedBox(height: heightDp! * 5) : SizedBox(),
+                                              index < customerModel.recipients!.length - 1
+                                                  ? SizedBox(height: heightDp! * 5)
+                                                  : const SizedBox(),
                                             ],
                                           );
                                         }),
