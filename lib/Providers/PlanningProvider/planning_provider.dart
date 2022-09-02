@@ -48,7 +48,7 @@ class PlanningProvider extends ChangeNotifier {
       result = await PlanningApiProvider.getPlanning(startDate: _planningState.currentDate);
 
       if (result["success"]) {
-        Map<String, dynamic> planningData = _planningState.planningData!;
+        Map<String, dynamic> planningData = json.decode(json.encode(_planningState.planningData!));
 
         planningData[_planningState.currentDate!] = result["data"];
 
