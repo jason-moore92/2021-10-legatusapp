@@ -104,7 +104,7 @@ class LocalReportModel extends Equatable {
     this.recipientBirthCity = "",
     this.recipientEmail = "",
     this.recipientPhone = "",
-    this.medias,
+    this.medias = const [],
     this.orderList = const [],
   });
 
@@ -148,7 +148,7 @@ class LocalReportModel extends Equatable {
       recipientBirthCity: map["recipient_birth_city"] ?? "",
       recipientEmail: map["recipient_email"] ?? "",
       recipientPhone: map["recipient_phone"] ?? "",
-      medias: medias,
+      medias: map["medias"] ?? "",
       orderList: map["orderList"] ?? "",
     );
   }
@@ -265,7 +265,7 @@ class LocalReportModel extends Equatable {
         recipientBirthCity!,
         recipientEmail!,
         recipientPhone!,
-        medias ?? Object(),
+        medias!,
         orderList!,
       ];
 
