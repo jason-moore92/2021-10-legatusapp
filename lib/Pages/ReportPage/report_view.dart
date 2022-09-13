@@ -10,7 +10,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:legatus/Pages/AddEditoinPage/index.dart';
 import 'package:legatus/Pages/App/index.dart';
@@ -33,6 +32,8 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -368,7 +369,8 @@ class ReportViewState extends State<ReportView> with SingleTickerProviderStateMi
         mediaModel.type = MediaType.note;
         mediaModel.uuid = const Uuid().v4();
 
-        if (_localReportModel!.medias == null) _localReportModel!.medias = [];
+        localReportModel.medias ??= [];
+        localReportModel.medias = List.from(localReportModel.medias!);
         localReportModel.medias!.add(mediaModel);
       } else {
         for (var i = 0; i < localReportModel.medias!.length; i++) {
@@ -435,14 +437,22 @@ class ReportViewState extends State<ReportView> with SingleTickerProviderStateMi
 
         String message = isNew ? "Note enregistrée avec succès" : "Note mise à jour avec succès";
         // SuccessDialog.show(context, text: message);
-        Fluttertoast.showToast(
-          msg: message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.greenAccent,
-          fontSize: 16.0,
+        // Fluttertoast.showToast(
+        //   msg: message,
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.TOP,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.black,
+        //   textColor: Colors.greenAccent,
+        //   fontSize: 16.0,
+        // );
+        showTopSnackBar(
+          context,
+          CustomSnackBar.success(
+            message: message,
+            icon: const SizedBox(),
+            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          ),
         );
 
         if (isNew) {
@@ -513,14 +523,22 @@ class ReportViewState extends State<ReportView> with SingleTickerProviderStateMi
 
     if (success) {
       // SuccessDialog.show(context, text: "Médias supprimés de cet appareil avec succès.");
-      Fluttertoast.showToast(
-        msg: "Médias supprimés de cet appareil avec succès.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.greenAccent,
-        fontSize: 16.0,
+      // Fluttertoast.showToast(
+      //   msg: "Médias supprimés de cet appareil avec succès.",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.TOP,
+      //   timeInSecForIosWeb: 1,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.greenAccent,
+      //   fontSize: 16.0,
+      // );
+      showTopSnackBar(
+        context,
+        const CustomSnackBar.success(
+          message: "Médias supprimés de cet appareil avec succès.",
+          icon: SizedBox(),
+          messagePadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        ),
       );
       var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
       if (result["success"]) {

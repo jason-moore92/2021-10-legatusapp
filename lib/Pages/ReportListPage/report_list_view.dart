@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:legatus/Config/config.dart';
 import 'package:legatus/Models/index.dart';
 import 'package:legatus/Pages/App/Styles/index.dart';
@@ -18,6 +17,8 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ReportListView extends StatefulWidget {
   const ReportListView({Key? key}) : super(key: key);
@@ -189,15 +190,23 @@ class ReportListViewState extends State<ReportListView> with SingleTickerProvide
   void _deleteLocalReportHandler(LocalReportModel localReportModel) async {
     var progressState = await LocalReportProvider.of(context).deleteLocalReport(localReportModel: localReportModel);
     if (progressState == 2) {
-      Fluttertoast.showToast(
-        msg: "Constat supprimé de cet appareil avec succès.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.greenAccent,
-        fontSize: 16.0,
+      showTopSnackBar(
+        context,
+        const CustomSnackBar.success(
+          message: "Constat supprimé de cet appareil avec succès.",
+          icon: SizedBox(),
+          messagePadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        ),
       );
+      // Fluttertoast.showToast(
+      //   msg: "Constat supprimé de cet appareil avec succès.",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.TOP,
+      //   timeInSecForIosWeb: 1,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.greenAccent,
+      //   fontSize: 16.0,
+      // );
       // SuccessDialog.show(
       //   context,
       //   text: "Constat supprimé de cet appareil avec succès.",

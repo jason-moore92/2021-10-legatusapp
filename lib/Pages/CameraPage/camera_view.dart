@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:camera/camera.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:legatus/Helpers/file_helpers.dart';
 import 'package:legatus/Helpers/index.dart';
@@ -20,6 +19,8 @@ import 'package:legatus/Providers/index.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -247,6 +248,7 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
       mediaModel.type = MediaType.note;
       mediaModel.uuid = const Uuid().v4();
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
+      _localReportModel!.medias = List.from(_localReportModel!.medias!);
       _localReportModel!.medias!.add(mediaModel);
 
       var progressState = await _localReportProvider!.updateLocalReport(
@@ -273,14 +275,22 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
           }
         }
 
-        Fluttertoast.showToast(
-          msg: "Note n°$notesCount enregistrée",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.black87,
-          fontSize: 16.0,
+        // Fluttertoast.showToast(
+        //   msg: "Note n°$notesCount enregistrée",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.TOP,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.greenAccent,
+        //   textColor: Colors.black87,
+        //   fontSize: 16.0,
+        // );
+        showTopSnackBar(
+          context,
+          CustomSnackBar.success(
+            message: "Note n°$notesCount enregistrée",
+            icon: const SizedBox(),
+            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          ),
         );
       }
     } catch (e) {
@@ -359,6 +369,7 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
       // /////////////////////////////////
 
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
+      _localReportModel!.medias = List.from(_localReportModel!.medias!);
       _localReportModel!.medias!.add(mediaModel);
 
       var progressState = await _localReportProvider!.updateLocalReport(
@@ -385,14 +396,22 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
           }
         }
 
-        Fluttertoast.showToast(
-          msg: "Photographie n°$pictureCount enregistrée",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.black87,
-          fontSize: 16.0,
+        // Fluttertoast.showToast(
+        //   msg: "Photographie n°$pictureCount enregistrée",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.TOP,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.greenAccent,
+        //   textColor: Colors.black87,
+        //   fontSize: 16.0,
+        // );
+        showTopSnackBar(
+          context,
+          CustomSnackBar.success(
+            message: "Photographie n°$pictureCount enregistrée",
+            icon: const SizedBox(),
+            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          ),
         );
       } else {
         FailedDialog.show(context, text: "Created picture media and update local report error");
@@ -457,6 +476,7 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
       mediaModel.uuid = const Uuid().v4();
 
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
+      _localReportModel!.medias = List.from(_localReportModel!.medias!);
       _localReportModel!.medias!.add(mediaModel);
 
       var progressState = await _localReportProvider!.updateLocalReport(
@@ -483,14 +503,22 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
           }
         }
 
-        Fluttertoast.showToast(
-          msg: "Dictée n°$audioCount enregistrée",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.black87,
-          fontSize: 16.0,
+        // Fluttertoast.showToast(
+        //   msg: "Dictée n°$audioCount enregistrée",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.TOP,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.greenAccent,
+        //   textColor: Colors.black87,
+        //   fontSize: 16.0,
+        // );
+        showTopSnackBar(
+          context,
+          CustomSnackBar.success(
+            message: "Dictée n°$audioCount enregistrée",
+            icon: const SizedBox(),
+            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          ),
         );
       } else {
         FailedDialog.show(context, text: "Created audio media and update local report error");
@@ -560,6 +588,7 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
       mediaModel.uuid = const Uuid().v4();
 
       if (_localReportModel!.medias == null) _localReportModel!.medias = [];
+      _localReportModel!.medias = List.from(_localReportModel!.medias!);
       _localReportModel!.medias!.add(mediaModel);
 
       var progressState = await _localReportProvider!.updateLocalReport(
@@ -586,14 +615,22 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
           }
         }
 
-        Fluttertoast.showToast(
-          msg: "Vidéo n°$videoCount enregitrée",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.black87,
-          fontSize: 16.0,
+        // Fluttertoast.showToast(
+        //   msg: "Vidéo n°$videoCount enregitrée",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.TOP,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.greenAccent,
+        //   textColor: Colors.black87,
+        //   fontSize: 16.0,
+        // );
+        showTopSnackBar(
+          context,
+          CustomSnackBar.success(
+            message: "Vidéo n°$videoCount enregitrée",
+            icon: const SizedBox(),
+            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          ),
         );
       } else {
         FailedDialog.show(context, text: "Created video media and update local report error");
