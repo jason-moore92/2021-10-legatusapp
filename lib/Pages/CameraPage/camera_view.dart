@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,8 +20,6 @@ import 'package:legatus/Providers/index.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -284,14 +283,14 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
         //   textColor: Colors.black87,
         //   fontSize: 16.0,
         // );
-        showTopSnackBar(
-          context,
-          CustomSnackBar.success(
-            message: "Note n°$notesCount enregistrée",
-            icon: const SizedBox(),
-            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          ),
-        );
+        Flushbar(
+          message: "Note n°$notesCount enregistrée",
+          duration: const Duration(seconds: 3),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          flushbarPosition: FlushbarPosition.TOP,
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          borderRadius: BorderRadius.circular(6),
+        ).show(context);
       }
     } catch (e) {
       if (kDebugMode) {
@@ -405,14 +404,14 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
         //   textColor: Colors.black87,
         //   fontSize: 16.0,
         // );
-        showTopSnackBar(
-          context,
-          CustomSnackBar.success(
-            message: "Photographie n°$pictureCount enregistrée",
-            icon: const SizedBox(),
-            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          ),
-        );
+        Flushbar(
+          message: "Photographie n°$pictureCount enregistrée",
+          duration: const Duration(seconds: 3),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          flushbarPosition: FlushbarPosition.TOP,
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          borderRadius: BorderRadius.circular(6),
+        ).show(context);
       } else {
         FailedDialog.show(context, text: "Created picture media and update local report error");
         return;
@@ -512,14 +511,14 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
         //   textColor: Colors.black87,
         //   fontSize: 16.0,
         // );
-        showTopSnackBar(
-          context,
-          CustomSnackBar.success(
-            message: "Dictée n°$audioCount enregistrée",
-            icon: const SizedBox(),
-            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          ),
-        );
+        Flushbar(
+          message: "Dictée n°$audioCount enregistrée",
+          duration: const Duration(seconds: 3),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          flushbarPosition: FlushbarPosition.TOP,
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          borderRadius: BorderRadius.circular(6),
+        ).show(context);
       } else {
         FailedDialog.show(context, text: "Created audio media and update local report error");
       }
@@ -624,14 +623,14 @@ class CameraViewState extends State<CameraView> with WidgetsBindingObserver, Tic
         //   textColor: Colors.black87,
         //   fontSize: 16.0,
         // );
-        showTopSnackBar(
-          context,
-          CustomSnackBar.success(
-            message: "Vidéo n°$videoCount enregitrée",
-            icon: const SizedBox(),
-            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          ),
-        );
+        Flushbar(
+          message: "Vidéo n°$videoCount enregitrée",
+          duration: const Duration(seconds: 3),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          flushbarPosition: FlushbarPosition.TOP,
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          borderRadius: BorderRadius.circular(6),
+        ).show(context);
       } else {
         FailedDialog.show(context, text: "Created video media and update local report error");
       }

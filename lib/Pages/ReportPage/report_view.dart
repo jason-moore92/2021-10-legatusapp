@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:math';
 
 // import 'package:device_info/device_info.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +33,6 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -446,14 +445,14 @@ class ReportViewState extends State<ReportView> with SingleTickerProviderStateMi
         //   textColor: Colors.greenAccent,
         //   fontSize: 16.0,
         // );
-        showTopSnackBar(
-          context,
-          CustomSnackBar.success(
-            message: message,
-            icon: const SizedBox(),
-            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          ),
-        );
+        Flushbar(
+          message: message,
+          duration: const Duration(seconds: 3),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          flushbarPosition: FlushbarPosition.TOP,
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          borderRadius: BorderRadius.circular(6),
+        ).show(context);
 
         if (isNew) {
           _onRefresh();
@@ -532,14 +531,14 @@ class ReportViewState extends State<ReportView> with SingleTickerProviderStateMi
       //   textColor: Colors.greenAccent,
       //   fontSize: 16.0,
       // );
-      showTopSnackBar(
-        context,
-        const CustomSnackBar.success(
-          message: "Médias supprimés de cet appareil avec succès.",
-          icon: SizedBox(),
-          messagePadding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        ),
-      );
+      Flushbar(
+        message: "Médias supprimés de cet appareil avec succès.",
+        duration: const Duration(seconds: 3),
+        flushbarStyle: FlushbarStyle.FLOATING,
+        flushbarPosition: FlushbarPosition.TOP,
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        borderRadius: BorderRadius.circular(6),
+      ).show(context);
       var result = await LocalReportApiProvider.getLocalReportModel(localReportModel: localReportModel);
       if (result["success"]) {
         _localReportModel = result["data"];

@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,8 +19,6 @@ import 'package:legatus/Pages/Dialogs/note_panel_dialog.dart';
 import 'package:legatus/Providers/index.dart';
 import 'package:legatus/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:uuid/uuid.dart';
 
 class GalleryView extends StatefulWidget {
@@ -747,14 +746,14 @@ class GalleryViewState extends State<GalleryView> with SingleTickerProviderState
         //   textColor: Colors.greenAccent,
         //   fontSize: 16.0,
         // );
-        showTopSnackBar(
-          context,
-          CustomSnackBar.success(
-            message: message,
-            icon: const SizedBox(),
-            messagePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          ),
-        );
+        Flushbar(
+          message: message,
+          duration: const Duration(seconds: 3),
+          flushbarStyle: FlushbarStyle.FLOATING,
+          flushbarPosition: FlushbarPosition.TOP,
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          borderRadius: BorderRadius.circular(6),
+        ).show(context);
 
         setState(() {});
       } else {
